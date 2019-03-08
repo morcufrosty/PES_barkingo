@@ -1,6 +1,6 @@
 # Barkingo
 
-## Membres:
+## Membres
 | Nom                | Adreça de correu electrònic        |
 |--------------------|------------------------------------|
 | Eduard Salagran    | eduard.salagran@est.fib.upc.edu    |
