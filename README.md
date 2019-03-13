@@ -13,3 +13,4 @@
 
 ## Estructura
 A la carpeta app s'hi troba l'aplicació multiplataforma, a la carpeta server s'hi troba el servidor que interactua amb l'aplicació i la base de dades.
+ARNAU PARA DE FER COMMITS
