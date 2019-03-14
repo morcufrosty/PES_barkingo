@@ -193,3 +193,5 @@ yarn-error.log*
 .npm/
 
 shrinkwrap.yaml
+app/.expo/packager-info.json
+app/.expo/settings.json
