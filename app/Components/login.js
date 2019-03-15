@@ -1,5 +1,4 @@
 import React from 'react';
-import Register from "./Components/register";
 import { StyleSheet, Text, View,
     ScrollView,
     TextInput,
@@ -9,7 +8,18 @@ import { StyleSheet, Text, View,
 export default class App extends React.Component {
   render() {
     return (
-        <Register/>
+      <ScrollView style={{padding: 20}}>
+           <Text
+               style={{fontSize: 27}}>
+               Login
+           </Text>
+           <TextInput placeholder='Username' />
+           <TextInput placeholder='Password' />
+           <View style={{margin:7}} />
+           <Button
+                     title="Submit"
+                 />
+             </ScrollView>
     );
   }
 }
