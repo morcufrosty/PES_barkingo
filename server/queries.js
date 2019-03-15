@@ -36,20 +36,18 @@ const createUser = (request, response) => {
     }
 };
 
-const loginUser = (request, response) => {
+async const loginUser = (request, response) => {
     const { username, password } = request.body;
-    
     loginAttempt();
     async function loginAttempt() {
-        
         const client = await pool.connect()
-        try{
+        try {
             await client.query('BEGIN')
-            var currentAccountsData = await JSON.stringify(client.query('SELECT id, name, email, password FROM users WHERE email=$1', [username], function(err, result) {
-            
-                if(err) {
+            var currentAccountsData = await JSON.stringify(client.query('SELECT id, name, email, password FROM users WHERE email=$1', [username],
+            (err, result) => {
+                if (err) {
                     response.json({ 'result':'error' , 'msg':'error' });
-                } 
+                }
                 if(result.rows[0] == null){
                     response.json({ 'result':'error' , 'msg':'Oops. Incorrect login details.' });
                 } else{
@@ -63,10 +61,11 @@ const loginUser = (request, response) => {
                         }
                     });
                 }
-            }))
+            }));
+        } catch(e) {
+            throw (e);
         }
     }
-    catch(e){throw (e);}
 };
 
 module.exports = {
