@@ -18,7 +18,7 @@ const createUser = (request, response) => {
                 if (result.rows[0]) {
                     response.json({'result': 'error', 'msg': 'User already exists'});
                 } else {
-                    client.query('INSERT INTO users (id, "firstName", "lastName", email, password) VALUES ($1, $2, $3, $4)', [uuidv4(), name, username, pwd],
+                    client.query('INSERT INTO users (id, name, email, password) VALUES ($1, $2, $3, $4)', [uuidv4(), name, username, pwd],
                         (err, result) => {
                             if (err){
                                 console.log(err);
