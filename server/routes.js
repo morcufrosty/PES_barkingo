@@ -12,6 +12,8 @@ router.get('/', (req, res) => {
 
 router.post('/register', db.createUser);
 
+router.post('/login', db.loginUser);
+
 // more routes for our API will happen here
 
 module.exports = router;
