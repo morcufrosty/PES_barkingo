@@ -1,15 +1,16 @@
 import React from 'react';
-import Register from "./Components/register";
 import { StyleSheet, Text, View,
     ScrollView,
     TextInput,
     Button
 }  from 'react-native';
+import {AppStack} from "./appStack";
+
 
 export default class App extends React.Component {
   render() {
     return (
-        <Register/>
+      <AppStack />
     );
   }
 }

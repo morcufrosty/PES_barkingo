@@ -1,35 +1,23 @@
-import React from 'react';
-import { StyleSheet, Text, View,
-    ScrollView,
-    TextInput,
-    Button
-}  from 'react-native';
+import React, { Component } from 'react';
+import { Container, AppRegistry,StyleSheet,Text ,TextInput, View} from 'react-native';
 
-export default class App extends React.Component {
+export default class Login extends Component {
   render() {
     return (
-      <ScrollView style={{padding: 20}}>
-           <Text
-               style={{fontSize: 27}}>
-               Login
-           </Text>
-           <TextInput placeholder='Username' />
-           <TextInput placeholder='Password' />
-           <View style={{margin:7}} />
-           <Button
-                     title="Submit"
-                 />
-             </ScrollView>
+      <View>
+            <Text>"Email"</Text>
+        <TextInput></TextInput>
+      <Text>"Username"</Text>
+  <TextInput></TextInput>
+      <Text>"Password"</Text>
+        <TextInput></TextInput>
+        <Text>"Repeat Password"</Text>
+        <TextInput></TextInput>
+        <Button onPress={() => this.props.navigation.navigate('RegisterScreen')} title="Register"/>
+      </View>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
 
-  },
-});
+AppRegistry.registerComponent('Register', () => Register);
