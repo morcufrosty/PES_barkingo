@@ -195,5 +195,7 @@ yarn-error.log*
 shrinkwrap.yaml
 app/.expo/packager-info.json
 app/.expo/settings.json
+.expo/packager-info.json
+.expo/settings.json
 
 server/creds.json
