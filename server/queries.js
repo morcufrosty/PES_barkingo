@@ -4,7 +4,11 @@ const bcrypt = require('bcrypt');
 const uuidv4 = require('uuid/v4');
 const pool = new Pool({
     // DB credentials i config
-    ...creds.db,
+    user: creds.db.user,
+    host: creds.db.host,
+    database: creds.db.database,
+    password: creds.db.password,
+    port: creds.db.port,
 });
 
 const createUser = async (request, response) => {
@@ -14,7 +18,7 @@ const createUser = async (request, response) => {
         await client.query('BEGIN');
         const pwd = await bcrypt.hash(password, 5);
         await JSON.stringify(
-            client.query('SELECT id FROM "users" WHERE "email"=$1', [username], (err, result) => {
+            client.query('SELECT id FROM users WHERE email=$1', [username], (err, result) => {
                 if (result.rows[0]) {
                     response.json({ result: 'error', msg: 'User already exists' });
                 } else {
