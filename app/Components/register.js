@@ -1,60 +1,53 @@
 import React, { Component } from 'react';
-import { Button, Container, AppRegistry,StyleSheet,Text ,TextInput, View} from 'react-native';
+import { Button, Alert, Container, AppRegistry,StyleSheet,Text ,TextInput, View} from 'react-native';
+import styles from '../style/stylesheet.js'
+import Background from './Background.js'
+import { LinearGradient } from 'expo'
 //import Login Component
 //import Login from './src/components/Login/Login';
 
 export default class Register extends Component {
   render() {
     return (
-      <View style={{
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        backgroundColor: '#123456',
-        margin: '10%'
+      <LinearGradient colors = {['#F15A24', '#D4145A']}
+      start = {[0, 1]}
+      end = {[1, 0]}
+      style={{
+        flex:1,
+        padding: '10%',
+        paddingTop: '30%'
       }}>
-        <View>
-          <Text>"Email"</Text>
-          <TextInput style={{
-            backgroundColor:'#ffffff'
-          }}></TextInput>
+          <Text style={{color: 'white', fontSize: 45, flex: 1}}>Register</Text>
+          <View style={{flex:1}}>
+            <Text style={{color: 'white'}}>Email</Text>
+            <TextInput textAlign={'center'}
+            style={{backgroundColor:'white', opacity: 0.5, borderRadius: 5}}></TextInput>
+          </View>
+          <View style={{flex:1}}>
+            <Text style={{color: 'white'}}>Username</Text>
+            <TextInput textAlign={'center'} style={{backgroundColor:'white', opacity: 0.5, borderRadius: 5}}></TextInput>
+          </View>
+          <View style={{flex:1}}>
+            <Text style={{color: 'white'}}>Password</Text>
+            <TextInput textAlign={'center'} secureTextEntry={true}
+            style={{backgroundColor:'white', opacity: 0.5, borderRadius: 5}}></TextInput>
+          </View>
+          <View style={{flex:1}}>
+            <Text style={{color: 'white'}}>Repeat Password</Text>
+            <TextInput secureTextEntry={true} textAlign={'center'}
+            style={{backgroundColor:'white', opacity: 0.5, borderRadius: 5}}></TextInput>
+          </View>
+          <View style={{flex:1}}>
+            <Button
+              title='Register'
+              accessibilityLabel="Learn more about this purple button"
+              color='#ff3b28'
+              onPress= {() => {
+                Alert.alert('Registered!');
+              }}
+            ></Button>
         </View>
-        <View>
-          <Text>"Email"</Text>
-          <TextInput
-          style={{
-            backgroundColor:'#ffffff'
-          }}></TextInput>
-        </View>
-        <View>
-          <Text>"Username"</Text>
-          <TextInput
-          style={{
-            backgroundColor:'#ffffff'
-          }}></TextInput>
-        </View>
-        <View>
-          <Text>"Password"</Text>
-          <TextInput style={{
-            backgroundColor:'#ffffff'
-          }}></TextInput>
-        </View>
-        <View>
-          <Text>"Repeat Password"</Text>
-          <TextInput
-          style={{
-            backgroundColor:'#ffffff'
-          }}></TextInput>
-        </View>
-        <View>
-          <Button
-            title="Register"
-            color="#841584"
-            accessibilityLabel="Learn more about this purple button"
-            onPress=""
-          />
-        </View>
-      </View>
+      </LinearGradient>
     );
   }
 }
