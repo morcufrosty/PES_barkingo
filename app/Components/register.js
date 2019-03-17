@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { Button, Alert, Container, AppRegistry,StyleSheet,Text ,TextInput, View} from 'react-native';
 import styles from '../style/stylesheet.js'
-import Background from './Background.js'
+//import Background from './Background.js'
 import { LinearGradient } from 'expo'
 //import Login Component
 //import Login from './src/components/Login/Login';
+
 
 export default class Register extends Component {
   render() {
@@ -43,10 +44,21 @@ export default class Register extends Component {
               accessibilityLabel="Learn more about this purple button"
               color='#ff3b28'
               onPress= {() => {
+                // this.props.navigation.navigate('Login')
                 Alert.alert('Registered!');
               }}
             ></Button>
         </View>
+        <View style={{flex:1}}>
+
+          <Text style={{color: 'white'}}>Go Back to <Text> </Text>
+            <Text style ={{textDecorationLine: "underline"}}
+                  onPress={() => this.props.navigation.navigate('Login')}>
+              Login page
+            </Text>
+          </Text>
+        </View>
+
       </LinearGradient>
     );
   }

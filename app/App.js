@@ -5,11 +5,14 @@ import { StyleSheet, Text, View,
     TextInput,
     Button
 }  from 'react-native';
+import AppNav from "./AppNav"
 
 export default class App extends React.Component {
   render() {
+    const { navigation } = this.props;
+
     return (
-        <Register/>
+        <AppNav navigation={navigation}/>
     );
   }
 }
