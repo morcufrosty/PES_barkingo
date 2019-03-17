@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Register from "./Components/register";
 import { StyleSheet, Text, View,
     ScrollView,
@@ -16,13 +16,3 @@ export default class App extends React.Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-
-  },
-});

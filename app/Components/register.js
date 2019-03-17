@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { Button, Alert, Container, AppRegistry,StyleSheet,Text ,TextInput, View} from 'react-native';
 import styles from '../style/stylesheet.js'
-//import Background from './Background.js'
 import { LinearGradient } from 'expo'
-//import Login Component
-//import Login from './src/components/Login/Login';
+import TextInputWTitle from './inputText.js';
+import InputPassword from './inputPassword.js';
 
 
-export default class Register extends Component {
+export default class Register extends React.Component {
   render() {
     return (
       <LinearGradient colors = {['#F15A24', '#D4145A']}
@@ -19,25 +18,10 @@ export default class Register extends Component {
         paddingTop: '30%'
       }}>
           <Text style={{color: 'white', fontSize: 45, flex: 1}}>Register</Text>
-          <View style={{flex:1}}>
-            <Text style={{color: 'white'}}>Email</Text>
-            <TextInput textAlign={'center'}
-            style={{backgroundColor:'white', opacity: 0.5, borderRadius: 5}}></TextInput>
-          </View>
-          <View style={{flex:1}}>
-            <Text style={{color: 'white'}}>Username</Text>
-            <TextInput textAlign={'center'} style={{backgroundColor:'white', opacity: 0.5, borderRadius: 5}}></TextInput>
-          </View>
-          <View style={{flex:1}}>
-            <Text style={{color: 'white'}}>Password</Text>
-            <TextInput textAlign={'center'} secureTextEntry={true}
-            style={{backgroundColor:'white', opacity: 0.5, borderRadius: 5}}></TextInput>
-          </View>
-          <View style={{flex:1}}>
-            <Text style={{color: 'white'}}>Repeat Password</Text>
-            <TextInput secureTextEntry={true} textAlign={'center'}
-            style={{backgroundColor:'white', opacity: 0.5, borderRadius: 5}}></TextInput>
-          </View>
+          <TextInputWTitle name='Email'/>
+          <TextInputWTitle name='Username'/>
+          <InputPassword name='Password'/>
+          <InputPassword name='Repeat password'/>
           <View style={{flex:1}}>
             <Button
               title='Register'
