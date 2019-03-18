@@ -44,6 +44,7 @@ export default class App extends React.Component {
             onPress= {() => this._handlePress()}
           ></Button>
         </View>
+        
         <View style={{flex:1}}>
           <Text style={{color: 'white'}}> Don't have an account?<Text> </Text>
             <Text style ={{textDecorationLine: "underline"}}
@@ -52,7 +53,14 @@ export default class App extends React.Component {
               Register now!
             </Text>
           </Text>
-
+        </View>
+        <View >
+          <Button
+            title='Sign in with Google'
+            color='#4285f4'
+           
+            onPress= {() => this.props.navigation.navigate('GoogleLogin').LoginPage}
+          ></Button>
         </View>
       </LinearGradient>
     );
