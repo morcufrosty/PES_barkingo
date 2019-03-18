@@ -13,42 +13,50 @@ const pool = new Pool({
 
 const createUser = async (request, response) => {
     try {
-        const { password, username, name } = request.body;
+        const { password, email, name } = request.query;
         const client = await pool.connect();
         await client.query('BEGIN');
-        const pwd = await bcrypt.hash(password, 5);
-        await JSON.stringify(
-            client.query('SELECT id FROM users WHERE email=$1', [username], (err, result) => {
-                if (result.rows[0]) {
-                    response.json({ result: 'error', msg: 'User already exists' });
-                } else {
-                    client.query('INSERT INTO users (id, name, email, password) VALUES ($1, $2, $3, $4)', [uuidv4(), name, username, pwd], (err, result) => {
-                        if (err) {
-                            console.log(err);
-                        } else {
-                            client.query('COMMIT');
-                            console.log(result);
-                            response.json({ result: 'success', msg: 'User created successfully' });
-                            return;
-                        }
-                    });
-                }
-            })
-        );
+        if (password === undefined) response.json({ result: 'error', msg: 'Password not defined' });
+        let pwd = '';
+        const f = async () => {
+            await JSON.stringify(
+                client.query('SELECT id FROM users WHERE email=$1', [email], (err, result) => {
+                    if (result.rows[0]) {
+                        response.json({ result: 'error', msg: 'User already exists' });
+                    } else {
+                        client.query('INSERT INTO users (id, name, email, password) VALUES ($1, $2, $3, $4)', [uuidv4(), name, email, pwd], (err, result) => {
+                            if (err) {
+                                console.log(err);
+                            } else {
+                                client.query('COMMIT');
+                                console.log(result);
+                                response.json({ result: 'success', msg: 'User created successfully' });
+                                return;
+                            }
+                        });
+                    }
+                })
+            );
+        };
+        bcrypt.hash(password, 10, (err, hash) => {
+            pwd = hash;
+            f();
+        });
+        console.log(name, email, password, pwd);
     } catch (e) {
         console.log(e.stack);
     }
 };
 
 const loginUser = async (request, response) => {
-    const { username, password } = request.body;
+    const { email, password } = request.body;
     loginAttempt();
     async function loginAttempt() {
         const client = await pool.connect();
         try {
             await client.query('BEGIN');
             var currentAccountsData = await JSON.stringify(
-                client.query('SELECT id, name, email, password FROM users WHERE email=$1', [username], (err, result) => {
+                client.query('SELECT id, name, email, password FROM users WHERE email=$1', [email], (err, result) => {
                     if (err) {
                         response.json({ result: 'error', msg: 'error' });
                     }
