@@ -58,8 +58,7 @@ export default class App extends React.Component {
           <Button
             title='Sign in with Google'
             color='#4285f4'
-           
-            onPress= {() => this.props.navigation.navigate('GoogleLogin').LoginPage}
+            onPress= {() => this.props.navigation.navigate('GoogleLogin')}
           ></Button>
         </View>
       </LinearGradient>
