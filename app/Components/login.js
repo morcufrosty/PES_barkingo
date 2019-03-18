@@ -53,14 +53,31 @@ export default class App extends React.Component {
               Register now!
             </Text>
           </Text>
+
         </View>
-        <View >
+    
+
+          <View style={{flex:1, padding:  '15%', paddingVertical : '15%'}}>
           <Button
-            title='Sign in with Google'
-            color='#4285f4'
+            title='Login with Facebook'
+            color='#3b5998'
+            onPress= {() => this._handlePress()}
+          ></Button>
+        </View>
+
+        <View style={{flex:1, padding:  '15%', paddingVertical : '5%'}}>
+          <Button
+            title='Login with Google'
+            color='#D84B37'
             onPress= {() => this.props.navigation.navigate('GoogleLogin')}
           ></Button>
         </View>
+
+
+        
+
+
+        
       </LinearGradient>
     );
   }
