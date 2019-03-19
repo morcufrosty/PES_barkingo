@@ -85,7 +85,6 @@ export default class App extends React.Component {
             </Text>
           </Text>
 
-        </View>
     
 
           <View style={{flex:1, padding:  '15%', paddingVertical : '15%'}}>
@@ -104,6 +103,7 @@ export default class App extends React.Component {
           ></Button>
         </View>
 
+        </View>
 
         
 
