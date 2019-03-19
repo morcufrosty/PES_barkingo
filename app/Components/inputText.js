@@ -15,7 +15,7 @@ export default class TextInputWTitle extends Component {
     return (
           <View style={{flex:1}}>
             <Text style={{color: 'white'}}>{this.props.name}</Text>
-            <TextInput textAlign={'center'}
+            <TextInput textAlign={'center'} autoCapitalize = {'none'}
             style={{backgroundColor:'white', opacity: 0.5, borderRadius: 5}}></TextInput>
           </View>
     );
