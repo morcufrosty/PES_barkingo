@@ -6,6 +6,7 @@ import { StyleSheet, Text, View,
     Alert
 }  from 'react-native';
 import { LinearGradient } from 'expo'
+import { Facebook } from 'expo';
 import TextInputWTitle from './inputText.js';
 import InputPassword from './inputPassword.js';
 
@@ -20,8 +21,38 @@ export default class App extends React.Component {
     }
   }
 
+  async logInFacebook() {
+    try {
+      const {
+        type,
+        token,
+        expires,
+        permissions,
+        declinedPermissions,
+      } = await Facebook.logInWithReadPermissionsAsync('248948239393282', {
+        permissions: ['public_profile'],
+      });
+      if (type === 'success') {
+        // Get the user's name using Facebook's Graph API
+        const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
+        Alert.alert('Logged in!', `Hi ${(await response.json()).name}!`);
+      } else {
+        // type === 'cancel'
+      }
+    } catch ({ message }) {
+      alert(`Facebook Login Error: ${message}`);
+    }
+  }
   _handlePress() {
     Alert.alert(this.state.username);
+  }
+
+  _handlePressFBLogin() {
+    this.logInFacebook();
+  }
+
+  _handlePressGoogleLogin() {
+    Alert.alert("JEJE");
   }
 
   render() {
@@ -57,7 +88,7 @@ export default class App extends React.Component {
           <Button
             title='Login with Facebook'
             color='#3b5998'
-            onPress= {() => this._handlePress()}
+            onPress= {() => this._handlePressFBLogin()}
           ></Button>
         </View>
 
@@ -65,7 +96,7 @@ export default class App extends React.Component {
           <Button
             title='Login with Google'
             color='#D84B37'
-            onPress= {() => this._handlePress()}
+            onPress= {() => this._handlePressGoogleLogin()}
           ></Button>
         </View>
 
