@@ -10,9 +10,11 @@ export default class GoogleLogin extends React.Component {
       signedIn: false,
       name: "",
       photoUrl: "",
-      email:""
+      email:"",
+      accessToken:""
     }
   }
+  
   signIn = async () => {
     try {
       const result = await Expo.Google.logInAsync({
@@ -28,6 +30,7 @@ export default class GoogleLogin extends React.Component {
           name: result.user.name,
           photoUrl: result.user.photoUrl,
           email: result.user.email,
+          accessToken: result.accessToken
       
         })
       } else {
@@ -41,7 +44,7 @@ export default class GoogleLogin extends React.Component {
     return (
       <View style={styles.container}>
         {this.state.signedIn ? (
-          <LoggedInPage name={this.state.name} photoUrl={this.state.photoUrl} email={this.state.email} />
+          <LoggedInPage name={this.state.name} photoUrl={this.state.photoUrl} email={this.state.email} accessToken={this.state.accessToken} />
         ) : (
           <LoginPage signIn={this.signIn} />
         )}
@@ -61,9 +64,11 @@ const LoginPage = props => {
 const LoggedInPage = props => {
   return (
     <View style={styles.container}>
+   
       <Text style={styles.header}>Benvingut!</Text>
       <Text style={styles.header}>Nom: {props.name}</Text>
       <Text style={styles.header}>e-mail:{props.email}</Text>
+      <Text style={styles.header}>token:{props.accessToken}</Text>
     
       <Image style={styles.image} source={{ uri: props.photoUrl }} />
     </View>
