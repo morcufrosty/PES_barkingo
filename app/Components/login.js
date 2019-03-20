@@ -30,12 +30,13 @@ export default class App extends React.Component {
         permissions,
         declinedPermissions,
       } = await Facebook.logInWithReadPermissionsAsync('248948239393282', {
-        permissions: ['public_profile'],
+        permissions: ['public_profile','email'],
       });
       if (type === 'success') {
         // Get the user's name using Facebook's Graph API
-        const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
-        Alert.alert('Logged in!', `Hi ${(await response.json()).name}!`);
+        const response = await fetch(`https://graph.facebook.com/me?fields=id,name,picture,email
+        &access_token=${token}`);
+        Alert.alert("You are logged in!", `Hi ${(await response.json()).name}!`);
       } else {
         // type === 'cancel'
       }
@@ -51,9 +52,6 @@ export default class App extends React.Component {
     this.logInFacebook();
   }
 
-  _handlePressGoogleLogin() {
-    Alert.alert("JEJE");
-  }
 
   render() {
     return (
