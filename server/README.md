@@ -28,7 +28,30 @@ Every query must be called in the endpoint `/api`. Parameters must be passed in 
 ## Endpoints
 
 -   ### POST `/register`
+
     -   #### Parameters
+
         -   email [`required`]: A valid email that the user provided.
         -   name [`required`]: The name of the user, spaces must be expressed with an underscore (`_`).
         -   password [`required`]: The password provided by the user, in plain text.
+
+    -   #### Response
+        -   result: Can either be `error` or `result`.
+        -   msg: Short message explaining the causes of the result.
+
+-   ### POST `/renewGoogleToken``
+
+    -   #### Parameters
+        -   email [`required`]: A valid email from the Google Account
+        -   token [`required`]: A valid Google authenthetication token
+    -   #### Response
+        -   result: Can either be `error` or `result`.
+        -   msg: Short message explaining the causes of the result.
+
+-   ### POST `/renewFacebookToken``
+    -   #### Parameters
+        -   email [`required`]: A valid email from the Facebook Account
+        -   token [`required`]: A valid Facebook authenthetication token
+    -   #### Response
+        -   result: Can either be `error` or `result`.
+        -   msg: Short message explaining the causes of the result.

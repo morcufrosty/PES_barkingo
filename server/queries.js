@@ -56,7 +56,7 @@ const loginUser = async (request, response) => {
         try {
             await client.query('BEGIN');
             var currentAccountsData = await JSON.stringify(
-                client.query('SELECT id, name, email, password FROM users WHERE email=$1', [email], (err, result) => {
+                client.query('SELECT * FROM users WHERE email=$1', [email], (err, result) => {
                     if (err) {
                         response.json({ result: 'error', msg: 'error' });
                     }
@@ -81,9 +81,47 @@ const loginUser = async (request, response) => {
     }
 };
 
+const renewGoogleToken = async (request, response) => {
+    const { email, token } = request.query;
+    loginAttempt();
+    async function loginAttempt() {
+        const client = await pool.connect();
+        try {
+            await client.query('BEGIN');
+            var currentAccountsData = await JSON.stringify(
+                client.query('SELECT id, name, email, password FROM users WHERE email=$1', [email], (err, result) => {
+                    if (err) {
+                        response.json({ result: 'error', msg: 'error' });
+                    }
+                    if (result.rows.rowCount == 0) {
+                    } else {
+                        bcrypt.compare(password, result.rows[0].password, function(err, check) {
+                            if (err) {
+                                response.json({ result: 'error', msg: 'Error while checking password' });
+                            } else if (check) {
+                                response.json({ result: 'success', msg: { email: result.rows[0].email, name: result.rows[0].name } });
+                            } else {
+                                response.json({ result: 'error', msg: 'Oops. Incorrect login details.' });
+                            }
+                        });
+                    }
+                })
+            );
+        } catch (e) {
+            throw e;
+        }
+    }
+};
+
+const renewFacebookToken = async (request, response) => {
+    const { email, token } = request.query;
+};
+
 module.exports = {
     createUser,
     loginUser,
+    renewGoogleToken,
+    renewFacebookToken,
 };
 
 // ref: https://blog.logrocket.com/setting-up-a-restful-api-with-node-js-and-postgresql-d96d6fc892d8

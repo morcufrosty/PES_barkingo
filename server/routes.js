@@ -14,6 +14,10 @@ router.post('/register', db.createUser);
 
 router.post('/login', db.loginUser);
 
+router.post('/renewGoogleToken', db.renewGoogleToken);
+
+router.post('/renewFacebookToken', db.renewFacebookToken);
+
 // more routes for our API will happen here
 
 module.exports = router;
