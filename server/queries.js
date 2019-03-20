@@ -83,86 +83,89 @@ const loginUser = async (request, response) => {
 
 const renewGoogleToken = async (request, response) => {
     const { name, email, token } = request.query;
-    loginAttempt();
-    async function loginAttempt() {
+    async function loginAttempt(hashed) {
         const client = await pool.connect();
         try {
             await client.query('BEGIN');
-            var currentAccountsData = await JSON.stringify(
-                client.query('SELECT id, name, email, googleToken password FROM users WHERE email=$1', [email], (err, result) => {
-                    if (err) {
-                        response.json({ result: 'error', msg: 'error' });
-                    }
-                    if (result.rows.rowCount == 0) {
-                        client.query('INSERT INTO users (id, name, email, googleToken) VALUES ($1, $2, $3, $4)', [uuidv4(), name, email, token], (err, result) => {
-                            if (err) {
-                                console.log(err);
-                            } else {
-                                client.query('COMMIT');
-                                console.log(result);
-                                response.json({ result: 'success', msg: 'User created successfully' });
-                                return;
-                            }
-                        });
-                    } else {
-                        if (response.rows[0].googleToken) { // TODO: comparació tokens
-                            if (err) {
-                                response.json({ result: 'error', msg: 'Error while checking password' });
-                            } else if (check) {
-                                response.json({ result: 'success', msg: { email: result.rows[0].email, name: result.rows[0].name } });
-                            } else {
-                                response.json({ result: 'error', msg: 'Oops. Incorrect login details.' });
-                            }
-                        });
-                    }
-                })
-            );
+            await client.query('SELECT id, name, email, googletoken FROM users WHERE email=$1', [email], (err, result) => {
+                console.log(result);
+                if (err) {
+                    response.json({ result: 'error', msg: 'error' });
+                }
+                if (result.rowCount == 0) {
+                    client.query('INSERT INTO users (id, name, email, googletoken) VALUES ($1, $2, $3, $4)', [uuidv4(), name, email, hashed], (err, result) => {
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            client.query('COMMIT');
+                            console.log(result);
+                            response.json({ result: 'success', msg: 'User created successfully' });
+                            return;
+                        }
+                    });
+                } else {
+                    bcrypt.compare(token, result.rows[0].googletoken, (err, check) => {
+                        if (err) {
+                            response.json({ result: 'error', msg: 'Error while checking password' });
+                        } else if (check) {
+                            response.json({ result: 'success', msg: { email: result.rows[0].email, name: result.rows[0].name } });
+                        } else {
+                            response.json({ result: 'error', msg: 'Oops. Incorrect token' });
+                        }
+                    });
+                }
+            });
         } catch (e) {
             throw e;
         }
     }
+    bcrypt.hash(token, 10, (err, hash) => {
+        let hashedToken = hash;
+        loginAttempt(hashedToken);
+    });
 };
 
 const renewFacebookToken = async (request, response) => {
     const { name, email, token } = request.query;
-    loginAttempt();
-    async function loginAttempt() {
+    async function loginAttempt(hashed) {
         const client = await pool.connect();
         try {
             await client.query('BEGIN');
-            var currentAccountsData = await JSON.stringify(
-                client.query('SELECT id, name, email, password FROM users WHERE email=$1', [email], (err, result) => {
-                    if (err) {
-                        response.json({ result: 'error', msg: 'error' });
-                    }
-                    if (result.rows.rowCount == 0) {
-                        client.query('INSERT INTO users (id, name, email, facebookToken) VALUES ($1, $2, $3, $4)', [uuidv4(), name, email, token], (err, result) => {
-                            if (err) {
-                                console.log(err);
-                            } else {
-                                client.query('COMMIT');
-                                console.log(result);
-                                response.json({ result: 'success', msg: 'User created successfully' });
-                                return;
-                            }
-                        });
-                    } else {
-                        bcrypt.compare(password, result.rows[0].password, function(err, check) {
-                            if (err) {
-                                response.json({ result: 'error', msg: 'Error while checking password' });
-                            } else if (check) {
-                                response.json({ result: 'success', msg: { email: result.rows[0].email, name: result.rows[0].name } });
-                            } else {
-                                response.json({ result: 'error', msg: 'Oops. Incorrect login details.' });
-                            }
-                        });
-                    }
-                })
-            );
+            await client.query('SELECT id, name, email, facebooktoken FROM users WHERE email=$1', [email], (err, result) => {
+                if (err) {
+                    response.json({ result: 'error', msg: 'error' });
+                }
+                if (result.rowCount == 0) {
+                    client.query('INSERT INTO users (id, name, email, facebooktoken) VALUES ($1, $2, $3, $4)', [uuidv4(), name, email, hashed], (err, result) => {
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            client.query('COMMIT');
+                            console.log(result);
+                            response.json({ result: 'success', msg: 'User created successfully' });
+                            return;
+                        }
+                    });
+                } else {
+                    bcrypt.compare(token, result.rows[0].facebookToken, (err, check) => {
+                        if (err) {
+                            response.json({ result: 'error', msg: 'Error while checking password' });
+                        } else if (check) {
+                            response.json({ result: 'success', msg: { email: result.rows[0].email, name: result.rows[0].name } });
+                        } else {
+                            response.json({ result: 'error', msg: 'Oops. Incorrect token' });
+                        }
+                    });
+                }
+            });
         } catch (e) {
             throw e;
         }
     }
+    bcrypt.hash(token, 10, (err, hash) => {
+        let hashedToken = hash;
+        loginAttempt(hashedToken);
+    });
 };
 
 module.exports = {
