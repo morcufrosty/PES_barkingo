@@ -39,7 +39,7 @@ Every query must be called in the endpoint `/api`. Parameters must be passed in 
         -   result: Can either be `error` or `result`.
         -   msg: Short message explaining the causes of the result.
 
--   ### POST `/renewGoogleToken``
+-   ### POST `/renewGoogleToken`
 
     -   #### Parameters
         -   email [`required`]: A valid email from the Google Account
@@ -48,7 +48,7 @@ Every query must be called in the endpoint `/api`. Parameters must be passed in 
         -   result: Can either be `error` or `result`.
         -   msg: Short message explaining the causes of the result.
 
--   ### POST `/renewFacebookToken``
+-   ### POST `/renewFacebookToken`
     -   #### Parameters
         -   email [`required`]: A valid email from the Facebook Account
         -   token [`required`]: A valid Facebook authenthetication token
