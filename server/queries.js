@@ -56,11 +56,7 @@ const loginUser = async (request, response) => {
         try {
             await client.query('BEGIN');
             var currentAccountsData = await JSON.stringify(
-<<<<<<< HEAD
-                client.query('SELECT * FROM users WHERE email=$1;', [email], (err, result) => {
-=======
                 client.query('SELECT * FROM users WHERE email=$1', [email], (err, result) => {
->>>>>>> 4d3e78f595f81501be32918e07f833682a6e4f6b
                     if (err) {
                         response.json({ result: 'error', msg: 'error' });
                     }
