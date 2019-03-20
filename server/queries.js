@@ -49,7 +49,7 @@ const createUser = async (request, response) => {
 };
 
 const loginUser = async (request, response) => {
-    const { email, password } = request.body;
+    const { email, password } = request.query;
     loginAttempt();
     async function loginAttempt() {
         const client = await pool.connect();
@@ -61,7 +61,7 @@ const loginUser = async (request, response) => {
                         response.json({ result: 'error', msg: 'error' });
                     }
                     if (result.rows[0] == null) {
-                        response.json({ result: 'error', msg: 'Oops. Incorrect login details.' });
+                        response.json({ result: 'error', msg: 'Oops. User not found.' });
                     } else {
                         bcrypt.compare(password, result.rows[0].password, function(err, check) {
                             if (err) {
@@ -69,7 +69,7 @@ const loginUser = async (request, response) => {
                             } else if (check) {
                                 response.json({ result: 'success', msg: { email: result.rows[0].email, name: result.rows[0].name } });
                             } else {
-                                response.json({ result: 'error', msg: 'Oops. Incorrect login details.' });
+                                response.json({ result: 'error', msg: 'Oops. Incorrect password' });
                             }
                         });
                     }
