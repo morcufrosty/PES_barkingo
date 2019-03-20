@@ -22,6 +22,7 @@ npm start
 
 ## API usage
 
+The server runs on address `10.4.41.164` in the FIB network.
 Every query must be called in the endpoint `/api`. Parameters must be passed in the folloring manner, for example: `/api/register?email=test@example.com&name=Jon_Baker&password=12345`.
 
 ## Endpoints
