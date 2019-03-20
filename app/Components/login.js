@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View,
     ScrollView,
     TextInput,
-    Button,
-    Alert
+    Alert,
+    Platform
 }  from 'react-native';
+import Button from './Button';
 import { LinearGradient } from 'expo'
 import { Facebook } from 'expo';
 import TextInputWTitle from './inputText.js';
@@ -102,11 +103,6 @@ export default class App extends React.Component {
         </View>
 
         </View>
-
-        
-
-
-        
       </LinearGradient>
     );
   }
