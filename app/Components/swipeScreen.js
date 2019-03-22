@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Dimensions, Image, Animated, PanResponder } from 'react-native';
-
+import { LinearGradient } from 'expo'
 const SCREEN_HEIGHT = Dimensions.get('window').height
 const SCREEN_WIDTH = Dimensions.get('window').width
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -49,7 +49,7 @@ export default class swipeScreen extends React.Component {
 
     this.nextCardOpacity = this.position.x.interpolate({
       inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
-      outputRange: [1, 0, 1],
+      outputRange: [1, 1, 1],
       extrapolate: 'clamp'
     })
     this.nextCardScale = this.position.x.interpolate({
@@ -108,68 +108,45 @@ export default class swipeScreen extends React.Component {
       else if (i == this.state.currentIndex) {
 
         return (
-          <LinearGradient colors = {['#F15A24', '#D4145A']}
-          start = {[0, 1]}
-          end = {[1, 0]}
-          style={{
-            flex:1,
-            padding: '10%',
-            paddingTop: '30%'
-          }}>
           <Animated.View
             {...this.PanResponder.panHandlers}
-            key={item.id} style={[this.rotateAndTranslate, { height: SCREEN_HEIGHT - 120, width: SCREEN_WIDTH, padding: 10, position: 'absolute' }]}>
+            key={item.id} style={[this.rotateAndTranslate, { height: SCREEN_HEIGHT - 180, width: SCREEN_WIDTH, padding: 10, position: 'absolute' }]}>
             <Animated.View style={{ opacity: this.likeOpacity, transform: [{ rotate: '-30deg' }], position: 'absolute', top: 50, left: 40, zIndex: 1000 }}>
               <Text style={{ borderWidth: 1, borderColor: 'green', color: 'green', fontSize: 32, fontWeight: '800', padding: 10 }}>LIKE</Text>
-
             </Animated.View>
-
             <Animated.View style={{ opacity: this.dislikeOpacity, transform: [{ rotate: '30deg' }], position: 'absolute', top: 50, right: 40, zIndex: 1000 }}>
               <Text style={{ borderWidth: 1, borderColor: 'red', color: 'red', fontSize: 32, fontWeight: '800', padding: 10 }}>NOPE</Text>
-
             </Animated.View>
-
+            <Animated.View style={{ opacity: 1, position: 'absolute', bottom: 20, right: 40, zIndex: 1000 }}>
+              <Text style={{ color: '#ffffff', fontSize: 32, fontWeight: '800', padding: 10 }}>NAME OF ANIMAL</Text>
+            </Animated.View>
             <Image
               style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20 }}
               source={item.uri} />
-
           </Animated.View>
-          </LinearGradient>
         )
       }
       else {
         return (
-          <LinearGradient colors = {['#F15A24', '#D4145A']}
-          start = {[0, 1]}
-          end = {[1, 0]}
-          style={{
-            flex:1,
-            padding: '10%',
-            paddingTop: '30%'
-          }}>
           <Animated.View
-
             key={item.id} style={[{
               opacity: this.nextCardOpacity,
               transform: [{ scale: this.nextCardScale }],
-              height: SCREEN_HEIGHT - 120, width: SCREEN_WIDTH, padding: 10, position: 'absolute'
+              height: SCREEN_HEIGHT - 180, width: SCREEN_WIDTH, padding: 10, position: 'absolute'
             }]}>
             <Animated.View style={{ opacity: 0, transform: [{ rotate: '-30deg' }], position: 'absolute', top: 50, left: 40, zIndex: 1000 }}>
               <Text style={{ borderWidth: 1, borderColor: 'green', color: 'green', fontSize: 32, fontWeight: '800', padding: 10 }}>LIKE</Text>
-
             </Animated.View>
-
             <Animated.View style={{ opacity: 0, transform: [{ rotate: '30deg' }], position: 'absolute', top: 50, right: 40, zIndex: 1000 }}>
               <Text style={{ borderWidth: 1, borderColor: 'red', color: 'red', fontSize: 32, fontWeight: '800', padding: 10 }}>NOPE</Text>
-
             </Animated.View>
-
+            <Animated.View style={{ opacity: 1, position: 'absolute', bottom: 20, right: 40, zIndex: 1000 }}>
+              <Text style={{ color: '#ffffff', fontSize: 32, fontWeight: '800', padding: 10 }}>NAME OF ANIMAL</Text>
+            </Animated.View>
             <Image
               style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20 }}
               source={item.uri} />
-
           </Animated.View>
-          </LinearGradient>
         )
       }
     }).reverse()
@@ -177,19 +154,20 @@ export default class swipeScreen extends React.Component {
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
+      <LinearGradient colors = {['#F15A24', '#D4145A']}
+      start = {[0, 1]}
+      end = {[1, 0]}
+      style={{
+        flex:1,
+      }}>
         <View style={{ height: 60 }}>
-
         </View>
         <View style={{ flex: 1 }}>
           {this.renderUsers()}
         </View>
-        <View style={{ height: 60 }}>
-
+        <View style={{ height: 120 }}>
         </View>
-
-
-      </View>
+      </LinearGradient>
 
     );
   }
