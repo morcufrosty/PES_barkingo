@@ -71,10 +71,10 @@ export default class App extends React.Component {
           <Button
             title='Login'
             color='#ff3b28'
-            onPress= {() => this._handlePress()}
-          ></Button>
+            onPress={() => this.props.navigation.navigate('Swipe')}>
+          </Button>
         </View>
-        
+
         <View style={{flex:1}}>
           <Text style={{color: 'white'}}> Don't have an account?<Text> </Text>
             <Text style ={{textDecorationLine: "underline"}}
@@ -84,7 +84,7 @@ export default class App extends React.Component {
             </Text>
           </Text>
 
-    
+
 
           <View style={{flex:1, padding:  '15%', paddingVertical : '15%'}}>
           <Button
