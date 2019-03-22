@@ -20,24 +20,22 @@ const createUser = async (request, response) => {
         if (password === undefined) response.json({ success: false, msg: 'Password not defined' });
         let pwd = '';
         const f = async () => {
-            await JSON.stringify(
-                client.query('SELECT id FROM users WHERE email=$1', [email], (err, result) => {
-                    if (result.rows[0]) {
-                        response.json({ success: false, msg: 'User already exists' });
-                    } else {
-                        client.query('INSERT INTO users (id, name, email, password) VALUES ($1, $2, $3, $4)', [uuidv4(), name, email, pwd], (err, result) => {
-                            if (err) {
-                                console.log(err);
-                            } else {
-                                client.query('COMMIT');
-                                console.log(result);
-                                response.json({ success: true, msg: 'User created successfully' });
-                                return;
-                            }
-                        });
-                    }
-                })
-            );
+            await client.query('SELECT id FROM users WHERE email=$1', [email], (err, result) => {
+                if (result.rows[0]) {
+                    response.json({ success: false, msg: 'User already exists' });
+                } else {
+                    client.query('INSERT INTO users (id, name, email, password) VALUES ($1, $2, $3, $4)', [uuidv4(), name, email, pwd], (err, result) => {
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            client.query('COMMIT');
+                            console.log(result);
+                            response.json({ success: true, msg: 'User created successfully' });
+                            return;
+                        }
+                    });
+                }
+            });
         };
         bcrypt.hash(password, 10, (err, hash) => {
             pwd = hash;
@@ -56,30 +54,28 @@ const loginUser = async (request, response) => {
         const client = await pool.connect();
         try {
             await client.query('BEGIN');
-            var currentAccountsData = await JSON.stringify(
-                client.query('SELECT * FROM users WHERE email=$1', [email], (err, result) => {
-                    if (err) {
-                        response.json({ success: false, msg: 'error' });
-                    }
-                    if (result.rowCount == 0) {
-                        response.json({ success: false, msg: 'Oops. User not found.' });
-                    } else {
-                        bcrypt.compare(password, result.rows[0].password, function(err, check) {
-                            if (err) {
-                                response.json({ success: false, msg: 'Error while checking password' });
-                            } else if (check) {
-                                const payload = { email: result.rows[0].email, name: result.rows[0].name };
-                                var token = jwt.sign(payload, creds.secret, {
-                                    expiresIn: 1440, // expires in 1 week
-                                });
-                                response.json({ success: true, msg: 'Successful login', token: token });
-                            } else {
-                                response.json({ success: false, msg: 'Oops. Incorrect password' });
-                            }
-                        });
-                    }
-                })
-            );
+            await client.query('SELECT * FROM users WHERE email=$1', [email], (err, result) => {
+                if (err) {
+                    response.json({ success: false, msg: 'error' });
+                }
+                if (result.rowCount == 0) {
+                    response.json({ success: false, msg: 'Oops. User not found.' });
+                } else {
+                    bcrypt.compare(password, result.rows[0].password, function(err, check) {
+                        if (err) {
+                            response.json({ success: false, msg: 'Error while checking password' });
+                        } else if (check) {
+                            const payload = { email: result.rows[0].email, name: result.rows[0].name };
+                            var token = jwt.sign(payload, creds.secret, {
+                                expiresIn: "1 day",
+                            });
+                            response.json({ success: true, msg: 'Successful login', token: token });
+                        } else {
+                            response.json({ success: false, msg: 'Oops. Incorrect password' });
+                        }
+                    });
+                }
+            });
         } catch (e) {
             throw e;
         }
@@ -104,7 +100,11 @@ const renewGoogleToken = async (request, response) => {
                         } else {
                             client.query('COMMIT');
                             console.log(result);
-                            response.json({ success: true, msg: 'User created successfully' });
+                            const payload = { email: result.rows[0].email, name: result.rows[0].name };
+                            var token = jwt.sign(payload, creds.secret, {
+                                expiresIn: "1 day",
+                            });
+                            response.json({ success: true, msg: 'User created successfully', token: token });
                             return;
                         }
                     });
@@ -113,7 +113,11 @@ const renewGoogleToken = async (request, response) => {
                         if (err) {
                             response.json({ success: false, msg: 'Error while checking password' });
                         } else if (check) {
-                            response.json({ success: true, msg: { email: result.rows[0].email, name: result.rows[0].name } });
+                            const payload = { email: result.rows[0].email, name: result.rows[0].name };
+                            var token = jwt.sign(payload, creds.secret, {
+                                expiresIn: "1 day",
+                            });
+                            response.json({ success: true, msg: 'User logged in successfully', token: token });
                         } else {
                             response.json({ success: false, msg: 'Oops. Incorrect token' });
                         }
@@ -147,7 +151,11 @@ const renewFacebookToken = async (request, response) => {
                         } else {
                             client.query('COMMIT');
                             console.log(result);
-                            response.json({ success: false, msg: 'User created successfully' });
+                            const payload = { email: result.rows[0].email, name: result.rows[0].name };
+                            var signedToken = jwt.sign(payload, creds.secret, {
+                                expiresIn: "1 day",
+                            });
+                            response.json({ success: true, msg: 'User created successfully', token: signedToken });
                             return;
                         }
                     });
@@ -156,7 +164,11 @@ const renewFacebookToken = async (request, response) => {
                         if (err) {
                             response.json({ success: false, msg: 'Error while checking password' });
                         } else if (check) {
-                            response.json({ success: true, msg: { email: result.rows[0].email, name: result.rows[0].name } });
+                            const payload = { email: result.rows[0].email, name: result.rows[0].name };
+                            var signedToken = jwt.sign(payload, creds.secret, {
+                                expiresIn: "1 day",
+                            });
+                            response.json({ success: true, msg: 'User logged in successfully', token: signedToken });
                         } else {
                             response.json({ success: false, msg: 'Oops. Incorrect token' });
                         }
