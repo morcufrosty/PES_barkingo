@@ -1,26 +1,18 @@
-import React from 'react';
+import React, { Component } from 'react';
+import Register from "./Components/register";
 import { StyleSheet, Text, View,
     ScrollView,
     TextInput,
     Button
 }  from 'react-native';
-import {AppStack} from "./appStack";
-
+import AppNav from "./AppNav"
 
 export default class App extends React.Component {
   render() {
+    const { navigation } = this.props;
+
     return (
-      <AppStack />
+        <AppNav navigation={navigation}/>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-
-  },
-});
