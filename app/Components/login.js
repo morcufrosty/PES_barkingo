@@ -9,6 +9,8 @@ import { LinearGradient } from 'expo'
 import { Facebook } from 'expo';
 import TextInputWTitle from './inputText.js';
 import InputPassword from './inputPassword.js';
+import {AsyncStorage} from 'react-native';
+
 
 
 export default class App extends React.Component {
@@ -20,6 +22,13 @@ export default class App extends React.Component {
       password: '',
     }
   }
+
+  /*
+  _storeToken(token, expiration){
+
+  }
+*/
+  
 
   async logInFacebook() {
     try {
@@ -33,9 +42,9 @@ export default class App extends React.Component {
         permissions: ['public_profile','email'],
       });
       if (type === 'success') {
-        // Get the user's name using Facebook's Graph API
-        const response = await fetch(`https://graph.facebook.com/me?fields=id,name,picture,email
-        &access_token=${token}`);
+        
+        const response = await fetch('https://graph.facebook.com/me?fields=name,picture,email&access_token=${token}');
+
         Alert.alert("You are logged in!", `Hi ${(await response.json()).name}!`);
       } else {
         // type === 'cancel'
@@ -44,6 +53,7 @@ export default class App extends React.Component {
       alert(`Facebook Login Error: ${message}`);
     }
   }
+
   _handlePress() {
     Alert.alert(this.state.username);
   }
