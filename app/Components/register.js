@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { Alert, Container, AppRegistry,StyleSheet,Text ,TextInput, View} from 'react-native';
+import { Button, Alert, Container, AppRegistry,StyleSheet,Text ,TextInput, View} from 'react-native';
 import styles from '../style/stylesheet.js'
 import { LinearGradient } from 'expo'
 import TextInputWTitle from './inputText.js';
 import InputPassword from './inputPassword.js';
-import Button from './Button';
+
 
 export default class Register extends React.Component {
 

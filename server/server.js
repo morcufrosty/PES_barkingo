@@ -1,9 +1,6 @@
 const express = require('express'); // call express
 const app = express(); // define our app using express
 const bodyParser = require('body-parser');
-var morgan = require('morgan');
-
-app.use(morgan('dev'));
 
 // configure app to use bodyParser()
 // this will let us get the data from a POST
