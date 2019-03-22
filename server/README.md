@@ -49,7 +49,7 @@ When needed, a token must be in the headers in the parameter name `x-access-toke
 
     -   #### Response
         -   success: Is either true or false.
-        -   msg: I case the request was not a successs, this parameter is a short message explaining the causes of the result. If the request was successful, it includes a token that the app must keep for a week and send in every request that needs token based authentication.
+        -   msg: In case the request was not a successs, this parameter is a short message explaining the causes of the result. If the request was successful, it also includes a token that the app must keep for a day (as it's only vlaid for such time) and send in every request that needs token based authentication.
 
 -   ### POST `/renewGoogleToken`
 
@@ -58,7 +58,7 @@ When needed, a token must be in the headers in the parameter name `x-access-toke
         -   token [`required`]: A valid Google authenthetication token
     -   #### Response
         -   success: Is either true or false.
-        -   msg: Short message explaining the causes of the result.
+        -   msg: In case the request was not a successs, this parameter is a short message explaining the causes of the result. If the request was successful, it also includes a token that the app must keep for a day (as it's only vlaid for such time) and send in every request that needs token based authentication.
 
 -   ### POST `/renewFacebookToken`
     -   #### Query parameters
@@ -66,4 +66,4 @@ When needed, a token must be in the headers in the parameter name `x-access-toke
         -   token [`required`]: A valid Facebook authenthetication token
     -   #### Response
         -   success: Is either true or false.
-        -   msg: Short message explaining the causes of the result.
+        -   msg: In case the request was not a successs, this parameter is a short message explaining the causes of the result. If the request was successful, it also includes a token that the app must keep for a day (as it's only vlaid for such time) and send in every request that needs token based authentication.
