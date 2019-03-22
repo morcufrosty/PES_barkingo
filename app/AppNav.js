@@ -6,14 +6,12 @@ import swipeScreen from "./Components/swipeScreen"
 import AppAfterLogin from "./AppAfterLogin"
 
 import Icon from 'react-native-vector-icons/FontAwesome';
-import Settings from "./Components/settings";
-import Chat from "./Components/chat"
+
 
 
 const TabNavigator = createBottomTabNavigator({
   Swipe: {screen: swipeScreen},
-  Settings: {screen: Settings},
-  Chat: {screen: Chat}
+
 });
 
 
