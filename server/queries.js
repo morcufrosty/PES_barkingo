@@ -70,7 +70,7 @@ const loginUser = async (request, response) => {
                             } else if (check) {
                                 const payload = { email: result.rows[0].email, name: result.rows[0].name };
                                 var token = jwt.sign(payload, creds.secret, {
-                                    expiresIn: 34560, // expires in 1 week
+                                    expiresIn: 1440, // expires in 1 week
                                 });
                                 response.json({ success: true, msg: 'Successful login', token: token });
                             } else {

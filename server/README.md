@@ -24,6 +24,7 @@ npm start
 
 The server runs on address `10.4.41.164` in the FIB network.
 Every query must be called in the endpoint `/api`. Parameters must be passed in the body of the request, using `x-www-form-urlencoded`.
+When needed, a token must be in the headers in the parameter name `x-access-token`.
 
 ## Endpoints
 
