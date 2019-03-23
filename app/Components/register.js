@@ -6,6 +6,7 @@ import TextInputWTitle from './inputText.js';
 import InputPassword from './inputPassword.js';
 import Button from './Button';
 
+
 export default class Register extends React.Component {
 
   constructor(props){
@@ -18,11 +19,30 @@ export default class Register extends React.Component {
     }
   }
 
-  handleChangeUsr(text){
-    this.setState({username: text})
-  }
+   async registerToApiAsync() {
+     console.log("EXECUTED");
+       return fetch('http://10.4.41.164/api/register', {
+       method: 'POST',
+       headers: {
+         Accept: 'application/json',
+         'Content-Type': 'application/json',
+       },
+       body: JSON.stringify({
+         email: this.state.email,
+         name: this.state.username,
+         password: this.state.password
+       }),
+     }).then((response) => response.json())
+     .then((responseJson) => {
+       console.log(responseJson);
+     }).catch((error) => {
+      console.error(error);
+    });
+     
 
-  render() {
+} 
+  
+render() {
     return (
       <LinearGradient colors = {['#F15A24', '#D4145A']}
       start = {[0, 1]}
@@ -63,22 +83,14 @@ export default class Register extends React.Component {
               title='Register'
               accessibilityLabel="Learn more about this purple button"
               color='#ff3b28'
-              onPress= {() => {
+              onPress= {() => { 
 
                 if(this.state.password == this.state.repeatPassword){
-                    fetch('http://10.4.41.164/api/register', {
-                      method: 'POST',
-                      headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json',
-                      },
-                      body: JSON.stringify({
-                        email: this.state.email,
-                        name: this.state.username ,
-                        password: this.state.password
-                    }),
-                }).then((response) => response.json());
-              }}
+                const response = this.registerToApiAsync();
+                alert(response.msg);
+                }
+                else alert('The passwords do not match, please try again');
+              }
             }
             ></Button>
         </View>

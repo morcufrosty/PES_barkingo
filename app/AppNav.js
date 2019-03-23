@@ -3,7 +3,7 @@ import Register from "./Components/register";
 import Login from "./Components/login"
 import GoogleLogin from "./Components/googleLogin"
 import swipeScreen from "./Components/swipeScreen"
-import AppAfterLogin from "./AppAfterLogin"
+//import AppAfterLogin from "./AppAfterLogin"
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Settings from "./Components/settings";

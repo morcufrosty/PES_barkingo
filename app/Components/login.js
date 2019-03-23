@@ -10,7 +10,8 @@ import { LinearGradient } from 'expo'
 import { Facebook } from 'expo';
 import TextInputWTitle from './inputText.js';
 import InputPassword from './inputPassword.js';
-import {AsyncStorage} from 'react-native';
+//import {AsyncStorage} from 'react-native';
+//import { getMaxListeners } from 'cluster';
 
 
 
@@ -19,7 +20,7 @@ export default class App extends React.Component {
   constructor(props){
     super(props)
     this.state = {
-      username: '',
+      email: '',
       password: '',
     }
   }
@@ -55,8 +56,36 @@ export default class App extends React.Component {
     }
   }
 
-  _handlePress() {
-    Alert.alert(this.state.username);
+
+  async _loginUsingAPI(){
+
+    return fetch('http://10.4.41.164/api/login', {
+                      method: 'POST',
+                      headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({
+                        email: this.state.email,
+                        password: this.state.password
+                    }),
+                }).then((response) => response.json())
+                .then((responseJson) => {
+                  console.log(responseJson);
+                }).catch((error) => {
+                  console.error(error);
+                });
+            
+  }
+
+   _handlePress() {
+
+  const response = this._loginUsingAPI();
+  console.log(response.msg);
+  if(response.success)
+    this.props.navigation.navigate('Swipe');  
+  else alert (`Login error: ${response.msg}`);
+    
   }
 
   _handlePressFBLogin() {
@@ -75,13 +104,24 @@ export default class App extends React.Component {
         paddingTop: '30%'
       }}>
         <Text style={{color: 'white', fontSize: 45, flex: 1}}>Login</Text>
-        <TextInputWTitle name='Username' action={this.handler}></TextInputWTitle>
-        <InputPassword name='Password'></InputPassword>
+
+        <View style={{flex:1}}>
+            <Text style={{color: 'white'}}>{"Email"}</Text>
+            <TextInput  onChangeText= { (email) => this.setState({email})} value = {this.state.email} textAlign={'center'} autoCapitalize = {'none'}
+            style={{backgroundColor:'white', opacity: 0.5, borderRadius: 5}}></TextInput>
+          </View>
+
+          <View style={{flex:1}}>
+            <Text style={{color: 'white'}}>{"Password"}</Text>
+            <TextInput secureTextEntry={true}  onChangeText= { (password) => this.setState({password})} value = {this.state.password} textAlign={'center'} autoCapitalize = {'none'}
+            style={{backgroundColor:'white', opacity: 0.5, borderRadius: 5}}></TextInput>
+          </View>
+
         <View style={{flex:1}}>
           <Button
             title='Login'
             color='#ff3b28'
-            onPress={() => this.props.navigation.navigate('Swipe')}>
+            onPress={() => this._handlePress()}>
           </Button>
         </View>
 
