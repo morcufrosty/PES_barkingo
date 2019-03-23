@@ -142,7 +142,8 @@ export default class App extends React.Component {
     const response = this._loginUsingAPI();
     console.log(response.msg);
     if (response.success){
-      this._storeToken(response.msg);
+      this.setState({token:response.msg})
+      this._storeToken();
       this.props.navigation.navigate('Swipe');
     }
     else{ 
