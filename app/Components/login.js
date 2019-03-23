@@ -128,33 +128,6 @@ export default class App extends React.Component {
 
   }
 
-  _handlePress() {
-    if (this.state.email === '' && this.state.password === ''){
-      this.setState({count: this.state.count + 1});
-
-    if (this.state.count === 2){
-      this.props.navigation.navigate('Swipe');
-      this.setState({count: 0});
-    }
-    return;
-    }
-
-    const response = this._loginUsingAPI();
-    console.log(response.msg);
-    if (response.success){
-      this.setState({token:response.msg})
-      this._storeToken();
-      this.props.navigation.navigate('Swipe');
-    }
-    else{
-      if(response.msg === undefined)
-        Alert.alert("Login error", "Unknown error");
-      else
-      Alert.alert("Login error", response.msg);
-    }
-
-
-  }
 
   _handlePressFBLogin() {
     this._logInFacebook();
@@ -193,7 +166,42 @@ export default class App extends React.Component {
           <Button
             title='Login'
             color='#ff3b28'
-            onPress={() => this._handlePress()}>
+            onPress={async() =>{
+              if (this.state.email === '' && this.state.password === ''){
+                this.setState({count: this.state.count + 1});
+          
+              if (this.state.count === 2){
+                this.props.navigation.navigate('Swipe');
+                this.setState({count: 0});
+              }
+              return;
+              }
+              else if(this.state.email == ''){
+                Alert.alert("Error", "Please enter your email");
+                return;
+              }
+
+
+              else if(this.state.password == ''){
+              Alert.alert("Error", "Please enter your password");
+              return;
+              }
+
+          
+              const response = await this._loginUsingAPI();
+              console.log(response.msg);
+              if (response.success){
+                this.setState({token:response.msg})
+                this._storeToken();
+                this.props.navigation.navigate('Swipe');
+              }
+              else{
+                if(response.msg === undefined)
+                  Alert.alert("Login error", "Server error");
+                else
+                Alert.alert("Login error", response.msg);
+              }
+            }}>
           </Button>
         </View>
 
