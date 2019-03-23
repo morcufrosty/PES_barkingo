@@ -131,8 +131,7 @@ export default class App extends React.Component {
   _handlePress() {
     if (this.state.email === '' && this.state.password === ''){
       this.setState({count: this.state.count + 1});
- 
-      
+
     if (this.state.count === 2){
       this.props.navigation.navigate('Swipe');
       this.setState({count: 0});
@@ -147,7 +146,7 @@ export default class App extends React.Component {
       this._storeToken();
       this.props.navigation.navigate('Swipe');
     }
-    else{ 
+    else{
       if(response.msg === undefined)
         Alert.alert("Login error", "Unknown error");
       else
@@ -181,13 +180,13 @@ export default class App extends React.Component {
         <View style={{ flex: 1 }}>
           <Text style={{ color: 'white' }}>{"Email"}</Text>
           <TextInput onChangeText={(email) => this.setState({ email })} value={this.state.email} textAlign={'center'} autoCapitalize={'none'}
-            style={{ backgroundColor: 'white', opacity: 0.5, borderRadius: 5 }}></TextInput>
+            style={{ backgroundColor: 'white', opacity: 0.5, borderRadius: 5, paddingVertical: 0, height: 35 }}></TextInput>
         </View>
 
         <View style={{ flex: 1 }}>
           <Text style={{ color: 'white' }}>{"Password"}</Text>
           <TextInput secureTextEntry={true} onChangeText={(password) => this.setState({ password })} value={this.state.password} textAlign={'center'} autoCapitalize={'none'}
-            style={{ backgroundColor: 'white', opacity: 0.5, borderRadius: 5 }}></TextInput>
+            style={{ backgroundColor: 'white', opacity: 0.5, borderRadius: 5, paddingVertical: 0, height: 35 }}></TextInput>
         </View>
 
         <View style={{ flex: 1 }}>
@@ -206,14 +205,14 @@ export default class App extends React.Component {
               Register now!
             </Text>
           </Text>
-          <View style={{ flex: 1, padding: '15%', paddingVertical: '15%' }}>
+          <View style={{ flex: 1, padding: '10%', paddingVertical: '15%' }}>
             <Button
               title='Login with Facebook'
               color='#3b5998'
               onPress={() => this._handlePressFBLogin()}
             ></Button>
           </View>
-          <View style={{ flex: 1, padding: '15%', paddingVertical: '5%' }}>
+          <View style={{ flex: 1, padding: '10%', paddingVertical: '5%' }}>
             <Button
               title='Login with Google'
               color='#D84B37'
