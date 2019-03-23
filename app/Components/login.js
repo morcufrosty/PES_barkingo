@@ -120,7 +120,8 @@ export default class App extends React.Component {
       }),
     }).then((response) => response.json())
       .then((responseJson) => {
-        console.log(responseJson);
+        console.log(responseJson.msg);
+        return responseJson;
       }).catch((error) => {
         console.error(error);
       });

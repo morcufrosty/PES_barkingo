@@ -20,7 +20,6 @@ export default class Register extends React.Component {
   }
 
   async registerToApiAsync() {
-    console.log("EXECUTED");
     return fetch('http://10.4.41.164/api/register', {
       method: 'POST',
       headers: {
@@ -34,7 +33,8 @@ export default class Register extends React.Component {
       }),
     }).then((response) => response.json())
       .then((responseJson) => {
-        console.log(responseJson);
+        console.log(responseJson.msg);
+        return responseJson;
       }).catch((error) => {
         console.error(error);
       });
@@ -91,7 +91,10 @@ export default class Register extends React.Component {
 
               else if (this.state.password == this.state.repeatPassword) {
                 const response = this.registerToApiAsync();
-                alert(response.msg);
+                if (response.msg === undefined)
+                  Alert.alert("Login error", "Unknown error");
+                else
+                  alert(response.msg);
               }
               else Alert.alert("Error", 'The passwords do not match, please try again');
             }
