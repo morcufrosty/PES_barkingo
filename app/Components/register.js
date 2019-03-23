@@ -57,25 +57,25 @@ export default class Register extends React.Component {
         <View style={{ flex: 1 }}>
           <Text style={{ color: 'white' }}>{"Email"}</Text>
           <TextInput onChangeText={(email) => this.setState({ email })} value={this.state.email} textAlign={'center'} autoCapitalize={'none'}
-            style={{ backgroundColor: 'white', opacity: 0.5, borderRadius: 5 }}></TextInput>
+            style={{ backgroundColor: 'white', opacity: 0.5, borderRadius: 5, paddingVertical: 0, height: 35 }}></TextInput>
         </View>
 
         <View style={{ flex: 1 }}>
           <Text style={{ color: 'white' }}>{"Username"}</Text>
           <TextInput onChangeText={(username) => this.setState({ username })} value={this.state.username} textAlign={'center'} autoCapitalize={'none'}
-            style={{ backgroundColor: 'white', opacity: 0.5, borderRadius: 5 }}></TextInput>
+            style={{ backgroundColor: 'white', opacity: 0.5, borderRadius: 5, paddingVertical: 0, height: 35 }}></TextInput>
         </View>
 
         <View style={{ flex: 1 }}>
           <Text style={{ color: 'white' }}>{"Password"}</Text>
           <TextInput secureTextEntry={true} onChangeText={(password) => this.setState({ password })} value={this.state.password} textAlign={'center'} autoCapitalize={'none'}
-            style={{ backgroundColor: 'white', opacity: 0.5, borderRadius: 5 }}></TextInput>
+            style={{ backgroundColor: 'white', opacity: 0.5, borderRadius: 5, paddingVertical: 0, height: 35 }}></TextInput>
         </View>
 
         <View style={{ flex: 1 }}>
           <Text style={{ color: 'white' }}>{"Repeat password"}</Text>
           <TextInput secureTextEntry={true} onChangeText={(repeatPassword) => this.setState({ repeatPassword })} value={this.state.repeatPassword} textAlign={'center'} autoCapitalize={'none'}
-            style={{ backgroundColor: 'white', opacity: 0.5, borderRadius: 5 }}></TextInput>
+            style={{ backgroundColor: 'white', opacity: 0.5, borderRadius: 5, paddingVertical: 0, height: 35 }}></TextInput>
         </View>
 
         <View style={{ flex: 1 }}>
