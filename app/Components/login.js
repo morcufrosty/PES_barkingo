@@ -3,7 +3,7 @@ import {
   StyleSheet, Text, View,
   ScrollView,
   TextInput,
-  Alert,
+  Alert,AsyncStorage,
   Platform
 } from 'react-native';
 import Button from './Button';
@@ -11,11 +11,11 @@ import { LinearGradient } from 'expo'
 import { Facebook } from 'expo';
 import TextInputWTitle from './inputText.js';
 import InputPassword from './inputPassword.js';
-import {AsyncStorage} from 'react-native';
+
 import * as Expo from "expo"
 //import { getMaxListeners } from 'cluster';
 
-
+const ACCESS_TOKEN = 'access_token';
 
 export default class App extends React.Component {
 
@@ -57,7 +57,7 @@ export default class App extends React.Component {
 
   _retrieveAndCheckToken = async () => {
     try {
-      const localToken = await AsyncStorage.getItem('Token');
+      const localToken = await AsyncStorage.getItem(ACCESS_TOKEN);
       if (localToken !== null) {
         console.log(localToken);
         //Here we should get the token from the server to compare it with the local token
@@ -72,13 +72,36 @@ export default class App extends React.Component {
 
 
 
-  _storeToken = async () => {
+  async storeToken(){
     try {
-      await AsyncStorage.setItem('Token', this.state.token);
+      await AsyncStorage.setItem(ACCESS_TOKEN, this.state.token);
+      this.getToken();
     } catch (error) {
+      console.log("Ha fallat el storeToken")
       // Error saving data
     }
-  };
+  }
+
+  async getToken(){
+    try {
+      let token = await AsyncStorage.getItem(ACCESS_TOKEN);
+      this.getToken();
+      console.log("token: "+ token);
+    } catch (error) {
+      // Error showing data
+      console.log("Ha fallat el getToken")
+    }
+  }
+
+  async removeToken(){
+    try {
+      await AsyncStorage.removeItem(ACCESS_TOKEN);
+      this.getToken(); //ha de ser null
+    } catch (error) {
+      // Error showing data
+      console.log("Ha fallat el removeToken")
+    }
+  }
 
 
   async _logInFacebook() {
@@ -143,7 +166,7 @@ export default class App extends React.Component {
     console.log(response.msg);
     if (response.success){
       this.setState({token:response.msg})
-      this._storeToken();
+      this.storeToken();
       this.props.navigation.navigate('Swipe');
     }
     else{
