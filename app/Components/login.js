@@ -9,6 +9,7 @@ import { LinearGradient } from 'expo'
 import { Facebook } from 'expo';
 import TextInputWTitle from './inputText.js';
 import InputPassword from './inputPassword.js';
+import * as Expo from "expo";
 
 
 export default class App extends React.Component {
@@ -20,6 +21,35 @@ export default class App extends React.Component {
       password: '',
     }
   }
+
+ async signInGoogle ()  {
+    try {
+      const result = await Expo.Google.logInAsync({
+        androidClientId:
+          "802116894984-a2n57c60e6ri7bpp6t63nlivelj185om.apps.googleusercontent.com",
+        //iosClientId: YOUR_CLIENT_ID_HERE,  <-- if you use iOS
+        scopes: ["profile", "email"]
+      })
+  
+      if (result.type === "success") {
+
+        Alert.alert("You are logged in!", `Hola ${result.user.name}`);
+       // this.setState({
+         // signedIn: true,
+          //name: result.user.name,
+          //photoUrl: result.user.photoUrl,
+          //email: result.user.email,
+          //accessToken: result.accessToken
+      
+        //})
+      } else {
+        console.log("cancelled")
+      }
+    } catch (e) {
+      console.log("error", e)
+    }
+  }
+  
 
   async logInFacebook() {
     try {
@@ -50,6 +80,10 @@ export default class App extends React.Component {
 
   _handlePressFBLogin() {
     this.logInFacebook();
+  }
+
+  pressGoogleLogin(){
+    this.signInGoogle();
   }
 
 
@@ -96,8 +130,8 @@ export default class App extends React.Component {
         <View style={{flex:1, padding:  '15%', paddingVertical : '5%'}}>
           <Button
             title='Login with Google'
-            color='#D84B37'
-            onPress= {() => this.props.navigation.navigate('GoogleLogin')}
+            color='#D84B37' 
+            onPress= {() => this.pressGoogleLogin()}
           ></Button>
         </View>
 
