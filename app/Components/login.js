@@ -11,7 +11,7 @@ import { LinearGradient } from 'expo'
 import { Facebook } from 'expo';
 import TextInputWTitle from './inputText.js';
 import InputPassword from './inputPassword.js';
-//import {AsyncStorage} from 'react-native';
+import {AsyncStorage} from 'react-native';
 //import { getMaxListeners } from 'cluster';
 
 
@@ -23,18 +23,38 @@ export default class App extends React.Component {
     this.state = {
       email: '',
       password: '',
-      count: 0
+      count: 0,
+      token: ''
     }
   }
 
-  /*
-  _storeToken(token, expiration){
+  _retrieveAndCheckToken = async () => {
+    try {
+      const localToken = await AsyncStorage.getItem('Token');
+      if (localToken !== null) {
+        console.log(localToken);
+        //Here we should get the token from the server to compare it with the local token
+        //serverToken = fetch...
+        if(false && localToken === serverToken)
+          this.props.navigation.navigate('Swipe');
+       } else console.log("No local token");
+    } catch (error) {
+      // Error retrieving data
+    }
+  };
 
-  }
-*/
 
 
-  async logInFacebook() {
+  _storeToken = async () => {
+    try {
+      await AsyncStorage.setItem('Token', this.state.token);
+    } catch (error) {
+      // Error saving data
+    }
+  };
+
+
+  async _logInFacebook() {
     try {
       const {
         type,
@@ -94,18 +114,28 @@ export default class App extends React.Component {
 
     const response = this._loginUsingAPI();
     console.log(response.msg);
-    if (response.success)
+    if (response.success){
+      this._storeToken(response.msg);
       this.props.navigation.navigate('Swipe');
-    else alert(`Login error: ${response.msg}`);
+    }
+    else{ 
+      if(response.msg === undefined)
+        Alert.alert("Login error", "Unknown error");
+      else
+      Alert.alert("Login error", response.msg);
+    }
+
 
   }
 
   _handlePressFBLogin() {
-    this.logInFacebook();
+    this._logInFacebook();
   }
 
 
   render() {
+    this._retrieveAndCheckToken();
+
     return (
       <LinearGradient colors={['#F15A24', '#D4145A']}
         start={[0, 1]}
