@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View,
-    ScrollView,
-    TextInput,
-    Alert,
-    Platform
-}  from 'react-native';
+import {
+  StyleSheet, Text, View,
+  ScrollView,
+  TextInput,
+  Alert,
+  Platform
+} from 'react-native';
 import Button from './Button';
 import { LinearGradient } from 'expo'
 import { Facebook } from 'expo';
@@ -17,11 +18,12 @@ import InputPassword from './inputPassword.js';
 
 export default class App extends React.Component {
 
-  constructor(props){
+  constructor(props) {
     super(props)
     this.state = {
       email: '',
       password: '',
+      count: 0
     }
   }
 
@@ -30,7 +32,7 @@ export default class App extends React.Component {
 
   }
 */
-  
+
 
   async logInFacebook() {
     try {
@@ -41,10 +43,10 @@ export default class App extends React.Component {
         permissions,
         declinedPermissions,
       } = await Facebook.logInWithReadPermissionsAsync('248948239393282', {
-        permissions: ['public_profile','email'],
+        permissions: ['public_profile', 'email'],
       });
       if (type === 'success') {
-        
+
         const response = await fetch('https://graph.facebook.com/me?fields=name,picture,email&access_token=${token}');
 
         Alert.alert("You are logged in!", `Hi ${(await response.json()).name}!`);
@@ -57,35 +59,45 @@ export default class App extends React.Component {
   }
 
 
-  async _loginUsingAPI(){
+  async _loginUsingAPI() {
 
     return fetch('http://10.4.41.164/api/login', {
-                      method: 'POST',
-                      headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json',
-                      },
-                      body: JSON.stringify({
-                        email: this.state.email,
-                        password: this.state.password
-                    }),
-                }).then((response) => response.json())
-                .then((responseJson) => {
-                  console.log(responseJson);
-                }).catch((error) => {
-                  console.error(error);
-                });
-            
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: this.state.email,
+        password: this.state.password
+      }),
+    }).then((response) => response.json())
+      .then((responseJson) => {
+        console.log(responseJson);
+      }).catch((error) => {
+        console.error(error);
+      });
+
   }
 
-   _handlePress() {
+  _handlePress() {
+    if (this.state.email === '' && this.state.password === ''){
+      this.setState({count: this.state.count + 1});
+ 
+      
+    if (this.state.count === 2){
+      this.props.navigation.navigate('Swipe');
+      this.setState({count: 0});
+    }
+    return;
+    }
 
-  const response = this._loginUsingAPI();
-  console.log(response.msg);
-  if(response.success)
-    this.props.navigation.navigate('Swipe');  
-  else alert (`Login error: ${response.msg}`);
-    
+    const response = this._loginUsingAPI();
+    console.log(response.msg);
+    if (response.success)
+      this.props.navigation.navigate('Swipe');
+    else alert(`Login error: ${response.msg}`);
+
   }
 
   _handlePressFBLogin() {
@@ -95,29 +107,29 @@ export default class App extends React.Component {
 
   render() {
     return (
-      <LinearGradient colors = {['#F15A24', '#D4145A']}
-      start = {[0, 1]}
-      end = {[1, 0]}
-      style={{
-        flex:1,
-        padding: '10%',
-        paddingTop: '30%'
-      }}>
-        <Text style={{color: 'white', fontSize: 45, flex: 1}}>Login</Text>
+      <LinearGradient colors={['#F15A24', '#D4145A']}
+        start={[0, 1]}
+        end={[1, 0]}
+        style={{
+          flex: 1,
+          padding: '10%',
+          paddingTop: '30%'
+        }}>
+        <Text style={{ color: 'white', fontSize: 45, flex: 1 }}>Login</Text>
 
-        <View style={{flex:1}}>
-            <Text style={{color: 'white'}}>{"Email"}</Text>
-            <TextInput  onChangeText= { (email) => this.setState({email})} value = {this.state.email} textAlign={'center'} autoCapitalize = {'none'}
-            style={{backgroundColor:'white', opacity: 0.5, borderRadius: 5}}></TextInput>
-          </View>
+        <View style={{ flex: 1 }}>
+          <Text style={{ color: 'white' }}>{"Email"}</Text>
+          <TextInput onChangeText={(email) => this.setState({ email })} value={this.state.email} textAlign={'center'} autoCapitalize={'none'}
+            style={{ backgroundColor: 'white', opacity: 0.5, borderRadius: 5 }}></TextInput>
+        </View>
 
-          <View style={{flex:1}}>
-            <Text style={{color: 'white'}}>{"Password"}</Text>
-            <TextInput secureTextEntry={true}  onChangeText= { (password) => this.setState({password})} value = {this.state.password} textAlign={'center'} autoCapitalize = {'none'}
-            style={{backgroundColor:'white', opacity: 0.5, borderRadius: 5}}></TextInput>
-          </View>
+        <View style={{ flex: 1 }}>
+          <Text style={{ color: 'white' }}>{"Password"}</Text>
+          <TextInput secureTextEntry={true} onChangeText={(password) => this.setState({ password })} value={this.state.password} textAlign={'center'} autoCapitalize={'none'}
+            style={{ backgroundColor: 'white', opacity: 0.5, borderRadius: 5 }}></TextInput>
+        </View>
 
-        <View style={{flex:1}}>
+        <View style={{ flex: 1 }}>
           <Button
             title='Login'
             color='#ff3b28'
@@ -125,32 +137,32 @@ export default class App extends React.Component {
           </Button>
         </View>
 
-        <View style={{flex:1}}>
-          <Text style={{color: 'white'}}> Don't have an account?<Text> </Text>
-            <Text style ={{textDecorationLine: "underline"}}
-                  onPress={() => this.props.navigation.navigate('Register')
-                }>
+        <View style={{ flex: 1 }}>
+          <Text style={{ color: 'white' }}> Don't have an account?<Text> </Text>
+            <Text style={{ textDecorationLine: "underline" }}
+              onPress={() => this.props.navigation.navigate('Register')
+              }>
               Register now!
             </Text>
           </Text>
 
 
 
-          <View style={{flex:1, padding:  '15%', paddingVertical : '15%'}}>
-          <Button
-            title='Login with Facebook'
-            color='#3b5998'
-            onPress= {() => this._handlePressFBLogin()}
-          ></Button>
-        </View>
+          <View style={{ flex: 1, padding: '15%', paddingVertical: '15%' }}>
+            <Button
+              title='Login with Facebook'
+              color='#3b5998'
+              onPress={() => this._handlePressFBLogin()}
+            ></Button>
+          </View>
 
-        <View style={{flex:1, padding:  '15%', paddingVertical : '5%'}}>
-          <Button
-            title='Login with Google'
-            color='#D84B37'
-            onPress= {() => this.props.navigation.navigate('GoogleLogin')}
-          ></Button>
-        </View>
+          <View style={{ flex: 1, padding: '15%', paddingVertical: '5%' }}>
+            <Button
+              title='Login with Google'
+              color='#D84B37'
+              onPress={() => this.props.navigation.navigate('GoogleLogin')}
+            ></Button>
+          </View>
 
         </View>
       </LinearGradient>
