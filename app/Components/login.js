@@ -213,14 +213,14 @@ export default class App extends React.Component {
               Register now!
             </Text>
           </Text>
-          <View style={{ flex: 1, padding: '10%', marginTop: 20}}>
+          <View style={{ flex: 1, padding: '11%', marginTop: 20}}>
             <Button
               title='Login with Facebook'
               color='#3b5998'
               onPress={() => this._handlePressFBLogin()}
             ></Button>
           </View>
-          <View style={{ flex: 1, padding: '10%' }}>
+          <View style={{ flex: 1, padding: '11%' }}>
             <Button
               title='Login with Google'
               color='#D84B37'
