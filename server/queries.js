@@ -13,9 +13,13 @@ const pool = new Pool({
 });
 
 const createUser = async (request, response) => {
-    try {
-        const { password, email, name } = request.body;
-        const client = await pool.connect();
+    const { password, email, name } = request.body;
+    await pool.connect(async (err, client, done) => {
+        if (err) {
+            response.json({ success: false, msg: 'Error accessing the database' });
+            done();
+            return;
+        }
         await client.query('BEGIN');
         if (password === undefined) response.json({ success: false, msg: 'Password not defined' });
         let pwd = '';
@@ -26,12 +30,10 @@ const createUser = async (request, response) => {
                 } else {
                     client.query('INSERT INTO users (id, name, email, password) VALUES ($1, $2, $3, $4)', [uuidv4(), name, email, pwd], (err, result) => {
                         if (err) {
-                            console.log(err);
+                            console.error('Unknown error', err);
                         } else {
                             client.query('COMMIT');
-                            console.log(result);
                             response.json({ success: true, msg: 'User created successfully' });
-                            return;
                         }
                     });
                 }
@@ -41,71 +43,77 @@ const createUser = async (request, response) => {
             pwd = hash;
             f();
         });
-        console.log(name, email, password, pwd);
-    } catch (e) {
-        console.log(e.stack);
-    }
+        done();
+    });
 };
 
 const loginUser = async (request, response) => {
     const { email, password } = request.body;
-    loginAttempt();
-    async function loginAttempt() {
-        const client = await pool.connect();
-        try {
-            await client.query('BEGIN');
-            await client.query('SELECT * FROM users WHERE email=$1', [email], (err, result) => {
-                if (err) {
-                    response.json({ success: false, msg: 'error' });
-                }
-                if (result.rowCount == 0) {
-                    response.json({ success: false, msg: 'Oops. User not found.' });
-                } else {
-                    bcrypt.compare(password, result.rows[0].password, function(err, check) {
-                        if (err) {
-                            response.json({ success: false, msg: 'Error while checking password' });
-                        } else if (check) {
-                            const payload = { email: result.rows[0].email, name: result.rows[0].name };
-                            var token = jwt.sign(payload, creds.secret, {
-                                expiresIn: "1 day",
-                            });
-                            response.json({ success: true, msg: 'Successful login', token: token });
-                        } else {
-                            response.json({ success: false, msg: 'Oops. Incorrect password' });
-                        }
-                    });
-                }
-            });
-        } catch (e) {
-            throw e;
+    await pool.connect(async (err, client, done) => {
+        if (err) {
+            response.json({ success: false, msg: 'Error accessing the database' });
+            done();
+            return;
         }
-    }
+        await client.query('BEGIN');
+        await client.query('SELECT * FROM users WHERE email=$1', [email], (err, result) => {
+            if (err) {
+                response.json({ success: false, msg: 'error' });
+            }
+            if (result.rowCount == 0) {
+                response.json({ success: false, msg: 'Oops. User not found.' });
+            } else {
+                bcrypt.compare(password, result.rows[0].password, function(err, check) {
+                    if (err) {
+                        response.json({ success: false, msg: 'Error while checking password' });
+                    } else if (check) {
+                        const payload = { email: result.rows[0].email, name: result.rows[0].name };
+                        jwt.sign(
+                            payload,
+                            creds.secret,
+                            {
+                                expiresIn: '1 day',
+                            },
+                            (err, token) => {
+                                if (err) throw err;
+                                response.json({ success: true, msg: 'Successful login', token: token });
+                            }
+                        );
+                    } else {
+                        response.json({ success: false, msg: 'Oops. Incorrect password' });
+                    }
+                });
+            }
+        });
+        done();
+    });
 };
 
 const renewGoogleToken = async (request, response) => {
     const { name, email, token } = request.body;
     async function loginAttempt(hashed) {
-        const client = await pool.connect();
-        try {
+        await pool.connect(async (err, client, done) => {
+            if (err) {
+                response.json({ success: false, msg: 'Error accessing the database' });
+                done();
+                return;
+            }
             await client.query('BEGIN');
             await client.query('SELECT id, name, email, googletoken FROM users WHERE email=$1', [email], (err, result) => {
-                console.log(result);
                 if (err) {
                     response.json({ success: false, msg: 'Server error' });
                 }
                 if (result.rowCount == 0) {
                     client.query('INSERT INTO users (id, name, email, googletoken) VALUES ($1, $2, $3, $4)', [uuidv4(), name, email, hashed], (err, result) => {
                         if (err) {
-                            console.log(err);
+                            console.error('Query error', err);
                         } else {
                             client.query('COMMIT');
-                            console.log(result);
                             const payload = { email: result.rows[0].email, name: result.rows[0].name };
                             var token = jwt.sign(payload, creds.secret, {
-                                expiresIn: "1 day",
+                                expiresIn: '1 day',
                             });
                             response.json({ success: true, msg: 'User created successfully', token: token });
-                            return;
                         }
                     });
                 } else {
@@ -115,18 +123,17 @@ const renewGoogleToken = async (request, response) => {
                         } else if (check) {
                             const payload = { email: result.rows[0].email, name: result.rows[0].name };
                             var token = jwt.sign(payload, creds.secret, {
-                                expiresIn: "1 day",
+                                expiresIn: '1 day',
                             });
                             response.json({ success: true, msg: 'User logged in successfully', token: token });
                         } else {
-                            response.json({ success: false, msg: 'Oops. Incorrect token' });
+                            response.json({ success: false, msg: 'Incorrect token' });
                         }
                     });
                 }
             });
-        } catch (e) {
-            throw e;
-        }
+            done();
+        });
     }
     bcrypt.hash(token, 10, (err, hash) => {
         let hashedToken = hash;
@@ -137,8 +144,12 @@ const renewGoogleToken = async (request, response) => {
 const renewFacebookToken = async (request, response) => {
     const { name, email, token } = request.body;
     async function loginAttempt(hashed) {
-        const client = await pool.connect();
-        try {
+        await pool.connect(async (err, client, done) => {
+            if (err) {
+                response.json({ success: false, msg: 'Error accessing the database' });
+                done();
+                return;
+            }
             await client.query('BEGIN');
             await client.query('SELECT id, name, email, facebooktoken FROM users WHERE email=$1', [email], (err, result) => {
                 if (err) {
@@ -153,7 +164,7 @@ const renewFacebookToken = async (request, response) => {
                             console.log(result);
                             const payload = { email: result.rows[0].email, name: result.rows[0].name };
                             var signedToken = jwt.sign(payload, creds.secret, {
-                                expiresIn: "1 day",
+                                expiresIn: '1 day',
                             });
                             response.json({ success: true, msg: 'User created successfully', token: signedToken });
                             return;
@@ -166,7 +177,7 @@ const renewFacebookToken = async (request, response) => {
                         } else if (check) {
                             const payload = { email: result.rows[0].email, name: result.rows[0].name };
                             var signedToken = jwt.sign(payload, creds.secret, {
-                                expiresIn: "1 day",
+                                expiresIn: '1 day',
                             });
                             response.json({ success: true, msg: 'User logged in successfully', token: signedToken });
                         } else {
@@ -175,9 +186,8 @@ const renewFacebookToken = async (request, response) => {
                     });
                 }
             });
-        } catch (e) {
-            throw e;
-        }
+            done();
+        });
     }
     bcrypt.hash(token, 10, (err, hash) => {
         let hashedToken = hash;
