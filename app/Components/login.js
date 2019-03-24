@@ -72,9 +72,9 @@ export default class App extends React.Component {
 
 
 
-  _storeToken = async () => {
+  _storeToken = async (token) => {
     try {
-      await AsyncStorage.setItem('Token', this.state.token);
+      await AsyncStorage.setItem('Token', token);
     } catch (error) {
       // Error saving data
     }
@@ -191,8 +191,8 @@ export default class App extends React.Component {
               const response = await this._loginUsingAPI();
               console.log(response.msg);
               if (response.success){
-                this.setState({token:response.msg})
-                this._storeToken();
+                console.log(response.token);
+                this._storeToken(response.token);
                 this.props.navigation.navigate('Swipe');
               }
               else{

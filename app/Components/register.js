@@ -93,7 +93,10 @@ export default class Register extends React.Component {
 
               else if (this.state.password == this.state.repeatPassword) {
                 const response = await this.registerToApiAsync();
-                if (response.msg === undefined)
+                if(response.success){
+                  alert(response.msg);
+                  this.props.navigation.navigate('Login');
+                }else if (response.msg === undefined)
                   Alert.alert("Login error", "Server error");
                 else
                   alert(response.msg);
