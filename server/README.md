@@ -56,6 +56,7 @@ When needed, a token must be in the headers in the parameter name `x-access-toke
     -   #### Query parameters
         -   email [`required`]: A valid email from the Google Account
         -   token [`required`]: A valid Google authenthetication token
+        -   name  [`required`]: The name of the user, spaces must be expressed with an underscore (`_`).
     -   #### Response
         -   success: Is either true or false.
         -   msg: In case the request was not a successs, this parameter is a short message explaining the causes of the result. If the request was successful, it also includes a token that the app must keep for a day (as it's only vlaid for such time) and send in every request that needs token based authentication.
@@ -64,6 +65,8 @@ When needed, a token must be in the headers in the parameter name `x-access-toke
     -   #### Query parameters
         -   email [`required`]: A valid email from the Facebook Account
         -   token [`required`]: A valid Facebook authenthetication token
+        -   name [`required`]: The name of the user, spaces must be expressed with an underscore (`_`).
+
     -   #### Response
         -   success: Is either true or false.
         -   msg: In case the request was not a successs, this parameter is a short message explaining the causes of the result. If the request was successful, it also includes a token that the app must keep for a day (as it's only vlaid for such time) and send in every request that needs token based authentication.

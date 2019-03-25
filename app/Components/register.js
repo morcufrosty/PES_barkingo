@@ -19,6 +19,7 @@ export default class Register extends React.Component {
     }
   }
 
+
   async registerToApiAsync() {
     return fetch('http://10.4.41.164/api/register', {
       method: 'POST',
@@ -83,16 +84,24 @@ export default class Register extends React.Component {
             title='Register'
             accessibilityLabel="Learn more about this purple button"
             color='#ff3b28'
-            onPress={() => {
-
+            onPress={async () => {
+              const expression = /\S+@\S+/
               if (this.state.email === '' || this.state.username === '' || this.state.password === '' || this.state.repeatPassword === '')
                 Alert.alert("Error", "Please fill all the fields")
-
-
+              else if (!expression.test(String(this.state.email).toLowerCase()))
+                Alert.alert("Error", "The email you entered is invalid, please try again")
               else if (this.state.password == this.state.repeatPassword) {
-                const response = this.registerToApiAsync();
-                if (response.msg === undefined)
-                  Alert.alert("Register error: " +response.msg );
+                if (this.state.password.length < 5) {
+                  Alert.alert("Error", "The password must have at least 5 characters");
+                  return;
+                }
+
+                const response = await this.registerToApiAsync();
+                if (response.success) {
+                  Alert.alert("Congratulations", response.msg);
+                  this.props.navigation.navigate('Login');
+                } else if (response.msg === undefined)
+                  Alert.alert("Login error", "Server error");
                 else
                   alert(response.msg);
               }
