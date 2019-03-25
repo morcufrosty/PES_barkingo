@@ -163,7 +163,7 @@ export default class App extends React.Component {
     }
 
     const response = this._loginUsingAPI();
-    console.log(response.msg);
+    console.log("Response login user" + response.msg);
     if (response.success){
       this.setState({token:response.msg})
       this.storeToken();
