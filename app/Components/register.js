@@ -85,7 +85,7 @@ export default class Register extends React.Component {
             accessibilityLabel="Learn more about this purple button"
             color='#ff3b28'
             onPress={async () => {
-              const expression = /\S+@\S+/
+              const expression = /\S+@\S+\.\S+/
               if (this.state.email === '' || this.state.username === '' || this.state.password === '' || this.state.repeatPassword === '')
                 Alert.alert("Error", "Please fill all the fields")
               else if (!expression.test(String(this.state.email).toLowerCase()))

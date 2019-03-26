@@ -51,11 +51,11 @@ export default class App extends React.Component {
       
        const resFromBarkingo = await this.renewGoogleTokenToAPI('http://10.4.41.164/api/renewGoogleToken');
        console.log("google response content:" + resFromBarkingo.success + " "+ resFromBarkingo.msg);
-      if (resFromBarkingo.success === true)
-      
-       this._storeToken(resFromBarkingo.msg);
+      if (resFromBarkingo.success){
+       this.storeToken(resFromBarkingo.token);
        this.getToken();
        this.props.navigation.navigate('Swipe');
+      }
 
       } else {
         console.log("cancelled Google Login")
@@ -66,7 +66,7 @@ export default class App extends React.Component {
   }
 
 
-  _retrieveAndCheckToken = async () => {
+  retrieveAndCheckToken = async () => {
     try {
       const localToken = await AsyncStorage.getItem(ACCESS_TOKEN);
       if (localToken !== null) {
@@ -83,9 +83,9 @@ export default class App extends React.Component {
 
 
 
-  _storeToken = async (token) => {
+  storeToken = async (token) => {
     try {
-      await AsyncStorage.setItem('Token', token);
+      await AsyncStorage.setItem(ACCESS_TOKEN, token);
     } catch (error) {
       console.log("Ha fallat el storeToken")
       // Error saving data
@@ -113,7 +113,7 @@ export default class App extends React.Component {
     }
   }
 
-  async _renewFacebookTokenToAPI(facebookName, facebookEmail, facebookToken) {
+  async renewFacebookTokenToAPI(facebookName, facebookEmail, facebookToken) {
 
     return fetch('http://10.4.41.164/api/renewFacebookToken', {
       method: 'POST',
@@ -160,7 +160,7 @@ export default class App extends React.Component {
 
   }
 
-  async _logInFacebook() {
+  async logInFacebook() {
     try {
       const {
         type,
@@ -176,9 +176,9 @@ export default class App extends React.Component {
         const responseFb = await fetch(`https://graph.facebook.com/me?fields=name,picture,email&access_token=${token}`);
         responseFbJson = await responseFb.json();
        
-        const responseBarkingo = await this._renewFacebookTokenToAPI(responseFbJson.name, responseFbJson.email, token);
+        const responseBarkingo = await this.renewFacebookTokenToAPI(responseFbJson.name, responseFbJson.email, token);
         if (responseBarkingo.success) {
-          this._storeToken(responseBarkingo.token);
+          this.storeToken(responseBarkingo.token);
           this.props.navigation.navigate('Swipe');
         }
         else Alert.Alert("Login error", responseBarkingo.msg);
@@ -193,7 +193,7 @@ export default class App extends React.Component {
   }
 
 
-  async _loginUsingAPI() {
+  async loginUsingAPI() {
 
     return fetch('http://10.4.41.164/api/login', {
       method: 'POST',
@@ -216,15 +216,19 @@ export default class App extends React.Component {
   }
 
 
-  _handlePressFBLogin() {
-    this._logInFacebook();
+  handlePressFBLogin() {
+    this.logInFacebook();
   }
 
   pressGoogleLogin() {
     this.signInWithGoogle()
   }
+
+
+
   render() {
-    this._retrieveAndCheckToken();
+    this.retrieveAndCheckToken();
+    
 
     return (
       <LinearGradient colors={['#F15A24', '#D4145A']}
@@ -275,11 +279,11 @@ export default class App extends React.Component {
               }
 
 
-              const response = await this._loginUsingAPI();
+              const response = await this.loginUsingAPI();
               console.log(response.msg);
               if (response.success) {
                 console.log(response.token);
-                this._storeToken(response.token);
+                this.storeToken(response.token);
                 this.props.navigation.navigate('Swipe');
               }
               else {
@@ -304,7 +308,7 @@ export default class App extends React.Component {
             <Button
               title='Login with Facebook'
               color='#3b5998'
-              onPress={() => this._handlePressFBLogin()}
+              onPress={() => this.handlePressFBLogin()}
             ></Button>
           </View>
           <View style={{ flex: 1, padding: '11%' }}>
