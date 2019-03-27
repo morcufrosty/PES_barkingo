@@ -10,6 +10,9 @@
     "type": "git",
     "url": "git+https://github.com/morcufrosty/barkingo.git"
   },
+  "dependencies": {
+    "react-scripts": "^2.1.8"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
