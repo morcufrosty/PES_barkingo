@@ -26,7 +26,9 @@ export default class App extends React.Component {
       name: '',
       password: '',
       count: 0,
-      token: ''
+      token: '',
+      isLoading: true
+
     }
   }
 
@@ -35,10 +37,11 @@ export default class App extends React.Component {
       name: '',
       email: '',
       token: '',
-      password: ''      
+      password: ''
    })
 
   }
+
 
   async signInWithGoogle() {
     try {
@@ -54,18 +57,18 @@ export default class App extends React.Component {
           name: result.user.name,
           email: result.user.email.replace(/\s/g, "_"),
           token: result.accessToken
-          
+
          // maybe we need it:photoUrl: result.user.photoUrl,
        })
        console.log("enter fetch API barkingo google");
-      
+
        const resFromBarkingo = await this.renewGoogleTokenToAPI('http://10.4.41.164/api/renewGoogleToken');
        console.log("google response content:" + resFromBarkingo.success + " "+ resFromBarkingo.msg);
       if (resFromBarkingo.success){
        this.storeToken(resFromBarkingo.token);
        this.getToken();
        this.resetState();
-       this.props.navigation.navigate('AppAfterLogin');
+       this.props.navigation.replace('AppAfterLogin');
       }
 
       } else {
@@ -92,12 +95,24 @@ export default class App extends React.Component {
 
         if (new Date().getTime() < tokenJson.expiration ){
           this.resetState();
-          this.props.navigation.navigate('AppAfterLogin');
+          this.setState({
+              isLoading: false
+          });
+          this.props.navigation.replace('AppAfterLogin');
         }
         else{
           //Renew token
-        } 
-      } else console.log("No local token");
+          this.setState({
+              isLoading: false
+          });
+        }
+      } else {
+        console.log("No local token");
+        this.setState({
+            isLoading: false
+        });
+
+      }
     } catch (error) {
       console.log(error);
     }
@@ -199,11 +214,11 @@ export default class App extends React.Component {
 
         const responseFb = await fetch(`https://graph.facebook.com/me?fields=name,picture,email&access_token=${token}`);
         responseFbJson = await responseFb.json();
-       
+
         const responseBarkingo = await this.renewFacebookTokenToAPI(responseFbJson.name, responseFbJson.email, token);
         if (responseBarkingo.success) {
           this.storeToken(responseBarkingo.token);
-          this.props.navigation.navigate('AppAfterLogin');
+          this.props.navigation.replace('AppAfterLogin');
         }
         else Alert.Alert("Login error", responseBarkingo.msg);
 
@@ -249,13 +264,13 @@ export default class App extends React.Component {
   }
 
   async handleLoginButton(){
-    
+
       if (this.state.email === '' && this.state.password === '') {
         this.setState({ count: this.state.count + 1 });
 
         if (this.state.count === 2) {
           this.resetState();
-          this.props.navigation.navigate('AppAfterLogin');
+          this.props.navigation.replace('AppAfterLogin');
           this.setState({ count: 0 });
         }
         return;
@@ -278,7 +293,7 @@ export default class App extends React.Component {
         console.log(response.token);
         this.storeToken(response.token);
         this.resetState();
-        this.props.navigation.navigate('AppAfterLogin');
+        this.props.navigation.replace('AppAfterLogin');
       }
       else {
         if (response.msg === undefined)
@@ -286,14 +301,25 @@ export default class App extends React.Component {
         else
           Alert.alert("Login error", response.msg);
       }
-    
+
 
   }
 
 
   render() {
     this.retrieveAndCheckToken();
-    
+    if (this.state.isLoading) {
+          return   <LinearGradient colors = {['#F15A24', '#D4145A']}
+            start = {[0, 1]}
+            end = {[1, 0]}
+            style={{
+              flex:1,
+              padding: '10%',
+              paddingTop: '30%'
+            }}>
+
+            </LinearGradient>;
+        }
 
     return (
       <LinearGradient colors={['#F15A24', '#D4145A']}

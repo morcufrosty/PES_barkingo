@@ -194,6 +194,90 @@ const renewFacebookToken = async (request, response) => {
     });
 };
 
+const renewGoogleLoginToken = async (request, response) => {
+    const { email, token } = request.body;
+    await pool.connect(async (err, client, done) => {
+        if (err) {
+            response.json({ success: false, msg: 'Error accessing the database' });
+            done();
+            return;
+        }
+        await client.query('BEGIN');
+        await client.query('SELECT * FROM users WHERE email=$1', [email], (err, result) => {
+            if (err) {
+                response.json({ success: false, msg: 'error' });
+            }
+            if (result.rowCount == 0) {
+                response.json({ success: false, msg: 'Oops. User not found.' });
+            } else {
+                bcrypt.compare(token, result.rows[0].googletoken, function(err, check) {
+                    if (err) {
+                        response.json({ success: false, msg: 'Error while checking password' });
+                    } else if (check) {
+                        const payload = { email: result.rows[0].email, name: result.rows[0].name };
+                        jwt.sign(
+                            payload,
+                            creds.secret,
+                            {
+                                expiresIn: '1 day',
+                            },
+                            (err, token) => {
+                                if (err) throw err;
+                                response.json({ success: true, msg: 'Successful login', token: token });
+                            }
+                        );
+                    } else {
+                        response.json({ success: false, msg: 'Oops. Incorrect password' });
+                    }
+                });
+            }
+        });
+        done();
+    });
+};
+
+const renewFacebookLoginToken = async (request, response) => {
+    const { email, token } = request.body;
+    await pool.connect(async (err, client, done) => {
+        if (err) {
+            response.json({ success: false, msg: 'Error accessing the database' });
+            done();
+            return;
+        }
+        await client.query('BEGIN');
+        await client.query('SELECT * FROM users WHERE email=$1', [email], (err, result) => {
+            if (err) {
+                response.json({ success: false, msg: 'error' });
+            }
+            if (result.rowCount == 0) {
+                response.json({ success: false, msg: 'Oops. User not found.' });
+            } else {
+                bcrypt.compare(token, result.rows[0].facebooktoken, function(err, check) {
+                    if (err) {
+                        response.json({ success: false, msg: 'Error while checking password' });
+                    } else if (check) {
+                        const payload = { email: result.rows[0].email, name: result.rows[0].name };
+                        jwt.sign(
+                            payload,
+                            creds.secret,
+                            {
+                                expiresIn: '1 day',
+                            },
+                            (err, token) => {
+                                if (err) throw err;
+                                response.json({ success: true, msg: 'Successful login', token: token });
+                            }
+                        );
+                    } else {
+                        response.json({ success: false, msg: 'Oops. Incorrect password' });
+                    }
+                });
+            }
+        });
+        done();
+    });
+};
+
 module.exports = {
     createUser,
     loginUser,
