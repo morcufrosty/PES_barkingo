@@ -17,6 +17,7 @@ import * as Expo from "expo"
 
 const ACCESS_TOKEN = 'access_token';
 
+
 export default class App extends React.Component {
 
   constructor(props) {
@@ -50,15 +51,14 @@ export default class App extends React.Component {
        console.log("enter fetch API barkingo google");
       
        const resFromBarkingo = await this.renewGoogleTokenToAPI('http://10.4.41.164/api/renewGoogleToken');
-       console.log("google response content:" + resFromBarkingo.success + " "+ resFromBarkingo.msg);
+       console.log("google response content:" + resFromBarkingo.success + " "+ resFromBarkingo.token + " "+resFromBarkingo.msg);
       if (resFromBarkingo.success){
        this.storeToken(resFromBarkingo.token);
-       this.getToken();
        this.props.navigation.navigate('AppAfterLogin');
       }
 
       } else {
-        console.log("cancelled Google Login")
+        Alert.Alert("Login error", responseBarkingo.msg);
       }
     } catch (e) {
       console.log("error", e)
@@ -82,6 +82,7 @@ export default class App extends React.Component {
         if (new Date().getTime() < tokenJson.expiration )
           this.props.navigation.navigate('AppAfterLogin');
         else{
+         
           //Renew token
         } 
       } else console.log("No local token");
@@ -170,7 +171,7 @@ export default class App extends React.Component {
       });
 
   }
-
+ 
   async logInFacebook() {
     try {
       const {
