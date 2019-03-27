@@ -5,7 +5,7 @@ const request = require('supertest');
 
 const initServer = () => {
     const app = express();
-    app.use(server());
+    app.use(server);
     return app;
 };
 
