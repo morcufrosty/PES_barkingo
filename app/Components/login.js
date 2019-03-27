@@ -30,6 +30,16 @@ export default class App extends React.Component {
     }
   }
 
+  resetState(){
+    this.setState({
+      name: '',
+      email: '',
+      token: '',
+      password: ''      
+   })
+
+  }
+
   async signInWithGoogle() {
     try {
       const result = await Expo.Google.logInAsync({
@@ -54,6 +64,7 @@ export default class App extends React.Component {
       if (resFromBarkingo.success){
        this.storeToken(resFromBarkingo.token);
        this.getToken();
+       this.resetState();
        this.props.navigation.navigate('AppAfterLogin');
       }
 
@@ -79,8 +90,10 @@ export default class App extends React.Component {
 
         */
 
-        if (new Date().getTime() < tokenJson.expiration )
+        if (new Date().getTime() < tokenJson.expiration ){
+          this.resetState();
           this.props.navigation.navigate('AppAfterLogin');
+        }
         else{
           //Renew token
         } 
@@ -98,7 +111,7 @@ export default class App extends React.Component {
       jsonObject = {token: token , expiration: expirationDate};
       await AsyncStorage.setItem(ACCESS_TOKEN, JSON.stringify(jsonObject));
     } catch (error) {
-      console.log("Ha fallat el storeToken" + error)
+      console.log("Ha fallat el storeToken: " + error)
       // Error saving data
     }
   }
@@ -110,7 +123,7 @@ export default class App extends React.Component {
       console.log("token: "+ token);
     } catch (error) {
       // Error showing data
-      console.log("Ha fallat el getToken")
+      console.log("Ha fallat el getToken: " + error)
     }
   }
 
@@ -120,7 +133,7 @@ export default class App extends React.Component {
       this.getToken(); //ha de ser null
     } catch (error) {
       // Error showing data
-      console.log("Ha fallat el removeToken")
+      console.log("Ha fallat el removeToken: " + error)
     }
   }
 
@@ -235,6 +248,47 @@ export default class App extends React.Component {
     this.signInWithGoogle()
   }
 
+  async handleLoginButton(){
+    
+      if (this.state.email === '' && this.state.password === '') {
+        this.setState({ count: this.state.count + 1 });
+
+        if (this.state.count === 2) {
+          this.resetState();
+          this.props.navigation.navigate('AppAfterLogin');
+          this.setState({ count: 0 });
+        }
+        return;
+      }
+      else if (this.state.email == '') {
+        Alert.alert("Error", "Please enter your email");
+        return;
+      }
+
+
+      else if (this.state.password == '') {
+        Alert.alert("Error", "Please enter your password");
+        return;
+      }
+
+
+      const response = await this.loginUsingAPI();
+      console.log(response.msg);
+      if (response.success) {
+        console.log(response.token);
+        this.storeToken(response.token);
+        this.resetState();
+        this.props.navigation.navigate('AppAfterLogin');
+      }
+      else {
+        if (response.msg === undefined)
+          Alert.alert("Login error", "Server error");
+        else
+          Alert.alert("Login error", response.msg);
+      }
+    
+
+  }
 
 
   render() {
@@ -268,42 +322,7 @@ export default class App extends React.Component {
           <Button
             title='Login'
             color='#ff3b28'
-            onPress={async () => {
-              if (this.state.email === '' && this.state.password === '') {
-                this.setState({ count: this.state.count + 1 });
-
-                if (this.state.count === 2) {
-                  this.props.navigation.navigate('AppAfterLogin');
-                  this.setState({ count: 0 });
-                }
-                return;
-              }
-              else if (this.state.email == '') {
-                Alert.alert("Error", "Please enter your email");
-                return;
-              }
-
-
-              else if (this.state.password == '') {
-                Alert.alert("Error", "Please enter your password");
-                return;
-              }
-
-
-              const response = await this.loginUsingAPI();
-              console.log(response.msg);
-              if (response.success) {
-                console.log(response.token);
-                this.storeToken(response.token);
-                this.props.navigation.navigate('AppAfterLogin');
-              }
-              else {
-                if (response.msg === undefined)
-                  Alert.alert("Login error", "Server error");
-                else
-                  Alert.alert("Login error", response.msg);
-              }
-            }}>
+            onPress={async () => this.handleLoginButton()}>
           </Button>
         </View>
 

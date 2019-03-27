@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, Container, AppRegistry, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Alert, Container, AppRegistry, StyleSheet, Text, TextInput, View, ToastAndroid} from 'react-native';
 import styles from '../style/stylesheet.js'
 import { LinearGradient } from 'expo'
 import TextInputWTitle from './inputText.js';
@@ -98,7 +98,14 @@ export default class Register extends React.Component {
 
                 const response = await this.registerToApiAsync();
                 if (response.success) {
-                  Alert.alert("Congratulations", response.msg);
+                  //Alert.alert("Congratulations", response.msg);
+                  ToastAndroid.showWithGravityAndOffset(
+                    'User created successfully',
+                    ToastAndroid.SHORT,
+                    ToastAndroid.BOTTOM,
+                    25,
+                    50,
+                  );
                   this.props.navigation.navigate('Login');
                 } else if (response.msg === undefined)
                   Alert.alert("Login error", "Server error");
