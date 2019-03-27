@@ -307,8 +307,8 @@ export default class App extends React.Component {
 
 
   render() {
-    this.retrieveAndCheckToken();
     if (this.state.isLoading) {
+        this.retrieveAndCheckToken();
           return   <LinearGradient colors = {['#F15A24', '#D4145A']}
             start = {[0, 1]}
             end = {[1, 0]}
@@ -320,7 +320,6 @@ export default class App extends React.Component {
 
             </LinearGradient>;
         }
-
     return (
       <LinearGradient colors={['#F15A24', '#D4145A']}
         start={[0, 1]}

@@ -35,7 +35,7 @@ export default class Swipe extends React.Component {
             onPress={async () => {
 
               await AsyncStorage.removeItem('access_token');
-              this.props.navigation.navigate('Login');
+              this.props.navigation.replace('Login');
             }
             }
             title="Log out"
