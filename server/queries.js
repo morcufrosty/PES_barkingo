@@ -109,7 +109,7 @@ const renewGoogleToken = async (request, response) => {
                             console.error('Query error', err);
                         } else {
                             client.query('COMMIT');
-                            const payload = { email: result.rows[0].email, name: result.rows[0].name };
+                            const payload = { email, name };
                             var token = jwt.sign(payload, creds.secret, {
                                 expiresIn: '1 day',
                             });
@@ -156,13 +156,12 @@ const renewFacebookToken = async (request, response) => {
                     response.json({ success: false, msg: 'Server error' });
                 }
                 if (result.rowCount == 0) {
-                    client.query('INSERT INTO users (id, name, email, facebooktoken) VALUES ($1, $2, $3, $4)', [uuidv4(), name, email, hashed], (err, result) => {
+                    client.query('INSERT INTO users (id, name, email, facebooktoken) VALUES ($1, $2, $3, $4)', [uuidv4(), name, email, hashed], (err, resultI) => {
                         if (err) {
                             console.log(err);
                         } else {
                             client.query('COMMIT');
-                            console.log(result);
-                            const payload = { email: result.rows[0].email, name: result.rows[0].name };
+                            const payload = { email, name };
                             var signedToken = jwt.sign(payload, creds.secret, {
                                 expiresIn: '1 day',
                             });
