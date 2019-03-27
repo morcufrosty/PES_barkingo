@@ -1,10 +1,15 @@
 language: node_js
 node_js:
   - "stable"
+services:
+  - postgresql
 cache:
   directories:
   - app/node_modules
   - server/node_modules
+before_script:
+  - psql -c 'create database barkingo;' -U postgres
+  - psql -c 'CREATE TABLE users (id character varying(150) PRIMARY KEY, name character varying(150) NOT NULL, email character varying(150) NOT NULL UNIQUE, password character varying(150), googletoken character varying(200), facebooktoken character varying(200));' -U postgres
 script:
   - npm test
   - npm run build
