@@ -1,0 +1,20 @@
+{
+  "name": "barkingo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "",
+  "scripts": {
+    "test": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/morcufrosty/barkingo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/morcufrosty/barkingo/issues"
+  },
+  "homepage": "https://github.com/morcufrosty/barkingo#readme"
+}
