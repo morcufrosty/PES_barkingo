@@ -1,0 +1,26 @@
+{
+  "name": "barkingo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "",
+  "scripts": {
+    "test": "jest --detectOpenHandles"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/morcufrosty/barkingo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/morcufrosty/barkingo/issues"
+  },
+  "homepage": "https://github.com/morcufrosty/barkingo#readme",
+  "devDependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "jest": "^24.5.0",
+    "supertest": "^4.0.2"
+  }
+}
