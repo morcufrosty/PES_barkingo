@@ -25,7 +25,6 @@ const createUser = async (request, response) => {
         let pwd = '';
         const f = async () => {
             await client.query('SELECT id FROM users WHERE email=$1', [email], (err, result) => {
-                if (err) throw err;
                 if (result.rows[0]) {
                     response.json({ success: false, msg: 'User already exists' });
                 } else {
