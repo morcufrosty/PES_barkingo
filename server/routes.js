@@ -20,6 +20,10 @@ router.post('/renewGoogleToken', db.renewGoogleToken);
 
 router.post('/renewFacebookToken', db.renewFacebookToken);
 
+router.post('/renewGoogleLoginToken', db.renewGoogleLoginToken);
+
+router.post('/renewFacebookLoginToken', db.renewFacebookLoginToken);
+
 // molt important l'ordre d'aquest middleware pq simplement comprovarà
 // les requests que es troben a sota i per tant assegurarà que no calqui token per iniciar sessió i etc
 router.use((req, res, next) => {

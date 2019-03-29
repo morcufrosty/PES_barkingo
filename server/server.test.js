@@ -1,34 +1,25 @@
 const server = require('./routes');
 const express = require('express');
+const moxios = require('moxios');
 const request = require('supertest');
-var bodyParser = require('body-parser');
 
 const initServer = () => {
     const app = express();
-    app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({ extended: false }));
-    app.use('/api', server);
+    app.use(server());
     return app;
 };
 
-afterAll(async () => {
-    await new Promise(resolve => setTimeout(() => resolve(), 500)); // avoid jest open handle error
-});
-
-describe('Root path', () => {
-    test('It should respond the greetings message', async () => {
-        const response = await request(initServer()).get('/api');
-        expect(response.body.message).toBe('Welcome to the Barkingo API!');
+describe('GET /api', () => {
+    beforeEach(() => {
+        moxios.install();
     });
-});
-
-describe('POST /api/register', () => {
-    test('It should response the GET method', async () => {
-        const response = await request(initServer())
-            .post('/api/register')
-            .send({ password: 'test', email: 'mail@mail.com', name: 'Test Account' })
-            .set('Accept', /application\/json/)
-            .type('form')
-        expect(response.body.success).toBe(true);
+    afterEach(() => {
+        moxios.uninstall();
+    });
+    test('It ', async () => {
+        moxios.stubRequest('/api', { message: 'Welcome to the Barkingo API!' });
+        const app = initServer();
+        await request(app).get('/api');
+        expect(moxios.requests.mostRecent().message).toBe('Welcome to the Barkingo API!');
     });
 });
