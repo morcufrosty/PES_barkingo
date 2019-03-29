@@ -55,7 +55,7 @@ export default class App extends React.Component {
       if (result.type === "success") {
         this.setState({
           name: result.user.name,
-          email: result.user.email.navigate(/\s/g, "_"),
+          email: result.user.email.replace(/\s/g, "_"),
           token: result.accessToken
 
          // maybe we need it:photoUrl: result.user.photoUrl,
@@ -161,7 +161,7 @@ export default class App extends React.Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        name: facebookName.navigate(/\s/g, "_"),
+        name: facebookName.replace(/\s/g, "_"),
         email: facebookEmail,
         token: facebookToken
       }),
