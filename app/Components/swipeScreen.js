@@ -129,6 +129,8 @@ export default class swipeScreen extends React.Component {
       else {
         return (
           <Animated.View
+          {...this.PanResponder.panHandlers}
+
             key={item.id} style={[{
               opacity: this.nextCardOpacity,
               transform: [{ scale: this.nextCardScale }],
