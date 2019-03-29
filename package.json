@@ -4,7 +4,7 @@
   "description": "",
   "main": "",
   "scripts": {
-    "test": "react-scripts test"
+    "test": "jest --detectOpenHandles"
   },
   "repository": {
     "type": "git",
@@ -16,5 +16,11 @@
   "bugs": {
     "url": "https://github.com/morcufrosty/barkingo/issues"
   },
-  "homepage": "https://github.com/morcufrosty/barkingo#readme"
+  "homepage": "https://github.com/morcufrosty/barkingo#readme",
+  "devDependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "jest": "^24.5.0",
+    "supertest": "^4.0.2"
+  }
 }
