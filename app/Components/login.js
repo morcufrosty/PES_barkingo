@@ -55,7 +55,7 @@ export default class App extends React.Component {
       if (result.type === "success") {
         this.setState({
           name: result.user.name,
-          email: result.user.email.replace(/\s/g, "_"),
+          email: result.user.email.navigate(/\s/g, "_"),
           token: result.accessToken
 
          // maybe we need it:photoUrl: result.user.photoUrl,
@@ -68,7 +68,7 @@ export default class App extends React.Component {
        this.storeToken(resFromBarkingo.token);
        this.getToken();
        this.resetState();
-       this.props.navigation.replace('AppAfterLogin');
+       this.props.navigation.navigate('AppAfterLogin');
       }
 
       } else {
@@ -98,7 +98,7 @@ export default class App extends React.Component {
           this.setState({
               isLoading: false
           });
-          this.props.navigation.replace('AppAfterLogin');
+          this.props.navigation.navigate('AppAfterLogin');
         }
         else{
           //Renew token
@@ -161,7 +161,7 @@ export default class App extends React.Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        name: facebookName.replace(/\s/g, "_"),
+        name: facebookName.navigate(/\s/g, "_"),
         email: facebookEmail,
         token: facebookToken
       }),
@@ -218,7 +218,7 @@ export default class App extends React.Component {
         const responseBarkingo = await this.renewFacebookTokenToAPI(responseFbJson.name, responseFbJson.email, token);
         if (responseBarkingo.success) {
           this.storeToken(responseBarkingo.token);
-          this.props.navigation.replace('AppAfterLogin');
+          this.props.navigation.navigate('AppAfterLogin');
         }
         else Alert.Alert("Login error", responseBarkingo.msg);
 
@@ -270,7 +270,7 @@ export default class App extends React.Component {
 
         if (this.state.count === 2) {
           this.resetState();
-          this.props.navigation.replace('AppAfterLogin');
+          this.props.navigation.navigate('AppAfterLogin');
           this.setState({ count: 0 });
         }
         return;
@@ -293,7 +293,7 @@ export default class App extends React.Component {
         console.log(response.token);
         this.storeToken(response.token);
         this.resetState();
-        this.props.navigation.replace('AppAfterLogin');
+        this.props.navigation.navigate('AppAfterLogin');
       }
       else {
         if (response.msg === undefined)
