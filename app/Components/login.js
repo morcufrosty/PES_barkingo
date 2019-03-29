@@ -66,7 +66,6 @@ export default class App extends React.Component {
        console.log("google response content:" + resFromBarkingo.success + " "+ resFromBarkingo.msg);
       if (resFromBarkingo.success){
        this.storeToken(resFromBarkingo.token);
-       this.getToken();
        this.resetState();
        this.props.navigation.navigate('AppAfterLogin');
       }
@@ -131,21 +130,11 @@ export default class App extends React.Component {
     }
   }
 
-  async getToken(){
-    try {
-      let token = await AsyncStorage.getItem(ACCESS_TOKEN);
-      this.getToken();
-      console.log("token: "+ token);
-    } catch (error) {
-      // Error showing data
-      console.log("Ha fallat el getToken: " + error)
-    }
-  }
+  
 
   async removeToken(){
     try {
       await AsyncStorage.removeItem(ACCESS_TOKEN);
-      this.getToken(); //ha de ser null
     } catch (error) {
       // Error showing data
       console.log("Ha fallat el removeToken: " + error)
