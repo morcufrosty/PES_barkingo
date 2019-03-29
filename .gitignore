@@ -200,3 +200,5 @@ app/.expo/settings.json
 
 server/creds.json
 keystore.txt
+
+jest_*/

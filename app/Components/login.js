@@ -16,6 +16,7 @@ import * as Expo from "expo"
 //import { getMaxListeners } from 'cluster';
 
 const ACCESS_TOKEN = 'access_token';
+const USER_INFO = 'user_info';
 
 export default class App extends React.Component {
 
@@ -63,16 +64,16 @@ export default class App extends React.Component {
        console.log("enter fetch API barkingo google");
 
        const resFromBarkingo = await this.renewGoogleTokenToAPI('http://10.4.41.164/api/renewGoogleToken');
-       console.log("google response content:" + resFromBarkingo.success + " "+ resFromBarkingo.msg);
+       console.log("google response content:" + resFromBarkingo.success + " "+ resFromBarkingo.token + " "+resFromBarkingo.msg);
       if (resFromBarkingo.success){
        this.storeToken(resFromBarkingo.token);
        this.getToken();
        this.resetState();
-       this.props.navigation.replace('AppAfterLogin');
+       this.props.navigation.navigate('AppAfterLogin');
       }
 
       } else {
-        console.log("cancelled Google Login")
+        Alert.alert("Login error", responseBarkingo.msg);
       }
     } catch (e) {
       console.log("error", e)
@@ -83,35 +84,50 @@ export default class App extends React.Component {
   retrieveAndCheckToken = async () => {
     try {
       const token = await AsyncStorage.getItem(ACCESS_TOKEN);
+
       if (token !== null) {
         tokenJson = JSON.parse(token);
 
-        /*
-        console.log("This is the token: " + tokenJson.token);
+        
+        /*console.log("This is the token: " + tokenJson.token);
         console.log("This is when the token expires: " + new Date(tokenJson.expiration));
-        console.log("This is the current time: " + new Date(new Date().getTime()));
-
-        */
+        console.log("This is the current time: " + new Date(new Date().getTime()));*/
+        this.setState({isLoading:false});
+        
 
         if (new Date().getTime() < tokenJson.expiration ){
           this.resetState();
-          this.setState({
-              isLoading: false
-          });
-          this.props.navigation.replace('AppAfterLogin');
+          this.setState({isLoading:false});
+          this.props.navigation.navigate('AppAfterLogin');
         }
         else{
+         
           //Renew token
-          this.setState({
-              isLoading: false
-          });
+         
+         
+          const userInfo = await AsyncStorage.getItem(USER_INFO);
+          userInfoJson = JSON.parse(userInfo);
+          this.state.email =userInfoJson.email;
+          this.setState({ email:userInfoJson.email,password: userInfoJson.password  }); 
+         
+          const response = await this.loginUsingAPI();
+          if (response.success) {
+            this.storeToken(response.token);
+            console.log("s'ha renovat token ");
+            this.setState({isLoading:false});
+            this.props.navigation.navigate('AppAfterLogin');
+
+          }
+          else{
+            console.log("error renovant el token:"+ response.msg);
+          }
+
+
         }
       } else {
         console.log("No local token");
-        this.setState({
-            isLoading: false
-        });
-
+        this.setState({isLoading:false});
+        
       }
     } catch (error) {
       console.log(error);
@@ -128,6 +144,15 @@ export default class App extends React.Component {
     } catch (error) {
       console.log("Ha fallat el storeToken: " + error)
       // Error saving data
+    }
+  }
+  storeUserInfo = async () => {
+    try {
+      jsonObject = {email: this.state.email , password: this.state.password};
+      await AsyncStorage.setItem(USER_INFO, JSON.stringify(jsonObject));
+      
+    } catch (error) {
+      console.log("Ha fallat el storeUserInfo: " + error);
     }
   }
 
@@ -198,7 +223,7 @@ export default class App extends React.Component {
       });
 
   }
-
+ 
   async logInFacebook() {
     try {
       const {
@@ -218,9 +243,9 @@ export default class App extends React.Component {
         const responseBarkingo = await this.renewFacebookTokenToAPI(responseFbJson.name, responseFbJson.email, token);
         if (responseBarkingo.success) {
           this.storeToken(responseBarkingo.token);
-          this.props.navigation.replace('AppAfterLogin');
+          this.props.navigation.navigate('AppAfterLogin');
         }
-        else Alert.Alert("Login error", responseBarkingo.msg);
+        else Alert.alert("Login error", responseBarkingo.msg);
 
         //Alert.alert("You are logged in!", `Hi ${responseFb.json().name}!`);
       } else {
@@ -270,7 +295,7 @@ export default class App extends React.Component {
 
         if (this.state.count === 2) {
           this.resetState();
-          this.props.navigation.replace('AppAfterLogin');
+          this.props.navigation.navigate('AppAfterLogin');
           this.setState({ count: 0 });
         }
         return;
@@ -292,8 +317,9 @@ export default class App extends React.Component {
       if (response.success) {
         console.log(response.token);
         this.storeToken(response.token);
+        this.storeUserInfo();
         this.resetState();
-        this.props.navigation.replace('AppAfterLogin');
+        this.props.navigation.navigate('AppAfterLogin');
       }
       else {
         if (response.msg === undefined)
@@ -307,8 +333,15 @@ export default class App extends React.Component {
 
 
   render() {
+<<<<<<< HEAD
     if (this.state.isLoading) {
         this.retrieveAndCheckToken();
+=======
+    
+
+    if (this.state.isLoading) {
+      this.retrieveAndCheckToken();
+>>>>>>> 9c1c5078cdc06a5a98842f7155e386dd3f6054b4
           return   <LinearGradient colors = {['#F15A24', '#D4145A']}
             start = {[0, 1]}
             end = {[1, 0]}
