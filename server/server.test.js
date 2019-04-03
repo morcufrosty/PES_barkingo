@@ -29,6 +29,6 @@ describe('POST /api/register', () => {
             .send({ password: 'test', email: 'mail@mail.com', name: 'Test Account' })
             .set('Accept', /application\/json/)
             .type('form')
-        expect(response.body.success).toBe(true);
+        expect(response.body.success).toBe(false);
     });
 });
