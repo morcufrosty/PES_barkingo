@@ -1,8 +1,9 @@
 const Pool = require('pg').Pool;
-const creds = require('./creds.json');
+const creds = require('../creds.json');
 const bcrypt = require('bcrypt');
 const uuidv4 = require('uuid/v4');
 const jwt = require('jsonwebtoken');
+
 const pool = new Pool({
     // DB credentials i config
     user: creds.db.user,
