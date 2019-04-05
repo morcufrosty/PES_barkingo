@@ -8,32 +8,45 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Settings from "./Components/settings";
 import Chat from "./Components/chat"
+import perfilAnimal from "./Components/perfilAnimal"
+import formNewOffer from "./Components/formNewOffer"
 
+
+const SwipeNavigator = createStackNavigator({
+
+    SwipeScreen:{screen: swipeScreen},
+    perfilAnimal:{screen: perfilAnimal}},
+    {
+      initialRouteName: 'SwipeScreen',
+      headerMode: 'none',
+      navigationOptions: {
+          headerVisible: false,
+      }
+
+});
+const SwipeNav = createAppContainer(SwipeNavigator);
 
 const TabNavigator = createBottomTabNavigator(
   {
   Swipe: {
-    screen: swipeScreen,
-
+    screen: SwipeNav,
     },
   Settings: {
     screen: Settings
-
   },
 
-  Chat: {
-    screen: Chat
+  formNewOffer: {
+    screen: formNewOffer
   }
-
 }
 );
+
 
 const BottomNavigation = createAppContainer(TabNavigator);
 
 const MainNavigator = createStackNavigator({
   Register: {screen: Register},
   Login: {screen: Login},
-  Swipe: {screen: swipeScreen},
   AppAfterLogin:{screen: BottomNavigation}
 },
 {

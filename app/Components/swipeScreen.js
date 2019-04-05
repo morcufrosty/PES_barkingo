@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Dimensions, Image, Animated, PanResponder } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, Image, Animated, PanResponder,TouchableOpacity,Alert } from 'react-native';
 import { LinearGradient } from 'expo'
 const SCREEN_HEIGHT = Dimensions.get('window').height
 const SCREEN_WIDTH = Dimensions.get('window').width
@@ -9,7 +9,7 @@ const Users = [
   { id: "2", uri: require('../assets/2.jpg') },
   { id: "3", uri: require('../assets/3.jpg') },
   { id: "4", uri: require('../assets/4.jpg') },
-  { id: "5", uri: require('../assets/5.jpg') },
+  { id: "5", uri: require('../assets/5.jpg') }
 ]
 
 export default class swipeScreen extends React.Component {
@@ -87,6 +87,10 @@ export default class swipeScreen extends React.Component {
             })
           })
         }
+        if (gestureState.dy > -5  && gestureState.dy < 5 && gestureState.dx > -5 &&  gestureState.dx < 5) {
+          this.props.navigation.navigate('perfilAnimal');
+
+        }
         else {
           Animated.spring(this.position, {
             toValue: { x: 0, y: 0 },
@@ -108,6 +112,7 @@ export default class swipeScreen extends React.Component {
       else if (i == this.state.currentIndex) {
 
         return (
+
           <Animated.View
             {...this.PanResponder.panHandlers}
             key={item.id} style={[this.rotateAndTranslate, { height: SCREEN_HEIGHT - 180, width: SCREEN_WIDTH, padding: 10, position: 'absolute' }]}>
@@ -120,10 +125,14 @@ export default class swipeScreen extends React.Component {
             <Animated.View style={{ opacity: 1, position: 'absolute', bottom: 20, right: 40, zIndex: 1000 }}>
               <Text style={{ color: '#ffffff', fontSize: 32, fontWeight: '800', padding: 10 }}>NAME OF ANIMAL</Text>
             </Animated.View>
-            <Image
-              style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20 }}
-              source={item.uri} />
+
+              <Image
+                style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20 }}
+                source={item.uri} />
+
           </Animated.View>
+
+
         )
       }
       else {
@@ -136,6 +145,7 @@ export default class swipeScreen extends React.Component {
               transform: [{ scale: this.nextCardScale }],
               height: SCREEN_HEIGHT - 180, width: SCREEN_WIDTH, padding: 10, position: 'absolute'
             }]}>
+
             <Animated.View style={{ opacity: 0, transform: [{ rotate: '-30deg' }], position: 'absolute', top: 50, left: 40, zIndex: 1000 }}>
               <Text style={{ borderWidth: 1, borderColor: 'green', color: 'green', fontSize: 32, fontWeight: '800', padding: 10 }}>LIKE</Text>
             </Animated.View>
@@ -148,7 +158,9 @@ export default class swipeScreen extends React.Component {
             <Image
               style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20 }}
               source={item.uri} />
+
           </Animated.View>
+
         )
       }
     }).reverse()
@@ -164,9 +176,13 @@ export default class swipeScreen extends React.Component {
       }}>
         <View style={{ height: 60 }}>
         </View>
+
         <View style={{ flex: 1 }}>
+
           {this.renderUsers()}
+
         </View>
+
         <View style={{ height: 120 }}>
         </View>
       </LinearGradient>

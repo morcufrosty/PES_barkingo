@@ -13,7 +13,7 @@ import TextInputWTitle from './inputText.js';
 import InputPassword from './inputPassword.js';
 
 
-export default class Chat extends React.Component {
+export default class perfilAnimal extends React.Component {
 
   render() {
     return (
@@ -25,7 +25,7 @@ export default class Chat extends React.Component {
         padding: '10%',
         paddingTop: '30%'
       }}>
-        <Text style={{color: 'white', fontSize: 45, flex: 1}}>CHAT SCREEN</Text>
+        <Text style={{color: 'white', fontSize: 45, flex: 1}}>PERFIL SCREEN</Text>
 
       </LinearGradient>
     );
