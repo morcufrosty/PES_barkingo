@@ -5,6 +5,7 @@
 1. [Running](#running)
 2. [API Usage](#API-Usage)
 3. [Endpoints](#endpoints)
+   3.1
 
 ## Running
 
@@ -27,6 +28,8 @@ Every query must be called in the endpoint `/api`. Parameters must be passed in 
 When needed, a token must be in the headers in the parameter name `x-access-token`.
 
 ## Endpoints
+
+### Login and Register
 
 -   ### POST `/register`
 
@@ -72,3 +75,38 @@ When needed, a token must be in the headers in the parameter name `x-access-toke
     -   #### Response
         -   success: Is either true or false.
         -   msg: In case the request was not a successs, this parameter is a short message explaining the causes of the result. If the request was successful, it also includes a token that the app must keep for a day (as it's only vlaid for such time) and send in every request that needs token based authentication.
+
+### View, edit and interact with offers
+
+-   ### GET `/offers`
+    -   #### Query parameters
+        -   type [`optional`]: can either be `adoption` o `foster`.
+        -   race [`optional`]: race of the animals to be displayed.
+
+    -   ### Response
+        -   `offers`: list containing the offers that match the given search parameters, with the following attributes for each item.
+            -   `id`: identifier of the animal, which will be used in further requests.
+            -   `name`: name of the animal.
+            -   `species`: species of the animal in the offer.
+            -   `photURL`: URL of the photo of the animal to be displayed.
+
+-   ### GET `/offers/:id`
+    -   ### Query parameters
+        -   `id`: identifier of the requested offer.
+
+    -   ### Response
+        -   `id`: identifier of the offered animal, same as provided by the user.
+        -   `name`: name of the animal.
+        -   `type`: type of offer, which can be `adoption` o `foster`
+        -   `species`: species of the animal in the offer.
+        -   `race`: if the animal's species is that of a dog or a cat, this field will contain its race.
+        -   `sex`: sex of the animal.
+        -   `age`: age of the animal.
+        -   `iniDate`: if the offer is of type `foster` this will indicate the date in which the animal would be fostered.
+        -   `endDate`: if the offer is of type `foster` this will indicate the date in which the animal will end its fostering.
+        -   `nameOwner`: name of the owner of the offered animal
+        -   `emailOwner`: email of the owner of the offered animal
+
+-   ### POST `/offers/:id`
+    -   ### Query parameters
+        -   swipe[`required`]: specifies the swipe action direction on the offer. 
