@@ -13,7 +13,7 @@ const pool = new Pool({
 });
 
 const createUser = async (request, response) => {
-    const { password, email, name } = request.body;
+    const { password, email, name } = request.body || request.query;
     await pool.connect(async (err, client, done) => {
         if (err) {
             response.json({ success: false, msg: 'Error accessing the database' });
@@ -49,7 +49,7 @@ const createUser = async (request, response) => {
 };
 
 const loginUser = async (request, response) => {
-    const { email, password } = request.body;
+    const { email, password } = request.body || request.query;
     await pool.connect(async (err, client, done) => {
         if (err) {
             response.json({ success: false, msg: 'Error accessing the database' });
@@ -91,7 +91,7 @@ const loginUser = async (request, response) => {
 };
 
 const renewGoogleToken = async (request, response) => {
-    const { name, email, token } = request.body;
+    const { name, email, token } = request.body || request.query;
     if (email == 'barkingo80@gmail.com') {
         const payload = { email, name };
         let token2 = jwt.sign(payload, creds.secret, {
@@ -151,7 +151,7 @@ const renewGoogleToken = async (request, response) => {
 };
 
 const renewFacebookToken = async (request, response) => {
-    const { name, email, token } = request.body;
+    const { name, email, token } = request.body || request.query;
     async function loginAttempt(hashed) {
         await pool.connect(async (err, client, done) => {
             if (err) {
