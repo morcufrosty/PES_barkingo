@@ -5,6 +5,8 @@
 1. [Running](#running)
 2. [API Usage](#API-Usage)
 3. [Endpoints](#endpoints)
+    - [Login and Register](#Login-and-Register)
+    - [View, edit and interact with offers](#View,-edit-and-interact-with-offers)
 
 ## Running
 
@@ -28,47 +30,111 @@ When needed, a token must be in the headers in the parameter name `x-access-toke
 
 ## Endpoints
 
+### Login and Register
+
 -   ### POST `/register`
 
     -   #### Query arameters
 
-        -   email [`required`]: A valid email that the user provided.
-        -   name [`required`]: The name of the user, spaces must be expressed with an underscore (`_`).
-        -   password [`required`]: The password provided by the user, in plain text.
+        -   `email` [`required`]: A valid email that the user provided.
+        -   `name` [`required`]: The name of the user, spaces must be expressed with an underscore (`_`).
+        -   `password` [`required`]: The password provided by the user, in plain text.
 
     -   #### Response
-        -   success: Is either true or false.
-        -   msg: Short message explaining the causes of the result.
+        -   `success`: Is either true or false.
+        -   `msg`: Short message explaining the causes of the result.
 
 -   ### POST `/login`
 
     -   #### Query arameters
 
-        -   email [`required`]: A valid email that the user provided.
-        -   password [`required`]: The password provided by the user, in plain text.
+        -   `email` [`required`]: A valid email that the user provided.
+        -   `password` [`required`]: The password provided by the user, in plain text.
 
     -   #### Response
-        -   success: Is either true or false.
-        -   msg: In case the request was not a successs, this parameter is a short message explaining the causes of the result. If the request was successful, it also includes a token that the app must keep for a day (as it's only vlaid for such time) and send in every request that needs token based authentication.
+        -   `success`: Is either true or false.
+        -   `msg`: In case the request was not a successs, this parameter is a short message explaining the causes of the result. If the request was successful, it also includes a token that the app must keep for a day (as it's only vlaid for such time) and send in every request that needs token based authentication.
 
 -   ### POST `/renewGoogleToken`
 
     -   #### Query parameters
-        -   email [`required`]: A valid email from the Google Account
-        -   token [`required`]: A valid Google authenthetication token
-        -   name [`required`]: The name of the user, spaces must be expressed with an underscore (`_`).
+        -   `email` [`required`]: A valid email from the Google Account
+        -   `token` [`required`]: A valid Google authenthetication token
+        -   `name` [`required`]: The name of the user, spaces must be expressed with an underscore (`_`).
     -   #### Response
-        -   success: Is either true or false.
-        -   msg: In case the request was not a successs, this parameter is a short message explaining the causes of the result. If the request was successful, it also includes a token that the app must keep for a day (as it's only vlaid for such time) and send in every request that needs token based authentication.
+        -   `success`: Is either true or false.
+        -   `msg`: In case the request was not a successs, this parameter is a short message explaining the causes of the result. If the request was successful, it also includes a token that the app must keep for a day (as it's only vlaid for such time) and send in every request that needs token based authentication.
 
 -   ### POST `/renewFacebookToken`
 
     -   #### Query parameters
 
-        -   email [`required`]: A valid email from the Facebook Account
-        -   token [`required`]: A valid Facebook authenthetication token
-        -   name [`required`]: The name of the user, spaces must be expressed with an underscore (`_`).
+        -   `email` [`required`]: A valid email from the Facebook Account
+        -   `token` [`required`]: A valid Facebook authenthetication token
+        -   `name` [`required`]: The name of the user, spaces must be expressed with an underscore (`_`).
 
     -   #### Response
-        -   success: Is either true or false.
-        -   msg: In case the request was not a successs, this parameter is a short message explaining the causes of the result. If the request was successful, it also includes a token that the app must keep for a day (as it's only vlaid for such time) and send in every request that needs token based authentication.
+        -   `success`: Is either true or false.
+        -   `msg`: In case the request was not a successs, this parameter is a short message explaining the causes of the result. If the request was successful, it also includes a token that the app must keep for a day (as it's only vlaid for such time) and send in every request that needs token based authentication.
+
+### View, edit and interact with offers
+
+-   ### GET `/offers`: returns all the offers given some search paramters
+
+    -   #### Query parameters
+
+        -   `type` [`optional`]: can either be `adoption` o `foster`.
+        -   `race` [`optional`]: race of the animals to be displayed.
+
+    -   ### Response
+        -   `offers`: list containing the offers that match the given search parameters, with the following attributes for each item.
+            -   `id`: identifier of the animal, which will be used in further requests.
+            -   `name`: name of the animal.
+            -   `species`: species of the animal in the offer.
+            -   `photURL`: URL of the photo of the animal to be displayed.
+
+-   ### POST `/offers`: creates a new offer
+
+    -   #### Query parameters
+        -   `name` [`required`]: name of the animal.
+        -   `type` [`required`]: type of offer, which can be `adoption` o `foster`
+        -   `species` [`required`]: species of the animal in the offer.
+        -   `race` [`optional`]: if the animal's species is that of a dog or a cat, this field will contain its race.
+        -   `sex` [`required`]: sex of the animal.
+        -   `age` [`required`]: age of the animal.
+        -   `iniDate` [`optional`]: if the offer is of type `foster` this will indicate the date in which the animal would be fostered.
+        -   `endDate` [`optional`]: if the offer is of type `foster` this will indicate the date in which the animal will end its fostering.
+    -   #### Response
+        -   `success`: Is either `true` or `false`.
+        -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
+
+-   ### GET `/offers/:id`: returns information about a single offer
+
+    -   ### Query parameters
+
+        -   `id` [`required`]: identifier of the requested offer.
+
+    -   ### Response
+        -   `id`: identifier of the offered animal, same as provided by the user.
+        -   `name`: name of the animal.
+        -   `type`: type of offer, which can be `adoption` o `foster`
+        -   `species`: species of the animal in the offer.
+        -   `race`: if the animal's species is that of a dog or a cat, this field will contain its race.
+        -   `sex`: sex of the animal.
+        -   `age`: age of the animal.
+        -   `iniDate`: if the offer is of type `foster` this will indicate the date in which the animal would be fostered.
+        -   `endDate`: if the offer is of type `foster` this will indicate the date in which the animal will end its fostering.
+        -   `nameOwner`: name of the owner of the offered animal.
+        -   `emailOwner`: email of the owner of the offered animal.
+
+-   ### POST `/offers/:id`
+    -   #### Query parameters
+        -   swipe[`required`]: specifies the swipe action direction on the offer, which can be `left` or `right`. This will decide if the offer gets added to the favourite list (viewable by the user) or the discarded list.
+    -   #### Response
+        -   `success`: Is either `true` or `false`.
+        -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
+
+-   ### DELETE `/offers/:id`: delete an offer. To do so you must be its creator.
+    -   #### Response
+        -   `success`: Is either `true` or `false`.
+        -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
