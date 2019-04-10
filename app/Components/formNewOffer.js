@@ -13,6 +13,56 @@ import { Facebook } from 'expo';
 
 
 export default class formNewOffer extends React.Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      name: '',
+      type: '',
+      species: '',
+      race: '',
+      sex: '',
+      age: '',
+      iniDate: '',
+      endDate: ''
+
+    }
+  }
+
+  resetState(){
+    this.setState({
+      name: '',
+      email: '',
+      token: '',
+      password: ''
+   })
+
+  }
+
+async newOfferUsingAPI(){
+
+  return fetch('http://10.4.41.164/api/offers', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      name: this.state.id,
+      type: this.state.name,
+      species: 
+      photURL
+
+    }),
+  }).then((response) => response.json())
+    .then((responseJson) => {
+      console.log(responseJson.msg);
+      return responseJson;
+    }).catch((error) => {
+      console.error(error);
+    });
+}
+  
 render(){
 
   return (
