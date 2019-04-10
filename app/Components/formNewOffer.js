@@ -182,7 +182,12 @@ render(){
                 <Picker.Item label="female" value="female" />
               </Picker>
             </View>
+            <Button
+              title='Submit'
+              color='#ff3b28'>
+            </Button>
             </ScrollView>
+
     </LinearGradient>
     );
 }
