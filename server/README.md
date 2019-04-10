@@ -77,6 +77,16 @@ When needed, a token must be in the headers in the parameter name `x-access-toke
         -   `success`: Is either true or false.
         -   `msg`: In case the request was not a successs, this parameter is a short message explaining the causes of the result. If the request was successful, it also includes a token that the app must keep for a day (as it's only vlaid for such time) and send in every request that needs token based authentication.
 
+-   ### GET `/user`: returns information about the logged-in user.
+    -   #### Query parameters
+        -   `token` [`required`]: A valid Facebook authenthetication token
+    -   #### Response
+        -   `id`: identifier of the user
+        -   `email`: A valid email from the Facebook Account
+        -   `name`: The name of the user, spaces must be expressed with an underscore (`_`).
+        -   `success`: Is either true or false.
+        -   `msg`: Short message explaining the causes of the result.
+
 ### View, edit and interact with offers
 
 -   ### GET `/offers`: returns all the offers given some search paramters
@@ -85,12 +95,16 @@ When needed, a token must be in the headers in the parameter name `x-access-toke
 
         -   `type` [`optional`]: can either be `adoption` o `foster`.
         -   `race` [`optional`]: race of the animals to be displayed.
+        -   `id` [`required`]: id of the user which will be excluded from the results.
 
     -   ### Response
-        -   `offers`: list containing the offers that match the given search parameters, with the following attributes for each item.
+        -   `offers`: list containing the offers that match the given search parameters, with the following attributes for each element.
             -   `id`: identifier of the animal, which will be used in further requests.
             -   `name`: name of the animal.
+            -   `description`: description of the offer.
+            -   `sex`: sex of the offered animal.
             -   `species`: species of the animal in the offer.
+            -   ``
             -   `photURL`: URL of the photo of the animal to be displayed.
 
 -   ### POST `/offers`: creates a new offer
@@ -98,8 +112,7 @@ When needed, a token must be in the headers in the parameter name `x-access-toke
     -   #### Query parameters
         -   `name` [`required`]: name of the animal.
         -   `type` [`required`]: type of offer, which can be `adoption` o `foster`
-        -   `species` [`required`]: species of the animal in the offer.
-        -   `race` [`optional`]: if the animal's species is that of a dog or a cat, this field will contain its race.
+        -   `race` [`required`]: this field will contain the animal's race, with the implicit species of the animal in the offer.
         -   `sex` [`required`]: sex of the animal.
         -   `age` [`required`]: age of the animal.
         -   `iniDate` [`optional`]: if the offer is of type `foster` this will indicate the date in which the animal would be fostered.
@@ -128,13 +141,32 @@ When needed, a token must be in the headers in the parameter name `x-access-toke
         -   `emailOwner`: email of the owner of the offered animal.
 
 -   ### POST `/offers/:id`
+
     -   #### Query parameters
-        -   swipe[`required`]: specifies the swipe action direction on the offer, which can be `left` or `right`. This will decide if the offer gets added to the favourite list (viewable by the user) or the discarded list.
+        -   swipe [`required`]: specifies the swipe action direction on the offer, which can be `left` or `right`. This will decide if the offer gets added to the favourite list (viewable by the user) or the discarded list.
     -   #### Response
         -   `success`: Is either `true` or `false`.
-        -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
+        -   `msg`: If success is `false`, short message explaining the causes of the error. If not, contains success message.
 
 -   ### DELETE `/offers/:id`: delete an offer. To do so you must be its creator.
     -   #### Response
         -   `success`: Is either `true` or `false`.
         -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
+
+-   ### GET `/myOffers`: returns all the given user's offers
+
+    -   #### Query parameters
+
+        -   `type` [`optional`]: can either be `adoption` o `foster`.
+        -   `race` [`optional`]: race of the animals to be displayed.
+        -   `id` [`required`]: id of the user.
+
+    -   ### Response
+        -   `offers`: list containing the offers that match the given search parameters, with the following attributes for each element.
+            -   `id`: identifier of the animal, which will be used in further requests.
+            -   `name`: name of the animal.
+            -   `description`: description of the offer.
+            -   `sex`: sex of the offered animal.
+            -   `species`: species of the animal in the offer.
+            -   ``
+            -   `photURL`: URL of the photo of the animal to be displayed.
