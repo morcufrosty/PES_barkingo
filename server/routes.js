@@ -48,9 +48,15 @@ router.use((req, res, next) => {
     }
 });
 
+router.get('/user', db.user);
+
 router.get('/middletest', (req, res) => {
     res.json({ hey: 'nice' });
 });
+
+router.get('/offers', db.getOffers);
+
+router.get('/offers', db.createOffer);
 
 // more routes for our API will happen here
 
