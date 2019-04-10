@@ -56,7 +56,7 @@ router.get('/middletest', (req, res) => {
 
 router.get('/offers', db.getOffers);
 
-router.get('/offers', db.createOffer);
+router.post('/offers', db.createOffer);
 
 // more routes for our API will happen here
 
