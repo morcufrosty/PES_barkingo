@@ -23,7 +23,7 @@ export default class formNewOffer extends React.Component {
       type: '',
       species: '',
       race: '',
-      sex: '',
+      sex: null,
       age: '',
       iniDate: '',
       endDate: '',
@@ -46,6 +46,43 @@ export default class formNewOffer extends React.Component {
 
   }
 
+async handlePress(){
+
+  if(this.state.name === ''){
+    Alert.alert("Error", "Please enter the name of the pet" )
+  }
+
+  else if(this.state.age === ''){
+    Alert.alert("Error", "Please enter the age of the pet" )
+  }
+
+  else if(this.state.description === ''){
+    Alert.alert("Error", "Please enter a description" )
+  }
+
+  else if(this.state.race === ''){
+    Alert.alert("Error", "Please enter the race of the pet" )
+  }
+
+  else if(this.state.sex === null){
+    Alert.alert("Error", "Please specify the sex of the pet" )
+  }
+
+
+
+  const response = await this.newOfferUsingAPI();
+
+
+  if(response.success){
+    Alert.alert("Amazing!", response.msg);
+
+  }
+  else{
+    Alert.alert("Error", response.msg);
+  }
+
+}
+
 async newOfferUsingAPI(){
 
   return fetch('http://10.4.41.164/api/offers', {
@@ -53,12 +90,18 @@ async newOfferUsingAPI(){
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      'x-access-token': await AsyncStorage.getItem(ACCESS_TOKEN)
     },
     body: JSON.stringify({
-      name: this.state.id,
-      type: this.state.name,
-      species:
-      photURL
+
+      name: this.state.name,
+      type: this.state.type,
+      species: this.state.species,
+      race: this.state.race,
+      sex: this.state.sex,
+      age: this.state.age,
+      iniDate: this.state.iniDate,
+      endDate: this.setState.endDate
 
     }),
   }).then((response) => response.json())
@@ -139,10 +182,7 @@ render(){
                 <Picker.Item label="female" value="female" />
               </Picker>
             </View>
-
-        </ScrollView>
-
-
+            </ScrollView>
     </LinearGradient>
     );
 }
