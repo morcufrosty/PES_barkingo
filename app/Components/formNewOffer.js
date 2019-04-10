@@ -7,7 +7,7 @@ import { StyleSheet, Text, View,
     Picker,
 }  from 'react-native';
 
-
+import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import Button from './Button';
 import { LinearGradient } from 'expo'
 import { Facebook } from 'expo';
@@ -15,6 +15,8 @@ import { Facebook } from 'expo';
 
 
 export default class formNewOffer extends React.Component {
+
+
 
   constructor(props) {
     super(props)
@@ -169,18 +171,23 @@ render(){
                 </TextInput>
             </View>
 
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1,paddingVertical: 10 }}>
             <Text style={{ color: 'white' }}>{"Sexe"}</Text>
-              <Picker
-                mode="dropdown"
-                selectedValue={this.state.sexe}
-                style={{ paddingVertical: 0, height: 50 }}
-                onValueChange={(itemValue, itemIndex) =>
-                  this.setState({sexe: itemValue})
-                }>
-                <Picker.Item label="male" value="male" />
-                <Picker.Item label="female" value="female" />
-              </Picker>
+            <RadioForm
+            formHorizontal={true}
+            animation={true}
+            buttonColor={"#ffffff"}
+            selectedButtonColor={"#ffffff"}
+            style={{ paddingVertical:10}}
+            labelStyle={{color: 'white'}}
+            radioStyle={{paddingRight: 20,opacity:0.5}}
+                     radio_props={[
+                       {label: 'male', value: "male" },
+                       {label: 'female', value: "female" }
+                     ]}
+                     initial={0}
+                     onPress={(value) => {this.setState({value:value})}}
+                   />
             </View>
             <Button
               title='Submit'
