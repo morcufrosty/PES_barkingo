@@ -11,6 +11,7 @@ const Users = [
   { id: "4", uri: require('../assets/4.jpg') },
   { id: "5", uri: require('../assets/5.jpg') }
 ]
+var arrayOffers = [];
 
 export default class swipeScreen extends React.Component {
 
@@ -20,6 +21,7 @@ export default class swipeScreen extends React.Component {
     this.position = new Animated.ValueXY()
     this.state = {
       currentIndex: 0
+
     }
 
     this.rotate = this.position.x.interpolate({
@@ -100,6 +102,21 @@ export default class swipeScreen extends React.Component {
       }
     })
   }
+
+  async getNextOffers() {
+
+    return fetch('http://10.4.41.164/api/offers', {
+      method: 'GET'
+      }).then((response) => response.json())
+      .then((responseJson) => {
+        console.log(responseJson.msg);
+        return responseJson.offers;
+      }).catch((error) => {
+        console.error(error);
+      });
+
+  }
+ 
 
   renderUsers = () => {
 
