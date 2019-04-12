@@ -31,7 +31,7 @@ router.use((req, res, next) => {
         // verifies secret and checks exp
         jwt.verify(token, creds.secret, (err, decoded) => {
             if (err) {
-                return res.json({ success: false, message: 'Failed to authenticate token.' });
+                return res.json({ success: false, msg: 'Failed to authenticate token.' });
             } else {
                 // if everything is good, save to request for use in other routes
                 req.decoded = decoded;
@@ -43,7 +43,7 @@ router.use((req, res, next) => {
         // return an error
         return res.status(403).send({
             success: false,
-            message: 'No token provided.',
+            msg: 'No token provided.',
         });
     }
 });
@@ -57,6 +57,8 @@ router.get('/middletest', (req, res) => {
 router.get('/offers', db.getOffers);
 
 router.post('/offers', db.createOffer);
+
+router.get('/myOffers', db.myOffers);
 
 // more routes for our API will happen here
 

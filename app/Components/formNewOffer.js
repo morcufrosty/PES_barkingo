@@ -6,17 +6,20 @@ import { StyleSheet, Text, View,
     Platform,
     Picker,
 }  from 'react-native';
-
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import Button from './Button';
 import { LinearGradient } from 'expo'
 import { Facebook } from 'expo';
+import DatePicker from 'react-native-datepicker'
 import { AsyncStorage } from 'react-native';
 
 
 
 
 export default class formNewOffer extends React.Component {
+
+
 
   constructor(props) {
     super(props)
@@ -27,8 +30,8 @@ export default class formNewOffer extends React.Component {
       race: '',
       sex: '',
       age: '',
-      iniDate: '',
-      endDate: '',
+      iniDate: "2019-04-15",
+      endDate: '2019-04-15',
       description:''
     }
   }
@@ -123,19 +126,100 @@ async newOfferUsingAPI(jsonToken){
 }
 
 render(){
+  var form;
+          if (this.state.type === "foster") {
+             form = (
+                <View style={{
+                  paddingBottom:30
+                }}>
+                <Text  style={{ color: 'white' }}>{"Data d'inici"}</Text>
+                <DatePicker
+                        style={{width: 200, margin: 5}}
+                        date={this.state.iniDate}
+                        mode="date"
+                        placeholder="select ini date"
+                        format="YYYY-MM-DD"
+                        minDate="2016-05-01"
+                        maxDate="2020-06-01"
+                        confirmBtnText="Confirm"
+                        cancelBtnText="Cancel"
+                        customStyles={{
+                          dateIcon: {
+                            position: 'absolute',
+                            left: 0,
+                            top: 4,
+                            marginLeft: 0
+                          },
+                          dateInput: {
+                            marginLeft: 36,
+
+                            backgroundColor: 'white',
+                            borderWidth: 0,
+                            opacity: 0.5,
+                            borderRadius: 5                          }
+                          // ... You can check the source to find the other keys.
+                        }}
+                        onDateChange={(date) => {this.setState({iniDate: date})}}
+                      />
+                      <Text  style={{ color: 'white' }}>{"Data fi"}</Text>
+                      <DatePicker
+                              style={{width: 200,margin: 5}}
+                              date={this.state.endDate}
+                              mode="date"
+                              placeholder="select end date"
+                              format="YYYY-MM-DD"
+                              minDate="2016-05-01"
+                              maxDate="2020-06-01"
+                              confirmBtnText="Confirm"
+                              cancelBtnText="Cancel"
+                              customStyles={{
+                                dateIcon: {
+                                  position: 'absolute',
+                                  left: 0,
+                                  top: 4,
+                                  marginLeft: 0
+                                },
+                                dateInput: {
+                                  marginLeft: 36,
+                                  backgroundColor: 'white',
+                                  opacity: 0.5,
+                                  borderRadius: 5,
+                                  borderWidth: 0
+                                },
+                                dateText:{
+                                  color: "black",
+                                }
+                                // ... You can check the source to find the other keys.
+                              }}
+                              onDateChange={(date) => {this.setState({endDate: date})}}
+                            />
+                    </View>
+             );
+          } else if (this.state.type === "adoption") {
+             form = (
+               <View style={{
+                height:10
+              }}>
+               </View>
+             );
+          }
 
   return (
     <LinearGradient colors={['#F15A24', '#D4145A']}
       start={[0, 1]}
       end={[1, 0]}
       style={{
-        flex: 1
+        flex: 1,
       }}
     >
       <ScrollView
       style={{
-        padding: '10%',
-      }}>
+        flex: 1,
+        padding:15,
+        paddingTop:25
+      }}
+      showsVerticalScrollIndicator={false}
+      >
 
       <Text style={{ color: 'white', fontSize: 45, flex: 1 }}>New Offer</Text>
 
@@ -167,36 +251,58 @@ render(){
                 </TextInput>
             </View>
 
-            <View style={{ flex: 1, paddingVertical: 10 }}>
-              <Text style={{ color: 'white' }}>{"Description"}</Text>
-              <TextInput
-                multiline = {true}
-                numberOfLines = {4}
-                onChangeText={(description) => this.setState({ description })}
-                value={this.state.description}
-                style={{ backgroundColor: 'white', opacity: 0.5, borderRadius: 5, paddingVertical: 0, height: 80 }}>
-                </TextInput>
-            </View>
+            <KeyboardAwareScrollView>
+              <View style={{ flex: 1, paddingVertical: 10 }}>
+                <Text style={{ color: 'white' }}>{"Description"}</Text>
+                <TextInput
+                  multiline = {true}
+                  numberOfLines = {4}
+                  onChangeText={(description) => this.setState({ description })}
+                  value={this.state.description}
+                  style={{ backgroundColor: 'white', opacity: 0.5, borderRadius: 5, paddingVertical: 0, height: 80 }}>
+                  </TextInput>
+              </View>
+            </KeyboardAwareScrollView>
 
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1,paddingVertical: 10 }}>
             <Text style={{ color: 'white' }}>{"Sexe"}</Text>
-              <Picker
-                mode="dropdown"
-                selectedValue={this.state.sexe}
-                style={{ paddingVertical: 0, height: 50 }}
-                onValueChange={(itemValue, itemIndex) =>
-                  this.setState({sex: itemValue})
-                }>
-                <Picker.Item label="male" value="male" />
-                <Picker.Item label="female" value="female" />
-              </Picker>
+            <RadioForm
+            formHorizontal={true}
+            animation={true}
+            buttonColor={"#ffffff"}
+            selectedButtonColor={"#ffffff"}
+            style={{ paddingVertical:10}}
+            labelStyle={{color: 'white'}}
+            radioStyle={{paddingRight: 20,opacity:0.5}}
+                     radio_props={[
+                       {label: 'male', sex: "male" },
+                       {label: 'female', sex: "female" }
+                     ]}
+                     initial={0}
+                     onPress={(sex) => {this.setState({sex:sex})}}
+                   />
             </View>
-            <Button
-              title='Submit'
-              color='#ff3b28'
-              onPress={async () => this.handlePress()}>
 
-            </Button>
+            <View style={{ flex: 1,paddingVertical: 10 }}>
+            <Text style={{ color: 'white' }}>{"Type of offer"}</Text>
+            <RadioForm
+            formHorizontal={true}
+            animation={true}
+            buttonColor={"#ffffff"}
+            selectedButtonColor={"#ffffff"}
+            style={{ paddingVertical:10}}
+            labelStyle={{color: 'white'}}
+            radioStyle={{paddingRight: 20,opacity:0.5}}
+                     radio_props={[
+                       {label: 'adoption', value: "adoption" },
+                       {label: 'foster', value: "foster" }
+                     ]}
+                     initial={0}
+                     onPress={(value) => {this.setState({type:value})}}
+                   />
+            </View>
+            {form}
+
             </ScrollView>
 
     </LinearGradient>
