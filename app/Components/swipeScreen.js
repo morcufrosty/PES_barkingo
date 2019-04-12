@@ -1,6 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, View, Dimensions, Image, Animated, PanResponder,TouchableOpacity,Alert } from 'react-native';
-import { LinearGradient } from 'expo'
+import { LinearGradient } from 'expo';
+import { AsyncStorage } from 'react-native';
+
 const SCREEN_HEIGHT = Dimensions.get('window').height
 const SCREEN_WIDTH = Dimensions.get('window').width
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -11,6 +13,7 @@ const Users = [
   { id: "4", uri: require('../assets/4.jpg') },
   { id: "5", uri: require('../assets/5.jpg') }
 ]
+var arrayOffers = [];
 
 export default class swipeScreen extends React.Component {
 
@@ -20,7 +23,8 @@ export default class swipeScreen extends React.Component {
     this.position = new Animated.ValueXY()
     this.state = {
       currentIndex: 0,
-      offers: ''
+      offers: [],
+      isLoading: true
     }
 
 
@@ -108,7 +112,7 @@ export default class swipeScreen extends React.Component {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        'x-access-token': await AsyncStorage.getItem(ACCESS_TOKEN),
+        'x-access-token': await AsyncStorage.getItem('access_token'),
 
       },
       body: JSON.stringify({
@@ -171,10 +175,49 @@ export default class swipeScreen extends React.Component {
       }
     })
   }
+    async handleGetOffers(){
+      
+      const t = await AsyncStorage.getItem('access_token');
+      tokenJson = JSON.parse(t);
+      const response = await this.getOffers(tokenJson);
+      this.setState({isLoading:false});
+/*
+      console.log("success: " + response.success);
+      console.log("msg: " + response.msg);
+      console.log("response: " + response.offers);
+      */
+
+      if(response.success){
+        this.setState({offers: response.offers});
+        Alert.alert("DONE!");
+      }
+      else{
+        Alert.alert("Error", response.msg);
+      }
+    }
+
+  async getOffers(t) {
+    
+
+    return fetch('http://10.4.41.164/api/offers', {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'x-access-token': t.token
+      }
+      }).then((response) => response.json())
+      .then((responseJson) => {
+        return responseJson;
+      }).catch((error) => {
+        console.error(error);
+      });
+
+  }
+ 
 
   renderUsers = () => {
 
-    return Users.map((item, i) => {
+    return this.state.offers.map((item, i) => {
 
 
       if (i < this.state.currentIndex) {
@@ -194,12 +237,12 @@ export default class swipeScreen extends React.Component {
               <Text style={{ borderWidth: 1, borderColor: 'red', color: 'red', fontSize: 32, fontWeight: '800', padding: 10 }}>NOPE</Text>
             </Animated.View>
             <Animated.View style={{ opacity: 1, position: 'absolute', bottom: 20, right: 40, zIndex: 1000 }}>
-              <Text style={{ color: '#ffffff', fontSize: 32, fontWeight: '800', padding: 10 }}>NAME OF ANIMAL</Text>
+              <Text style={{ color: '#ffffff', fontSize: 32, fontWeight: '800', padding: 10 }}> {item.name}</Text>
             </Animated.View>
 
               <Image
                 style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20 }}
-                source={item.uri} />
+                source={item.urlImage} />
 
           </Animated.View>
 
@@ -224,7 +267,7 @@ export default class swipeScreen extends React.Component {
               <Text style={{ borderWidth: 1, borderColor: 'red', color: 'red', fontSize: 32, fontWeight: '800', padding: 10 }}>NOPE</Text>
             </Animated.View>
             <Animated.View style={{ opacity: 1, position: 'absolute', bottom: 20, right: 40, zIndex: 1000 }}>
-              <Text style={{ color: '#ffffff', fontSize: 32, fontWeight: '800', padding: 10 }}>NAME OF ANIMAL</Text>
+              <Text style={{ color: '#ffffff', fontSize: 32, fontWeight: '800', padding: 10 }}></Text>
             </Animated.View>
             <Image
               style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20 }}
@@ -238,6 +281,20 @@ export default class swipeScreen extends React.Component {
   }
 
   render() {
+    
+    if (this.state.isLoading) {
+      this.handleGetOffers();
+        return   <LinearGradient colors = {['#F15A24', '#D4145A']}
+          start = {[0, 1]}
+          end = {[1, 0]}
+          style={{
+            flex:1,
+            padding: '10%',
+            paddingTop: '30%'
+          }}>
+
+          </LinearGradient>;
+      }
     return (
       <LinearGradient colors = {['#F15A24', '#D4145A']}
       start = {[0, 1]}
