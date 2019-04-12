@@ -58,6 +58,8 @@ router.get('/offers', db.getOffers);
 
 router.post('/offers', db.createOffer);
 
+router.get('/myOffers', db.myOffers);
+
 // more routes for our API will happen here
 
 module.exports = router;

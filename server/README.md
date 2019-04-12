@@ -119,7 +119,7 @@ Animal species:
     -   #### Query parameters
         -   `name` [`required`]: name of the animal.
         -   `type` [`required`]: type of offer, which can be `adoption` o `foster`
-        -   `species` [`required`]: species of the animal in the offer.
+        -   `race` [`required`]: race of the animal in the offer, which in turn identifies its species.
         -   `sex` [`required`]: sex of the animal.
         -   `age` [`required`]: age of the animal.
         -   `description` [`optional`]: description of the offer.
