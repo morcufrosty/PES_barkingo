@@ -5,7 +5,8 @@ import {
   TextInput,
   Alert,
   Platform, 
-  Image
+  Image,
+  TouchableOpacity
 } from 'react-native';
 import Button from './Button';
 import { LinearGradient } from 'expo'
@@ -14,10 +15,52 @@ import TextInputWTitle from './inputText.js';
 import InputPassword from './inputPassword.js';
 import { AsyncStorage } from 'react-native';
 
-
+const Users = [
+  { id: "1", uri: require('../assets/1.jpg') },
+  { id: "2", uri: require('../assets/2.jpg') },
+  { id: "3", uri: require('../assets/3.jpg') },
+  { id: "4", uri: require('../assets/4.jpg') },
+  { id: "5", uri: require('../assets/5.jpg') }
+]
 
 export default class Swipe extends React.Component {
 
+
+  renderPublications = () => {
+    return Users.map((data)=>{
+      return(
+      <View>
+        <Image style={{
+          borderRadius:5,
+          overflow:'hidden',
+          marginLeft: 10,
+          width: 200, 
+          height: 200
+        }} source ={data.uri} /> 
+      <TouchableOpacity 
+        style={{
+          position:'absolute',
+          top:10,
+          right:10
+        }}
+        onPress={()=>Alert.alert("Editar puto gos!")}>
+          <Image
+            source={{uri: "https://www.pngrepo.com/download/42233/pencil-edit-button.png", width: 40, height: 40}} />        
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={{
+            position:'absolute',
+            top:10,
+            left:20
+          }}
+        onPress={()=>Alert.alert("Eliminar puto gos!")}>
+          <Image
+            source={{uri: "https://png.pngtree.com/svg/20170121/delete_286553.png", width: 40, height: 40}} />        
+        </TouchableOpacity>
+      </View>
+      )
+    })
+  }
 
   render() {
     return (
@@ -52,76 +95,7 @@ export default class Swipe extends React.Component {
               marginLeft: -10
             }}
           >
-            <View>
-              <Image style={{
-                borderRadius:5,
-                overflow:'hidden',
-                marginLeft: 10,
-                width: 200, 
-                height: 200
-              }} source ={ require('../assets/1.jpg')} />        
-              <Image style={{
-                position:'absolute',
-                top:10,
-                right:10
-                }} 
-                onPress={() => Alert.alert("S'hauria d'editar el gos")}
-                source={{uri: "https://www.pngrepo.com/download/42233/pencil-edit-button.png", width: 40, height: 40}} />        
-              <Image style={{
-                position:'absolute',
-                top:10,
-                left:20
-                }} 
-                onPress={() => Alert.alert("S'hauria d'editar el gos")}
-                source={{uri: "https://png.pngtree.com/svg/20170121/delete_286553.png", width: 40, height: 40}} />        
-            </View>
-            <View>
-              <Image style={{
-                borderRadius:5,
-                overflow:'hidden',
-                marginLeft: 10,
-                width: 200, 
-                height: 200
-              }} source ={ require('../assets/2.jpg')} />        
-              <Image style={{
-                position:'absolute',
-                top:10,
-                right:10
-                }} 
-                onPress={() => Alert.alert("S'hauria d'editar el gos")}
-                source={{uri: "https://www.pngrepo.com/download/42233/pencil-edit-button.png", width: 40, height: 40}} />        
-              <Image style={{
-                position:'absolute',
-                top:10,
-                left:20
-                }} 
-                onPress={() => Alert.alert("S'hauria d'editar el gos")}
-                source={{uri: "https://png.pngtree.com/svg/20170121/delete_286553.png", width: 40, height: 40}} />        
-            </View>
-            <View>
-              <Image style={{
-                borderRadius:5,
-                overflow:'hidden',
-                marginLeft: 10,
-                width: 200, 
-                height: 200
-              }} source ={ require('../assets/3.jpg')} />        
-              <Image style={{
-                position:'absolute',
-                top:10,
-                right:10
-                }} 
-                onPress={() => Alert.alert("S'hauria d'editar el gos")}
-                source={{uri: "https://www.pngrepo.com/download/42233/pencil-edit-button.png", width: 40, height: 40}} />        
-              <Image style={{
-                position:'absolute',
-                top:10,
-                left:20
-                }} 
-                onPress={() => Alert.alert("S'hauria d'editar el gos")}
-                source={{uri: "https://png.pngtree.com/svg/20170121/delete_286553.png", width: 40, height: 40}} />        
-            </View>
-            
+           {this.renderPublications()}       
           </ScrollView>
 
           <View style={{ flex: 1, marginTop: 10 }}>

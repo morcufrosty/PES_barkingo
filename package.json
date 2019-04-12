@@ -22,5 +22,8 @@
     "express": "^4.16.4",
     "jest": "^24.5.0",
     "supertest": "^4.0.2"
+  },
+  "dependencies": {
+    "react-native-simple-radio-button": "^2.7.3"
   }
 }

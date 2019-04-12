@@ -68,12 +68,15 @@ export default class swipeScreen extends React.Component {
   }
 
   async handleSwipeLeft(){
-    const response = await this.SwipeLeftToAPI();
+
+   // this.setState({id: offers[this.state.currentIndex]}); 
+   // const response = await this.SwipeLeftToAPI();
 
   }
 
   async handleSwipeRight(){
-    const response = await this.SwipeRightToAPI();
+   // this.setState({id: offers[this.state.currentIndex]}); 
+   // const response = await this.SwipeRightToAPI();
 
 
   }

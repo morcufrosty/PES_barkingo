@@ -6,15 +6,20 @@ import { StyleSheet, Text, View,
     Platform,
     Picker,
 }  from 'react-native';
-
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import Button from './Button';
 import { LinearGradient } from 'expo'
 import { Facebook } from 'expo';
+import DatePicker from 'react-native-datepicker'
+import { AsyncStorage } from 'react-native';
+
 
 
 
 export default class formNewOffer extends React.Component {
+
+
 
   constructor(props) {
     super(props)
@@ -23,10 +28,10 @@ export default class formNewOffer extends React.Component {
       type: '',
       species: '',
       race: '',
-      sex: null,
+      sex: '',
       age: '',
-      iniDate: '',
-      endDate: '',
+      iniDate: "2019-04-15",
+      endDate: '2019-04-15',
       description:''
     }
   }
@@ -52,6 +57,14 @@ async handlePress(){
     Alert.alert("Error", "Please enter the name of the pet" )
   }
 
+  else if(this.state.species === ''){
+    Alert.alert("Error", "Please enter the scpecies of the pet" )
+  }
+
+  else if(this.state.race === ''){
+    Alert.alert("Error", "Please enter the race of the pet" )
+  }
+
   else if(this.state.age === ''){
     Alert.alert("Error", "Please enter the age of the pet" )
   }
@@ -60,15 +73,11 @@ async handlePress(){
     Alert.alert("Error", "Please enter a description" )
   }
 
-  else if(this.state.race === ''){
-    Alert.alert("Error", "Please enter the race of the pet" )
-  }
 
   else if(this.state.sex === null){
     Alert.alert("Error", "Please specify the sex of the pet" )
   }
-
-
+  else{
 
   const response = await this.newOfferUsingAPI();
 
@@ -80,6 +89,7 @@ async handlePress(){
   else{
     Alert.alert("Error", response.msg);
   }
+}
 
 }
 
@@ -90,10 +100,11 @@ async newOfferUsingAPI(){
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      'x-access-token': await AsyncStorage.getItem(ACCESS_TOKEN)
+      'x-access-token': await AsyncStorage.getItem("access_token")
     },
     body: JSON.stringify({
 
+      token: await AsyncStorage.getItem("access_token"),
       name: this.state.name,
       type: this.state.type,
       species: this.state.species,
@@ -101,7 +112,8 @@ async newOfferUsingAPI(){
       sex: this.state.sex,
       age: this.state.age,
       iniDate: this.state.iniDate,
-      endDate: this.setState.endDate
+      endDate: this.state.endDate,
+      description: this.state.description
 
     }),
   }).then((response) => response.json())
@@ -114,19 +126,100 @@ async newOfferUsingAPI(){
 }
 
 render(){
+  var form;
+          if (this.state.type === "foster") {
+             form = (
+                <View style={{
+                  paddingBottom:30
+                }}>
+                <Text  style={{ color: 'white' }}>{"Data d'inici"}</Text>
+                <DatePicker
+                        style={{width: 200, margin: 5}}
+                        date={this.state.iniDate}
+                        mode="date"
+                        placeholder="select ini date"
+                        format="YYYY-MM-DD"
+                        minDate="2016-05-01"
+                        maxDate="2020-06-01"
+                        confirmBtnText="Confirm"
+                        cancelBtnText="Cancel"
+                        customStyles={{
+                          dateIcon: {
+                            position: 'absolute',
+                            left: 0,
+                            top: 4,
+                            marginLeft: 0
+                          },
+                          dateInput: {
+                            marginLeft: 36,
+
+                            backgroundColor: 'white',
+                            borderWidth: 0,
+                            opacity: 0.5,
+                            borderRadius: 5                          }
+                          // ... You can check the source to find the other keys.
+                        }}
+                        onDateChange={(date) => {this.setState({iniDate: date})}}
+                      />
+                      <Text  style={{ color: 'white' }}>{"Data fi"}</Text>
+                      <DatePicker
+                              style={{width: 200,margin: 5}}
+                              date={this.state.endDate}
+                              mode="date"
+                              placeholder="select end date"
+                              format="YYYY-MM-DD"
+                              minDate="2016-05-01"
+                              maxDate="2020-06-01"
+                              confirmBtnText="Confirm"
+                              cancelBtnText="Cancel"
+                              customStyles={{
+                                dateIcon: {
+                                  position: 'absolute',
+                                  left: 0,
+                                  top: 4,
+                                  marginLeft: 0
+                                },
+                                dateInput: {
+                                  marginLeft: 36,
+                                  backgroundColor: 'white',
+                                  opacity: 0.5,
+                                  borderRadius: 5,
+                                  borderWidth: 0
+                                },
+                                dateText:{
+                                  color: "black",
+                                }
+                                // ... You can check the source to find the other keys.
+                              }}
+                              onDateChange={(date) => {this.setState({endDate: date})}}
+                            />
+                    </View>
+             );
+          } else if (this.state.type === "adoption") {
+             form = (
+               <View style={{
+                height:10
+              }}>
+               </View>
+             );
+          }
 
   return (
     <LinearGradient colors={['#F15A24', '#D4145A']}
       start={[0, 1]}
       end={[1, 0]}
       style={{
-        flex: 1
+        flex: 1,
       }}
     >
       <ScrollView
       style={{
-        padding: '10%',
-      }}>
+        flex: 1,
+        padding:15,
+        paddingTop:25
+      }}
+      showsVerticalScrollIndicator={false}
+      >
 
       <Text style={{ color: 'white', fontSize: 45, flex: 1 }}>New Offer</Text>
 
@@ -158,34 +251,58 @@ render(){
                 </TextInput>
             </View>
 
-            <View style={{ flex: 1, paddingVertical: 10 }}>
-              <Text style={{ color: 'white' }}>{"Description"}</Text>
-              <TextInput
-                multiline = {true}
-                numberOfLines = {4}
-                onChangeText={(description) => this.setState({ description })}
-                value={this.state.description}
-                style={{ backgroundColor: 'white', opacity: 0.5, borderRadius: 5, paddingVertical: 0, height: 80 }}>
-                </TextInput>
+            <KeyboardAwareScrollView>
+              <View style={{ flex: 1, paddingVertical: 10 }}>
+                <Text style={{ color: 'white' }}>{"Description"}</Text>
+                <TextInput
+                  multiline = {true}
+                  numberOfLines = {4}
+                  onChangeText={(description) => this.setState({ description })}
+                  value={this.state.description}
+                  style={{ backgroundColor: 'white', opacity: 0.5, borderRadius: 5, paddingVertical: 0, height: 80 }}>
+                  </TextInput>
+              </View>
+            </KeyboardAwareScrollView>
+
+            <View style={{ flex: 1,paddingVertical: 10 }}>
+            <Text style={{ color: 'white' }}>{"Sexe"}</Text>
+            <RadioForm
+            formHorizontal={true}
+            animation={true}
+            buttonColor={"#ffffff"}
+            selectedButtonColor={"#ffffff"}
+            style={{ paddingVertical:10}}
+            labelStyle={{color: 'white'}}
+            radioStyle={{paddingRight: 20,opacity:0.5}}
+                     radio_props={[
+                       {label: 'male', sex: "male" },
+                       {label: 'female', sex: "female" }
+                     ]}
+                     initial={0}
+                     onPress={(sex) => {this.setState({sex:sex})}}
+                   />
             </View>
 
-            <View style={{ flex: 1 }}>
-            <Text style={{ color: 'white' }}>{"Sexe"}</Text>
-              <Picker
-                mode="dropdown"
-                selectedValue={this.state.sexe}
-                style={{ paddingVertical: 0, height: 50 }}
-                onValueChange={(itemValue, itemIndex) =>
-                  this.setState({sexe: itemValue})
-                }>
-                <Picker.Item label="male" value="male" />
-                <Picker.Item label="female" value="female" />
-              </Picker>
+            <View style={{ flex: 1,paddingVertical: 10 }}>
+            <Text style={{ color: 'white' }}>{"Type of offer"}</Text>
+            <RadioForm
+            formHorizontal={true}
+            animation={true}
+            buttonColor={"#ffffff"}
+            selectedButtonColor={"#ffffff"}
+            style={{ paddingVertical:10}}
+            labelStyle={{color: 'white'}}
+            radioStyle={{paddingRight: 20,opacity:0.5}}
+                     radio_props={[
+                       {label: 'adoption', value: "adoption" },
+                       {label: 'foster', value: "foster" }
+                     ]}
+                     initial={0}
+                     onPress={(value) => {this.setState({type:value})}}
+                   />
             </View>
-            <Button
-              title='Submit'
-              color='#ff3b28'>
-            </Button>
+            {form}
+
             </ScrollView>
 
     </LinearGradient>
