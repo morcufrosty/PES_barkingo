@@ -54,6 +54,10 @@ router.get('/middletest', (req, res) => {
     res.json({ hey: 'nice' });
 });
 
+router.get('/offers', db.getOffers);
+
+router.post('/offers', db.createOffer);
+
 // more routes for our API will happen here
 
 module.exports = router;

@@ -4,7 +4,8 @@ import {
   ScrollView,
   TextInput,
   Alert,
-  Platform
+  Platform, 
+  Image
 } from 'react-native';
 import Button from './Button';
 import { LinearGradient } from 'expo'
@@ -25,24 +26,135 @@ export default class Swipe extends React.Component {
         end={[1, 0]}
         style={{
           flex: 1,
-          padding: '10%',
-          paddingTop: '30%'
+          paddingTop: '20%',
+          padding: '5%'
         }}>
-        <Text style={{ color: 'white', fontSize: 45, flex: 1 }}>SETTINGS</Text>
+        <ScrollView>
+          <View style={{
+            flex:1,
+            flexDirection: 'row',
+            height:64
+          }}>  
+            <Image style={{
+              borderRadius:64,
+              overflow:'hidden'
+            }} source={{uri: "https://facebook.github.io/react-native/img/favicon.png", width: 64, height: 64}} />        
+            <Text style={{fontSize:20, marginLeft:10, color: 'white', flex: 1,justifyContent: 'center', alignItems: 'center', height:64, textAlignVertical: 'center' }}>Your name</Text>
+          </View>
+          <Text style={{
+            paddingTop:'5%',
+            paddingBottom:'5%',
+            color: 'white'
+          }}>Your publications</Text>
+          <ScrollView
+            horizontal={true}
+            style={{
+              marginLeft: -10
+            }}
+          >
+            <View>
+              <Image style={{
+                borderRadius:5,
+                overflow:'hidden',
+                marginLeft: 10,
+                width: 200, 
+                height: 200
+              }} source ={ require('../assets/1.jpg')} />        
+              <Image style={{
+                position:'absolute',
+                top:10,
+                right:10
+                }} 
+                onPress={() => Alert.alert("S'hauria d'editar el gos")}
+                source={{uri: "https://www.pngrepo.com/download/42233/pencil-edit-button.png", width: 40, height: 40}} />        
+              <Image style={{
+                position:'absolute',
+                top:10,
+                left:20
+                }} 
+                onPress={() => Alert.alert("S'hauria d'editar el gos")}
+                source={{uri: "https://png.pngtree.com/svg/20170121/delete_286553.png", width: 40, height: 40}} />        
+            </View>
+            <View>
+              <Image style={{
+                borderRadius:5,
+                overflow:'hidden',
+                marginLeft: 10,
+                width: 200, 
+                height: 200
+              }} source ={ require('../assets/2.jpg')} />        
+              <Image style={{
+                position:'absolute',
+                top:10,
+                right:10
+                }} 
+                onPress={() => Alert.alert("S'hauria d'editar el gos")}
+                source={{uri: "https://www.pngrepo.com/download/42233/pencil-edit-button.png", width: 40, height: 40}} />        
+              <Image style={{
+                position:'absolute',
+                top:10,
+                left:20
+                }} 
+                onPress={() => Alert.alert("S'hauria d'editar el gos")}
+                source={{uri: "https://png.pngtree.com/svg/20170121/delete_286553.png", width: 40, height: 40}} />        
+            </View>
+            <View>
+              <Image style={{
+                borderRadius:5,
+                overflow:'hidden',
+                marginLeft: 10,
+                width: 200, 
+                height: 200
+              }} source ={ require('../assets/3.jpg')} />        
+              <Image style={{
+                position:'absolute',
+                top:10,
+                right:10
+                }} 
+                onPress={() => Alert.alert("S'hauria d'editar el gos")}
+                source={{uri: "https://www.pngrepo.com/download/42233/pencil-edit-button.png", width: 40, height: 40}} />        
+              <Image style={{
+                position:'absolute',
+                top:10,
+                left:20
+                }} 
+                onPress={() => Alert.alert("S'hauria d'editar el gos")}
+                source={{uri: "https://png.pngtree.com/svg/20170121/delete_286553.png", width: 40, height: 40}} />        
+            </View>
+            
+          </ScrollView>
 
-        <View style={{ flex: 1 }}>
-          <Button
-            onPress={async () => {
+          <View style={{ flex: 1, marginTop: 10 }}>
+            <Button
+              onPress={() => Alert.alert("S'hauria d'anar a ajustaments")}
+              title="Settings"
+              color="#ff3b28"
+              
+            />
+          </View>
 
-              await AsyncStorage.removeItem('access_token');
-              this.props.navigation.replace('Login');
-            }
-            }
-            title="Log out"
-            color="#FF0000"
-          />
-        </View>
+          <View style={{ flex: 1, marginTop: 10 }}>
+            <Button
+              onPress={() => Alert.alert("S'haurien d'obrir coses")}
+              title="New Publication"
+              color="#ff3b28"
+              
+            />
+          </View>
 
+          <View style={{ flex: 1, marginTop: 10 }}>
+            <Button
+              onPress={async () => {
+
+                await AsyncStorage.removeItem('access_token');
+                this.props.navigation.replace('Login');
+              }
+              }
+              title="Log out"
+              color="#FF0000"
+            />
+          </View>
+        </ScrollView>
       </LinearGradient>
     );
   }
