@@ -24,6 +24,7 @@ const SwipeNavigator = createStackNavigator({
       }
 
 });
+
 const SwipeNav = createAppContainer(SwipeNavigator);
 
 const TabNavigator = createBottomTabNavigator(
