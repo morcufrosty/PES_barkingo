@@ -1,7 +1,9 @@
 const pool = require('./db');
 
 const getOffers = async (request, response) => {
-    const { id } = request.body || request.query;
+    let id = request.body.id || request.query.id || req.headers['id'];
+    id = id.toString()
+    console.log(id)
     await pool.connect(async (err, client, done) => {
         if (err) {
             response.json({ success: false, msg: 'Error accessing the database' });
@@ -9,16 +11,15 @@ const getOffers = async (request, response) => {
             return;
         }
         await client.query('BEGIN');
-        await client.query('SELECT id, name, sex, race, "TypeName", "urlImage" FROM "openedOffers" WHERE "idOwner" <> "$1";', [id], (err, result) => {
+        await client.query('SELECT id, name, sex, race, "TypeName", "urlImage" FROM "openedOffers" WHERE "idOwner" != \'$1\';', [id], (err, result) => {
             if (err || result.rowCount == 0) {
                 console.log(err)
                 response.json({ success: false, msg: 'No offers found found' });
-                done();
-                return;
             } else {
-                response.json({ offerList: result.rows });
+                response.json({ offers: result.rows });
             }
         });
+        done();
     })
 }
 
@@ -31,9 +32,9 @@ const createOffer = async (request, response) => {
             return;
         }
         await client.query('BEGIN');
-        if(description === undefined) description = "null";
-        if(iniDate === undefined) iniDate = "null";
-        if(endDate === undefined) endDate = "null";
+        if (description === undefined) description = "null";
+        if (iniDate === undefined) iniDate = "null";
+        if (endDate === undefined) endDate = "null";
         await client.query('INSERT INTO animals (id, name, type, species, race, sex, age, description, iniDate, endDate) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)', [uuidv4(), name, type, species, race, sex, age, description, iniDate, endDate], (err, result) => {
             if (err) {
                 console.error('Unknown error', err);
