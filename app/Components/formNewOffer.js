@@ -283,7 +283,7 @@ render(){
                    />
             </View>
 
-            <View style={{ flex: 1,paddingVertical: 10 }}>
+            <View style={{ flex: 1, marginTop: 10, marginBottom:20 }}>
             <Text style={{ color: 'white' }}>{"Type of offer"}</Text>
             <RadioForm
             formHorizontal={true}
