@@ -25,6 +25,50 @@ const Users = [
 
 export default class Swipe extends React.Component {
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      myOffers:''
+
+    }
+  }
+
+
+  async getMyOffersFromAPI(){
+
+    return fetch('http://10.4.41.164/api/offers', {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'x-access-token': await AsyncStorage.getItem("access_token")
+    }
+  }).then((response) => response.json())
+    .then((responseJson) => {
+      console.log(responseJson.msg);
+      return responseJson;
+    }).catch((error) => {
+      console.error(error);
+    });
+
+  }
+
+  async handleOffers(){
+
+  const response = await this.getMyOffersFromAPI();
+  
+  if(response.success){
+    this.setState({myOffers: response.offers})
+  }
+
+  else{
+    Alert.alert("Error al carregar ofertes");
+
+
+  }
+
+  }
+
 
   renderPublications = () => {
     return Users.map((data)=>{

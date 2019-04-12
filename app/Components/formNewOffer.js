@@ -60,26 +60,26 @@ async handlePress(){
   else if(this.state.species === ''){
     Alert.alert("Error", "Please enter the scpecies of the pet" )
   }
-
+/*
   else if(this.state.race === ''){
     Alert.alert("Error", "Please enter the race of the pet" )
   }
-
+*/
   else if(this.state.age === ''){
     Alert.alert("Error", "Please enter the age of the pet" )
   }
 
-  else if(this.state.description === ''){
-    Alert.alert("Error", "Please enter a description" )
-  }
-
-
+ 
   else if(this.state.sex === null){
     Alert.alert("Error", "Please specify the sex of the pet" )
   }
   else{
 
-  const response = await this.newOfferUsingAPI();
+   const token = await AsyncStorage.getItem("access_token");
+   const jsonToken = JSON.parse(token);
+
+
+  const response = await this.newOfferUsingAPI(jsonToken);
 
 
   if(response.success){
@@ -93,20 +93,20 @@ async handlePress(){
 
 }
 
-async newOfferUsingAPI(){
+async newOfferUsingAPI(jsonToken){
 
   return fetch('http://10.4.41.164/api/offers', {
     method: 'POST',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      'x-access-token': await AsyncStorage.getItem("access_token")
+      'x-access-token': jsonToken.token
     },
     body: JSON.stringify({
 
-      token: await AsyncStorage.getItem("access_token"),
+      token: jsonToken.token,
       name: this.state.name,
-      type: this.state.type,
+      type: 'adoption',
       species: this.state.species,
       race: this.state.race,
       sex: this.state.sex,
@@ -283,7 +283,7 @@ render(){
                    />
             </View>
 
-            <View style={{ flex: 1,paddingVertical: 10 }}>
+            <View style={{ flex: 1, marginTop: 10, marginBottom:20 }}>
             <Text style={{ color: 'white' }}>{"Type of offer"}</Text>
             <RadioForm
             formHorizontal={true}
