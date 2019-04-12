@@ -14,9 +14,9 @@ const getOffers = async (request, response) => {
             [name, email], (err, result) => {
                 if (err || result.rowCount == 0) {
                     console.log(err)
-                    response.json({ success: false, msg: 'No offers found found' });
+                    response.json({ success: false, msg: 'No offers found' });
                 } else {
-                    response.json({ offers: result.rows });
+                    response.json({ success: true, offers: result.rows });
                 }
             });
         done();
@@ -60,9 +60,9 @@ const myOffers = async (request, response) => {
             [name, email], (err, result) => {
                 if (err || result.rowCount == 0) {
                     console.log(err)
-                    response.json({ success: false, msg: 'No offers found found' });
+                    response.json({ success: false, msg: 'No offers found' });
                 } else {
-                    response.json({ offers: result.rows });
+                    response.json({ success: true, offers: result.rows });
                 }
             });
         done();
