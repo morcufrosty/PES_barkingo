@@ -296,6 +296,7 @@ export default class App extends React.Component {
 
 
   render() {
+    
     if (this.state.isLoading) {
         this.retrieveAndCheckToken();
           return   <LinearGradient colors = {['#F15A24', '#D4145A']}
