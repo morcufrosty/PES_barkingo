@@ -11,6 +11,8 @@ import { StyleSheet, Text, View,
 import Button from './Button';
 import { LinearGradient } from 'expo'
 import { Facebook } from 'expo';
+import { AsyncStorage } from 'react-native';
+
 
 
 
@@ -23,7 +25,7 @@ export default class formNewOffer extends React.Component {
       type: '',
       species: '',
       race: '',
-      sex: null,
+      sex: '',
       age: '',
       iniDate: '',
       endDate: '',
@@ -52,6 +54,14 @@ async handlePress(){
     Alert.alert("Error", "Please enter the name of the pet" )
   }
 
+  else if(this.state.species === ''){
+    Alert.alert("Error", "Please enter the scpecies of the pet" )
+  }
+
+  else if(this.state.race === ''){
+    Alert.alert("Error", "Please enter the race of the pet" )
+  }
+
   else if(this.state.age === ''){
     Alert.alert("Error", "Please enter the age of the pet" )
   }
@@ -60,15 +70,11 @@ async handlePress(){
     Alert.alert("Error", "Please enter a description" )
   }
 
-  else if(this.state.race === ''){
-    Alert.alert("Error", "Please enter the race of the pet" )
-  }
-
+ 
   else if(this.state.sex === null){
     Alert.alert("Error", "Please specify the sex of the pet" )
   }
-
-
+  else{
 
   const response = await this.newOfferUsingAPI();
 
@@ -80,6 +86,7 @@ async handlePress(){
   else{
     Alert.alert("Error", response.msg);
   }
+}
 
 }
 
@@ -90,10 +97,11 @@ async newOfferUsingAPI(){
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      'x-access-token': await AsyncStorage.getItem(ACCESS_TOKEN)
+      'x-access-token': await AsyncStorage.getItem("access_token")
     },
     body: JSON.stringify({
 
+      token: await AsyncStorage.getItem("access_token"),
       name: this.state.name,
       type: this.state.type,
       species: this.state.species,
@@ -101,7 +109,8 @@ async newOfferUsingAPI(){
       sex: this.state.sex,
       age: this.state.age,
       iniDate: this.state.iniDate,
-      endDate: this.setState.endDate
+      endDate: this.state.endDate,
+      description: this.state.description
 
     }),
   }).then((response) => response.json())
@@ -176,7 +185,7 @@ render(){
                 selectedValue={this.state.sexe}
                 style={{ paddingVertical: 0, height: 50 }}
                 onValueChange={(itemValue, itemIndex) =>
-                  this.setState({sexe: itemValue})
+                  this.setState({sex: itemValue})
                 }>
                 <Picker.Item label="male" value="male" />
                 <Picker.Item label="female" value="female" />
@@ -184,7 +193,9 @@ render(){
             </View>
             <Button
               title='Submit'
-              color='#ff3b28'>
+              color='#ff3b28'
+              onPress={async () => this.handlePress()}>
+
             </Button>
             </ScrollView>
 
