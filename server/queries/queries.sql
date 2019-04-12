@@ -1,4 +1,5 @@
---
+--login
+SELECT * FROM users WHERE email='hola@gmail.com'
 
 --offers
 
