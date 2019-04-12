@@ -4,7 +4,8 @@ const { createUser,
     renewFacebookToken,
     user } = require('./login_register');
 
-const { getOffers } = require('./offers');
+const { getOffers,
+    createOffer } = require('./offers');
 
 module.exports = {
     createUser,
@@ -12,7 +13,8 @@ module.exports = {
     renewGoogleToken,
     renewFacebookToken,
     user,
-    getOffers
+    getOffers,
+    createOffer
 };
 
 // TODO: paginacio https://www.moesif.com/blog/technical/api-design/REST-API-Design-Filtering-Sorting-and-Pagination/#

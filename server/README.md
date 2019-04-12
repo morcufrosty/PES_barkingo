@@ -25,8 +25,17 @@ npm start
 ## API usage
 
 The server runs on address `10.4.41.164` in the FIB network.
-Every query must be called in the endpoint `/api`. Parameters must be passed in the body of the request, using `x-www-form-urlencoded`.
+Every query must be called in the endpoint `/api`. Parameters must be passed in the body of the request, using `x-www-form-urlencoded`, or the query parameters.
 When needed, a token must be in the headers in the parameter name `x-access-token`.
+
+Animal species:
+
+- 0:	dog
+- 1:	cat
+- 2:	fish
+- 3:	reptile
+- 4:	bird
+- 5:	other
 
 ## Endpoints
 
@@ -101,20 +110,20 @@ When needed, a token must be in the headers in the parameter name `x-access-toke
         -   `offers`: list containing the offers that match the given search parameters, with the following attributes for each element.
             -   `id`: identifier of the animal, which will be used in further requests.
             -   `name`: name of the animal.
-            -   `description`: description of the offer.
             -   `sex`: sex of the offered animal.
             -   `species`: species of the animal in the offer.
-            -   ``
             -   `photURL`: URL of the photo of the animal to be displayed.
+            -   `offerType`: type of the offer
 
 -   ### POST `/offers`: creates a new offer
 
     -   #### Query parameters
         -   `name` [`required`]: name of the animal.
         -   `type` [`required`]: type of offer, which can be `adoption` o `foster`
-        -   `race` [`required`]: this field will contain the animal's race, with the implicit species of the animal in the offer.
+        -   `species` [`required`]: species of the animal in the offer.
         -   `sex` [`required`]: sex of the animal.
         -   `age` [`required`]: age of the animal.
+        -   `description` [`optional`]: description of the offer.
         -   `iniDate` [`optional`]: if the offer is of type `foster` this will indicate the date in which the animal would be fostered.
         -   `endDate` [`optional`]: if the offer is of type `foster` this will indicate the date in which the animal will end its fostering.
     -   #### Response

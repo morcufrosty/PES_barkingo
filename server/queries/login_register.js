@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const uuidv4 = require('uuid/v4');
 const jwt = require('jsonwebtoken');
 const pool = require('./db');
+const {secret} = require('../creds.json');
 
 const createUser = async (request, response) => {
     const { password, email, name } = request.body || request.query;
@@ -62,7 +63,7 @@ const loginUser = async (request, response) => {
                         const payload = { email: result.rows[0].email, name: result.rows[0].name };
                         jwt.sign(
                             payload,
-                            creds.secret,
+                            secret,
                             {
                                 expiresIn: '1 day',
                             },
@@ -85,7 +86,7 @@ const renewGoogleToken = async (request, response) => {
     const { name, email, token } = request.body || request.query;
     if (email == 'barkingo80@gmail.com') {
         const payload = { email, name };
-        let token2 = jwt.sign(payload, creds.secret, {
+        let token2 = jwt.sign(payload, secret, {
             expiresIn: '1 day',
         });
         response.json({ success: true, msg: 'User logged in successfully', token: token2 });
@@ -110,7 +111,7 @@ const renewGoogleToken = async (request, response) => {
                         } else {
                             client.query('COMMIT');
                             const payload = { email, name };
-                            var token = jwt.sign(payload, creds.secret, {
+                            var token = jwt.sign(payload, secret, {
                                 expiresIn: '1 day',
                             });
                             response.json({ success: true, msg: 'User created successfully', token: token });
@@ -122,7 +123,7 @@ const renewGoogleToken = async (request, response) => {
                             response.json({ success: false, msg: 'Error while checking password' });
                         } else if (check) {
                             const payload = { email: result.rows[0].email, name: result.rows[0].name };
-                            var token = jwt.sign(payload, creds.secret, {
+                            var token = jwt.sign(payload, secret, {
                                 expiresIn: '1 day',
                             });
                             response.json({ success: true, msg: 'User logged in successfully', token: token });
@@ -162,7 +163,7 @@ const renewFacebookToken = async (request, response) => {
                         } else {
                             client.query('COMMIT');
                             const payload = { email, name };
-                            var signedToken = jwt.sign(payload, creds.secret, {
+                            var signedToken = jwt.sign(payload, secret, {
                                 expiresIn: '1 day',
                             });
                             response.json({ success: true, msg: 'User created successfully', token: signedToken });
@@ -175,7 +176,7 @@ const renewFacebookToken = async (request, response) => {
                             response.json({ success: false, msg: 'Error while checking password' });
                         } else if (check) {
                             const payload = { email: result.rows[0].email, name: result.rows[0].name };
-                            var signedToken = jwt.sign(payload, creds.secret, {
+                            var signedToken = jwt.sign(payload, secret, {
                                 expiresIn: '1 day',
                             });
                             response.json({ success: true, msg: 'User logged in successfully', token: signedToken });
