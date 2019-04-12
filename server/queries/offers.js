@@ -69,8 +69,13 @@ const myOffers = async (request, response) => {
     })
 }
 
+const swipeRight = async (request, response) => {
+    response.json({ success: false, msg: 'Not implemented' })
+}
+
 module.exports = {
     getOffers,
     createOffer,
-    myOffers
+    myOffers,
+    swipeRight
 }
