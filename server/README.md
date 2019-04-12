@@ -25,17 +25,17 @@ npm start
 ## API usage
 
 The server runs on address `10.4.41.164` in the FIB network.
-Every query must be called in the endpoint `/api`. Parameters must be passed in the body of the request, using `x-www-form-urlencoded`, or the query parameters.
+Every query must be called in the endpoint `/api`. Parameters must be passed in the body of the request, using `x-www-form-urlencoded` as , or the query parameters.
 When needed, a token must be in the headers in the parameter name `x-access-token`.
 
 Animal species:
 
-- 0:	dog
-- 1:	cat
-- 2:	fish
-- 3:	reptile
-- 4:	bird
-- 5:	other
+-   0: dog
+-   1: cat
+-   2: fish
+-   3: reptile
+-   4: bird
+-   5: other
 
 ## Endpoints
 
@@ -88,7 +88,7 @@ Animal species:
 
 -   ### GET `/user`: returns information about the logged-in user.
     -   #### Query parameters
-        -   `token` [`required`]: A valid Facebook authenthetication token
+        -   `token` [`required`]: Barkingo authenthetication token
     -   #### Response
         -   `id`: identifier of the user
         -   `email`: A valid email from the Facebook Account
@@ -104,7 +104,6 @@ Animal species:
 
         -   `type` [`optional`]: can either be `adoption` o `foster`.
         -   `race` [`optional`]: race of the animals to be displayed.
-        -   `id` [`required`]: id of the user which will be excluded from the results.
 
     -   ### Response
         -   `offers`: list containing the offers that match the given search parameters, with the following attributes for each element.
@@ -158,6 +157,7 @@ Animal species:
         -   `msg`: If success is `false`, short message explaining the causes of the error. If not, contains success message.
 
 -   ### DELETE `/offers/:id`: delete an offer. To do so you must be its creator.
+
     -   #### Response
         -   `success`: Is either `true` or `false`.
         -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
@@ -166,8 +166,6 @@ Animal species:
 
     -   #### Query parameters
 
-        -   `type` [`optional`]: can either be `adoption` o `foster`.
-        -   `race` [`optional`]: race of the animals to be displayed.
         -   `id` [`required`]: id of the user.
 
     -   ### Response
