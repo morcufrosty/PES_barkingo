@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 var morgan = require('morgan');
 
 app.use(morgan('dev'));
+app.disable('etag');
 
 // configure app to use bodyParser()
 // this will let us get the data from a POST
