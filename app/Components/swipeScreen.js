@@ -20,9 +20,11 @@ export default class swipeScreen extends React.Component {
 
     this.position = new Animated.ValueXY()
     this.state = {
-      currentIndex: 0
-
+      currentIndex: 0,
+      offers: ''
     }
+
+
 
     this.rotate = this.position.x.interpolate({
       inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
@@ -61,6 +63,65 @@ export default class swipeScreen extends React.Component {
     })
 
   }
+
+  async handleSwipeLeft(){
+    const response = await this.SwipeLeftToAPI();
+
+  }
+
+  async handleSwipeRight(){
+    const response = await this.SwipeRightToAPI();
+
+
+  }
+
+
+  async SwipeLeftToAPI(){
+
+    return fetch('http://10.4.41.164/api/offers/swipeleft', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'x-access-token': await AsyncStorage.getItem(ACCESS_TOKEN),
+
+      },
+      body: JSON.stringify({
+  
+      }),
+    }).then((response) => response.json())
+      .then((responseJson) => {
+        console.log(responseJson.msg);
+        return responseJson;
+      }).catch((error) => {
+        console.error(error);
+      });
+
+  }
+
+  async SwipeRightToAPI(){
+
+    return fetch('http://10.4.41.164/api/offers/swipeRight', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'x-access-token': await AsyncStorage.getItem(ACCESS_TOKEN),
+
+      },
+      body: JSON.stringify({
+
+      }),
+    }).then((response) => response.json())
+      .then((responseJson) => {
+        console.log(responseJson.msg);
+        return responseJson;
+      }).catch((error) => {
+        console.error(error);
+      });
+    
+  }
+
   componentWillMount() {
     this.PanResponder = PanResponder.create({
 
@@ -71,16 +132,19 @@ export default class swipeScreen extends React.Component {
       },
       onPanResponderRelease: (evt, gestureState) => {
 
-        if (gestureState.dx > 120) {
+        if (gestureState.dx > 120) { //SWIPE RIGHT
           Animated.spring(this.position, {
             toValue: { x: SCREEN_WIDTH + 100, y: gestureState.dy }
           }).start(() => {
             this.setState({ currentIndex: this.state.currentIndex + 1 }, () => {
               this.position.setValue({ x: 0, y: 0 })
+              
             })
+          this.handleSwipeRight();
+
           })
         }
-        else if (gestureState.dx < -120) {
+        else if (gestureState.dx < -120) { //SWIPE LEFT
           Animated.spring(this.position, {
             toValue: { x: -SCREEN_WIDTH - 100, y: gestureState.dy }
           }).start(() => {
@@ -88,6 +152,9 @@ export default class swipeScreen extends React.Component {
               this.position.setValue({ x: 0, y: 0 })
             })
           })
+
+         this.handleSwipeLeft;
+
         }
         if (gestureState.dy > -5  && gestureState.dy < 5 && gestureState.dx > -5 &&  gestureState.dx < 5) {
           this.props.navigation.navigate('perfilAnimal');

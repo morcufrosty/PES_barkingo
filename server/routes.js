@@ -48,6 +48,8 @@ router.use((req, res, next) => {
     }
 });
 
+router.get('/user', db.user);
+
 router.get('/middletest', (req, res) => {
     res.json({ hey: 'nice' });
 });
