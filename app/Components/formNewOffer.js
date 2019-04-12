@@ -129,7 +129,9 @@ render(){
   var form;
           if (this.state.type === "foster") {
              form = (
-                <View>
+                <View style={{
+                  paddingBottom:30
+                }}>
                 <Text  style={{ color: 'white' }}>{"Data d'inici"}</Text>
                 <DatePicker
                         style={{width: 200, margin: 5}}
@@ -195,7 +197,9 @@ render(){
              );
           } else if (this.state.type === "adoption") {
              form = (
-               <View>
+               <View style={{
+                height:10
+              }}>
                </View>
              );
           }
@@ -205,16 +209,14 @@ render(){
       start={[0, 1]}
       end={[1, 0]}
       style={{
-        paddingRight:20,
-        paddingTop:30,
-        paddingLeft: 20,
-        padding: 20,
-        flex: 1
+        flex: 1,
       }}
     >
       <ScrollView
       style={{
-        flex: 1
+        flex: 1,
+        padding:15,
+        paddingTop:25
       }}
       showsVerticalScrollIndicator={false}
       >
