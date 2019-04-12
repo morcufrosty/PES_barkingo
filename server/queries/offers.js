@@ -16,7 +16,7 @@ const getOffers = async (request, response) => {
                     console.log(err)
                     response.json({ success: false, msg: 'No offers found' });
                 } else {
-                    response.json({ success: true, offers: result.rows });
+                    response.json({ success: true, msg: "Offers found", offers: result.rows });
                 }
             });
         done();
