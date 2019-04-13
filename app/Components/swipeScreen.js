@@ -128,7 +128,7 @@ export default class swipeScreen extends React.Component {
       }).catch((error) => {
         console.error(error);
       });
-    
+
   }
 
   componentWillMount() {
@@ -147,7 +147,7 @@ export default class swipeScreen extends React.Component {
           }).start(() => {
             this.setState({ currentIndex: this.state.currentIndex + 1 }, () => {
               this.position.setValue({ x: 0, y: 0 })
-              
+
             })
           this.handleSwipeRight();
 
@@ -179,7 +179,7 @@ export default class swipeScreen extends React.Component {
     })
   }
     async handleGetOffers(){
-      
+
       const t = await AsyncStorage.getItem('access_token');
       tokenJson = JSON.parse(t);
       const response = await this.getOffers(tokenJson);
@@ -199,7 +199,7 @@ export default class swipeScreen extends React.Component {
     }
 
   async getOffers(t) {
-    
+
 
     return fetch('http://10.4.41.164/api/offers', {
       method: 'GET',
@@ -215,7 +215,7 @@ export default class swipeScreen extends React.Component {
       });
 
   }
- 
+
 
   renderUsers = () => {
 
@@ -282,7 +282,7 @@ export default class swipeScreen extends React.Component {
   }
 
   render() {
-    
+
     if (this.state.isLoading) {
       this.handleGetOffers();
         return   <LinearGradient colors = {['#F15A24', '#D4145A']}

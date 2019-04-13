@@ -5,6 +5,8 @@ import { StyleSheet, Text, View,
     Alert,
     Platform,
     Picker,
+    Image,
+    TouchableOpacity
 }  from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
@@ -13,7 +15,9 @@ import { LinearGradient } from 'expo'
 import { Facebook } from 'expo';
 import DatePicker from 'react-native-datepicker'
 import { AsyncStorage } from 'react-native';
-
+//import ImagePicker from 'react-native-image-picker';
+import { ImagePicker } from 'expo';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 
 
@@ -30,9 +34,11 @@ export default class formNewOffer extends React.Component {
       race: '',
       sex: '',
       age: '',
+      //PER CANVIAR EL FORMAT DE LA DATA, MIRAR "fromat" de <DatePicker> a l'inici del render()
       iniDate: "2019-04-15",
       endDate: '2019-04-15',
-      description:''
+      description:'',
+      image:null
     }
   }
 
@@ -46,7 +52,8 @@ export default class formNewOffer extends React.Component {
       age: '',
       iniDate: '',
       endDate: '',
-      description: ''
+      description: '',
+      image: null
    })
 
   }
@@ -82,7 +89,7 @@ async handlePress(){
     Alert.alert("Error", "Please enter the age of the pet" )
   }
 
- 
+
   else if(this.state.sex === null){
     Alert.alert("Error", "Please specify the sex of the pet" )
   }
@@ -137,19 +144,65 @@ async newOfferUsingAPI(jsonToken){
     });
 }
 
+
+//OPCIONS DE L'IMAGE PICKER
+_pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      this.setState({ image: result.uri });
+    }
+  };
+
 render(){
+  let { image } = this.state;
+  var imageForm;
   var form;
-          if (this.state.type === "foster") {
-             form = (
-                <View style={{
-                  paddingBottom:30
-                }}>
-                <Text  style={{ color: 'white' }}>{"Data d'inici"}</Text>
+    if (this.state.type === "foster") {
+       form = (
+          <View style={{
+            paddingBottom:30
+          }}>
+          <Text  style={{ color: 'white' }}>{"Data d'inici"}</Text>
+          <DatePicker
+                  style={{width: 200, margin: 5}}
+                  date={this.state.iniDate}
+                  mode="date"
+                  placeholder="select ini date"
+                  format="YYYY-MM-DD"
+                  minDate="2016-05-01"
+                  maxDate="2020-06-01"
+                  confirmBtnText="Confirm"
+                  cancelBtnText="Cancel"
+                  customStyles={{
+                    dateIcon: {
+                      position: 'absolute',
+                      left: 0,
+                      top: 4,
+                      marginLeft: 0
+                    },
+                    dateInput: {
+                      marginLeft: 36,
+
+                      backgroundColor: 'white',
+                      borderWidth: 0,
+                      opacity: 0.5,
+                      borderRadius: 5                          }
+                    // ... You can check the source to find the other keys.
+                  }}
+                  onDateChange={(date) => {this.setState({iniDate: date})}}
+                />
+                <Text  style={{ color: 'white' }}>{"Data fi"}</Text>
                 <DatePicker
-                        style={{width: 200, margin: 5}}
-                        date={this.state.iniDate}
+                        style={{width: 200,margin: 5}}
+                        date={this.state.endDate}
                         mode="date"
-                        placeholder="select ini date"
+                        placeholder="select end date"
                         format="YYYY-MM-DD"
                         minDate="2016-05-01"
                         maxDate="2020-06-01"
@@ -164,71 +217,111 @@ render(){
                           },
                           dateInput: {
                             marginLeft: 36,
-
                             backgroundColor: 'white',
-                            borderWidth: 0,
                             opacity: 0.5,
-                            borderRadius: 5                          }
+                            borderRadius: 5,
+                            borderWidth: 0
+                          },
+                          dateText:{
+                            color: "black",
+                          }
                           // ... You can check the source to find the other keys.
                         }}
-                        onDateChange={(date) => {this.setState({iniDate: date})}}
+                        onDateChange={(date) => {this.setState({endDate: date})}}
                       />
-                      <Text  style={{ color: 'white' }}>{"Data fi"}</Text>
-                      <DatePicker
-                              style={{width: 200,margin: 5}}
-                              date={this.state.endDate}
-                              mode="date"
-                              placeholder="select end date"
-                              format="YYYY-MM-DD"
-                              minDate="2016-05-01"
-                              maxDate="2020-06-01"
-                              confirmBtnText="Confirm"
-                              cancelBtnText="Cancel"
-                              customStyles={{
-                                dateIcon: {
-                                  position: 'absolute',
-                                  left: 0,
-                                  top: 4,
-                                  marginLeft: 0
-                                },
-                                dateInput: {
-                                  marginLeft: 36,
-                                  backgroundColor: 'white',
-                                  opacity: 0.5,
-                                  borderRadius: 5,
-                                  borderWidth: 0
-                                },
-                                dateText:{
-                                  color: "black",
-                                }
-                                // ... You can check the source to find the other keys.
-                              }}
-                              onDateChange={(date) => {this.setState({endDate: date})}}
-                            />
-                    </View>
-             );
-          } else if (this.state.type === "adoption") {
-             form = (
-               <View style={{
-                height:10
-              }}>
-               </View>
-             );
-          }
+              </View>
+       );
+    } else if (this.state.type === "adoption") {
+       form = (
+         <View style={{
+          height:10
+        }}>
+         </View>
+       );
+    }
 
+    if(this.state.image != null){
+      imageForm=(
+        <View style={{ flex: 1, marginTop: 10, marginBottom:20, flexDirection: 'row' }}>
+                    <Image
+                      source={{ uri: image }}
+                        style={{ width: 200, height: 200,borderRadius:50 }}
+                      />
+                      <View
+                      style={{
+                        alignItems:"center",
+                        justifyContent: 'center',
+                        flex: 1
+                      }}>
+                       <TouchableOpacity onPress={this._pickImage}
+                       style={{
+                           //borderWidth:1,
+                           //borderColor:'rgba(0,0,0,0.2)',
+                           opacity: 0.5,
+                           alignItems:'center',
+                           justifyContent:'center',
+                           width:60,
+                           height:60,
+                           backgroundColor:'#fff',
+                           borderRadius:50,
+                         }}
+                         >
+                       <Icon name={"exchange"}  size={20} color="#F15A24" />
+
+                     </TouchableOpacity>
+                     <Text style={{ color: 'white', opacity:0.5 }}>{"Change image"}</Text>
+
+                     </View>
+                   </View>);
+
+    } else{
+      imageForm=(
+        <View style={{ flex: 1, marginTop: 10, marginBottom:20, flexDirection: 'row' }}>
+                    <Image
+                        source={require('../assets/no_image.png')}
+                        style={{ width: 200, height: 200 }}
+                            />
+                     <View
+                      style={{
+                        alignItems:"center",
+                        justifyContent: 'center',
+                        flex: 1
+                      }}>
+                       <TouchableOpacity onPress={this._pickImage}
+                       style={{
+                           //borderWidth:1,
+                           //borderColor:'rgba(0,0,0,0.2)',
+                           opacity: 0.5,
+                           alignItems:'center',
+                           justifyContent:'center',
+                           width:60,
+                           height:60,
+                           backgroundColor:'#fff',
+                           borderRadius:50,
+                         }}
+                         >
+                       <Icon name={"plus"}  size={20} color="#F15A24" />
+
+                     </TouchableOpacity>
+                     <Text style={{ color: 'white', opacity:0.5 }}>{"Add an image"}</Text>
+
+                     </View>
+                   </View>);
+    }
   return (
     <LinearGradient colors={['#F15A24', '#D4145A']}
       start={[0, 1]}
       end={[1, 0]}
       style={{
         flex: 1,
+        padding:15,
+        paddingTop:25
       }}
     >
       <ScrollView
       style={{
         flex: 1,
-        padding:15,
-        paddingTop:25
+
       }}
       showsVerticalScrollIndicator={false}
       >

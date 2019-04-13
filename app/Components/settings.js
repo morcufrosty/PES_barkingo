@@ -4,7 +4,7 @@ import {
   ScrollView,
   TextInput,
   Alert,
-  Platform, 
+  Platform,
   Image,
   TouchableOpacity
 } from 'react-native';
@@ -109,7 +109,7 @@ export default class Swipe extends React.Component {
           borderRadius:5,
           overflow:'hidden',
           marginLeft: 10,
-          width: 200, 
+          width: 200,
           height: 200
         }} source ={placeHolderImages[index].uri} /> 
       <TouchableOpacity 
@@ -120,9 +120,9 @@ export default class Swipe extends React.Component {
         }}
         onPress={()=>Alert.alert("Editar puto gos!")}>
           <Image
-            source={{uri: "https://www.pngrepo.com/download/42233/pencil-edit-button.png", width: 40, height: 40}} />        
+            source={{uri: "https://www.pngrepo.com/download/42233/pencil-edit-button.png", width: 40, height: 40}} />
         </TouchableOpacity>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={{
             position:'absolute',
             top:10,
@@ -130,7 +130,7 @@ export default class Swipe extends React.Component {
           }}
         onPress={()=>Alert.alert("Eliminar puto gos!")}>
           <Image
-            source={{uri: "https://png.pngtree.com/svg/20170121/delete_286553.png", width: 40, height: 40}} />        
+            source={{uri: "https://png.pngtree.com/svg/20170121/delete_286553.png", width: 40, height: 40}} />
         </TouchableOpacity>
       </View>
       )
@@ -167,7 +167,7 @@ export default class Swipe extends React.Component {
             flex:1,
             flexDirection: 'row',
             height:64
-          }}>  
+          }}>
             <Image style={{
               borderRadius:64,
               overflow:'hidden'
@@ -185,24 +185,24 @@ export default class Swipe extends React.Component {
               marginLeft: -10
             }}
           >
-           {this.renderPublications()}       
+           {this.renderPublications()}
           </ScrollView>
 
           <View style={{ flex: 1, marginTop: 10 }}>
             <Button
-              onPress={() => Alert.alert("S'hauria d'anar a ajustaments")}
-              title="Settings"
+              onPress={() => this.props.navigation.navigate('formNewOffer')}
+              title="New Publication"
               color="#ff3b28"
-              
+
             />
           </View>
 
           <View style={{ flex: 1, marginTop: 10 }}>
             <Button
               onPress={() => Alert.alert("S'haurien d'obrir coses")}
-              title="New Publication"
+              title="Settings"
               color="#ff3b28"
-              
+
             />
           </View>
 
