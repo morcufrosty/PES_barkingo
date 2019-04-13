@@ -53,6 +53,19 @@ export default class formNewOffer extends React.Component {
 
 async handlePress(){
 
+
+  console.log(
+    this.state.name,
+    this.state.type,
+     this.state.species,
+    this.state.race,
+    this.state.sex,
+    this.state.age,
+     this.state.iniDate,
+    this.state.endDate,
+     this.state.description
+)
+
   if(this.state.name === ''){
     Alert.alert("Error", "Please enter the name of the pet" )
   }
@@ -104,9 +117,8 @@ async newOfferUsingAPI(jsonToken){
     },
     body: JSON.stringify({
 
-      token: jsonToken.token,
       name: this.state.name,
-      type: 'adoption',
+      type: this.state.type,
       species: this.state.species,
       race: this.state.race,
       sex: this.state.sex,
@@ -275,11 +287,11 @@ render(){
             labelStyle={{color: 'white'}}
             radioStyle={{paddingRight: 20,opacity:0.5}}
                      radio_props={[
-                       {label: 'male', sex: "male" },
-                       {label: 'female', sex: "female" }
+                       {label: 'male', value: "male" },
+                       {label: 'female', value: "female" }
                      ]}
                      initial={0}
-                     onPress={(sex) => {this.setState({sex:sex})}}
+                     onPress={(value) => {this.setState({sex:value})}}
                    />
             </View>
 
@@ -301,8 +313,16 @@ render(){
                      onPress={(value) => {this.setState({type:value})}}
                    />
             </View>
-            {form}
 
+            {form}
+            <View style={{ flex: 1, marginTop: 10, marginBottom:70 }}>
+            <Button
+              title='Submit'
+              color='#ff3b28'
+              onPress={async () => this.handlePress()}>
+
+            </Button>
+            </View>
             </ScrollView>
 
     </LinearGradient>
