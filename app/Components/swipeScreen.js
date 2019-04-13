@@ -7,11 +7,11 @@ const SCREEN_HEIGHT = Dimensions.get('window').height
 const SCREEN_WIDTH = Dimensions.get('window').width
 import Icon from 'react-native-vector-icons/Ionicons'
 const Users = [
-  { id: "1", uri: require('../assets/1.jpg') },
-  { id: "2", uri: require('../assets/2.jpg') },
-  { id: "3", uri: require('../assets/3.jpg') },
-  { id: "4", uri: require('../assets/4.jpg') },
-  { id: "5", uri: require('../assets/5.jpg') }
+  { id: "1", uri: require('../assets/1.jpg'),key:"1" },
+  { id: "2", uri: require('../assets/2.jpg'),key:"2" },
+  { id: "3", uri: require('../assets/3.jpg'),key:"3" },
+  { id: "4", uri: require('../assets/4.jpg'),key:"4" },
+  { id: "5", uri: require('../assets/5.jpg'),key:"5" }
 ]
 var arrayOffers = [];
 
@@ -69,13 +69,13 @@ export default class swipeScreen extends React.Component {
 
   async handleSwipeLeft(){
 
-   // this.setState({id: offers[this.state.currentIndex]}); 
+   // this.setState({id: offers[this.state.currentIndex]});
    // const response = await this.SwipeLeftToAPI();
 
   }
 
   async handleSwipeRight(){
-   // this.setState({id: offers[this.state.currentIndex]}); 
+   // this.setState({id: offers[this.state.currentIndex]});
    // const response = await this.SwipeRightToAPI();
 
 
@@ -93,7 +93,7 @@ export default class swipeScreen extends React.Component {
 
       },
       body: JSON.stringify({
-  
+
       }),
     }).then((response) => response.json())
       .then((responseJson) => {
@@ -125,7 +125,7 @@ export default class swipeScreen extends React.Component {
       }).catch((error) => {
         console.error(error);
       });
-    
+
   }
 
   componentWillMount() {
@@ -144,7 +144,7 @@ export default class swipeScreen extends React.Component {
           }).start(() => {
             this.setState({ currentIndex: this.state.currentIndex + 1 }, () => {
               this.position.setValue({ x: 0, y: 0 })
-              
+
             })
           this.handleSwipeRight();
 
@@ -176,7 +176,7 @@ export default class swipeScreen extends React.Component {
     })
   }
     async handleGetOffers(){
-      
+
       const t = await AsyncStorage.getItem('access_token');
       tokenJson = JSON.parse(t);
       const response = await this.getOffers(tokenJson);
@@ -197,7 +197,7 @@ export default class swipeScreen extends React.Component {
     }
 
   async getOffers(t) {
-    
+
 
     return fetch('http://10.4.41.164/api/offers', {
       method: 'GET',
@@ -213,7 +213,7 @@ export default class swipeScreen extends React.Component {
       });
 
   }
- 
+
 
   renderUsers = () => {
 
@@ -281,7 +281,7 @@ export default class swipeScreen extends React.Component {
   }
 
   render() {
-    
+
     if (this.state.isLoading) {
       this.handleGetOffers();
         return   <LinearGradient colors = {['#F15A24', '#D4145A']}
