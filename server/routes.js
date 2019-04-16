@@ -61,7 +61,7 @@ router.post('/offers', db.createOffer);
 
 router.get('/myOffers', db.myOffers);
 
-router.get('/swipeRight', db.swipeRight);
+router.post('/offers/:id', db.swipe);
 
 // more routes for our API will happen here
 

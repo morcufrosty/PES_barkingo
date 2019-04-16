@@ -24,3 +24,7 @@ SELECT "openedOffers".id, "openedOffers".name, "openedOffers".sex, "openedOffers
 
 --createOffer
 INSERT INTO animals (id, name, type, species, race, sex, age, description, iniDate, endDate) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+
+--swipeRight
+SELECT id FROM users WHERE email=$1 AND name=$2;
+INSERT INTO favourites (idUser, idOffer) VALUES ($1, $2);

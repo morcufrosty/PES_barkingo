@@ -7,7 +7,7 @@ const { createUser,
 const { getOffers,
     createOffer,
     myOffers,
-    swipeRight } = require('./offers');
+    swipe } = require('./offers');
 
 module.exports = {
     createUser,
@@ -18,7 +18,7 @@ module.exports = {
     getOffers,
     createOffer,
     myOffers,
-    swipeRight
+    swipe
 };
 
 // TODO: paginacio https://www.moesif.com/blog/technical/api-design/REST-API-Design-Filtering-Sorting-and-Pagination/#

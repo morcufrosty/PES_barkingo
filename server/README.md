@@ -118,9 +118,9 @@ Animal species:
 
     -   #### Query parameters
         -   `name` [`required`]: name of the animal.
-        -   `type` [`required`]: type of offer, which can be `adoption` o `foster`
+        -   `type` [`required`]: type of offer, which can be `0` (`adoption`) or `1` (`foster`)
         -   `race` [`required`]: race of the animal in the offer, which in turn identifies its species.
-        -   `sex` [`required`]: sex of the animal.
+        -   `sex` [`required`]: sex of the animal, can be `Male` or `Female`.
         -   `age` [`required`]: age of the animal.
         -   `description` [`optional`]: description of the offer.
         -   `iniDate` [`optional`]: if the offer is of type `foster` this will indicate the date in which the animal would be fostered.
@@ -168,12 +168,18 @@ Animal species:
 
         -   `id` [`required`]: id of the user.
 
-    -   ### Response
+    -   #### Response
         -   `offers`: list containing the offers that match the given search parameters, with the following attributes for each element.
             -   `id`: identifier of the animal, which will be used in further requests.
             -   `name`: name of the animal.
             -   `description`: description of the offer.
             -   `sex`: sex of the offered animal.
             -   `species`: species of the animal in the offer.
-            -   ``
             -   `photURL`: URL of the photo of the animal to be displayed.
+
+-   ### POST `/offers/:id`
+    -   #### Query parameters
+        -   `direction`: direction of the swipe action, can only be `right` or `left`
+    -   #### Response
+        -   `success`: Is either `true` or `false`.
+        -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
