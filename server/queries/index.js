@@ -6,6 +6,7 @@ const { createUser,
 
 const { getOffers,
     createOffer,
+    updateOffer,
     myOffers,
     swipe } = require('./offers');
 
@@ -17,6 +18,7 @@ module.exports = {
     user,
     getOffers,
     createOffer,
+    updateOffer,
     myOffers,
     swipe
 };

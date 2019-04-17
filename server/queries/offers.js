@@ -61,6 +61,11 @@ const createOffer = async (request, response) => {
     })
 }
 
+
+const updateOffer = async (request, response) => {
+    response.json({ success: false, msg: 'Not implemented yet' });
+}
+
 const myOffers = async (request, response) => {
     const { email, name } = request.decoded;
     await pool.connect(async (err, client, done) => {
