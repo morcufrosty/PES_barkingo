@@ -138,16 +138,12 @@ const swipe = async (request, response) => {
 
 const getImage = async (request, response) => {
     const { id: idOffer } = request.params;
-    console.log(path.join(imagesDir, idOffer + '.jpg'));
     response.sendFile(path.join(homedir, imagesDir, idOffer + '.jpg'));
 }
 
 const uploadImage = async (request, response) => {
     const { id: idOffer } = request.params;
-    console.log(request.files);
     const image = request.files.image;
-
-    console.log('form data', image.name);
 
     require("fs").writeFile(path.join(homedir, imagesDir, idOffer + '.jpg'), image.data, (err) => {
         if (err) {
