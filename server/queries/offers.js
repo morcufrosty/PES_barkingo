@@ -1,5 +1,8 @@
 const pool = require('./db');
 const uuidv4 = require('uuid/v4');
+const path = require('path');
+const homedir = require('os').homedir();
+const imagesDir = '.images';
 
 const getOffers = async (request, response) => {
     const { email, name } = request.decoded;
@@ -11,7 +14,7 @@ const getOffers = async (request, response) => {
         }
         await client.query('BEGIN');
         await client.query(
-            'SELECT "openedOffers".id, "openedOffers".name, "openedOffers".sex, "openedOffers".race, "openedOffers"."TypeName", "openedOffers"."urlImage" FROM "openedOffers", users WHERE users.name<>$1 and users.email<>$2 and "openedOffers"."idOwner" = users.id;',
+            'SELECT "openedOffers".id, "openedOffers".name, "openedOffers".sex, "openedOffers".race, "openedOffers"."TypeName" FROM "openedOffers", users WHERE users.name<>$1 and users.email<>$2 and "openedOffers"."idOwner" = users.id;',
             [name, email], (err, result) => {
                 if (err || result.rowCount == 0) {
                     console.log(err)
@@ -44,21 +47,26 @@ const createOffer = async (request, response) => {
                     console.log(err)
                     response.json({ success: false, msg: 'User ' + email + ' doesn\'t exist' });
                 } else {
+                    let idOffer = uuidv4();
                     client.query(
                         'INSERT INTO animals (id, name, offer, race, sex, age, description, "idOwner") VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
-                        [uuidv4(), name, type, race, sex, age, description, result.rows[0].id],
+                        [idOffer, name, type, race, sex, age, description, result.rows[0].id],
                         (error, res) => {
                             if (error) {
                                 console.error('Unknown error', error);
                             } else {
                                 client.query('COMMIT');
-                                response.json({ success: true, msg: 'Offer created successfully' });
+                                response.json({ success: true, msg: 'Offer created successfully', id: idOffer });
                             }
                         });
                 }
             });
         done();
     })
+}
+
+const updateOffer = async (request, response) => {
+    response.json({ success: false, msg: 'Not implemented yet' });
 }
 
 const myOffers = async (request, response) => {
@@ -128,9 +136,33 @@ const swipe = async (request, response) => {
     })
 }
 
+const getImage = async (request, response) => {
+    const { id: idOffer } = request.params;
+    console.log(path.join(imagesDir, idOffer + '.jpg'));
+    response.sendFile(path.join(homedir, imagesDir, idOffer + '.jpg'));
+}
+
+const uploadImage = async (request, response) => {
+    const { id: idOffer } = request.params;
+    console.log(request.files);
+    const image = request.files.image;
+
+    console.log('form data', image.name);
+
+    require("fs").writeFile(path.join(homedir, imagesDir, idOffer + '.jpg'), image.data, (err) => {
+        if (err) {
+            console.log(err);
+            response.json({ success: false, msg: 'Image couldn\'t be uploaded' });
+        } else response.json({ success: true, msg: 'Image added successfully'});
+    });
+}
+
 module.exports = {
     getOffers,
     createOffer,
+    updateOffer,
     myOffers,
-    swipe
+    swipe,
+    getImage,
+    uploadImage
 }
