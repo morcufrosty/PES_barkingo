@@ -32,7 +32,7 @@ export default class formNewOffer extends React.Component {
       type: '',
       species: '',
       race: '',
-      sex: '',
+      sex: 'Male',
       age: '',
       //PER CANVIAR EL FORMAT DE LA DATA, MIRAR "fromat" de <DatePicker> a l'inici del render()
       iniDate: "2019-04-15",
@@ -380,8 +380,8 @@ render(){
             labelStyle={{color: 'white'}}
             radioStyle={{paddingRight: 20,opacity:0.5}}
                      radio_props={[
-                       {label: 'male', value: "male" },
-                       {label: 'female', value: "female" }
+                       {label: 'male', value: "Male" },
+                       {label: 'female', value: "Female" }
                      ]}
                      initial={0}
                      onPress={(value) => {this.setState({sex:value})}}
@@ -399,8 +399,8 @@ render(){
             labelStyle={{color: 'white'}}
             radioStyle={{paddingRight: 20,opacity:0.5}}
                      radio_props={[
-                       {label: 'adoption', value: "adoption" },
-                       {label: 'foster', value: "foster" }
+                       {label: 'adoption', value: "0" },
+                       {label: 'foster', value: "1" }
                      ]}
                      initial={0}
                      onPress={(value) => {this.setState({type:value})}}
