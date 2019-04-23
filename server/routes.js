@@ -65,6 +65,10 @@ router.get('/myOffers', db.myOffers);
 
 router.post('/offers/:id', db.swipe);
 
+router.get('/offers/:id/image', db.getImage);
+
+router.post('/offers/:id/image', db.uploadImage);
+
 // more routes for our API will happen here
 
 module.exports = router;

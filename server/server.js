@@ -1,10 +1,12 @@
 const express = require('express'); // call express
 const app = express(); // define our app using express
 const bodyParser = require('body-parser');
-var morgan = require('morgan');
+const morgan = require('morgan');
+const upload = require('express-fileupload');
 
 app.use(morgan('dev'));
 app.disable('etag');
+app.use(upload());
 
 // configure app to use bodyParser()
 // this will let us get the data from a POST

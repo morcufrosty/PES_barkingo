@@ -183,3 +183,14 @@ Animal species:
     -   #### Response
         -   `success`: Is either `true` or `false`.
         -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
+
+-   ### GET `/offers/:id/image`
+    -   #### Response
+        -   JPG file of the requested image.
+
+-   ### POST `/offers/:id/image`
+    -   #### Query parameters
+        -   `image`[`required`]: image file in jpg format, passed through form-data.
+    -   #### Response
+        -   `success`: Is either `true` or `false`.
+        -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
