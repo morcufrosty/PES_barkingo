@@ -19,6 +19,14 @@ SELECT * FROM users WHERE email='hola@gmail.com'
      animals, "offerType"
   WHERE animals.status = 0 AND animals.offer = "offerType"."idType";
 
+--see offers
+SELECT "openedOffers".id, "openedOffers".name, "openedOffers".sex, "openedOffers".race, "openedOffers"."TypeName"
+FROM "openedOffers"
+WHERE "openedOffers"."idOwner"<>'6947fa31-67a0-4820-976d-296db10929f5'
+	and NOT EXISTS (SELECT * FROM seen WHERE seen."idOffer"="openedOffers".id and seen."idUser"='6947fa31-67a0-4820-976d-296db10929f5')
+	and NOT EXISTS (SELECT * FROM favourites WHERE favourites."idOffer"="openedOffers".id and favourites."idUser"='6947fa31-67a0-4820-976d-296db10929f5')
+ORDER BY "openedOffers".id;
+
 --offers
 SELECT "openedOffers".id, "openedOffers".name, "openedOffers".sex, "openedOffers".race, "openedOffers"."TypeName", "openedOffers"."urlImage" FROM "openedOffers", users WHERE users.name='test' and users.email='hola@gmail.com' and "openedOffers"."idOwner" = users.id;
 

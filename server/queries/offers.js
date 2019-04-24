@@ -14,13 +14,22 @@ const getOffers = async (request, response) => {
         }
         await client.query('BEGIN');
         await client.query(
-            'SELECT "openedOffers".id, "openedOffers".name, "openedOffers".sex, "openedOffers".race, "openedOffers"."TypeName" FROM "openedOffers", users WHERE users.name<>$1 and users.email<>$2 and "openedOffers"."idOwner" = users.id;',
-            [name, email], (err, result) => {
+            'SELECT id FROM users WHERE email=$1 AND name=$2;', [email, name],
+            (err, result) => {
                 if (err || result.rowCount == 0) {
                     console.log(err)
-                    response.json({ success: false, msg: 'No offers found' });
+                    response.json({ success: false, msg: 'User ' + email + ' doesn\'t exist' });
                 } else {
-                    response.json({ success: true, msg: 'Offers found', offers: result.rows });
+                    client.query(
+                        'SELECT "openedOffers".id, "openedOffers".name, "openedOffers".sex, "openedOffers".race, "openedOffers"."TypeName" FROM "openedOffers" WHERE "openedOffers"."idOwner"<>$1 and NOT EXISTS (SELECT * FROM seen WHERE seen."idOffer"="openedOffers".id and seen."idUser"=$1) and NOT EXISTS (SELECT * FROM favourites WHERE favourites."idOffer"="openedOffers".id and favourites."idUser"=$1);',
+                        [result.rows[0].id], (err, res) => {
+                            if (err || res.rowCount == 0) {
+                                console.log(err)
+                                response.json({ success: false, msg: 'No offers found' });
+                            } else {
+                                response.json({ success: true, msg: 'Offers found', offers: res.rows });
+                            }
+                        });
                 }
             });
         done();
@@ -191,7 +200,7 @@ const uploadImage = async (request, response) => {
         if (err) {
             console.log(err);
             response.json({ success: false, msg: 'Image couldn\'t be uploaded' });
-        } else response.json({ success: true, msg: 'Image added successfully'});
+        } else response.json({ success: true, msg: 'Image added successfully' });
     });
 }
 
