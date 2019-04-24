@@ -95,7 +95,7 @@ export default class swipeScreen extends React.Component {
 
       },
       body: JSON.stringify({
-        swipe: direction
+        direction
 
       }),
     }).then((response) => response.json())
