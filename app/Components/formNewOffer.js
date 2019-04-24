@@ -96,6 +96,7 @@ async handlePress(){
     Alert.alert("Error", "Please specify a description of the pet" )
   }
   else{
+    Alert.alert("Amazing!", response.msg);
 
    const token = await AsyncStorage.getItem("access_token");
    const jsonToken = JSON.parse(token);
@@ -179,7 +180,7 @@ _pickImage = async () => {
         .then(console.log)
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
-      aspect: [3, 5],
+      aspect: [5, 5],
     });
 
     console.log(result);

@@ -13,6 +13,7 @@ import formNewOffer from "./Components/formNewOffer"
 import TabIcon from './TabIcon';
 
 const SettingsNavigator = createStackNavigator({
+  LoginScreen:{screen: Login},
 
     SettingsScreen:{screen: Settings},
     formNewOffer: {
