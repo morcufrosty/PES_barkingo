@@ -190,8 +190,15 @@ Animal species:
             -   `sex`: sex of the offered animal.
             -   `species`: species of the animal in the offer.
 
--   ### GET `/favouriteOffers`: returns all the given user's favourite offers
-    -   #### Query parameters
+-   ### GET `/favouriteOffers`: returns all the user's favourite offers
+
+    -   ### Response
+        -   `offers`: list containing the offers that match the given search parameters, with the following attributes for each element.
+            -   `id`: identifier of the animal, which will be used in further requests.
+            -   `name`: name of the animal.
+            -   `sex`: sex of the offered animal.
+            -   `species`: species of the animal in the offer.
+            -   `offerType`: type of the offer
 
 -   ### POST `/offers/:id`: swipe on an offer
     -   #### Query parameters

@@ -99,13 +99,13 @@ const updateOffer = async (request, response) => {
                     client.query(
                         'UPDATE animals SET name=$1, offer=$2, race=$3, sex=$4, age=$5, description=$6, "idOwner"=$7 WHERE id=$8;', [name, type, race, sex, age, description, idOwn, idOffer],
                         (error, res) => {
-                        if (error) {
-                            console.error('Unknown error', error);
-                        } else {
-                            client.query('COMMIT');
-                            response.json({ success: true, msg: 'Offer updated successfully', id: idOffer });
-                        }
-                    });
+                            if (error) {
+                                console.error('Unknown error', error);
+                            } else {
+                                client.query('COMMIT');
+                                response.json({ success: true, msg: 'Offer updated successfully', id: idOffer });
+                            }
+                        });
                 }
             });
         done();
@@ -229,6 +229,31 @@ const favourites = async (request, response) => {
     })
 }
 
+const deleteSeenOffers = (request, response) => { };
+
+const offerDetails = async (request, response) => {
+    const { id: idOffer } = request.params;
+    await pool.connect(async (err, client, done) => {
+        if (err) {
+            response.json({ success: false, msg: 'Error accessing the database' });
+            done();
+            return;
+        }
+        await client.query('BEGIN');
+        await client.query(
+            'SELECT "openedOffers".id, "openedOffers"."name", "openedOffers".description, "openedOffers".sex, race."raceName", species."speciesName", users.name AS "userName" FROM "openedOffers", race, species, users WHERE "openedOffers".id = $1 and "openedOffers"."idOwner"=users.id and "openedOffers".race=race."idRace" and race."idSpecies"=species.id;', [idOffer],
+            (err, result) => {
+                if (err || result.rowCount == 0) {
+                    console.log(err)
+                    response.json({ success: false, msg: 'Offer doesn\'t exist' });
+                } else {
+                    response.json({ success: true, msg: 'Offer', offer: result.rows[0] });
+                }
+            });
+        done();
+    })
+}
+
 module.exports = {
     getOffers,
     createOffer,
@@ -237,5 +262,6 @@ module.exports = {
     swipe,
     getImage,
     uploadImage,
-    favourites
+    favourites,
+    offerDetails
 }
