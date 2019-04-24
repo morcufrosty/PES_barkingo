@@ -163,7 +163,7 @@ render(){
   let { image } = this.state;
   var imageForm;
   var form;
-    if (this.state.type === "foster") {
+    if (this.state.type === "1") {
        form = (
           <View style={{
             paddingBottom:30
@@ -231,7 +231,7 @@ render(){
                       />
               </View>
        );
-    } else if (this.state.type === "adoption") {
+    } else if (this.state.type === "0") {
        form = (
          <View style={{
           height:10
@@ -408,14 +408,18 @@ render(){
             </View>
 
             {form}
-            <View style={{ flex: 1, marginTop: 10, marginBottom:70 }}>
+
+
+            <Text style={{ color: 'white' }}>{"Image"}</Text>
+            {imageForm}
+
+
             <Button
               title='Submit'
               color='#ff3b28'
               onPress={async () => this.handlePress()}>
 
             </Button>
-            </View>
             </ScrollView>
 
     </LinearGradient>
