@@ -111,7 +111,6 @@ Animal species:
             -   `name`: name of the animal.
             -   `sex`: sex of the offered animal.
             -   `species`: species of the animal in the offer.
-            -   `photURL`: URL of the photo of the animal to be displayed.
             -   `offerType`: type of the offer
 
 -   ### POST `/offers`: creates a new offer
@@ -190,7 +189,6 @@ Animal species:
             -   `description`: description of the offer.
             -   `sex`: sex of the offered animal.
             -   `species`: species of the animal in the offer.
-            -   `photURL`: URL of the photo of the animal to be displayed.
 
 -   ### POST `/offers/:id`: swipe on an offer
     -   #### Query parameters

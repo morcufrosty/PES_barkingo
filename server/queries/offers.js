@@ -139,8 +139,8 @@ const swipe = async (request, response) => {
     const { direction } = request.body || request.query;
     const { id: idOffer } = request.params;
     let table;
-    if (direction === 'right') table = 'favourites';
-    else if (direction === 'left') table = 'seen';
+    if (direction.toString().trim() === 'right') table = 'favourites';
+    else if (direction.toString().trim() === 'left') table = 'seen';
     else {
         response.json({ success: false, msg: 'Wrong swipe direction ' + direction });
         return;
