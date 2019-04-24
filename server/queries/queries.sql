@@ -45,4 +45,4 @@ SELECT id FROM users WHERE email=$1 AND name=$2;
 INSERT INTO favourites (idUser, idOffer) VALUES ($1, $2);
 
 --races
-SELECT * FROM species, race WHERE species.id=race."idSpecies";
+SELECT species.id AS "idSpecies", species."speciesName", race."idRace", race."raceName" FROM species, race WHERE species.id=race."idSpecies";

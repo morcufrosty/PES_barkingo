@@ -57,7 +57,10 @@ router.get('/middletest', (req, res) => {
 
 router.get('/offers', db.getOffers);
 
-router.post('/offers', db.createOffer);
+router.post('/offers', (request, response) => {
+    console.log(request.body);
+    db.createOffer(request, response);
+});
 
 router.put('/offers/:id', db.updateOffer);
 
