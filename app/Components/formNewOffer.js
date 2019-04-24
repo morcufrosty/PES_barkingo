@@ -16,7 +16,7 @@ import { Facebook } from 'expo';
 import DatePicker from 'react-native-datepicker'
 import { AsyncStorage } from 'react-native';
 //import ImagePicker from 'react-native-image-picker';
-import { ImagePicker } from 'expo';
+import { ImagePicker, Permissions } from 'expo';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 
@@ -147,9 +147,11 @@ async newOfferUsingAPI(jsonToken){
 
 //OPCIONS DE L'IMAGE PICKER
 _pickImage = async () => {
+  Permissions.getAsync(Permissions.CAMERA_ROLL)
+        .then(console.log)
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [3, 5],
     });
 
     console.log(result);
@@ -351,7 +353,7 @@ render(){
 
             <View style={{ flex: 1 , paddingVertical: 10}}>
               <Text style={{ color: 'white' }}>{"Age"}</Text>
-              <TextInput onChangeText={(age) => this.setState({ age })}  value={this.state.age}
+              <TextInput onChangeText={(age) => this.setState({ age })}  value={this.state.age} keyboardType = 'numeric'
                 style={{ backgroundColor: 'white', opacity: 0.5, borderRadius: 5, paddingVertical: 0, height: 35 }}>
                 </TextInput>
             </View>
