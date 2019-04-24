@@ -49,7 +49,7 @@ const createOffer = async (request, response) => {
                 } else {
                     let idOffer = uuidv4();
                     client.query(
-                        'INSERT INTO animals (id, name, offer, race, sex, age, description, "idOwner") VALUES ($1, $2, $3, $4, $5, $6, $7, $8);',
+                        'INSERT INTO animals (id, name, offer, race, sex, age, description, "idOwner", status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 0);',
                         [idOffer, name, type, race, sex, age, description, result.rows[0].id],
                         (error, res) => {
                             if (error) {
