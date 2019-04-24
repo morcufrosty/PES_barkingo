@@ -222,3 +222,13 @@ Animal species:
     -   #### Response
         -   `success`: Is either `true` or `false`.
         -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
+
+-   ### GET `/races`: list of races and its species
+    -   #### Response
+        -   `success`: Is either `true` or `false`.
+        -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
+        -   `list`: List of races and its species, with the following attributes in each element.
+            -   `idSpecies`: 0,
+            -   `speciesName`: 
+            -   `idRace`: 0
+            -   `raceName`

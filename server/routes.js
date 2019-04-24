@@ -75,6 +75,8 @@ router.get('/favouriteOffers', db.favourites);
 
 router.delete('/offers/seen', db.deleteSeenOffers);
 
+router.get('/races', db.racesList);
+
 // more routes for our API will happen here
 
 module.exports = router;
