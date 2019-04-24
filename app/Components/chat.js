@@ -25,9 +25,9 @@ const placeHolderImages = [
 
 export default class Chat extends React.Component {
 
-  async getMyFavoritesFromAPI(tokenJson){
+  async getMyFavouritesFromAPI(tokenJson){
 
-    return fetch('http://10.4.41.164/api/favoriteOffers', {
+    return fetch('http://10.4.41.164/api/favouriteOffers', {
     method: 'GET',
     headers: {
       Accept: 'application/json',
