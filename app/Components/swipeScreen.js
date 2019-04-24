@@ -11,11 +11,6 @@ const PlaceHolderImages = [
   {  uri: require('../assets/2.jpg') },
   {  uri: require('../assets/3.jpg') },
   {  uri: require('../assets/4.jpg') },
-  {  uri: require('../assets/5.jpg') },
-  {  uri: require('../assets/1.jpg') },
-  {  uri: require('../assets/2.jpg') },
-  {  uri: require('../assets/3.jpg') },
-  {  uri: require('../assets/4.jpg') },
   { uri: require('../assets/5.jpg') },
   {  uri: require('../assets/1.jpg') },
   { uri: require('../assets/2.jpg') },
@@ -36,12 +31,8 @@ const PlaceHolderImages = [
   { uri: require('../assets/2.jpg') },
   {  uri: require('../assets/3.jpg') },
   {  uri: require('../assets/4.jpg') },
-  { uri: require('../assets/5.jpg') },
-  {  uri: require('../assets/1.jpg') },
-  { uri: require('../assets/2.jpg') },
-  {  uri: require('../assets/3.jpg') },
-  {  uri: require('../assets/4.jpg') },
-  { uri: require('../assets/5.jpg') },
+  { uri: require('../assets/5.jpg') }
+  
 ]
 
 export default class swipeScreen extends React.Component {
@@ -172,7 +163,8 @@ export default class swipeScreen extends React.Component {
 
         }
         if (gestureState.dy > -5  && gestureState.dy < 5 && gestureState.dx > -5 &&  gestureState.dx < 5) {
-            this.handleProfileClick()
+          this.props.navigation.navigate('perfilAnimal', {id: this.state.offers[this.state.currentIndex].id});
+
         }
         else {
           Animated.spring(this.position, {
@@ -182,9 +174,6 @@ export default class swipeScreen extends React.Component {
         }
       }
     })
-  }
-  async handleProfileClick(){
-    this.props.navigation.navigate('perfilAnimal', { item:this.state.offers[this.state.currentIndex].id});
   }
     async handleGetOffers(){
 
@@ -207,14 +196,14 @@ export default class swipeScreen extends React.Component {
       }
     }
 
-  async getOffers(tokenJson) {
-    
+  async getOffers(t) {
+
 
     return fetch('http://10.4.41.164/api/offers', {
       method: 'GET',
       headers: {
         Accept: 'application/json',
-        'x-access-token': tokenJson.token
+        'x-access-token': t.token
       }
       }).then((response) => response.json())
       .then((responseJson) => {
@@ -252,7 +241,7 @@ export default class swipeScreen extends React.Component {
 
               <Image
                 style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20 }}
-                source={PlaceHolderImages[0].uri} />
+                source={PlaceHolderImages[this.state.currentIndex].uri} />
 
           </Animated.View>
 
@@ -281,7 +270,7 @@ export default class swipeScreen extends React.Component {
             </Animated.View>
             <Image
               style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20 }}
-              source={PlaceHolderImages[0].uri} />
+              source={PlaceHolderImages[this.state.currentIndex+1].uri} />
 
           </Animated.View>
 

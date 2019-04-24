@@ -38,7 +38,7 @@ export default class formNewOffer extends React.Component {
       iniDate: "2019-04-15",
       endDate: '2019-04-15',
       description:'',
-      image:null
+      image: null
     }
   }
 
@@ -92,26 +92,30 @@ async handlePress(){
     Alert.alert("Error", "Please specify the sex of the pet" )
   }
 
-  else if(this.state.description === null){
+  else if(this.state.description === ''){
     Alert.alert("Error", "Please specify a description of the pet" )
   }
   else{
-    Alert.alert("Amazing!", response.msg);
 
    const token = await AsyncStorage.getItem("access_token");
    const jsonToken = JSON.parse(token);
    const response = await this.newOfferUsingAPI(jsonToken);
 
-
-   console.log(response);
+   console.log("response: " + response);
 
 
   if(response.success){
     Alert.alert("Amazing!", response.msg);
     if(this.state.image != null){
       console.log("Enviant imatge")
-      const responsePostImg = await this.handleSubmitImage(jsonToken, response.id);
-      Alert.alert(responsePostImg.msg);
+      data = new FormData()
+      data.append('image', {
+        uri: this.state.image.uri,
+        type: 'image/jpeg', 
+        name: this.state.name
+      });
+      const responsePostImg = await this.handleSubmitImage(jsonToken, response.id, data);
+      Alert.alert(responsePostImg);
 
     }
 
@@ -124,7 +128,7 @@ async handlePress(){
 }
 
 
-async handleSubmitImage(jsonToken, id){
+async handleSubmitImage(tokenJson, id, data){
 
   return fetch(`http://10.4.41.164/api/offers/${id}/image`, {
     method: 'POST',
@@ -133,12 +137,10 @@ async handleSubmitImage(jsonToken, id){
       'Content-Type': 'multipart/form-data',
       'x-access-token': tokenJson.token
     },
-    body: JSON.stringify({
-     image: this.state.Image
-    }),
+    body: data,
   }).then((response) => response.json())
   .then((responseJson) => {
-    console.log(responseJson.msg);
+    console.log(responseJson);
     return responseJson;
   }).catch((error) => {
     console.error(error);
@@ -146,7 +148,7 @@ async handleSubmitImage(jsonToken, id){
 }
 
 
-async newOfferUsingAPI(jsonToken){
+async newOfferUsingAPI(tokenJson){
 
   return fetch("http://10.4.41.164/api/offers", {
     method: 'POST',
@@ -186,7 +188,7 @@ _pickImage = async () => {
     console.log(result);
 
     if (!result.cancelled) {
-      this.setState({ image: result.uri });
+      this.setState({ image: result });
     }
   };
 
@@ -275,7 +277,7 @@ render(){
       imageForm=(
         <View style={{ flex: 1, marginTop: 10, marginBottom:20, flexDirection: 'row' }}>
                     <Image
-                      source={{ uri: image }}
+                      source={{ uri: image.uri }}
                         style={{ width: 200, height: 200,borderRadius:50 }}
                       />
                       <View

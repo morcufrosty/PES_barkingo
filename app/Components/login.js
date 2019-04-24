@@ -83,7 +83,7 @@ export default class App extends React.Component {
   retrieveAndCheckToken = async () => {
     try {
       const token = await AsyncStorage.getItem(ACCESS_TOKEN);
-      if (token !== null) {
+      if (token !== null ) {
         tokenJson = JSON.parse(token);
 
         /*
