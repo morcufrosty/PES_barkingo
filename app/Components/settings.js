@@ -30,7 +30,8 @@ export default class Swipe extends React.Component {
     this.state = {
       myOffers:[],
       isLoading:true,
-      username:''
+      username:'',
+      noOffers:false
 
     }
   }
@@ -89,7 +90,7 @@ export default class Swipe extends React.Component {
     }
 
     else {
-      Alert.alert(responseOffers.msg);
+      this.setState({noOffers: true});
 
     }
 
@@ -111,8 +112,8 @@ export default class Swipe extends React.Component {
           marginLeft: 10,
           width: 200,
           height: 200
-        }} source ={placeHolderImages[index].uri} /> 
-      <TouchableOpacity 
+        }} source ={placeHolderImages[index].uri} />
+      <TouchableOpacity
         style={{
           position:'absolute',
           top:10,
@@ -152,6 +153,21 @@ export default class Swipe extends React.Component {
 
           </LinearGradient>;
       }
+      var noOffersMessage;
+      if (this.state.noOffers) {
+        noOffersMessage = (
+           <View style={{
+             paddingBottom:30
+           }}>
+           <Text  style={{ color: 'white', opacity:0.5, fontStyle: "italic" }}>{"You haven't created any publications"}</Text>
+           </View>
+         );
+      } else {
+        noOffersMessage = (
+           <View>
+           </View>
+         );
+      }
 
     return (
       <LinearGradient colors={['#F15A24', '#D4145A']}
@@ -171,7 +187,7 @@ export default class Swipe extends React.Component {
             <Image style={{
               borderRadius:64,
               overflow:'hidden'
-            }} source={{uri: "https://facebook.github.io/react-native/img/favicon.png", width: 64, height: 64}} />        
+            }} source={{uri: "https://facebook.github.io/react-native/img/favicon.png", width: 64, height: 64}} />
             <Text style={{fontSize:20, marginLeft:10, color: 'white', flex: 1,justifyContent: 'center', alignItems: 'center', height:64, textAlignVertical: 'center' }}>{this.state.username}</Text>
           </View>
           <Text style={{
@@ -187,7 +203,7 @@ export default class Swipe extends React.Component {
           >
            {this.renderPublications()}
           </ScrollView>
-
+          {noOffersMessage}
           <View style={{ flex: 1, marginTop: 10 }}>
             <Button
               onPress={() => this.props.navigation.navigate('formNewOffer')}

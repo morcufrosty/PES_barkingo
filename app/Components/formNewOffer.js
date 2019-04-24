@@ -16,7 +16,7 @@ import { Facebook } from 'expo';
 import DatePicker from 'react-native-datepicker'
 import { AsyncStorage } from 'react-native';
 //import ImagePicker from 'react-native-image-picker';
-import { ImagePicker } from 'expo';
+import { ImagePicker, Permissions } from 'expo';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 
@@ -32,7 +32,7 @@ export default class formNewOffer extends React.Component {
       type: '',
       species: '',
       race: '',
-      sex: '',
+      sex: 'Male',
       age: '',
       //PER CANVIAR EL FORMAT DE LA DATA, MIRAR "fromat" de <DatePicker> a l'inici del render()
       iniDate: "2019-04-15",
@@ -147,9 +147,11 @@ async newOfferUsingAPI(jsonToken){
 
 //OPCIONS DE L'IMAGE PICKER
 _pickImage = async () => {
+  Permissions.getAsync(Permissions.CAMERA_ROLL)
+        .then(console.log)
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [3, 5],
     });
 
     console.log(result);
@@ -163,7 +165,7 @@ render(){
   let { image } = this.state;
   var imageForm;
   var form;
-    if (this.state.type === "foster") {
+    if (this.state.type === "1") {
        form = (
           <View style={{
             paddingBottom:30
@@ -231,7 +233,7 @@ render(){
                       />
               </View>
        );
-    } else if (this.state.type === "adoption") {
+    } else if (this.state.type === "0") {
        form = (
          <View style={{
           height:10
@@ -351,7 +353,7 @@ render(){
 
             <View style={{ flex: 1 , paddingVertical: 10}}>
               <Text style={{ color: 'white' }}>{"Age"}</Text>
-              <TextInput onChangeText={(age) => this.setState({ age })}  value={this.state.age}
+              <TextInput onChangeText={(age) => this.setState({ age })}  value={this.state.age} keyboardType = 'numeric'
                 style={{ backgroundColor: 'white', opacity: 0.5, borderRadius: 5, paddingVertical: 0, height: 35 }}>
                 </TextInput>
             </View>
@@ -380,8 +382,8 @@ render(){
             labelStyle={{color: 'white'}}
             radioStyle={{paddingRight: 20,opacity:0.5}}
                      radio_props={[
-                       {label: 'male', value: "male" },
-                       {label: 'female', value: "female" }
+                       {label: 'male', value: "Male" },
+                       {label: 'female', value: "Female" }
                      ]}
                      initial={0}
                      onPress={(value) => {this.setState({sex:value})}}
@@ -399,8 +401,8 @@ render(){
             labelStyle={{color: 'white'}}
             radioStyle={{paddingRight: 20,opacity:0.5}}
                      radio_props={[
-                       {label: 'adoption', value: "adoption" },
-                       {label: 'foster', value: "foster" }
+                       {label: 'adoption', value: "0" },
+                       {label: 'foster', value: "1" }
                      ]}
                      initial={0}
                      onPress={(value) => {this.setState({type:value})}}
@@ -408,14 +410,18 @@ render(){
             </View>
 
             {form}
-            <View style={{ flex: 1, marginTop: 10, marginBottom:70 }}>
+
+
+            <Text style={{ color: 'white' }}>{"Image"}</Text>
+            {imageForm}
+
+
             <Button
               title='Submit'
               color='#ff3b28'
               onPress={async () => this.handlePress()}>
 
             </Button>
-            </View>
             </ScrollView>
 
     </LinearGradient>

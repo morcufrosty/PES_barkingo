@@ -67,49 +67,26 @@ export default class swipeScreen extends React.Component {
   }
 
   async handleSwipeLeft(){
-    const id = this.state.offers[this.state.currentIndex];
+    const id = this.state.offers[this.state.currentIndex].id;
     const t = await AsyncStorage.getItem("access_token");
     tokenJson = JSON.parse(t);
-    const response = await this.SwipeLeftToAPI(tokenJson, id);
+    const response = await this.SwipeToAPI(tokenJson, id, 'left');
 
   }
 
   async handleSwipeRight(){
-    const id = this.state.offers[this.state.currentIndex];
+    const id = this.state.offers[this.state.currentIndex].id;
     const t = await AsyncStorage.getItem("access_token");
     tokenJson = JSON.parse(t);
-    const response = await this.SwipeRightToAPI(tokenJson, id);
-
+    const response = await this.SwipeToAPI(tokenJson, id, 'right');
+    console.log(response);
   }
 
 
-  async SwipeLeftToAPI(tokenJson, id){
 
-    return fetch('http://10.4.41.164/api/offers/swipeLeft', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        'x-access-token': tokenJson.token
+  async SwipeToAPI(tokenJson, id, direction){
 
-      },
-      body: JSON.stringify({
-        id: id
-  
-      }),
-    }).then((response) => response.json())
-      .then((responseJson) => {
-        console.log(responseJson.msg);
-        return responseJson;
-      }).catch((error) => {
-        console.error(error);
-      });
-
-  }
-
-  async SwipeRightToAPI(tokenJson, id){
-
-    return fetch('http://10.4.41.164/api/offers/swipeRight', {
+    return fetch(`http://10.4.41.164/api/offers/${id}`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -118,17 +95,16 @@ export default class swipeScreen extends React.Component {
 
       },
       body: JSON.stringify({
-        id: id
+        direction
 
       }),
     }).then((response) => response.json())
-      .then((responseJson) => {
-        console.log(responseJson.msg);
-        return responseJson;
-      }).catch((error) => {
-        console.error(error);
-      });
-
+    .then((responseJson) => {
+      console.log(responseJson.msg);
+      return responseJson;
+    }).catch((error) => {
+      console.error(error);
+    });
   }
 
   componentWillMount() {
@@ -190,6 +166,7 @@ export default class swipeScreen extends React.Component {
       console.log("response: " + response.offers);
       */
 
+      console.log(response);
       if(response.success){
         this.setState({offers: response.offers});
       }
