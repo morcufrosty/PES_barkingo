@@ -151,7 +151,7 @@ _pickImage = async () => {
         .then(console.log)
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
-      aspect: [3, 5],
+      aspect: [5, 5],
     });
 
     console.log(result);
