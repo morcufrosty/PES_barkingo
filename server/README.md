@@ -121,7 +121,7 @@ Animal species:
         -   `race` [`required`]: race of the animal in the offer, which in turn identifies its species.
         -   `sex` [`required`]: sex of the animal, can be `Male` or `Female`.
         -   `age` [`required`]: age of the animal.
-        -   `description` [`optional`]: description of the offer.
+        -   `description` [`required`]: description of the offer.
         -   `iniDate` [`unavailable`]: if the offer is of type `foster` this will indicate the date in which the animal would be fostered.
         -   `endDate` [`unavailable`]: if the offer is of type `foster` this will indicate the date in which the animal will end its fostering.
     -   #### Response
