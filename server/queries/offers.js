@@ -75,8 +75,8 @@ const createOffer = async (request, response) => {
 }
 
 const updateOffer = async (request, response) => {
-    response.json({ success: false, msg: 'Not implemented yet' });
-    /*const { email, name: userName } = request.decoded;
+    //response.json({ success: false, msg: 'Not implemented yet' });
+    const { email, name: userName } = request.decoded;
     const { id: idOffer } = request.params;
     let { name, type, race, sex, age, description, iniDate, endDate } = request.body || request.query;
     await pool.connect(async (err, client, done) => {
@@ -98,26 +98,19 @@ const updateOffer = async (request, response) => {
                 } else {
                     let idOwn = result.rows[0].id
                     client.query(
-                        'SELECT id FROM animals WHERE id=$1 AND "idOwner"=$2;', [idOffer, idOwn],
-                        if (err || result.rowCount == 0) {
-                            console.log(err)
-                            response.json({ success: false, msg: 'Offer ' + idOffer + ' doesn\'t exist' });
+                        'UPDATE animals SET name=$1, offer=$2, race=$3, sex=$4, age=$5, description=$6, "idOwner"=$7 WHERE id=$8;', [name, type, race, sex, age, description, idOwn, idOffer],
+                        (error, res) => {
+                        if (error) {
+                            console.error('Unknown error', error);
                         } else {
-                            client.query(
-                                'UPDATE animals SET name=$1, offer=$2, race=$3, sex=$4, age=$5, description=$6, "idOwner"=$7 WHERE id=$8;', [name, type, race, sex, age, description, idOwn, idOffer],
-                                (error, res) => {
-                                if (error) {
-                                    console.error('Unknown error', error);
-                                } else {
-                                    client.query('COMMIT');
-                                    response.json({ success: true, msg: 'Offer updated successfully', id: idOffer });
-                                }
-                            });
-                        });
+                            client.query('COMMIT');
+                            response.json({ success: true, msg: 'Offer updated successfully', id: idOffer });
+                        }
+                    });
                 }
             });
         done();
-    })*/
+    })
 }
 
 const myOffers = async (request, response) => {
