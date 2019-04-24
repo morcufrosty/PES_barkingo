@@ -58,7 +58,7 @@ const createOffer = async (request, response) => {
                 } else {
                     let idOffer = uuidv4();
                     client.query(
-                        'INSERT INTO animals (id, name, offer, race, sex, age, description, "idOwner", status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 0);',
+                        'INSERT INTO animals (id, name, offer, race, sex, age, description, "idOwner", status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, \'0\');',
                         [idOffer, name, type, race, sex, age, description, result.rows[0].id],
                         (error, res) => {
                             if (error) {
@@ -197,6 +197,39 @@ const uploadImage = async (request, response) => {
     });
 }
 
+
+const favourites = async (request, response) => {
+    const { email, name } = request.decoded;
+    await pool.connect(async (err, client, done) => {
+        if (err) {
+            response.json({ success: false, msg: 'Error accessing the database' });
+            done();
+            return;
+        }
+        await client.query('BEGIN');
+        await client.query(
+            'SELECT id FROM users WHERE email=$1 AND name=$2;', [email, name],
+            (err, result) => {
+                if (err || result.rowCount == 0) {
+                    console.log(err)
+                    response.json({ success: false, msg: 'User ' + email + ' doesn\'t exist' });
+                } else {
+                    client.query(
+                        'SELECT "openedOffers".id, "openedOffers".name, "openedOffers".sex, "openedOffers".race, "openedOffers"."TypeName" FROM "openedOffers" WHERE "openedOffers"."idOwner"<>$1 and NOT EXISTS (SELECT * FROM seen WHERE seen."idOffer"="openedOffers".id and seen."idUser"=$1) and EXISTS (SELECT * FROM favourites WHERE favourites."idOffer"="openedOffers".id and favourites."idUser"=$1);',
+                        [result.rows[0].id], (err, res) => {
+                            if (err || res.rowCount == 0) {
+                                console.log(err)
+                                response.json({ success: false, msg: 'No offers found' });
+                            } else {
+                                response.json({ success: true, msg: 'Offers found', offers: res.rows.slice(0, 10) });
+                            }
+                        });
+                }
+            });
+        done();
+    })
+}
+
 module.exports = {
     getOffers,
     createOffer,
@@ -204,5 +237,6 @@ module.exports = {
     myOffers,
     swipe,
     getImage,
-    uploadImage
+    uploadImage,
+    favourites
 }

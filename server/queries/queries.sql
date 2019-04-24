@@ -33,6 +33,13 @@ SELECT "openedOffers".id, "openedOffers".name, "openedOffers".sex, "openedOffers
 --createOffer
 INSERT INTO animals (id, name, type, species, race, sex, age, description, iniDate, endDate) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
 
+--favourites
+SELECT "openedOffers".id, "openedOffers".name, "openedOffers".sex, "openedOffers".race, "openedOffers"."TypeName"
+FROM "openedOffers"
+WHERE "openedOffers"."idOwner"<>'b1bd53a9-aff4-4c7b-8e86-b97cf62cafc3'
+	and NOT EXISTS (SELECT * FROM seen WHERE seen."idOffer"="openedOffers".id and seen."idUser"='b1bd53a9-aff4-4c7b-8e86-b97cf62cafc3')
+	and EXISTS (SELECT * FROM favourites WHERE favourites."idOffer"="openedOffers".id and favourites."idUser"='b1bd53a9-aff4-4c7b-8e86-b97cf62cafc3');
+
 --swipeRight
 SELECT id FROM users WHERE email=$1 AND name=$2;
 INSERT INTO favourites (idUser, idOffer) VALUES ($1, $2);

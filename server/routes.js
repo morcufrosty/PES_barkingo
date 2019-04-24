@@ -69,6 +69,8 @@ router.get('/offers/:id/image', db.getImage);
 
 router.post('/offers/:id/image', db.uploadImage);
 
+router.get('/favouriteOffers', db.favourites);
+
 // more routes for our API will happen here
 
 module.exports = router;
