@@ -121,10 +121,11 @@ Animal species:
         -   `race` [`required`]: race of the animal in the offer, which in turn identifies its species.
         -   `sex` [`required`]: sex of the animal, can be `Male` or `Female`.
         -   `age` [`required`]: age of the animal.
-        -   `description` [`optional`]: description of the offer.
-        -   `iniDate` [`optional`]: if the offer is of type `foster` this will indicate the date in which the animal would be fostered.
-        -   `endDate` [`optional`]: if the offer is of type `foster` this will indicate the date in which the animal will end its fostering.
+        -   `description` [`required`]: description of the offer.
+        -   `iniDate` [`unavailable`]: if the offer is of type `foster` this will indicate the date in which the animal would be fostered.
+        -   `endDate` [`unavailable`]: if the offer is of type `foster` this will indicate the date in which the animal will end its fostering.
     -   #### Response
+        -   `id`: Identifier of the newly created offer.
         -   `success`: Is either `true` or `false`.
         -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
 
@@ -179,7 +180,6 @@ Animal species:
 -   ### GET `/myOffers`: returns all the given user's offers
 
     -   #### Query parameters
-
         -   `id` [`required`]: id of the user.
 
     -   #### Response
@@ -189,6 +189,9 @@ Animal species:
             -   `description`: description of the offer.
             -   `sex`: sex of the offered animal.
             -   `species`: species of the animal in the offer.
+
+-   ### GET `/favouriteOffers`: returns all the given user's favourite offers
+    -   #### Query parameters
 
 -   ### POST `/offers/:id`: swipe on an offer
     -   #### Query parameters

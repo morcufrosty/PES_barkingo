@@ -187,14 +187,14 @@ export default class swipeScreen extends React.Component {
       }
     }
 
-  async getOffers(t) {
-
+  async getOffers(tokenJson) {
+    
 
     return fetch('http://10.4.41.164/api/offers', {
       method: 'GET',
       headers: {
         Accept: 'application/json',
-        'x-access-token': t.token
+        'x-access-token': tokenJson.token
       }
       }).then((response) => response.json())
       .then((responseJson) => {

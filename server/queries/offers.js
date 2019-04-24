@@ -46,7 +46,6 @@ const createOffer = async (request, response) => {
             return;
         }
         await client.query('BEGIN');
-        if (description === undefined) description = "null";
         if (iniDate === undefined) iniDate = "null";
         if (endDate === undefined) endDate = "null";
         await client.query(
@@ -75,8 +74,8 @@ const createOffer = async (request, response) => {
 }
 
 const updateOffer = async (request, response) => {
-    response.json({ success: false, msg: 'Not implemented yet' });
-    /*const { email, name: userName } = request.decoded;
+    //response.json({ success: false, msg: 'Not implemented yet' });
+    const { email, name: userName } = request.decoded;
     const { id: idOffer } = request.params;
     let { name, type, race, sex, age, description, iniDate, endDate } = request.body || request.query;
     await pool.connect(async (err, client, done) => {
@@ -98,26 +97,19 @@ const updateOffer = async (request, response) => {
                 } else {
                     let idOwn = result.rows[0].id
                     client.query(
-                        'SELECT id FROM animals WHERE id=$1 AND "idOwner"=$2;', [idOffer, idOwn],
-                        if (err || result.rowCount == 0) {
-                            console.log(err)
-                            response.json({ success: false, msg: 'Offer ' + idOffer + ' doesn\'t exist' });
+                        'UPDATE animals SET name=$1, offer=$2, race=$3, sex=$4, age=$5, description=$6, "idOwner"=$7 WHERE id=$8;', [name, type, race, sex, age, description, idOwn, idOffer],
+                        (error, res) => {
+                        if (error) {
+                            console.error('Unknown error', error);
                         } else {
-                            client.query(
-                                'UPDATE animals SET name=$1, offer=$2, race=$3, sex=$4, age=$5, description=$6, "idOwner"=$7 WHERE id=$8;', [name, type, race, sex, age, description, idOwn, idOffer],
-                                (error, res) => {
-                                if (error) {
-                                    console.error('Unknown error', error);
-                                } else {
-                                    client.query('COMMIT');
-                                    response.json({ success: true, msg: 'Offer updated successfully', id: idOffer });
-                                }
-                            });
-                        });
+                            client.query('COMMIT');
+                            response.json({ success: true, msg: 'Offer updated successfully', id: idOffer });
+                        }
+                    });
                 }
             });
         done();
-    })*/
+    })
 }
 
 const myOffers = async (request, response) => {
@@ -204,6 +196,39 @@ const uploadImage = async (request, response) => {
     });
 }
 
+
+const favourites = async (request, response) => {
+    const { email, name } = request.decoded;
+    await pool.connect(async (err, client, done) => {
+        if (err) {
+            response.json({ success: false, msg: 'Error accessing the database' });
+            done();
+            return;
+        }
+        await client.query('BEGIN');
+        await client.query(
+            'SELECT id FROM users WHERE email=$1 AND name=$2;', [email, name],
+            (err, result) => {
+                if (err || result.rowCount == 0) {
+                    console.log(err)
+                    response.json({ success: false, msg: 'User ' + email + ' doesn\'t exist' });
+                } else {
+                    client.query(
+                        'SELECT "openedOffers".id, "openedOffers".name, "openedOffers".sex, "openedOffers".race, "openedOffers"."TypeName" FROM "openedOffers" WHERE "openedOffers"."idOwner"<>$1 and NOT EXISTS (SELECT * FROM seen WHERE seen."idOffer"="openedOffers".id and seen."idUser"=$1) and EXISTS (SELECT * FROM favourites WHERE favourites."idOffer"="openedOffers".id and favourites."idUser"=$1);',
+                        [result.rows[0].id], (err, res) => {
+                            if (err || res.rowCount == 0) {
+                                console.log(err)
+                                response.json({ success: false, msg: 'No offers found' });
+                            } else {
+                                response.json({ success: true, msg: 'Offers found', offers: res.rows });
+                            }
+                        });
+                }
+            });
+        done();
+    })
+}
+
 module.exports = {
     getOffers,
     createOffer,
@@ -211,5 +236,6 @@ module.exports = {
     myOffers,
     swipe,
     getImage,
-    uploadImage
+    uploadImage,
+    favourites
 }
