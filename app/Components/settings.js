@@ -20,7 +20,18 @@ const placeHolderImages = [
   { id: "2", uri: require('../assets/2.jpg') },
   { id: "3", uri: require('../assets/3.jpg') },
   { id: "4", uri: require('../assets/4.jpg') },
-  { id: "5", uri: require('../assets/5.jpg') }
+  { id: "5", uri: require('../assets/5.jpg') },
+  { id: "6", uri: require('../assets/1.jpg') },
+  { id: "7", uri: require('../assets/2.jpg') },
+  { id: "8", uri: require('../assets/3.jpg') },
+  { id: "9", uri: require('../assets/4.jpg') },
+  { id: "10", uri: require('../assets/5.jpg') },
+  { id: "11", uri: require('../assets/1.jpg') },
+  { id: "12", uri: require('../assets/2.jpg') },
+  { id: "13", uri: require('../assets/3.jpg') },
+  { id: "14", uri: require('../assets/4.jpg') },
+  { id: "15", uri: require('../assets/5.jpg') },
+  
 ]
 
 export default class Swipe extends React.Component {

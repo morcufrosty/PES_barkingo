@@ -8,10 +8,31 @@ const SCREEN_WIDTH = Dimensions.get('window').width
 import Icon from 'react-native-vector-icons/Ionicons'
 const PlaceHolderImages = [
   {  uri: require('../assets/1.jpg') },
+  {  uri: require('../assets/2.jpg') },
+  {  uri: require('../assets/3.jpg') },
+  {  uri: require('../assets/4.jpg') },
+  {  uri: require('../assets/5.jpg') },
+  {  uri: require('../assets/1.jpg') },
+  {  uri: require('../assets/2.jpg') },
+  {  uri: require('../assets/3.jpg') },
+  {  uri: require('../assets/4.jpg') },
+  { uri: require('../assets/5.jpg') },
+  {  uri: require('../assets/1.jpg') },
+  { uri: require('../assets/2.jpg') },
+  {  uri: require('../assets/3.jpg') },
+  {  uri: require('../assets/4.jpg') },
+  { uri: require('../assets/5.jpg') },
+  {  uri: require('../assets/1.jpg') },
+  { uri: require('../assets/2.jpg') },
+  {  uri: require('../assets/3.jpg') },
+  {  uri: require('../assets/4.jpg') },
+  { uri: require('../assets/5.jpg') },
+  {  uri: require('../assets/1.jpg') },
   { uri: require('../assets/2.jpg') },
   {  uri: require('../assets/3.jpg') },
   {  uri: require('../assets/4.jpg') },
   { uri: require('../assets/5.jpg') }
+  
 ]
 
 export default class swipeScreen extends React.Component {
@@ -220,7 +241,7 @@ export default class swipeScreen extends React.Component {
 
               <Image
                 style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20 }}
-                source={PlaceHolderImages[this.state.currentIndex].uri} />
+                source={PlaceHolderImages[0].uri} />
 
           </Animated.View>
 
@@ -249,7 +270,7 @@ export default class swipeScreen extends React.Component {
             </Animated.View>
             <Image
               style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20 }}
-              source={PlaceHolderImages[this.state.currentIndex+1].uri} />
+              source={PlaceHolderImages[0].uri} />
 
           </Animated.View>
 
