@@ -32,7 +32,8 @@ renderFavorites = () => {
         <Image style={{
           borderRadius:40,
           overflow:'hidden',
-          marginLeft: 10,
+          marginLeft: 5,
+          marginRight: 5,
           width: 80,
           height: 80
         }} source ={placeHolderImages[index].uri} />
@@ -48,7 +49,8 @@ renderFavorites = () => {
         <Image style={{
           borderRadius:50,
           overflow:'hidden',
-          marginBottom: 10,
+          marginBottom: 5,
+          marginTop: 5,
           width: 100,
           height: 100,
           marginLeft: '5%'
@@ -84,11 +86,13 @@ renderFavorites = () => {
         start={[0, 1]}
         end={[1, 0]}
         style={{
-          paddingTop: '10%',
-        }}>
+        flex: 1,
+        paddingTop: 30
+        }}
+      >
         <Text style={{
           paddingLeft: '5%',
-          paddingBottom:'5%',
+          paddingBottom: 5,
           color: 'white',
           fontSize:30,
           fontWeight: 'bold'
@@ -108,8 +112,7 @@ renderFavorites = () => {
             fontSize:30,
             fontWeight: 'bold'
           }}>Chats</Text>
-        <ScrollView style={{
-            marginBottom: 170}}>
+        <ScrollView>
            {this.renderChats()}
           </ScrollView>
       </LinearGradient>
