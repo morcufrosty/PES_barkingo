@@ -10,6 +10,7 @@ import Settings from "./Components/settings";
 import Chat from "./Components/chat"
 import perfilAnimal from "./Components/perfilAnimal"
 import formNewOffer from "./Components/formNewOffer"
+import TabIcon from './TabIcon';
 
 const SettingsNavigator = createStackNavigator({
 
@@ -50,18 +51,28 @@ const TabNavigator = createBottomTabNavigator(
   Swipe: {
     screen: SwipeNav,
     navigationOptions: {
-       tabBarLabel:"SWIPE",
-       tabBarIcon: ({ tintColor }) => (
-         <Icon name="share" size={25} color="#F15A24" />
+       tabBarLabel:"",
+       tabBarIcon: ({ focused, tintColor }) => (
+         <TabIcon
+             iconDefault='paw'
+             iconFocused='paw'
+             focused={focused}
+             tintColor={tintColor}
+         />
        )
      },
     },
   Settings: {
     screen: SettingsNav,
     navigationOptions: {
-       tabBarLabel:"PROFILE",
-       tabBarIcon: ({ tintColor }) => (
-         <Icon name="user" size={25} color="#F15A24" />
+       tabBarLabel:"",
+       tabBarIcon: ({focused, tintColor }) => (
+         <TabIcon
+             iconDefault='user'
+             iconFocused='user'
+             focused={focused}
+             tintColor={tintColor}
+         />
        )
      },
   },
@@ -69,17 +80,26 @@ const TabNavigator = createBottomTabNavigator(
   chat: {
     screen: Chat,
     navigationOptions: {
-       tabBarLabel:"CHATS",
-       tabBarIcon: ({ tintColor }) => (
-         <Icon name="comment" size={25} color="#F15A24" />
-       )
+       tabBarLabel:"",
+       tabBarIcon: ({focused, tintColor }) => (
+         <TabIcon
+             iconDefault='comment'
+             iconFocused='comment'
+             focused={focused}
+             tintColor={tintColor}
+         />       )
      },
   }
 },
 {
 tabBarOptions: {
-  showIcon: true
-},}
+  showLabel: false,
+  showIcon: true,
+  activeTintColor: "#F15A24",
+  inactiveTintColor: "#858585",
+},
+
+}
 );
 
 
