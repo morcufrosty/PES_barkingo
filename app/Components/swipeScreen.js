@@ -11,7 +11,17 @@ const PlaceHolderImages = [
   { uri: require('../assets/2.jpg') },
   {  uri: require('../assets/3.jpg') },
   {  uri: require('../assets/4.jpg') },
-  { uri: require('../assets/5.jpg') }
+  { uri: require('../assets/5.jpg') },
+  {  uri: require('../assets/1.jpg') },
+  { uri: require('../assets/2.jpg') },
+  {  uri: require('../assets/3.jpg') },
+  {  uri: require('../assets/4.jpg') },
+  { uri: require('../assets/5.jpg') },
+  {  uri: require('../assets/1.jpg') },
+  { uri: require('../assets/2.jpg') },
+  {  uri: require('../assets/3.jpg') },
+  {  uri: require('../assets/4.jpg') },
+  { uri: require('../assets/5.jpg') },
 ]
 
 export default class swipeScreen extends React.Component {

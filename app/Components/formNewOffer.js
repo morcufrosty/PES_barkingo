@@ -64,13 +64,13 @@ async handlePress(){
   console.log(
     this.state.name,
     this.state.type,
-     this.state.species,
+    this.state.species,
     this.state.race,
     this.state.sex,
     this.state.age,
-     this.state.iniDate,
+    this.state.iniDate,
     this.state.endDate,
-     this.state.description
+    this.state.description
 )
 
   if(this.state.name === ''){
@@ -93,7 +93,9 @@ async handlePress(){
   else if(this.state.sex === null){
     Alert.alert("Error", "Please specify the sex of the pet" )
   }
+
   else{
+    Alert.alert("Amazing!", response.msg);
 
    const token = await AsyncStorage.getItem("access_token");
    const jsonToken = JSON.parse(token);
