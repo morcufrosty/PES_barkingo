@@ -43,3 +43,6 @@ WHERE "openedOffers"."idOwner"<>'b1bd53a9-aff4-4c7b-8e86-b97cf62cafc3'
 --swipeRight
 SELECT id FROM users WHERE email=$1 AND name=$2;
 INSERT INTO favourites (idUser, idOffer) VALUES ($1, $2);
+
+--races
+SELECT * FROM species, race WHERE species.id=race."idSpecies";

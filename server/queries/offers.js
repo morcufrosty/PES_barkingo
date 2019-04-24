@@ -220,7 +220,7 @@ const favourites = async (request, response) => {
                                 console.log(err)
                                 response.json({ success: false, msg: 'No offers found' });
                             } else {
-                                response.json({ success: true, msg: 'Offers found', offers: res.rows.slice(0, 10) });
+                                response.json({ success: true, msg: 'Offers found', offers: res.rows });
                             }
                         });
                 }
