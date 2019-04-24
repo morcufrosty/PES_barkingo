@@ -152,8 +152,7 @@ export default class swipeScreen extends React.Component {
 
         }
         if (gestureState.dy > -5  && gestureState.dy < 5 && gestureState.dx > -5 &&  gestureState.dx < 5) {
-          this.props.navigation.navigate('perfilAnimal');
-
+            this.handleProfileClick()
         }
         else {
           Animated.spring(this.position, {
@@ -163,6 +162,9 @@ export default class swipeScreen extends React.Component {
         }
       }
     })
+  }
+  async handleProfileClick(){
+    this.props.navigation.navigate('perfilAnimal', { item:this.state.offers[this.state.currentIndex].id});
   }
     async handleGetOffers(){
 
