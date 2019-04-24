@@ -73,6 +73,8 @@ router.post('/offers/:id/image', db.uploadImage);
 
 router.get('/favouriteOffers', db.favourites);
 
+router.delete('/offers/seen', db.deleteSeenOffers);
+
 // more routes for our API will happen here
 
 module.exports = router;

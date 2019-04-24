@@ -229,7 +229,39 @@ const favourites = async (request, response) => {
     })
 }
 
-const deleteSeenOffers = (request, response) => { };
+// TODO: aaaaa
+const deleteSeenOffers = async (request, response) => {
+    const { email, name } = request.decoded;
+    await pool.connect(async (err, client, done) => {
+        if (err) {
+            response.json({ success: false, msg: 'Error accessing the database' });
+            done();
+            return;
+        }
+        await client.query('BEGIN');
+        await client.query(
+            'SELECT id FROM users WHERE email=$1 AND name=$2;', [email, name],
+            (err, result) => {
+                if (err || result.rowCount == 0) {
+                    console.log(err)
+                    response.json({ success: false, msg: 'User ' + email + ' doesn\'t exist' });
+                } else {
+                    client.query(
+                        'DELETE FROM seen WHERE seen."idUser"=$1;',
+                        [result.rows[0].id], (err, res) => {
+                            if (err || res.rowCount == 0) {
+                                console.log(err)
+                                response.json({ success: false, msg: 'No offers found' });
+                            } else {
+                                client.query('COMMIT');
+                                response.json({ success: true, msg: 'Offers deleted', offers: res.rows });
+                            }
+                        });
+                }
+            });
+        done();
+    })
+};
 
 const offerDetails = async (request, response) => {
     const { id: idOffer } = request.params;
@@ -263,5 +295,6 @@ module.exports = {
     getImage,
     uploadImage,
     favourites,
-    offerDetails
+    offerDetails,
+    deleteSeenOffers
 }
