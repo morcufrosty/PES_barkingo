@@ -151,6 +151,21 @@ Animal species:
 -   ### POST `/offers/:id`
 
     -   #### Query parameters
+        -   `name` [`optional`]: name of the animal.
+        -   `type` [`optional`]: type of offer, which can be `0` (`adoption`) or `1` (`foster`)
+        -   `race` [`optional`]: race of the animal in the offer, which in turn identifies its species.
+        -   `sex` [`optional`]: sex of the animal, can be `Male` or `Female`.
+        -   `age` [`optional`]: age of the animal.
+        -   `description` [`optional`]: description of the offer.
+        -   `iniDate` [`optional`]: if the offer is of type `foster` this will indicate the date in which the animal would be fostered.
+        -   `endDate` [`optional`]: if the offer is of type `foster` this will indicate the date in which the animal will end its fostering.
+    -   #### Response
+        -   `success`: Is either `true` or `false`.
+        -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
+
+-   ### PUT `/offers/:id`
+
+    -   #### Query parameters
         -   swipe [`required`]: specifies the swipe action direction on the offer, which can be `left` or `right`. This will decide if the offer gets added to the favourite list (viewable by the user) or the discarded list.
     -   #### Response
         -   `success`: Is either `true` or `false`.
@@ -177,7 +192,7 @@ Animal species:
             -   `species`: species of the animal in the offer.
             -   `photURL`: URL of the photo of the animal to be displayed.
 
--   ### POST `/offers/:id`
+-   ### POST `/offers/:id`: swipe on an offer
     -   #### Query parameters
         -   `direction`: direction of the swipe action, can only be `right` or `left`
     -   #### Response

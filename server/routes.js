@@ -59,7 +59,7 @@ router.get('/offers', db.getOffers);
 
 router.post('/offers', db.createOffer);
 
-router.post('/offers/:id', db.updateOffer);
+router.put('/offers/:id', db.updateOffer);
 
 router.get('/myOffers', db.myOffers);
 
