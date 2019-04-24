@@ -54,24 +54,25 @@ renderFavorites = () => {
           marginLeft: '5%'
         }} source ={placeHolderImages[index].uri} />
       <Text
+      style={{
+        position:'absolute',
+        top: 30,
+        left: 125,
+        color: 'white',
+        fontWeight: "bold"
+      }}
+      onPress={()=>Alert.alert("Editar puto gos!")}>Nom del puto gos
+      </Text>
+      <Text
         style={{
           position:'absolute',
-          top: 60,
+          top: 50,
           left: 125,
           color: 'white'
         }}
         onPress={()=>Alert.alert("Editar puto gos!")}>Ultim missatge del xat :)
         </Text>
-        <Text
-        style={{
-          position:'absolute',
-          top: 40,
-          left: 125,
-          color: 'white',
-          fontWeight: "bold"
-        }}
-        onPress={()=>Alert.alert("Editar puto gos!")}>Nom del puto gos
-        </Text>
+        
       </View>
       )
     })
