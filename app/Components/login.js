@@ -4,6 +4,7 @@ import {
   ScrollView,
   TextInput,
   Alert,
+  ToastAndroid,
   Platform
 } from 'react-native';
 import Button from './Button';
@@ -244,6 +245,30 @@ export default class App extends React.Component {
   }
 
 
+  async loginDevUsingAPI() {
+
+    return fetch('http://10.4.41.164/api/login', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email:'devUser@dev.dev', 
+        password:'devUser'
+      }),
+    }).then((response) => response.json())
+      .then((responseJson) => {
+        console.log(responseJson.msg);
+        return responseJson;
+      }).catch((error) => {
+        console.error(error);
+      });
+
+  }
+
+
+
   handlePressFBLogin() {
     this.logInFacebook();
   }
@@ -256,14 +281,31 @@ export default class App extends React.Component {
 
       if (this.state.email === '' && this.state.password === '') {
         this.setState({ count: this.state.count + 1 });
+        if(this.state.count === 1){
+          ToastAndroid.showWithGravityAndOffset(
+            'Assegura\'t d\'estar conenctat a la VPN',
+            ToastAndroid.SHORT,
+            ToastAndroid.BOTTOM,
+            25,
+            50,
+          );
+        }
 
         if (this.state.count === 2) {
           this.resetState();
-          this.props.navigation.navigate('AppAfterLogin');
+          const response = await this.loginDevUsingAPI();
+          console.log(response.msg);
+          if (response.success) {
+            console.log(response.token);
+            this.storeToken(response.token);
+            this.resetState();
+            this.props.navigation.navigate('AppAfterLogin');
           this.setState({ count: 0 });
         }
-        return;
       }
+      return;
+
+    }
       else if (this.state.email == '') {
         Alert.alert("Error", "Please enter your email");
         return;

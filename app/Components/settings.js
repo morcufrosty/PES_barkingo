@@ -4,7 +4,7 @@ import {
   ScrollView,
   TextInput,
   Alert,
-  Platform, 
+  Platform,
   Image,
   TouchableOpacity
 } from 'react-native';
@@ -15,7 +15,7 @@ import TextInputWTitle from './inputText.js';
 import InputPassword from './inputPassword.js';
 import { AsyncStorage } from 'react-native';
 
-const Users = [
+const placeHolderImages = [
   { id: "1", uri: require('../assets/1.jpg') },
   { id: "2", uri: require('../assets/2.jpg') },
   { id: "3", uri: require('../assets/3.jpg') },
@@ -25,18 +25,93 @@ const Users = [
 
 export default class Swipe extends React.Component {
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      myOffers:[],
+      isLoading:true,
+      username:''
+
+    }
+  }
+
+
+  async getMyOffersFromAPI(tokenJson){
+
+    return fetch('http://10.4.41.164/api/myOffers', {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'x-access-token': tokenJson.token
+    }
+  }).then((response) => response.json())
+    .then((responseJson) => {
+      console.log(responseJson.msg);
+      return responseJson;
+    }).catch((error) => {
+      console.error(error);
+    });
+
+  }
+
+  async getUserFromAPI(tokenJson){
+
+    return fetch('http://10.4.41.164/api/user', {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'x-access-token': tokenJson.token
+    }
+  }).then((response) => response.json())
+    .then((responseJson) => {
+      console.log(responseJson.msg);
+      return responseJson;
+    }).catch((error) => {
+      console.error(error);
+    });
+
+  }
+
+  async handleStart() {
+
+    const token = await AsyncStorage.getItem("access_token");
+    tokenJson = JSON.parse(token);
+
+    const responseOffers = await this.getMyOffersFromAPI(tokenJson);
+    const responseUser = await this.getUserFromAPI(tokenJson);
+    this.setState({isLoading: false})
+    if (responseOffers.success) {
+      this.setState({ myOffers: responseOffers.offers })
+      console.log( responseOffers.offers)
+
+    }
+
+    else {
+      Alert.alert(responseOffers.msg);
+
+    }
+
+    if(responseUser.success){
+      this.setState({username: responseUser.name});
+
+    }
+
+  }
+
 
   renderPublications = () => {
-    return Users.map((data)=>{
+    return this.state.myOffers.map((data,index)=>{
       return(
       <View>
         <Image style={{
           borderRadius:5,
           overflow:'hidden',
           marginLeft: 10,
-          width: 200, 
+          width: 200,
           height: 200
-        }} source ={data.uri} /> 
+        }} source ={placeHolderImages[index].uri} /> 
       <TouchableOpacity 
         style={{
           position:'absolute',
@@ -45,9 +120,9 @@ export default class Swipe extends React.Component {
         }}
         onPress={()=>Alert.alert("Editar puto gos!")}>
           <Image
-            source={{uri: "https://www.pngrepo.com/download/42233/pencil-edit-button.png", width: 40, height: 40}} />        
+            source={{uri: "https://www.pngrepo.com/download/42233/pencil-edit-button.png", width: 40, height: 40}} />
         </TouchableOpacity>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={{
             position:'absolute',
             top:10,
@@ -55,7 +130,7 @@ export default class Swipe extends React.Component {
           }}
         onPress={()=>Alert.alert("Eliminar puto gos!")}>
           <Image
-            source={{uri: "https://png.pngtree.com/svg/20170121/delete_286553.png", width: 40, height: 40}} />        
+            source={{uri: "https://png.pngtree.com/svg/20170121/delete_286553.png", width: 40, height: 40}} />
         </TouchableOpacity>
       </View>
       )
@@ -63,6 +138,21 @@ export default class Swipe extends React.Component {
   }
 
   render() {
+
+    if (this.state.isLoading) {
+      this.handleStart();
+        return   <LinearGradient colors = {['#F15A24', '#D4145A']}
+          start = {[0, 1]}
+          end = {[1, 0]}
+          style={{
+            flex:1,
+            padding: '10%',
+            paddingTop: '30%'
+          }}>
+
+          </LinearGradient>;
+      }
+
     return (
       <LinearGradient colors={['#F15A24', '#D4145A']}
         start={[0, 1]}
@@ -77,12 +167,12 @@ export default class Swipe extends React.Component {
             flex:1,
             flexDirection: 'row',
             height:64
-          }}>  
+          }}>
             <Image style={{
               borderRadius:64,
               overflow:'hidden'
             }} source={{uri: "https://facebook.github.io/react-native/img/favicon.png", width: 64, height: 64}} />        
-            <Text style={{fontSize:20, marginLeft:10, color: 'white', flex: 1,justifyContent: 'center', alignItems: 'center', height:64, textAlignVertical: 'center' }}>Your name</Text>
+            <Text style={{fontSize:20, marginLeft:10, color: 'white', flex: 1,justifyContent: 'center', alignItems: 'center', height:64, textAlignVertical: 'center' }}>{this.state.username}</Text>
           </View>
           <Text style={{
             paddingTop:'5%',
@@ -95,24 +185,24 @@ export default class Swipe extends React.Component {
               marginLeft: -10
             }}
           >
-           {this.renderPublications()}       
+           {this.renderPublications()}
           </ScrollView>
 
           <View style={{ flex: 1, marginTop: 10 }}>
             <Button
-              onPress={() => Alert.alert("S'hauria d'anar a ajustaments")}
-              title="Settings"
+              onPress={() => this.props.navigation.navigate('formNewOffer')}
+              title="New Publication"
               color="#ff3b28"
-              
+
             />
           </View>
 
           <View style={{ flex: 1, marginTop: 10 }}>
             <Button
               onPress={() => Alert.alert("S'haurien d'obrir coses")}
-              title="New Publication"
+              title="Settings"
               color="#ff3b28"
-              
+
             />
           </View>
 

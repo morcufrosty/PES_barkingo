@@ -31,6 +31,7 @@ router.use((req, res, next) => {
         // verifies secret and checks exp
         jwt.verify(token, creds.secret, (err, decoded) => {
             if (err) {
+                res.status(403);
                 return res.json({ success: false, msg: 'Failed to authenticate token.' });
             } else {
                 // if everything is good, save to request for use in other routes
@@ -58,7 +59,11 @@ router.get('/offers', db.getOffers);
 
 router.post('/offers', db.createOffer);
 
+router.post('/offers/:id', db.updateOffer);
+
 router.get('/myOffers', db.myOffers);
+
+router.post('/offers/:id', db.swipe);
 
 // more routes for our API will happen here
 

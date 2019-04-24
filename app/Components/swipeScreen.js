@@ -6,14 +6,13 @@ import { AsyncStorage } from 'react-native';
 const SCREEN_HEIGHT = Dimensions.get('window').height
 const SCREEN_WIDTH = Dimensions.get('window').width
 import Icon from 'react-native-vector-icons/Ionicons'
-const Users = [
-  { id: "1", uri: require('../assets/1.jpg') },
-  { id: "2", uri: require('../assets/2.jpg') },
-  { id: "3", uri: require('../assets/3.jpg') },
-  { id: "4", uri: require('../assets/4.jpg') },
-  { id: "5", uri: require('../assets/5.jpg') }
+const PlaceHolderImages = [
+  {  uri: require('../assets/1.jpg') },
+  { uri: require('../assets/2.jpg') },
+  {  uri: require('../assets/3.jpg') },
+  {  uri: require('../assets/4.jpg') },
+  { uri: require('../assets/5.jpg') }
 ]
-var arrayOffers = [];
 
 export default class swipeScreen extends React.Component {
 
@@ -68,31 +67,34 @@ export default class swipeScreen extends React.Component {
   }
 
   async handleSwipeLeft(){
-
-   // this.setState({id: offers[this.state.currentIndex]}); 
-   // const response = await this.SwipeLeftToAPI();
+    const id = this.state.offers[this.state.currentIndex];
+    const t = await AsyncStorage.getItem("access_token");
+    tokenJson = JSON.parse(t);
+    const response = await this.SwipeLeftToAPI(tokenJson, id);
 
   }
 
   async handleSwipeRight(){
-   // this.setState({id: offers[this.state.currentIndex]}); 
-   // const response = await this.SwipeRightToAPI();
-
+    const id = this.state.offers[this.state.currentIndex];
+    const t = await AsyncStorage.getItem("access_token");
+    tokenJson = JSON.parse(t);
+    const response = await this.SwipeRightToAPI(tokenJson, id);
 
   }
 
 
-  async SwipeLeftToAPI(){
+  async SwipeLeftToAPI(tokenJson, id){
 
-    return fetch('http://10.4.41.164/api/offers/swipeleft', {
+    return fetch('http://10.4.41.164/api/offers/swipeLeft', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        'x-access-token': await AsyncStorage.getItem(ACCESS_TOKEN),
+        'x-access-token': tokenJson.token
 
       },
       body: JSON.stringify({
+        id: id
   
       }),
     }).then((response) => response.json())
@@ -105,17 +107,18 @@ export default class swipeScreen extends React.Component {
 
   }
 
-  async SwipeRightToAPI(){
+  async SwipeRightToAPI(tokenJson, id){
 
     return fetch('http://10.4.41.164/api/offers/swipeRight', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        'x-access-token': await AsyncStorage.getItem('access_token'),
+        'x-access-token': tokenJson.token,
 
       },
       body: JSON.stringify({
+        id: id
 
       }),
     }).then((response) => response.json())
@@ -125,7 +128,7 @@ export default class swipeScreen extends React.Component {
       }).catch((error) => {
         console.error(error);
       });
-    
+
   }
 
   componentWillMount() {
@@ -144,7 +147,7 @@ export default class swipeScreen extends React.Component {
           }).start(() => {
             this.setState({ currentIndex: this.state.currentIndex + 1 }, () => {
               this.position.setValue({ x: 0, y: 0 })
-              
+
             })
           this.handleSwipeRight();
 
@@ -159,7 +162,7 @@ export default class swipeScreen extends React.Component {
             })
           })
 
-         this.handleSwipeLeft;
+         this.handleSwipeLeft();
 
         }
         if (gestureState.dy > -5  && gestureState.dy < 5 && gestureState.dx > -5 &&  gestureState.dx < 5) {
@@ -176,7 +179,7 @@ export default class swipeScreen extends React.Component {
     })
   }
     async handleGetOffers(){
-      
+
       const t = await AsyncStorage.getItem('access_token');
       tokenJson = JSON.parse(t);
       const response = await this.getOffers(tokenJson);
@@ -189,7 +192,6 @@ export default class swipeScreen extends React.Component {
 
       if(response.success){
         this.setState({offers: response.offers});
-        Alert.alert("DONE!");
       }
       else{
         Alert.alert("Error", response.msg);
@@ -213,12 +215,11 @@ export default class swipeScreen extends React.Component {
       });
 
   }
- 
+
 
   renderUsers = () => {
 
     return this.state.offers.map((item, i) => {
-
 
       if (i < this.state.currentIndex) {
         return null
@@ -242,7 +243,7 @@ export default class swipeScreen extends React.Component {
 
               <Image
                 style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20 }}
-                source={item.urlImage} />
+                source={PlaceHolderImages[this.state.currentIndex].uri} />
 
           </Animated.View>
 
@@ -271,7 +272,7 @@ export default class swipeScreen extends React.Component {
             </Animated.View>
             <Image
               style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20 }}
-              source={item.uri} />
+              source={PlaceHolderImages[this.state.currentIndex+1].uri} />
 
           </Animated.View>
 
@@ -281,7 +282,7 @@ export default class swipeScreen extends React.Component {
   }
 
   render() {
-    
+
     if (this.state.isLoading) {
       this.handleGetOffers();
         return   <LinearGradient colors = {['#F15A24', '#D4145A']}
@@ -295,6 +296,8 @@ export default class swipeScreen extends React.Component {
 
           </LinearGradient>;
       }
+
+
     return (
       <LinearGradient colors = {['#F15A24', '#D4145A']}
       start = {[0, 1]}

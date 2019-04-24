@@ -5,6 +5,8 @@ import { StyleSheet, Text, View,
     Alert,
     Platform,
     Picker,
+    Image,
+    TouchableOpacity
 }  from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
@@ -13,7 +15,9 @@ import { LinearGradient } from 'expo'
 import { Facebook } from 'expo';
 import DatePicker from 'react-native-datepicker'
 import { AsyncStorage } from 'react-native';
-
+//import ImagePicker from 'react-native-image-picker';
+import { ImagePicker } from 'expo';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 
 
@@ -30,9 +34,11 @@ export default class formNewOffer extends React.Component {
       race: '',
       sex: '',
       age: '',
+      //PER CANVIAR EL FORMAT DE LA DATA, MIRAR "fromat" de <DatePicker> a l'inici del render()
       iniDate: "2019-04-15",
       endDate: '2019-04-15',
-      description:''
+      description:'',
+      image:null
     }
   }
 
@@ -46,12 +52,26 @@ export default class formNewOffer extends React.Component {
       age: '',
       iniDate: '',
       endDate: '',
-      description: ''
+      description: '',
+      image: null
    })
 
   }
 
 async handlePress(){
+
+
+  console.log(
+    this.state.name,
+    this.state.type,
+     this.state.species,
+    this.state.race,
+    this.state.sex,
+    this.state.age,
+     this.state.iniDate,
+    this.state.endDate,
+     this.state.description
+)
 
   if(this.state.name === ''){
     Alert.alert("Error", "Please enter the name of the pet" )
@@ -60,17 +80,13 @@ async handlePress(){
   else if(this.state.species === ''){
     Alert.alert("Error", "Please enter the scpecies of the pet" )
   }
-
+/*
   else if(this.state.race === ''){
     Alert.alert("Error", "Please enter the race of the pet" )
   }
-
+*/
   else if(this.state.age === ''){
     Alert.alert("Error", "Please enter the age of the pet" )
-  }
-
-  else if(this.state.description === ''){
-    Alert.alert("Error", "Please enter a description" )
   }
 
 
@@ -79,7 +95,11 @@ async handlePress(){
   }
   else{
 
-  const response = await this.newOfferUsingAPI();
+   const token = await AsyncStorage.getItem("access_token");
+   const jsonToken = JSON.parse(token);
+
+
+  const response = await this.newOfferUsingAPI(jsonToken);
 
 
   if(response.success){
@@ -93,18 +113,17 @@ async handlePress(){
 
 }
 
-async newOfferUsingAPI(){
+async newOfferUsingAPI(jsonToken){
 
   return fetch('http://10.4.41.164/api/offers', {
     method: 'POST',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      'x-access-token': await AsyncStorage.getItem("access_token")
+      'x-access-token': jsonToken.token
     },
     body: JSON.stringify({
 
-      token: await AsyncStorage.getItem("access_token"),
       name: this.state.name,
       type: this.state.type,
       species: this.state.species,
@@ -125,19 +144,65 @@ async newOfferUsingAPI(){
     });
 }
 
+
+//OPCIONS DE L'IMAGE PICKER
+_pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      this.setState({ image: result.uri });
+    }
+  };
+
 render(){
+  let { image } = this.state;
+  var imageForm;
   var form;
-          if (this.state.type === "foster") {
-             form = (
-                <View style={{
-                  paddingBottom:30
-                }}>
-                <Text  style={{ color: 'white' }}>{"Data d'inici"}</Text>
+    if (this.state.type === "foster") {
+       form = (
+          <View style={{
+            paddingBottom:30
+          }}>
+          <Text  style={{ color: 'white' }}>{"Data d'inici"}</Text>
+          <DatePicker
+                  style={{width: 200, margin: 5}}
+                  date={this.state.iniDate}
+                  mode="date"
+                  placeholder="select ini date"
+                  format="YYYY-MM-DD"
+                  minDate="2016-05-01"
+                  maxDate="2020-06-01"
+                  confirmBtnText="Confirm"
+                  cancelBtnText="Cancel"
+                  customStyles={{
+                    dateIcon: {
+                      position: 'absolute',
+                      left: 0,
+                      top: 4,
+                      marginLeft: 0
+                    },
+                    dateInput: {
+                      marginLeft: 36,
+
+                      backgroundColor: 'white',
+                      borderWidth: 0,
+                      opacity: 0.5,
+                      borderRadius: 5                          }
+                    // ... You can check the source to find the other keys.
+                  }}
+                  onDateChange={(date) => {this.setState({iniDate: date})}}
+                />
+                <Text  style={{ color: 'white' }}>{"Data fi"}</Text>
                 <DatePicker
-                        style={{width: 200, margin: 5}}
-                        date={this.state.iniDate}
+                        style={{width: 200,margin: 5}}
+                        date={this.state.endDate}
                         mode="date"
-                        placeholder="select ini date"
+                        placeholder="select end date"
                         format="YYYY-MM-DD"
                         minDate="2016-05-01"
                         maxDate="2020-06-01"
@@ -152,71 +217,111 @@ render(){
                           },
                           dateInput: {
                             marginLeft: 36,
-
                             backgroundColor: 'white',
-                            borderWidth: 0,
                             opacity: 0.5,
-                            borderRadius: 5                          }
+                            borderRadius: 5,
+                            borderWidth: 0
+                          },
+                          dateText:{
+                            color: "black",
+                          }
                           // ... You can check the source to find the other keys.
                         }}
-                        onDateChange={(date) => {this.setState({iniDate: date})}}
+                        onDateChange={(date) => {this.setState({endDate: date})}}
                       />
-                      <Text  style={{ color: 'white' }}>{"Data fi"}</Text>
-                      <DatePicker
-                              style={{width: 200,margin: 5}}
-                              date={this.state.endDate}
-                              mode="date"
-                              placeholder="select end date"
-                              format="YYYY-MM-DD"
-                              minDate="2016-05-01"
-                              maxDate="2020-06-01"
-                              confirmBtnText="Confirm"
-                              cancelBtnText="Cancel"
-                              customStyles={{
-                                dateIcon: {
-                                  position: 'absolute',
-                                  left: 0,
-                                  top: 4,
-                                  marginLeft: 0
-                                },
-                                dateInput: {
-                                  marginLeft: 36,
-                                  backgroundColor: 'white',
-                                  opacity: 0.5,
-                                  borderRadius: 5,
-                                  borderWidth: 0
-                                },
-                                dateText:{
-                                  color: "black",
-                                }
-                                // ... You can check the source to find the other keys.
-                              }}
-                              onDateChange={(date) => {this.setState({endDate: date})}}
-                            />
-                    </View>
-             );
-          } else if (this.state.type === "adoption") {
-             form = (
-               <View style={{
-                height:10
-              }}>
-               </View>
-             );
-          }
+              </View>
+       );
+    } else if (this.state.type === "adoption") {
+       form = (
+         <View style={{
+          height:10
+        }}>
+         </View>
+       );
+    }
 
+    if(this.state.image != null){
+      imageForm=(
+        <View style={{ flex: 1, marginTop: 10, marginBottom:20, flexDirection: 'row' }}>
+                    <Image
+                      source={{ uri: image }}
+                        style={{ width: 200, height: 200,borderRadius:50 }}
+                      />
+                      <View
+                      style={{
+                        alignItems:"center",
+                        justifyContent: 'center',
+                        flex: 1
+                      }}>
+                       <TouchableOpacity onPress={this._pickImage}
+                       style={{
+                           //borderWidth:1,
+                           //borderColor:'rgba(0,0,0,0.2)',
+                           opacity: 0.5,
+                           alignItems:'center',
+                           justifyContent:'center',
+                           width:60,
+                           height:60,
+                           backgroundColor:'#fff',
+                           borderRadius:50,
+                         }}
+                         >
+                       <Icon name={"exchange"}  size={20} color="#F15A24" />
+
+                     </TouchableOpacity>
+                     <Text style={{ color: 'white', opacity:0.5 }}>{"Change image"}</Text>
+
+                     </View>
+                   </View>);
+
+    } else{
+      imageForm=(
+        <View style={{ flex: 1, marginTop: 10, marginBottom:20, flexDirection: 'row' }}>
+                    <Image
+                        source={require('../assets/no_image.png')}
+                        style={{ width: 200, height: 200 }}
+                            />
+                     <View
+                      style={{
+                        alignItems:"center",
+                        justifyContent: 'center',
+                        flex: 1
+                      }}>
+                       <TouchableOpacity onPress={this._pickImage}
+                       style={{
+                           //borderWidth:1,
+                           //borderColor:'rgba(0,0,0,0.2)',
+                           opacity: 0.5,
+                           alignItems:'center',
+                           justifyContent:'center',
+                           width:60,
+                           height:60,
+                           backgroundColor:'#fff',
+                           borderRadius:50,
+                         }}
+                         >
+                       <Icon name={"plus"}  size={20} color="#F15A24" />
+
+                     </TouchableOpacity>
+                     <Text style={{ color: 'white', opacity:0.5 }}>{"Add an image"}</Text>
+
+                     </View>
+                   </View>);
+    }
   return (
     <LinearGradient colors={['#F15A24', '#D4145A']}
       start={[0, 1]}
       end={[1, 0]}
       style={{
         flex: 1,
+        padding:15,
+        paddingTop:25
       }}
     >
       <ScrollView
       style={{
         flex: 1,
-        padding:15,
-        paddingTop:25
+
       }}
       showsVerticalScrollIndicator={false}
       >
@@ -275,15 +380,15 @@ render(){
             labelStyle={{color: 'white'}}
             radioStyle={{paddingRight: 20,opacity:0.5}}
                      radio_props={[
-                       {label: 'male', sex: "male" },
-                       {label: 'female', sex: "female" }
+                       {label: 'male', value: "male" },
+                       {label: 'female', value: "female" }
                      ]}
                      initial={0}
-                     onPress={(sex) => {this.setState({sex:sex})}}
+                     onPress={(value) => {this.setState({sex:value})}}
                    />
             </View>
 
-            <View style={{ flex: 1,paddingVertical: 10 }}>
+            <View style={{ flex: 1, marginTop: 10, marginBottom:20 }}>
             <Text style={{ color: 'white' }}>{"Type of offer"}</Text>
             <RadioForm
             formHorizontal={true}
@@ -301,8 +406,16 @@ render(){
                      onPress={(value) => {this.setState({type:value})}}
                    />
             </View>
-            {form}
 
+            {form}
+            <View style={{ flex: 1, marginTop: 10, marginBottom:70 }}>
+            <Button
+              title='Submit'
+              color='#ff3b28'
+              onPress={async () => this.handlePress()}>
+
+            </Button>
+            </View>
             </ScrollView>
 
     </LinearGradient>
