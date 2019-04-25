@@ -227,7 +227,6 @@ const getImage = async (request, response) => {
                 'Content-Length': img.length
             });
             response.end(img);
-            console.log(response);
         }
     });
 }
