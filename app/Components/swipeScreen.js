@@ -8,10 +8,31 @@ const SCREEN_WIDTH = Dimensions.get('window').width
 import Icon from 'react-native-vector-icons/Ionicons'
 const PlaceHolderImages = [
   {  uri: require('../assets/1.jpg') },
+  {  uri: require('../assets/2.jpg') },
+  {  uri: require('../assets/3.jpg') },
+  {  uri: require('../assets/4.jpg') },
+  { uri: require('../assets/5.jpg') },
+  {  uri: require('../assets/1.jpg') },
+  { uri: require('../assets/2.jpg') },
+  {  uri: require('../assets/3.jpg') },
+  {  uri: require('../assets/4.jpg') },
+  { uri: require('../assets/5.jpg') },
+  {  uri: require('../assets/1.jpg') },
+  { uri: require('../assets/2.jpg') },
+  {  uri: require('../assets/3.jpg') },
+  {  uri: require('../assets/4.jpg') },
+  { uri: require('../assets/5.jpg') },
+  {  uri: require('../assets/1.jpg') },
+  { uri: require('../assets/2.jpg') },
+  {  uri: require('../assets/3.jpg') },
+  {  uri: require('../assets/4.jpg') },
+  { uri: require('../assets/5.jpg') },
+  {  uri: require('../assets/1.jpg') },
   { uri: require('../assets/2.jpg') },
   {  uri: require('../assets/3.jpg') },
   {  uri: require('../assets/4.jpg') },
   { uri: require('../assets/5.jpg') }
+  
 ]
 
 export default class swipeScreen extends React.Component {
@@ -143,7 +164,7 @@ export default class swipeScreen extends React.Component {
 
         }
         if (gestureState.dy > -5  && gestureState.dy < 5 && gestureState.dx > -5 &&  gestureState.dx < 5) {
-          this.props.navigation.navigate('perfilAnimal');
+          this.props.navigation.navigate('perfilAnimal', {id: this.state.offers[this.state.currentIndex].id});
 
         }
         else {
@@ -193,14 +214,14 @@ export default class swipeScreen extends React.Component {
       }
     }
 
-  async getOffers(tokenJson) {
-    
+  async getOffers(t) {
+
 
     return fetch('http://10.4.41.164/api/offers', {
       method: 'GET',
       headers: {
         Accept: 'application/json',
-        'x-access-token': tokenJson.token
+        'x-access-token': t.token
       }
       }).then((response) => response.json())
       .then((responseJson) => {

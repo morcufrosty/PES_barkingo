@@ -20,7 +20,18 @@ const placeHolderImages = [
   { id: "2", uri: require('../assets/2.jpg') },
   { id: "3", uri: require('../assets/3.jpg') },
   { id: "4", uri: require('../assets/4.jpg') },
-  { id: "5", uri: require('../assets/5.jpg') }
+  { id: "5", uri: require('../assets/5.jpg') },
+  { id: "6", uri: require('../assets/1.jpg') },
+  { id: "7", uri: require('../assets/2.jpg') },
+  { id: "8", uri: require('../assets/3.jpg') },
+  { id: "9", uri: require('../assets/4.jpg') },
+  { id: "10", uri: require('../assets/5.jpg') },
+  { id: "11", uri: require('../assets/1.jpg') },
+  { id: "12", uri: require('../assets/2.jpg') },
+  { id: "13", uri: require('../assets/3.jpg') },
+  { id: "14", uri: require('../assets/4.jpg') },
+  { id: "15", uri: require('../assets/5.jpg') },
+  
 ]
 
 export default class Swipe extends React.Component {
@@ -29,6 +40,7 @@ export default class Swipe extends React.Component {
     super(props)
     this.state = {
       myOffers:[],
+      images:[],
       isLoading:true,
       username:'',
       noOffers:false
@@ -75,6 +87,20 @@ export default class Swipe extends React.Component {
 
   }
 
+  async getImageFromServer(tokenJson, id){
+    return fetch(`http://10.4.41.164/api/offers/${id}/image`, {
+    method: 'GET',
+    headers: {
+      Accept: '*',
+      'x-access-token': tokenJson.token
+    }
+  })
+
+  }
+
+
+
+
   async handleStart() {
 
     const token = await AsyncStorage.getItem("access_token");
@@ -82,10 +108,27 @@ export default class Swipe extends React.Component {
 
     const responseOffers = await this.getMyOffersFromAPI(tokenJson);
     const responseUser = await this.getUserFromAPI(tokenJson);
+
     this.setState({isLoading: false})
     if (responseOffers.success) {
       this.setState({ myOffers: responseOffers.offers })
       console.log( responseOffers.offers)
+
+      for(let i = 0; i < this.state.myOffers.length; i++){
+        let id = this.state.myOffers[i].id;
+        let image = await this.getImageFromServer(tokenJson, id);
+        if(image.status != 404){
+          this.state.images[i] = image;
+        }
+        else   this.state.images[i] = null;
+
+      }
+
+      /*
+      for (let i = 0; i< this.state.images.length; i++){
+        console.log(this.state.images[i]);
+      }
+*/
 
     }
 
@@ -103,7 +146,8 @@ export default class Swipe extends React.Component {
 
 
   renderPublications = () => {
-    return this.state.myOffers.map((data,index)=>{
+
+    return this.state.myOffers.map((item,index)=>{
       return(
       <View>
         <Image style={{
@@ -112,7 +156,7 @@ export default class Swipe extends React.Component {
           marginLeft: 10,
           width: 200,
           height: 200
-        }} source ={placeHolderImages[index].uri} />
+        }} source ={{uri: `data:image/jpg;base64,${this.state.images[index]}`}} />
       <TouchableOpacity
         style={{
           position:'absolute',
@@ -227,7 +271,7 @@ export default class Swipe extends React.Component {
               onPress={async () => {
 
                 await AsyncStorage.removeItem('access_token');
-                this.props.navigation.replace('Login');
+                this.props.navigation.replace('LoginScreen');
               }
               }
               title="Log out"

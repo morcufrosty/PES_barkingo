@@ -57,6 +57,8 @@ router.get('/middletest', (req, res) => {
 
 router.get('/offers', db.getOffers);
 
+router.get('/offers/:id', db.offerDetails);
+
 router.post('/offers', db.createOffer);
 
 router.put('/offers/:id', db.updateOffer);
@@ -68,6 +70,12 @@ router.post('/offers/:id', db.swipe);
 router.get('/offers/:id/image', db.getImage);
 
 router.post('/offers/:id/image', db.uploadImage);
+
+router.get('/favouriteOffers', db.favourites);
+
+router.delete('/offers/seen', db.deleteSeenOffers);
+
+router.get('/races', db.racesList);
 
 // more routes for our API will happen here
 

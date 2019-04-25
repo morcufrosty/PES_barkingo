@@ -29,7 +29,7 @@ export default class formNewOffer extends React.Component {
     super(props)
     this.state = {
       name: '',
-      type: '',
+      type: '0',
       species: '',
       race: '',
       sex: 'Male',
@@ -38,7 +38,7 @@ export default class formNewOffer extends React.Component {
       iniDate: "2019-04-15",
       endDate: '2019-04-15',
       description:'',
-      image:null
+      image: null
     }
   }
 
@@ -64,13 +64,11 @@ async handlePress(){
   console.log(
     this.state.name,
     this.state.type,
-     this.state.species,
     this.state.race,
     this.state.sex,
     this.state.age,
-     this.state.iniDate,
-    this.state.endDate,
-     this.state.description
+    this.state.description,
+    this.state.image
 )
 
   if(this.state.name === ''){
@@ -93,17 +91,33 @@ async handlePress(){
   else if(this.state.sex === null){
     Alert.alert("Error", "Please specify the sex of the pet" )
   }
+
+  else if(this.state.description === ''){
+    Alert.alert("Error", "Please specify a description of the pet" )
+  }
   else{
 
    const token = await AsyncStorage.getItem("access_token");
    const jsonToken = JSON.parse(token);
+   const response = await this.newOfferUsingAPI(jsonToken);
 
-
-  const response = await this.newOfferUsingAPI(jsonToken);
+   console.log("response: " + response);
 
 
   if(response.success){
     Alert.alert("Amazing!", response.msg);
+    if(this.state.image != null){
+      console.log("Enviant imatge")
+      data = new FormData()
+      data.append('image', {
+        uri: this.state.image.uri,
+        type: 'image/jpeg', 
+        name: this.state.name
+      });
+      const responsePostImg = await this.handleSubmitImage(jsonToken, response.id, data);
+      Alert.alert(responsePostImg);
+
+    }
 
   }
   else{
@@ -113,35 +127,52 @@ async handlePress(){
 
 }
 
-async newOfferUsingAPI(jsonToken){
 
-  return fetch('http://10.4.41.164/api/offers', {
+async handleSubmitImage(tokenJson, id, data){
+
+  return fetch(`http://10.4.41.164/api/offers/${id}/image`, {
     method: 'POST',
     headers: {
-      Accept: 'application/json',
+      Accept: '*',
+      'Content-Type': 'multipart/form-data',
+      'x-access-token': tokenJson.token
+    },
+    body: data,
+  }).then((response) => response.json())
+  .then((responseJson) => {
+    console.log(responseJson);
+    return responseJson;
+  }).catch((error) => {
+    console.error(error);
+  });
+}
+
+
+async newOfferUsingAPI(tokenJson){
+
+  return fetch("http://10.4.41.164/api/offers", {
+    method: 'POST',
+    headers: {
+      Accept: '*',
       'Content-Type': 'application/json',
-      'x-access-token': jsonToken.token
+      'x-access-token': tokenJson.token
     },
     body: JSON.stringify({
-
       name: this.state.name,
       type: this.state.type,
-      species: this.state.species,
       race: this.state.race,
       sex: this.state.sex,
       age: this.state.age,
-      iniDate: this.state.iniDate,
-      endDate: this.state.endDate,
       description: this.state.description
 
     }),
   }).then((response) => response.json())
-    .then((responseJson) => {
-      console.log(responseJson.msg);
-      return responseJson;
-    }).catch((error) => {
-      console.error(error);
-    });
+  .then((responseJson) => {
+    console.log(responseJson.msg);
+    return responseJson;
+  }).catch((error) => {
+    console.error(error);
+  });
 }
 
 
@@ -151,13 +182,13 @@ _pickImage = async () => {
         .then(console.log)
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
-      aspect: [3, 5],
+      aspect: [5, 5],
     });
 
     console.log(result);
 
     if (!result.cancelled) {
-      this.setState({ image: result.uri });
+      this.setState({ image: result });
     }
   };
 
@@ -246,7 +277,7 @@ render(){
       imageForm=(
         <View style={{ flex: 1, marginTop: 10, marginBottom:20, flexDirection: 'row' }}>
                     <Image
-                      source={{ uri: image }}
+                      source={{ uri: image.uri }}
                         style={{ width: 200, height: 200,borderRadius:50 }}
                       />
                       <View
