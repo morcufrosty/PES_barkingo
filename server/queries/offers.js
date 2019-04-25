@@ -100,13 +100,47 @@ const updateOffer = async (request, response) => {
                     client.query(
                         'UPDATE animals SET name=$1, offer=$2, race=$3, sex=$4, age=$5, description=$6, "idOwner"=$7 WHERE id=$8;', [name, type, race, sex, age, description, idOwn, idOffer],
                         (error, res) => {
-                            if (error) {
-                                console.error('Unknown error', error);
-                            } else {
-                                client.query('COMMIT');
-                                response.json({ success: true, msg: 'Offer updated successfully', id: idOffer });
-                            }
-                        });
+                        if (error) {
+                            console.error('Unknown error', error);
+                        } else {
+                            client.query('COMMIT');
+                            response.json({ success: true, msg: 'Offer updated successfully', id: idOffer });
+                        }
+                    });
+                }
+            });
+        done();
+    })
+}
+
+const deleteOffer = async (request, response) => {
+    //response.json({ success: false, msg: 'Not implemented yet' });
+    const { email, name: userName } = request.decoded;
+    const { id: idOffer } = request.params;
+    await pool.connect(async (err, client, done) => {
+        if (err) {
+            response.json({ success: false, msg: 'Error accessing the database' });
+            done();
+            return;
+        }
+        await client.query('BEGIN');
+        await client.query(
+            'SELECT id FROM users WHERE email=$1 AND name=$2;', [email, userName],
+            (err, result) => {
+                if (err || result.rowCount == 0) {
+                    console.log(err)
+                    response.json({ success: false, msg: 'User ' + email + ' doesn\'t exist' });
+                } else {
+                    client.query(
+                        'UPDATE animals SET status=1 WHERE id=$1;', [idOffer],
+                        (error, res) => {
+                        if (error) {
+                            console.error('Unknown error', error);
+                        } else {
+                            client.query('COMMIT');
+                            response.json({ success: true, msg: 'Offer deleted successfully', id: idOffer });
+                        }
+                    });
                 }
             });
         done();
@@ -319,6 +353,7 @@ module.exports = {
     getOffers,
     createOffer,
     updateOffer,
+    deleteOffer,
     myOffers,
     swipe,
     getImage,
