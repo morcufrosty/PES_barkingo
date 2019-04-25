@@ -100,13 +100,13 @@ const updateOffer = async (request, response) => {
                     client.query(
                         'UPDATE animals SET name=$1, offer=$2, race=$3, sex=$4, age=$5, description=$6, "idOwner"=$7 WHERE id=$8;', [name, type, race, sex, age, description, idOwn, idOffer],
                         (error, res) => {
-                        if (error) {
-                            console.error('Unknown error', error);
-                        } else {
-                            client.query('COMMIT');
-                            response.json({ success: true, msg: 'Offer updated successfully', id: idOffer });
-                        }
-                    });
+                            if (error) {
+                                console.error('Unknown error', error);
+                            } else {
+                                client.query('COMMIT');
+                                response.json({ success: true, msg: 'Offer updated successfully', id: idOffer });
+                            }
+                        });
                 }
             });
         done();
@@ -134,13 +134,13 @@ const deleteOffer = async (request, response) => {
                     client.query(
                         'UPDATE animals SET status=1 WHERE id=$1;', [idOffer],
                         (error, res) => {
-                        if (error) {
-                            console.error('Unknown error', error);
-                        } else {
-                            client.query('COMMIT');
-                            response.json({ success: true, msg: 'Offer deleted successfully', id: idOffer });
-                        }
-                    });
+                            if (error) {
+                                console.error('Unknown error', error);
+                            } else {
+                                client.query('COMMIT');
+                                response.json({ success: true, msg: 'Offer deleted successfully', id: idOffer });
+                            }
+                        });
                 }
             });
         done();
@@ -216,14 +216,18 @@ const swipe = async (request, response) => {
 
 const getImage = async (request, response) => {
     const { id: idOffer } = request.params;
-    const data = fs.readFile(path.join(homedir, imagesDir, idOffer + '.jpg'), (err, data) => {
-        const img = Buffer.from(data, 'base64');
-        console.log(img);
-        response.writeHead(200, {
-            'Content-Type': 'image/jpeg',
-            'Content-Length': img.length
-        });
-        response.end(img);
+    fs.readFile(path.join(homedir, imagesDir, idOffer + '.jpg'), (err, data) => {
+        if (err) {
+            console.error(err);
+            response.json({ success: false, msg: 'Image couldn\'t be found' });
+        } else {
+            const img = Buffer.from(data, 'base64');
+            response.writeHead(200, {
+                'Content-Type': 'image/jpeg',
+                'Content-Length': img.length
+            });
+            response.end(img);
+        }
     });
 }
 
