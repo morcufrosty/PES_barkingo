@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Dimensions, Image, Animated, PanResponder,TouchableOpacity,Alert } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, Image, Animated, PanResponder,TouchableOpacity,Alert, ActivityIndicator } from 'react-native';
 import { LinearGradient } from 'expo';
 import { AsyncStorage } from 'react-native';
 
@@ -68,8 +68,19 @@ export default class swipeScreen extends React.Component {
 
   }
 
+
+  async cacheImage(id, image){
+    await AsyncStorage.setItem(id, image);
+  }
+
+  async getImage(id){
+    return await AsyncStorage.getItem(id);
+  }
+
+
   async handleSwipeLeft(){
     const id = this.state.offers[this.state.currentIndex].id;
+    AsyncStorage.removeItem(id);
     const t = await AsyncStorage.getItem("access_token");
     tokenJson = JSON.parse(t);
     const response = await this.SwipeToAPI(tokenJson, id, 'left');
@@ -239,15 +250,18 @@ export default class swipeScreen extends React.Component {
 
       for (let i = 0; i < ofertesAux.length; i++) {
         let id = ofertesAux[i].id;
-        let image = await this.getImageFromServer(tokenJson, id);
-        if (image.status != 404) {
-          imatgesAux[i] = image;
+        let image;
+        image = await this.getImage(id);
+        if(image === null){
+         image = await this.getImageFromServer(tokenJson, id);
+         this.cacheImage(id, image);
+         imatgesAux[i] = image;
         }
         else {
-        imatgesAux[i] = null;
+          imatgesAux[i] = image;
 
         }
-
+        
       }
 
     }
@@ -341,6 +355,8 @@ export default class swipeScreen extends React.Component {
             padding: '10%',
             paddingTop: '30%'
           }}>
+       <ActivityIndicator size="small" color="#ffffff" />
+
 
           </LinearGradient>;
       }

@@ -7,7 +7,8 @@ import {
   Platform,
   Image,
   TouchableOpacity,
-  ToastAndroid
+  ToastAndroid,
+  ActivityIndicator
 } from 'react-native';
 import Button from './Button';
 import { LinearGradient } from 'expo'
@@ -128,6 +129,15 @@ export default class Swipe extends React.Component {
 
   }
 
+  async cacheImage(id, image){
+    await AsyncStorage.setItem(id, image);
+  }
+
+  async getImage(id){
+    return await AsyncStorage.getItem(id);
+  }
+
+
   async getImageFromServer(tokenJson, id){
     return fetch(`http://10.4.41.164/api/offers/${id}/image`, {
     method: 'GET',
@@ -156,33 +166,27 @@ export default class Swipe extends React.Component {
     noOfertes = false
 
     const responseOffers = await this.getMyOffersFromAPI(tokenJson);
-   // const responseUser = await this.getUserFromAPI(tokenJson);
+    // const responseUser = await this.getUserFromAPI(tokenJson);
 
     if (responseOffers.success) {
-     ofertesAux = responseOffers.offers
-     console.log(ofertesAux);
-    
+      ofertesAux = responseOffers.offers
+      console.log(ofertesAux);
 
-
-      for(let i = 0; i <ofertesAux.length; i++){
+      for (let i = 0; i < ofertesAux.length; i++) {
         let id = ofertesAux[i].id;
-        let image = await this.getImageFromServer(tokenJson, id);
-        console.log("HAAAAAAAAHAHAHHAHAHA")
-        if(image.status != 404){
-          console.log("SUPPPPPPPPPPPPPPPPPPPP")
-          imatgesAux[i] = image;
-          console.log(image.body);
+        let image;
+        image = await this.getImage(id);
+        if(image === null){
+         image = await this.getImageFromServer(tokenJson, id);
+         this.cacheImage(id, image);
+         imatgesAux[i] = image;
         }
-        else{   imatgesAux[i] = null;
-        console.log("NOPE")}
+        else {
+         imatgesAux[i] = image;
 
+        }
+        
       }
-
-      /*
-      for (let i = 0; i< this.state.images.length; i++){
-        console.log(this.state.images[i]);
-      }
-*/
 
     }
 
@@ -191,7 +195,7 @@ export default class Swipe extends React.Component {
 
     }
 
-    this.setState({isLoading: false, myOffers: ofertesAux, noOffers: noOfertes, images: imatgesAux})
+    this.setState({ isLoading: false, myOffers: ofertesAux, noOffers: noOfertes, images: imatgesAux })
 
 
   }
@@ -248,6 +252,8 @@ export default class Swipe extends React.Component {
             padding: '10%',
             paddingTop: '30%'
           }}>
+
+       <ActivityIndicator size="small" color="#ffffff" />
 
           </LinearGradient>;
       }
@@ -314,7 +320,7 @@ export default class Swipe extends React.Component {
 
           <View style={{ flex: 1, marginTop: 10 }}>
             <Button
-              onPress={() =>         this.setState({isLoading: true, myOffers: []})
+              onPress={() => this.setState({isLoading: true, myOffers: []})
 }
               title="Settings"
               color="#ff3b28"
