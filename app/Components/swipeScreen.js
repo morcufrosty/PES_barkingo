@@ -23,6 +23,7 @@ export default class swipeScreen extends React.Component {
     this.state = {
       currentIndex: 0,
       offers: [],
+      currentImageId: '',
       isLoading: true
     }
 
@@ -154,6 +155,23 @@ export default class swipeScreen extends React.Component {
       }
     })
   }
+
+  async handleGetImageFormOffers(id){
+
+    const t = await AsyncStorage.getItem('access_token');
+    tokenJson = JSON.parse(t);
+    const response = await this.getImageFromOffer(tokenJson, id);
+   // this.setState({isLoading:false});
+ 
+
+    console.log(response);
+    if(response.success){
+      Alert.alert("success", response.msg);
+    }
+    else{
+      Alert.alert("Error", response.msg);
+    }
+  }
     async handleGetOffers(){
 
       const t = await AsyncStorage.getItem('access_token');
@@ -193,10 +211,24 @@ export default class swipeScreen extends React.Component {
 
   }
 
+  async getImageFromOffer(tokenJson, id) {
+    
+
+    return fetch(`http://10.4.41.164/api/offers/${id}/image`, {
+      method: 'GET',
+      headers: {
+        Accept: '*',
+        'x-access-token': tokenJson.token
+      }
+      });
+
+  }
+
 
   renderUsers = () => {
 
     return this.state.offers.map((item, i) => {
+    
 
       if (i < this.state.currentIndex) {
         return null
