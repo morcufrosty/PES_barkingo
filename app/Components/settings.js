@@ -6,7 +6,9 @@ import {
   Alert,
   Platform,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  ToastAndroid,
+  ActivityIndicator
 } from 'react-native';
 import Button from './Button';
 import { LinearGradient } from 'expo'
@@ -14,6 +16,7 @@ import { Facebook } from 'expo';
 import TextInputWTitle from './inputText.js';
 import InputPassword from './inputPassword.js';
 import { AsyncStorage } from 'react-native';
+import {NavigationActions} from 'react-navigation';
 
 const placeHolderImages = [
   { id: "1", uri: require('../assets/1.jpg') },
@@ -34,23 +37,23 @@ const placeHolderImages = [
 
 ]
 
+const initialState = {
+  myOffers:[],
+  images:[],
+  isLoading:true,
+  username:'',
+  noOffers:false
+};
 export default class Swipe extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = {
-      myOffers:[],
-      images:[],
-      isLoading:true,
-      username:'',
-      noOffers:false
-
-    }
+    this.state = initialState;
   }
 
+
   async handleDeleteOffer(id){
-    console.log(id);
-   
+    this.setState({isLoading: true, myOffers: []})
     const t = await AsyncStorage.getItem('access_token');
     tokenJson = JSON.parse(t);
     console.log(tokenJson);
@@ -58,8 +61,13 @@ export default class Swipe extends React.Component {
 
     console.log(response);
     if(response.success){
-      Alert.alert("success", response.msg);
-    }
+      ToastAndroid.showWithGravityAndOffset(
+        'Offer deleted succesfully',
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM,
+        25,
+        50,
+      );    }
     else{
       Alert.alert("No ha borrat", response.msg);
     }
@@ -74,7 +82,13 @@ export default class Swipe extends React.Component {
       'Content-Type': 'application/json',
       'x-access-token': tokenJson.token
     }
-   
+
+  }).then((response) => response.json())
+    .then((responseJson) => {
+      console.log(responseJson.msg);
+      return responseJson;
+    }).catch((error) => {
+      console.error(error);
     });
 }
 
@@ -116,6 +130,15 @@ export default class Swipe extends React.Component {
 
   }
 
+  async cacheImage(id, image){
+    await AsyncStorage.setItem(id, image);
+  }
+
+  async getImage(id){
+    return await AsyncStorage.getItem(id);
+  }
+
+
   async getImageFromServer(tokenJson, id){
     return fetch(`http://10.4.41.164/api/offers/${id}/image`, {
     method: 'GET',
@@ -123,62 +146,67 @@ export default class Swipe extends React.Component {
       Accept: '*',
       'x-access-token': tokenJson.token
     }
-  })
+  }).then((response => {return response.text()}))
 
   }
 
   editOffer(id){
-    this.props.navigation.navigate('formNewOffer', {id: id, update:true});
-  }
+    this.props.navigation.navigate('formNewOffer', {id: id, update: true});
+  } 
 
+  refresh() {
+    this.setState(initialState)
+  }
 
   async handleStart() {
 
     const token = await AsyncStorage.getItem("access_token");
     tokenJson = JSON.parse(token);
+    ofertesAux = []
+    imatgesAux = []
+    noOfertes = false
 
     const responseOffers = await this.getMyOffersFromAPI(tokenJson);
-    const responseUser = await this.getUserFromAPI(tokenJson);
+    // const responseUser = await this.getUserFromAPI(tokenJson);
 
-    this.setState({isLoading: false})
     if (responseOffers.success) {
-      this.setState({ myOffers: responseOffers.offers })
-      console.log( responseOffers.offers)
+      ofertesAux = responseOffers.offers
+      console.log(ofertesAux);
 
-      for(let i = 0; i < this.state.myOffers.length; i++){
-        let id = this.state.myOffers[i].id;
-        let image = await this.getImageFromServer(tokenJson, id);
-        if(image.status != 404){
-          this.state.images[i] = image;
+      for (let i = 0; i < ofertesAux.length; i++) {
+        let id = ofertesAux[i].id;
+        let image;
+        image = await this.getImage(id);
+        if(image === null){
+         image = await this.getImageFromServer(tokenJson, id);
+         this.cacheImage(id, image);
+         imatgesAux[i] = image;
         }
-        else   this.state.images[i] = null;
+        else {
+         imatgesAux[i] = image;
 
+        }
+        
       }
-
-      /*
-      for (let i = 0; i< this.state.images.length; i++){
-        console.log(this.state.images[i]);
-      }
-*/
 
     }
 
     else {
-      this.setState({noOffers: true});
+      noOfertes = true
 
     }
 
-    if(responseUser.success){
-      this.setState({username: responseUser.name});
+    this.setState({ isLoading: false, myOffers: ofertesAux, noOffers: noOfertes, images: imatgesAux })
 
-    }
 
   }
 
 
   renderPublications = () => {
 
+
     return this.state.myOffers.map((item,index)=>{
+
       return(
       <View>
         <Image style={{
@@ -187,7 +215,7 @@ export default class Swipe extends React.Component {
           marginLeft: 10,
           width: 200,
           height: 200
-        }} source ={{uri: `data:image/jpg;base64,${this.state.images[index]}`}} />
+        }} source ={{uri: `data:image/jpeg;base64,${this.state.images[index]}`}} />
       <TouchableOpacity
         style={{
           position:'absolute',
@@ -216,7 +244,7 @@ export default class Swipe extends React.Component {
   render() {
 
     if (this.state.isLoading) {
-      this.handleStart();
+        this.handleStart();
         return   <LinearGradient colors = {['#F15A24', '#D4145A']}
           start = {[0, 1]}
           end = {[1, 0]}
@@ -226,8 +254,11 @@ export default class Swipe extends React.Component {
             paddingTop: '30%'
           }}>
 
+       <ActivityIndicator size="small" color="#ffffff" />
+
           </LinearGradient>;
       }
+
       var noOffersMessage;
       if (this.state.noOffers) {
         noOffersMessage = (
@@ -281,7 +312,7 @@ export default class Swipe extends React.Component {
           {noOffersMessage}
           <View style={{ flex: 1, marginTop: 10 }}>
             <Button
-              onPress={() => this.props.navigation.navigate('formNewOffer')}
+              onPress={() => this.props.navigation.navigate('formNewOffer', {onGoBack: () => this.refresh() })}
               title="New Publication"
               color="#ff3b28"
 
@@ -290,7 +321,8 @@ export default class Swipe extends React.Component {
 
           <View style={{ flex: 1, marginTop: 10 }}>
             <Button
-              onPress={() => Alert.alert("S'haurien d'obrir coses")}
+              onPress={() => this.setState({isLoading: true, myOffers: []})
+}
               title="Settings"
               color="#ff3b28"
 
@@ -302,8 +334,15 @@ export default class Swipe extends React.Component {
               onPress={async () => {
 
                 await AsyncStorage.removeItem('access_token');
-                this.props.navigation.replace('LoginScreen');
-              }
+                this.props
+                               .navigation
+                               .dispatch(NavigationActions.reset(
+                                 {
+                                    index: 0,
+                                    actions: [
+                                      NavigationActions.navigate({ routeName: 'Login'})
+                                    ]
+                                  }));              }
               }
               title="Log out"
               color="#FF0000"

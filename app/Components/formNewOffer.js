@@ -135,6 +135,9 @@ async handlePress(){
   else if(this.state.description === ''){
     Alert.alert("Error", "Please specify a description of the pet" )
   }
+  else if(this.state.image === null){
+    Alert.alert("Error", "Please add an image" )
+  }
   else{
 
    const token = await AsyncStorage.getItem("access_token");
@@ -151,7 +154,7 @@ async handlePress(){
 
 
   if(response.success){
-    Alert.alert("Amazing!", response.msg);
+  //  Alert.alert("Amazing!", response.msg);
     if(this.state.image != null){
       console.log("Enviant imatge")
       data = new FormData()
@@ -161,8 +164,9 @@ async handlePress(){
         name: this.state.name
       });
       const responsePostImg = await this.handleSubmitImage(jsonToken, response.id, data);
-      Alert.alert(responsePostImg);
-
+    //  Alert.alert(responsePostImg);
+    this.props.navigation.state.params.onGoBack();
+    this.props.navigation.goBack();
     }
 
   }
@@ -170,6 +174,7 @@ async handlePress(){
     Alert.alert("Error", response.msg);
   }
 }
+
 
 }
 
@@ -268,7 +273,7 @@ _pickImage = async () => {
     if (!result.cancelled) {
       this.setState({ image: result });
     }
-  }
+//  }
 //  else{
   //  Alert.alert("Error", "No camera permission" )
 //

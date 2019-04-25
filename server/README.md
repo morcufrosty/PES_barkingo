@@ -131,7 +131,7 @@ Animal species:
 
 -   ### GET `/offers/:id`: returns information about a single offer
 
-    -   ### Query parameters
+    -   ### Address parameters
 
         -   `id` [`required`]: identifier of the requested offer.
 
@@ -179,9 +179,6 @@ Animal species:
 
 -   ### GET `/myOffers`: returns all the given user's offers
 
-    -   #### Query parameters
-        -   `id` [`required`]: id of the user.
-
     -   #### Response
         -   `offers`: list containing the offers that match the given search parameters, with the following attributes for each element.
             -   `id`: identifier of the animal, which will be used in further requests.
@@ -228,7 +225,7 @@ Animal species:
         -   `success`: Is either `true` or `false`.
         -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
         -   `list`: List of races and its species, with the following attributes in each element.
-            -   `idSpecies`: 0,
-            -   `speciesName`: 
-            -   `idRace`: 0
-            -   `raceName`
+            -   `idSpecies`: id of the species (`integer`)
+            -   `speciesName`: name of the species
+            -   `idRace`: identifier of race (`integer`)
+            -   `raceName`: name of the race
