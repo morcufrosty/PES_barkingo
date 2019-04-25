@@ -48,7 +48,7 @@ export default class formNewOffer extends React.Component {
 
     let response;
     console.log("WE IN")
- 
+
 
 
    if(this.props.navigation.getParam('update', false)){
@@ -61,13 +61,13 @@ export default class formNewOffer extends React.Component {
    console.log("SUCCESS");
     }
 
-  
+
 
   this.setState({
     update:this.props.navigation.getParam('update', false),
     id : this.props.navigation.getParam('id', '1'),
-    name: response.offer.name, 
-    description: response.offer.description, sex: response.offer.sex, race: '0', type:'0', age: '6',  isLoading: false, 
+    name: response.offer.name,
+    description: response.offer.description, sex: response.offer.sex, race: '0', type:'0', age: '6',  isLoading: false,
   })
 }else this.setState({isLoading:false})
 
@@ -106,7 +106,7 @@ async handlePress(){
     this.state.sex,
     this.state.age,
     this.state.description,
-    this.state.image, 
+    this.state.image,
     this.state.update
 )
 
@@ -157,7 +157,7 @@ async handlePress(){
       data = new FormData()
       data.append('image', {
         uri: this.state.image.uri,
-        type: 'image/jpeg', 
+        type: 'image/jpeg',
         name: this.state.name
       });
       const responsePostImg = await this.handleSubmitImage(jsonToken, response.id, data);
@@ -474,7 +474,6 @@ render(){
                 </TextInput>
             </View>
 
-            <KeyboardAwareScrollView>
               <View style={{ flex: 1, paddingVertical: 10 }}>
                 <Text style={{ color: 'white' }}>{"Description"}</Text>
                 <TextInput
@@ -485,7 +484,6 @@ render(){
                   style={{ backgroundColor: 'white', opacity: 0.5, borderRadius: 5, paddingVertical: 0, height: 80 }}>
                   </TextInput>
               </View>
-            </KeyboardAwareScrollView>
 
             <View style={{ flex: 1,paddingVertical: 10 }}>
             <Text style={{ color: 'white' }}>{"Sexe"}</Text>
