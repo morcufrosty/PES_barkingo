@@ -135,6 +135,9 @@ async handlePress(){
   else if(this.state.description === ''){
     Alert.alert("Error", "Please specify a description of the pet" )
   }
+  else if(this.state.image === null){
+    Alert.alert("Error", "Please add an image" )
+  }
   else{
 
    const token = await AsyncStorage.getItem("access_token");
