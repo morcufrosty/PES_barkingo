@@ -14,7 +14,7 @@ SELECT * FROM users WHERE email='hola@gmail.com'
     animals."idOwner",
     animals.status,
     "offerType"."TypeName",
-    animals."urlImage"
+    animals.age
    FROM
      animals, "offerType"
   WHERE animals.status = 0 AND animals.offer = "offerType"."idType";
