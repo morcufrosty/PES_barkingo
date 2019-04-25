@@ -46,11 +46,6 @@ const createOffer = async (request, response) => {
             done();
             return;
         }
-        if (typeof race === 'string') {
-            response.json({ success: false, msg: 'Race can\'t be a string' });
-            done();
-            return;
-        }
         await client.query('BEGIN');
         if (iniDate === undefined) iniDate = "null";
         if (endDate === undefined) endDate = "null";
