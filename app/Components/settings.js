@@ -98,7 +98,9 @@ export default class Swipe extends React.Component {
 
   }
 
-
+  editOffer(id){
+    this.props.navigation.navigate('formNewOffer', {id: id, update:true});
+  } 
 
 
   async handleStart() {
@@ -163,7 +165,7 @@ export default class Swipe extends React.Component {
           top:10,
           right:10
         }}
-        onPress={()=>Alert.alert("Editar puto gos!")}>
+        onPress={()=> this.editOffer(item.id)}>
           <Image
             source={{uri: "https://www.pngrepo.com/download/42233/pencil-edit-button.png", width: 40, height: 40}} />
         </TouchableOpacity>
