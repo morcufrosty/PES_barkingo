@@ -15,6 +15,7 @@ import { Facebook } from 'expo';
 import TextInputWTitle from './inputText.js';
 import InputPassword from './inputPassword.js';
 import { AsyncStorage } from 'react-native';
+import {NavigationActions} from 'react-navigation';
 
 const placeHolderImages = [
   { id: "1", uri: require('../assets/1.jpg') },
@@ -35,19 +36,21 @@ const placeHolderImages = [
 
 ]
 
+const initialState = {
+  myOffers:[],
+  images:[],
+  isLoading:true,
+  username:'',
+  noOffers:false
+};
 export default class Swipe extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = {
-      myOffers:[],
-      images:[],
-      isLoading:true,
-      username:'',
-      noOffers:false
-
-    }
+    this.state = initialState;
   }
+
+
 
   async handleDeleteOffer(id){
     this.setState({isLoading: true, myOffers: []})
@@ -141,6 +144,9 @@ export default class Swipe extends React.Component {
     this.props.navigation.navigate('formNewOffer', {id: id, update:true});
   }
 
+  refresh() {
+    this.setState(initialState)
+  }
 
   async handleStart() {
 
@@ -238,6 +244,7 @@ export default class Swipe extends React.Component {
 
           </LinearGradient>;
       }
+
       var noOffersMessage;
       if (this.state.noOffers) {
         noOffersMessage = (
@@ -291,7 +298,7 @@ export default class Swipe extends React.Component {
           {noOffersMessage}
           <View style={{ flex: 1, marginTop: 10 }}>
             <Button
-              onPress={() => this.props.navigation.navigate('formNewOffer')}
+              onPress={() => this.props.navigation.navigate('formNewOffer', {onGoBack: () => this.refresh() })}
               title="New Publication"
               color="#ff3b28"
 
@@ -313,8 +320,15 @@ export default class Swipe extends React.Component {
               onPress={async () => {
 
                 await AsyncStorage.removeItem('access_token');
-                this.props.navigation.replace('LoginScreen');
-              }
+                this.props
+                               .navigation
+                               .dispatch(NavigationActions.reset(
+                                 {
+                                    index: 0,
+                                    actions: [
+                                      NavigationActions.navigate({ routeName: 'Login'})
+                                    ]
+                                  }));              }
               }
               title="Log out"
               color="#FF0000"

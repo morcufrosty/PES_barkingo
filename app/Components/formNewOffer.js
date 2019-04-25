@@ -154,7 +154,7 @@ async handlePress(){
 
 
   if(response.success){
-    Alert.alert("Amazing!", response.msg);
+  //  Alert.alert("Amazing!", response.msg);
     if(this.state.image != null){
       console.log("Enviant imatge")
       data = new FormData()
@@ -164,8 +164,9 @@ async handlePress(){
         name: this.state.name
       });
       const responsePostImg = await this.handleSubmitImage(jsonToken, response.id, data);
-      Alert.alert(responsePostImg);
-
+    //  Alert.alert(responsePostImg);
+    this.props.navigation.state.params.onGoBack();
+    this.props.navigation.goBack();
     }
 
   }
@@ -173,6 +174,7 @@ async handlePress(){
     Alert.alert("Error", response.msg);
   }
 }
+
 
 }
 
