@@ -252,8 +252,9 @@ async updateOfferUsingAPI(tokenJson){
 
 //OPCIONS DE L'IMAGE PICKER
 _pickImage = async () => {
-  const permissions = Permissions.CAMERA_ROLL;
-  const { status } = await Permissions.askAsync(permissions);
+  const { cameraRollStatus } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+  const { cameraStatus } = await Permissions.askAsync(Permissions.CAMERA);
+    if (cameraRollStatus === 'granted') {
 
 
 
@@ -267,7 +268,13 @@ _pickImage = async () => {
     if (!result.cancelled) {
       this.setState({ image: result });
     }
-  };
+  }
+  else{
+    Alert.alert("Error", "No camera permission" )
+
+  }
+  }
+  ;
 
 render(){
 
