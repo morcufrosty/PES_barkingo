@@ -223,10 +223,11 @@ const getImage = async (request, response) => {
         } else {
             const img = new Buffer.from(data).toString('base64');
             response.writeHead(200, {
-                'Content-Type': 'image/jpeg',
+                // 'Content-Type': 'image/jpeg',
                 'Content-Length': img.length
             });
             response.end(img);
+            console.log(response);
         }
     });
 }
