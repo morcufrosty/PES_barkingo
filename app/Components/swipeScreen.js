@@ -8,10 +8,10 @@ const SCREEN_WIDTH = Dimensions.get('window').width
 import Icon from 'react-native-vector-icons/Ionicons'
 const PlaceHolderImages = [
   {  uri: require('../assets/1.jpg') },
-  { uri: require('../assets/2.jpg') },
+  {  uri: require('../assets/2.jpg') },
   {  uri: require('../assets/3.jpg') },
   {  uri: require('../assets/4.jpg') },
-  { uri: require('../assets/5.jpg') }
+  {  uri: require('../assets/5.jpg') }
 ]
 
 export default class swipeScreen extends React.Component {
@@ -144,7 +144,8 @@ export default class swipeScreen extends React.Component {
 
         }
         if (gestureState.dy > -5  && gestureState.dy < 5 && gestureState.dx > -5 &&  gestureState.dx < 5) {
-          this.props.navigation.navigate('perfilAnimal');
+          this.props.navigation.navigate('perfilAnimal', {id: this.state.offers[this.state.currentIndex].id, image: this.state.images[this.state.currentIndex]} );
+          
 
         }
         else {
@@ -163,7 +164,6 @@ export default class swipeScreen extends React.Component {
     tokenJson = JSON.parse(t);
     const response = await this.getImageFromOffer(tokenJson, id);
    // this.setState({isLoading:false});
- 
 
     console.log(response);
     if(response.success){
@@ -173,6 +173,7 @@ export default class swipeScreen extends React.Component {
       Alert.alert("Error", response.msg);
     }
   }
+
     async handleGetOffers(){
 
       const t = await AsyncStorage.getItem('access_token');
@@ -212,7 +213,7 @@ export default class swipeScreen extends React.Component {
 
   }
 
-  async getImageFromOffer(tokenJson, id) {
+  async getImageFromServer(tokenJson, id) {
     
 
     return fetch(`http://10.4.41.164/api/offers/${id}/image`, {
@@ -221,9 +222,44 @@ export default class swipeScreen extends React.Component {
         Accept: '*',
         'x-access-token': tokenJson.token
       }
-      });
+      }).then((response => {return response.text()}));
 
   }
+
+  async handleStart(){
+
+    let ofertesAux = []
+    let imatgesAux = []
+    const t = await AsyncStorage.getItem('access_token');
+    tokenJson = JSON.parse(t);
+    const response = await this.getOffers(tokenJson);
+   
+    if (response.success) {
+      ofertesAux = response.offers
+
+      for (let i = 0; i < ofertesAux.length; i++) {
+        let id = ofertesAux[i].id;
+        let image = await this.getImageFromServer(tokenJson, id);
+        if (image.status != 404) {
+          imatgesAux[i] = image;
+        }
+        else {
+        imatgesAux[i] = null;
+
+        }
+
+      }
+
+    }
+
+
+    this.setState({ isLoading: false, offers: ofertesAux, images: imatgesAux })
+
+
+  }
+
+
+
 
 
   renderUsers = () => {
@@ -253,7 +289,7 @@ export default class swipeScreen extends React.Component {
 
               <Image
                 style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20 }}
-                source={PlaceHolderImages[this.state.currentIndex].uri} />
+                source={{uri:`data:image/jpeg;base64,${this.state.images[i]}`}} />
 
           </Animated.View>
 
@@ -282,7 +318,7 @@ export default class swipeScreen extends React.Component {
             </Animated.View>
             <Image
               style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20 }}
-              source={PlaceHolderImages[this.state.currentIndex+1].uri} />
+              source={{uri:`data:image/jpeg;base64,${this.state.images[i+1]}`}}  />
 
           </Animated.View>
 
@@ -290,19 +326,7 @@ export default class swipeScreen extends React.Component {
       }
     }).reverse()
   }
-  async handleStart(){
-      this.handleGetOffers();
-      for(let i = 0; i < this.state.offers.length; i++){
-        let id = this.state.offers[i].id;
-        let image = await this.handleGetImageFormOffers(id);
-        if(image.status != 404){
-          this.state.images[i] = image;
-        }
-        else   this.state.images[i] = null;
-
-      }
-      this.setState({isLoading:false});
-  }
+  
 
   render() {
 

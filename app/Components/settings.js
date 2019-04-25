@@ -51,7 +51,6 @@ export default class Swipe extends React.Component {
   }
 
 
-
   async handleDeleteOffer(id){
     this.setState({isLoading: true, myOffers: []})
     const t = await AsyncStorage.getItem('access_token');
