@@ -49,8 +49,11 @@ export default class Swipe extends React.Component {
   }
 
   async handleDeleteOffer(id){
+    console.log(id);
+   
     const t = await AsyncStorage.getItem('access_token');
     tokenJson = JSON.parse(t);
+    console.log(tokenJson);
     const response = await this.deleteOffer(tokenJson, id);
    
     console.log(response);
@@ -58,21 +61,21 @@ export default class Swipe extends React.Component {
       Alert.alert("success", response.msg);
     }
     else{
-      Alert.alert("Error", response.msg);
+      Alert.alert("No ha borrat", response.msg);
     }
   }
   
   async deleteOffer(tokenJson, id){
-
-    return fetch(`ttp://10.4.41.164/api/offers/${id}`, {
+    console.log(id);
+    return fetch(`http://10.4.41.164/api/offers/${id}`, {
     method: 'DELETE',
     headers: {
-      Accept: '*',
+      Accept: 'application/json',
       'Content-Type': 'application/json',
       'x-access-token': tokenJson.token
     }
    
-    })
+    });
 }
 
   async getMyOffersFromAPI(tokenJson){

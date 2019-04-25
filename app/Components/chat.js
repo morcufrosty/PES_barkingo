@@ -13,6 +13,7 @@ import { LinearGradient } from 'expo'
 import { Facebook } from 'expo';
 import TextInputWTitle from './inputText.js';
 import InputPassword from './inputPassword.js';
+import { AsyncStorage } from 'react-native';
 
 
 const placeHolderImages = [
@@ -20,12 +21,15 @@ const placeHolderImages = [
   { id: "2", uri: require('../assets/2.jpg') },
   { id: "3", uri: require('../assets/3.jpg') },
   { id: "4", uri: require('../assets/4.jpg') },
-  { id: "5", uri: require('../assets/5.jpg') }
+  { id: "5", uri: require('../assets/5.jpg') },
+  { id: "6", uri: require('../assets/3.jpg') },
+  { id: "7", uri: require('../assets/4.jpg') },
+  { id: "8", uri: require('../assets/5.jpg') }
 ]
 
 export default class Chat extends React.Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       favouriteOffers:[],
       images:[],
@@ -37,7 +41,7 @@ export default class Chat extends React.Component {
 
     const t = await AsyncStorage.getItem('access_token');
     tokenJson = JSON.parse(t);
-    const response = await this.getOffers(tokenJson);
+    const response = await this.getMyFavouritesFromAPI(tokenJson);
     console.log(response);
     if(response.success){
       this.setState({favouriteOffers: response.offers});
@@ -86,7 +90,7 @@ renderFavorites = () => {
   }
 
   renderChats = () => {
-    return placeHolderImages.map((data,index)=>{
+    return this.state.favouriteOffers.map((data,index)=>{
       return(
       <View>
         <Image style={{
@@ -106,7 +110,7 @@ renderFavorites = () => {
         color: 'white',
         fontWeight: "bold"
       }}
-      onPress={()=>Alert.alert("Editar puto gos!")}>Nom del puto gos
+      onPress={()=>Alert.alert("Editar puto gos!")}>{data.name}
       </Text>
       <Text
         style={{
@@ -124,6 +128,11 @@ renderFavorites = () => {
   }
 
   render() {
+    if (this.state.isLoading){
+      this.handleGetFavouriteOffers();
+      console.log(this.state.favouriteOffers);
+      this.setState({isLoading: false});
+    }
     return (
       <LinearGradient colors={['#F15A24', '#D4145A']}
         start={[0, 1]}
