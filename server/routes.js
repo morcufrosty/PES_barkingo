@@ -63,6 +63,8 @@ router.post('/offers', db.createOffer);
 
 router.put('/offers/:id', db.updateOffer);
 
+router.delete('/offers/:id', db.deleteOffer);
+
 router.get('/myOffers', db.myOffers);
 
 router.post('/offers/:id', db.swipe);
