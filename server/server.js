@@ -20,6 +20,16 @@ var router = require('./routes.js');
 // all of our routes will be prefixed with /api
 app.use('/api', router);
 
+app.use((req, res, next) => {
+    return res.status(404).json({ success: false, msg: 'Route' + req.url + ' Not found.' });
+});
+
+// 500 - Any server error
+app.use( (err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ success: false, msg: 'Server error' });
+});
+
 // START THE SERVER
 // =============================================================================
 app.listen(port);
