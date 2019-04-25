@@ -1,5 +1,6 @@
 const pool = require('./db');
 const uuidv4 = require('uuid/v4');
+const fs = require('fs');
 const path = require('path');
 const homedir = require('os').homedir();
 const imagesDir = '.images';
@@ -181,7 +182,15 @@ const swipe = async (request, response) => {
 
 const getImage = async (request, response) => {
     const { id: idOffer } = request.params;
-    response.sendFile(path.join(homedir, imagesDir, idOffer + '.jpg'));
+    const data = fs.readFile(path.join(homedir, imagesDir, idOffer + '.jpg'), (err, data) => {
+        const img = Buffer.from(data, 'base64');
+        console.log(img);
+        response.writeHead(200, {
+            'Content-Type': 'image/png',
+            'Content-Length': img.length
+        });
+        response.end(img);
+    });
 }
 
 const uploadImage = async (request, response) => {

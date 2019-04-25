@@ -209,7 +209,7 @@ Animal species:
 
 -   ### GET `/offers/:id/image`
     -   #### Response
-        -   JPG file of the requested image.
+        -   JPG file of the requested image, encoded with base64.
 
 -   ### POST `/offers/:id/image`
     -   #### Query parameters
