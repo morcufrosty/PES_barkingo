@@ -6,7 +6,8 @@ import {
   Alert,
   Platform,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  ToastAndroid
 } from 'react-native';
 import Button from './Button';
 import { LinearGradient } from 'expo'
@@ -49,14 +50,20 @@ export default class Swipe extends React.Component {
   }
 
   async handleDeleteOffer(id){
+    this.setState({isLoading: true, myOffers: []})
     const t = await AsyncStorage.getItem('access_token');
     tokenJson = JSON.parse(t);
     const response = await this.deleteOffer(tokenJson, id);
 
     console.log(response);
     if(response.success){
-      Alert.alert("success", response.msg);
-    }
+      ToastAndroid.showWithGravityAndOffset(
+        'Offer deleted succesfully',
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM,
+        25,
+        50,
+      );    }
     else{
       Alert.alert("Error", response.msg);
     }
@@ -72,7 +79,13 @@ export default class Swipe extends React.Component {
       'x-access-token': tokenJson.token
     }
 
-    })
+  }).then((response) => response.json())
+    .then((responseJson) => {
+      console.log(responseJson.msg);
+      return responseJson;
+    }).catch((error) => {
+      console.error(error);
+    });
 }
 
   async getMyOffersFromAPI(tokenJson){
@@ -213,7 +226,7 @@ export default class Swipe extends React.Component {
   render() {
 
     if (this.state.isLoading) {
-      this.handleStart();
+        this.handleStart();
         return   <LinearGradient colors = {['#F15A24', '#D4145A']}
           start = {[0, 1]}
           end = {[1, 0]}
@@ -287,7 +300,8 @@ export default class Swipe extends React.Component {
 
           <View style={{ flex: 1, marginTop: 10 }}>
             <Button
-              onPress={() => Alert.alert("S'haurien d'obrir coses")}
+              onPress={() =>         this.setState({isLoading: true, myOffers: []})
+}
               title="Settings"
               color="#ff3b28"
 
