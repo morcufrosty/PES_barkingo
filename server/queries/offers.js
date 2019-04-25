@@ -221,7 +221,7 @@ const getImage = async (request, response) => {
             console.error(err);
             response.json({ success: false, msg: 'Image couldn\'t be found' });
         } else {
-            const img = Buffer.from(data, 'base64');
+            const img = new Buffer.from(data).toString('base64');
             response.writeHead(200, {
                 'Content-Type': 'image/jpeg',
                 'Content-Length': img.length
