@@ -220,7 +220,7 @@ const getImage = async (request, response) => {
         const img = Buffer.from(data, 'base64');
         console.log(img);
         response.writeHead(200, {
-            'Content-Type': 'image/png',
+            'Content-Type': 'image/jpeg',
             'Content-Length': img.length
         });
         response.end(img);
