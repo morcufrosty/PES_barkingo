@@ -273,8 +273,8 @@ _pickImage = async () => {
   //  Alert.alert("Error", "No camera permission" )
 //
 //  }
-  }
-  ;
+  
+  
 
 render(){
 
@@ -441,6 +441,7 @@ render(){
                      </View>
                    </View>);
     }
+    
   return (
     <LinearGradient colors={['#F15A24', '#D4145A']}
       start={[0, 1]}
