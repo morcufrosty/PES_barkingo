@@ -279,7 +279,7 @@ _pickImage = async () => {
 //
 //  }
   
-  
+}
 
 render(){
 
