@@ -252,8 +252,11 @@ async updateOfferUsingAPI(tokenJson){
 
 //OPCIONS DE L'IMAGE PICKER
 _pickImage = async () => {
-  Permissions.getAsync(Permissions.CAMERA_ROLL)
-        .then(console.log)
+  const permissions = Permissions.CAMERA_ROLL;
+  const { status } = await Permissions.askAsync(permissions);
+
+
+
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [5, 5],

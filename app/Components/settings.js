@@ -31,7 +31,7 @@ const placeHolderImages = [
   { id: "13", uri: require('../assets/3.jpg') },
   { id: "14", uri: require('../assets/4.jpg') },
   { id: "15", uri: require('../assets/5.jpg') },
-  
+
 ]
 
 export default class Swipe extends React.Component {
@@ -52,7 +52,7 @@ export default class Swipe extends React.Component {
     const t = await AsyncStorage.getItem('access_token');
     tokenJson = JSON.parse(t);
     const response = await this.deleteOffer(tokenJson, id);
-   
+
     console.log(response);
     if(response.success){
       Alert.alert("success", response.msg);
@@ -61,17 +61,17 @@ export default class Swipe extends React.Component {
       Alert.alert("Error", response.msg);
     }
   }
-  
+
   async deleteOffer(tokenJson, id){
 
-    return fetch(`ttp://10.4.41.164/api/offers/${id}`, {
+    return fetch(`http://10.4.41.164/api/offers/${id}`, {
     method: 'DELETE',
     headers: {
       Accept: '*',
       'Content-Type': 'application/json',
       'x-access-token': tokenJson.token
     }
-   
+
     })
 }
 
@@ -126,7 +126,7 @@ export default class Swipe extends React.Component {
 
   editOffer(id){
     this.props.navigation.navigate('formNewOffer', {id: id, update:true});
-  } 
+  }
 
 
   async handleStart() {
