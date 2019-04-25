@@ -157,7 +157,7 @@ const myOffers = async (request, response) => {
         }
         await client.query('BEGIN');
         await client.query(
-            'SELECT "openedOffers".id, "openedOffers".name, "openedOffers".sex, "openedOffers".race, "openedOffers"."TypeName", "openedOffers"."urlImage" FROM "openedOffers", users WHERE users.name=$1 and users.email=$2 and "openedOffers"."idOwner" = users.id;',
+            'SELECT "openedOffers".id, "openedOffers".name, "openedOffers".sex, "openedOffers".race, "openedOffers"."TypeName" FROM "openedOffers", users WHERE users.name=$1 and users.email=$2 and "openedOffers"."idOwner" = users.id;',
             [name, email], (err, result) => {
                 if (err || result.rowCount == 0) {
                     console.log(err)
