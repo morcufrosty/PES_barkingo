@@ -42,7 +42,7 @@ export default class Swipe extends React.Component {
       myOffers:[],
       images:[],
       isLoading:true,
-      username:'',
+      username:'username',
       noOffers:false
 
     }
@@ -94,12 +94,12 @@ export default class Swipe extends React.Component {
       Accept: '*',
       'x-access-token': tokenJson.token
     }
-  })
+  }).then((response => {return response.text()}))
 
   }
 
   editOffer(id){
-    this.props.navigation.navigate('formNewOffer', {id: id, update:true});
+    this.props.navigation.navigate('formNewOffer', {id: id, update: true});
   } 
 
 
@@ -107,22 +107,30 @@ export default class Swipe extends React.Component {
 
     const token = await AsyncStorage.getItem("access_token");
     tokenJson = JSON.parse(token);
+    ofertesAux = []
+    imatgesAux = []
+    noOfertes = false
 
     const responseOffers = await this.getMyOffersFromAPI(tokenJson);
-    const responseUser = await this.getUserFromAPI(tokenJson);
+   // const responseUser = await this.getUserFromAPI(tokenJson);
 
-    this.setState({isLoading: false})
     if (responseOffers.success) {
-      this.setState({ myOffers: responseOffers.offers })
-      console.log( responseOffers.offers)
+     ofertesAux = responseOffers.offers
+     console.log(ofertesAux);
+    
 
-      for(let i = 0; i < this.state.myOffers.length; i++){
-        let id = this.state.myOffers[i].id;
+
+      for(let i = 0; i <ofertesAux.length; i++){
+        let id = ofertesAux[i].id;
         let image = await this.getImageFromServer(tokenJson, id);
+        console.log("HAAAAAAAAHAHAHHAHAHA")
         if(image.status != 404){
-          this.state.images[i] = image;
+          console.log("SUPPPPPPPPPPPPPPPPPPPP")
+          imatgesAux[i] = image;
+          console.log(image.body);
         }
-        else   this.state.images[i] = null;
+        else{   imatgesAux[i] = null;
+        console.log("NOPE")}
 
       }
 
@@ -135,21 +143,21 @@ export default class Swipe extends React.Component {
     }
 
     else {
-      this.setState({noOffers: true});
+      noOfertes = true
 
     }
 
-    if(responseUser.success){
-      this.setState({username: responseUser.name});
+    this.setState({isLoading: false, myOffers: ofertesAux, noOffers: noOfertes, images: imatgesAux})
 
-    }
 
   }
 
 
   renderPublications = () => {
 
+
     return this.state.myOffers.map((item,index)=>{
+
       return(
       <View>
         <Image style={{
@@ -158,7 +166,7 @@ export default class Swipe extends React.Component {
           marginLeft: 10,
           width: 200,
           height: 200
-        }} source ={{uri: `data:image/jpg;base64,${this.state.images[index]}`}} />
+        }} source ={{uri: `data:image/jpeg;base64,${this.state.images[index]}`}} />
       <TouchableOpacity
         style={{
           position:'absolute',

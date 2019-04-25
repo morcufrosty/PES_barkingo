@@ -113,7 +113,7 @@ export default class perfilAnimal extends React.Component {
         <View style={{flex: 1}}>
 
           <Text style={{color: 'white', fontSize: 20, flex: 1}}>Name: {this.state.name}</Text>
-          <Text style={{color: 'white', fontSize: 20, flex: 1}}>Age: {Math.floor(Math.random()*17) + 1}</Text>
+          <Text style={{color: 'white', fontSize: 20, flex: 1}}>Age: {this.state.age}</Text>
           <Text style={{color: 'white', fontSize: 20, flex: 1}}>Race: {this.state.race}</Text>
           <Text style={{color: 'white', fontSize: 20, flex: 1}}>Sex: {this.state.sex}</Text>
           <Text style={{color: 'white', fontSize: 20, flex: 1}}>Description: {this.state.description}</Text>

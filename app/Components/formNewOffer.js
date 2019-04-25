@@ -161,8 +161,7 @@ async handlePress(){
         name: this.state.name
       });
       const responsePostImg = await this.handleSubmitImage(jsonToken, response.id, data);
-      Alert.alert(responsePostImg);
-
+      //Alert.alert(responsePostImg.msg)
     }
 
   }
