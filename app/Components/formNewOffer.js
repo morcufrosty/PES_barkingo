@@ -268,7 +268,7 @@ _pickImage = async () => {
     if (!result.cancelled) {
       this.setState({ image: result });
     }
-  }
+//  }
 //  else{
   //  Alert.alert("Error", "No camera permission" )
 //
