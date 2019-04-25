@@ -81,8 +81,7 @@ export default class perfilAnimal extends React.Component {
       image: image
 
      })
-     console.log(this.state.image)
-
+     
   }
 
   
