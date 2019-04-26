@@ -27,7 +27,11 @@
       "bundleIdentifier": "com.barkingoComp.barkingo"
     },
     "android":{
-      "package": "com.barkingoComp.barkingo"
+      "package": "com.barkingoComp.barkingo",
+      "permissions":[
+         "WRITE_EXTERNAL_STORAGE",
+         "CAMERA"
+      ]
     }
 
   }

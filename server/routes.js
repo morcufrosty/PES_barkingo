@@ -31,7 +31,8 @@ router.use((req, res, next) => {
         // verifies secret and checks exp
         jwt.verify(token, creds.secret, (err, decoded) => {
             if (err) {
-                return res.json({ success: false, message: 'Failed to authenticate token.' });
+                res.status(403);
+                return res.json({ success: false, msg: 'Failed to authenticate token.' });
             } else {
                 // if everything is good, save to request for use in other routes
                 req.decoded = decoded;
@@ -43,14 +44,42 @@ router.use((req, res, next) => {
         // return an error
         return res.status(403).send({
             success: false,
-            message: 'No token provided.',
+            msg: 'No token provided.',
         });
     }
 });
 
+router.get('/user', db.user);
+
 router.get('/middletest', (req, res) => {
     res.json({ hey: 'nice' });
 });
+
+router.get('/offers', db.getOffers);
+
+router.get('/offers/:id', db.offerDetails);
+
+router.post('/offers', db.createOffer);
+
+router.put('/offers/:id', db.updateOffer);
+
+router.delete('/offers/:id', db.deleteOffer);
+
+//router.delete('/offers/:id/elim', db.eliminateOffer);
+
+router.get('/myOffers', db.myOffers);
+
+router.post('/offers/:id', db.swipe);
+
+router.get('/offers/:id/image', db.getImage);
+
+router.post('/offers/:id/image', db.uploadImage);
+
+router.get('/favouriteOffers', db.favourites);
+
+router.delete('/offers/seen', db.deleteSeenOffers);
+
+router.get('/races', db.racesList);
 
 // more routes for our API will happen here
 
