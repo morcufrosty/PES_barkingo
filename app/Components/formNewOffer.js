@@ -18,13 +18,18 @@ import { AsyncStorage } from 'react-native';
 //import ImagePicker from 'react-native-image-picker';
 import { ImagePicker, Permissions } from 'expo';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {Ionicons} from "@expo/vector-icons";
+import Autocomplete from 'react-native-autocomplete-input';
+import races from "./races"
+import raceList from './races.json';
+
 
 
 
 export default class formNewOffer extends React.Component {
-
-
-
+  componentDidMount(){
+        this.setState({raceList});
+    }
   constructor(props) {
     super(props)
     this.state = {
@@ -40,41 +45,87 @@ export default class formNewOffer extends React.Component {
       description:'',
       image: null,
       update: false,
-      isLoading: true
+      isLoading: true,
+      query: '',
+      data: [  "Apples",
+        "Broccoli",
+        "Chicken",
+        "Duck",
+        "Eggs",
+        "Fish",
+        "Granola",
+        "Hash Browns",],
+      raceList: []
+
     }
   }
 
   async prepareUpdate(){
-
     let response;
-    console.log("WE IN")
 
+    /*
+    var jsonOfList = await AsyncStorage.getItem("raceList");
+    if(jsonOfList === null){
 
+      console.log("seartching race list")
+
+      const token = await AsyncStorage.getItem("access_token");
+      tokenJson = JSON.parse(token);
+      response = await this.getRaceListFromAPI(tokenJson);
+      console.log("got race list from api")
+
+      if(response.success){
+        console.log(response.list)
+        const list = response.list;
+        var jsonOfList = await AsyncStorage.setItem("raceList", JSON.stringify(list));
+      //  console.log(JSON.parse(jsonOfList))
+      }else{
+        console.log(response.msg)
+      }
+    }
+    //console.log(JSON.parse(jsonOfList));
+
+    */
 
    if(this.props.navigation.getParam('update', false)){
      console.log("UPDATE")
 
-   const token = await AsyncStorage.getItem("access_token");
-   tokenJson = JSON.parse(token);
-   response = await this.getOfferInfoFromAPI(tokenJson,this.props.navigation.getParam('id', '1'));
-   if(response.success){
-   console.log("SUCCESS");
-    }
-
-
-
-  this.setState({
-    update:this.props.navigation.getParam('update', false),
-    id : this.props.navigation.getParam('id', '1'),
-    name: response.offer.name,
-    description: response.offer.description, sex: response.offer.sex, race: '0', type:'0', age: '6',  isLoading: false,
-  })
-}else this.setState({isLoading:false})
+     const token = await AsyncStorage.getItem("access_token");
+     tokenJson = JSON.parse(token);
+     response = await this.getOfferInfoFromAPI(tokenJson,this.props.navigation.getParam('id', '1'));
+     if(response.success){
+     console.log("SUCCESS");
+      }
+      this.setState({
+      update:this.props.navigation.getParam('update', false),
+      id : this.props.navigation.getParam('id', '1'),
+      name: response.offer.name,
+      description: response.offer.description, sex: response.offer.sex, race: '0', type:'0', age: '6',  isLoading: false,
+    })
+  }else this.setState({isLoading:false})
 
   }
 
+  /*
+  async getRaceListFromAPI(tokenJson){
+    console.log(tokenJson);
+    return fetch('http://10.4.41.164/api/races', {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'x-access-token': tokenJson.token
+    }
+  }).then((response) => response.json())
+    .then((responseJson) => {
+      console.log(responseJson);
+      return responseJson;
+    }).catch((error) => {
+      console.error(error);
+    });
 
-
+  }
+  */
   async getOfferInfoFromAPI(tokenJson, id){
 
     return fetch(`http://10.4.41.164/api/offers/${id}`, {
@@ -172,10 +223,10 @@ async handlePress(){
     if(this.state.update){
 
     //ANAR ENRERE IGUAL QUE HA DALT
-     
+
     }
 
-  
+
 
   }
   else{
@@ -286,8 +337,21 @@ _pickImage = async () => {
   //  Alert.alert("Error", "No camera permission" )
 //
 //  }
-  
+
 }
+findRace(query) {
+
+    //method called everytime when we change the value of the input
+    if (query === '') {
+      //if the query is null then return blank
+      return [];
+    }
+    const { raceList } = this.state;
+     //making a case insensitive regular expression to get similar value from the film json
+     const regex = new RegExp(`${query.trim()}`, 'i');
+     //return the filtered film array according the query from the input
+     return raceList.filter(race => race.raceName.search(regex) >= 0);
+   }
 
 render(){
 
@@ -454,7 +518,10 @@ render(){
                      </View>
                    </View>);
     }
-    
+    const { query } = this.state;
+    const raceList = this.findRace(query);
+    const comp = (a, b) => a.toLowerCase().trim() === b.toLowerCase().trim();
+
   return (
     <LinearGradient colors={['#F15A24', '#D4145A']}
       start={[0, 1]}
@@ -481,7 +548,27 @@ render(){
                 style={{ backgroundColor: 'white', opacity: 0.5, borderRadius: 5, paddingVertical: 0, height: 35 }}></TextInput>
             </View>
 
-
+            <Autocomplete
+               autoCapitalize="none"
+               autoCorrect={false}
+            //   containerStyle={styles.autocompleteContainer}
+               //data to show in suggestion
+               data={raceList.length === 1 && comp(query, raceList[0].title) ? [] : raceList}
+               //default value if you want to set something in input
+               defaultValue={query}
+               /*onchange of the text changing the state of the query which will trigger
+               the findFilm method to show the suggestions*/
+               onChangeText={text => this.setState({ query: text })}
+               placeholder="Enter the film title"
+               renderItem={({ raceName }) => (
+                 //you can change the view you want to show in suggestion from here
+                 <TouchableOpacity onPress={() => this.setState({ query: raceName })}>
+                   <Text>
+                     {raceName}
+                   </Text>
+                 </TouchableOpacity>
+               )}
+             />
 
             <View style={{ flex: 1, paddingVertical: 10 }}>
               <Text style={{ color: 'white' }}>{"Race"}</Text>
