@@ -9,6 +9,7 @@
   "dependencies": {
     "expo": "^32.0.0",
     "expo-google-sign-in": "^4.0.0",
+    "lz-string": "^1.4.4",
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
     "react-native-autocomplete-input": "^4.0.0",

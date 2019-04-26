@@ -14,6 +14,7 @@ import { LinearGradient } from 'expo'
 import { Facebook } from 'expo';
 import TextInputWTitle from './inputText.js';
 import InputPassword from './inputPassword.js';
+import {decompressFromUTF16} from 'lz-string';
 import { AsyncStorage } from 'react-native';
 
 
@@ -73,22 +74,11 @@ export default class Chat extends React.Component {
 
       for (let i = 0; i < ofertesAux.length; i++) {
         let id = ofertesAux[i].id;
-        let image;
-        image = await this.getImage(id);
-        if(image === null){
-         image = await this.getImageFromServer(tokenJson, id);
-         this.cacheImage(id, image);
-         imatgesAux[i] = image;
-        }
-        else {
-          imatgesAux[i] = image;
-
-        }
-        
+        let image = await this.getImageFromServer(tokenJson, id); 
+        imatgesAux[i] = image;
       }
 
     }
-
 
     this.setState({ isLoading: false, favouriteOffers: ofertesAux, images: imatgesAux })
     console.log(this.state);
