@@ -111,39 +111,19 @@ export default class perfilAnimal extends React.Component {
       end = {[1, 0]}
       style={{
         flex:1,
-        padding: '10%',
-        paddingTop: '30%'
       }}>
-
-      <View style={{flex: 1, flexDirection: 'row'}}>
-        <View >
-        </View>
-
-
         <View style={{flex: 1}}>
-
-          <Text style={{color: 'white', fontSize: 20, flex: 1}}>Name: {this.state.name}</Text>
-          <Text style={{color: 'white', fontSize: 20, flex: 1}}>Age: {this.state.age}</Text>
-          <Text style={{color: 'white', fontSize: 20, flex: 1}}>Race: {this.state.race}</Text>
-          <Text style={{color: 'white', fontSize: 20, flex: 1}}>Sex: {this.state.sex}</Text>
-          <Text style={{color: 'white', fontSize: 20, flex: 1}}>Description: {this.state.description}</Text>
-
-
-          <Image style={{
-          borderRadius:5,
-          overflow:'hidden',
-          marginLeft: 10,
-          width: 200,
-          height: 200
+        <Image style={{
+          width: '100%',
+          height: '50%',
+          marginBottom: '5%'
         }} source ={{uri: `data:image/jpeg;base64,${this.state.image}}`}} />
-      
-
+          <Text style={{color: 'white', fontSize: 30, fontWeight:'bold', flex: 1, marginLeft:'10%'}}>{this.state.name}</Text>
+          <Text style={{color: 'white', fontSize: 20, flex: 1, marginLeft:'10%'}}>Age: {this.state.age}</Text>
+          <Text style={{color: 'white', fontSize: 20, flex: 1, marginLeft:'10%'}}>Race: {this.state.race}</Text>
+          <Text style={{color: 'white', fontSize: 20, flex: 1, marginLeft:'10%'}}>Sex: {this.state.sex}</Text>
+          <Text style={{color: 'white', fontSize: 20, flex: 1, marginLeft:'10%'}}>Description: {this.state.description}</Text>
         </View>
-
-
-      </View>
-      <View>
-      </View>
       </LinearGradient>
     );
   }
