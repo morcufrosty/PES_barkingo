@@ -4,7 +4,6 @@ const fs = require('fs');
 const path = require('path');
 const homedir = require('os').homedir();
 const imagesDir = '.images';
-const Base64String = require('lz-string');
 
 const getOffers = async (request, response) => {
     const { email, name } = request.decoded;
@@ -255,13 +254,12 @@ const getImage = async (request, response) => {
             console.error(err);
             response.json({ success: false, msg: 'Image couldn\'t be found' });
         } else {
-            let string = new Buffer.from(data).toString('base64');
-            var compressed = Base64String.compressToUTF16(string);
+            const img = new Buffer.from(data).toString('base64');
             response.writeHead(200, {
-                'Content-Type': 'application/octet-stream',
-                'Content-Length': compressed.length
+                // 'Content-Type': 'image/jpeg',
+                'Content-Length': img.length
             });
-            response.end(compressed);
+            response.end(img);
         }
     });
 }

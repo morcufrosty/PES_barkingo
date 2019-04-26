@@ -18,7 +18,7 @@ import { Facebook } from 'expo';
 import TextInputWTitle from './inputText.js';
 import InputPassword from './inputPassword.js';
 import { AsyncStorage } from 'react-native';
-import {NavigationActions} from 'react-navigation';
+import {NavigationActions, StackActions} from 'react-navigation';
 
 const placeHolderImages = [
   { id: "1", uri: require('../assets/1.jpg') },
@@ -331,16 +331,11 @@ export default class Swipe extends React.Component {
               onPress={async () => {
 
                 await AsyncStorage.removeItem('access_token');
-                this.props
-                  .navigation
-                  .dispatch(NavigationActions.reset(
-                    {
-                      index: 0,
-                      actions: [
-                        NavigationActions.navigate({ routeName: 'Login' })
-                      ]
-                    }));
-              }
+                const resetAction = StackActions.reset({
+                    index: 0,
+                    actions: [NavigationActions.navigate({ routeName: 'Login' })],
+                  });
+                  this.props.navigation.dispatch(resetAction);             }
               }
               title="Log out"
               color="#FF0000"
