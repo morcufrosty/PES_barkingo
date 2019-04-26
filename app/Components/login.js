@@ -15,6 +15,8 @@ import InputPassword from './inputPassword.js';
 import { AsyncStorage } from 'react-native';
 import * as Expo from "expo"
 //import { getMaxListeners } from 'cluster';
+import { StackActions, NavigationActions } from 'react-navigation';
+
 
 const ACCESS_TOKEN = 'access_token';
 
@@ -68,7 +70,11 @@ export default class App extends React.Component {
       if (resFromBarkingo.success){
        this.storeToken(resFromBarkingo.token);
        this.resetState();
-       this.props.navigation.navigate('AppAfterLogin');
+       const resetAction = StackActions.reset({
+        index: 0,
+        actions: [NavigationActions.navigate({ routeName: 'AppAfterLogin' })],
+      });
+      this.props.navigation.dispatch(resetAction);
       }
 
       } else {
@@ -98,7 +104,11 @@ export default class App extends React.Component {
           this.setState({
               isLoading: false
           });
-          this.props.navigation.navigate('AppAfterLogin');
+       const resetAction = StackActions.reset({
+        index: 0,
+        actions: [NavigationActions.navigate({ routeName: 'AppAfterLogin' })],
+      });
+      this.props.navigation.dispatch(resetAction);
         }
         else{
           //Renew token
@@ -208,7 +218,11 @@ export default class App extends React.Component {
         const responseBarkingo = await this.renewFacebookTokenToAPI(responseFbJson.name, responseFbJson.email, token);
         if (responseBarkingo.success) {
           this.storeToken(responseBarkingo.token);
-          this.props.navigation.navigate('AppAfterLogin');
+       const resetAction = StackActions.reset({
+        index: 0,
+        actions: [NavigationActions.navigate({ routeName: 'AppAfterLogin' })],
+      });
+      this.props.navigation.dispatch(resetAction);
         }
         else Alert.Alert("Login error", responseBarkingo.msg);
 
@@ -299,7 +313,11 @@ export default class App extends React.Component {
             console.log(response.token);
             this.storeToken(response.token);
             this.resetState();
-            this.props.navigation.navigate('AppAfterLogin');
+       const resetAction = StackActions.reset({
+        index: 0,
+        actions: [NavigationActions.navigate({ routeName: 'AppAfterLogin' })],
+      });
+      this.props.navigation.dispatch(resetAction);
           this.setState({ count: 0 });
         }
       }
@@ -324,7 +342,11 @@ export default class App extends React.Component {
         console.log(response.token);
         this.storeToken(response.token);
         this.resetState();
-        this.props.navigation.navigate('AppAfterLogin');
+       const resetAction = StackActions.reset({
+        index: 0,
+        actions: [NavigationActions.navigate({ routeName: 'AppAfterLogin' })],
+      });
+      this.props.navigation.dispatch(resetAction);
       }
       else {
         if (response.msg === undefined)
