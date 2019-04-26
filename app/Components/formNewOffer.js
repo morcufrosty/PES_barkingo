@@ -548,27 +548,6 @@ render(){
                 style={{ backgroundColor: 'white', opacity: 0.5, borderRadius: 5, paddingVertical: 0, height: 35 }}></TextInput>
             </View>
 
-            <Autocomplete
-               autoCapitalize="none"
-               autoCorrect={false}
-            //   containerStyle={styles.autocompleteContainer}
-               //data to show in suggestion
-               data={raceList.length === 1 && comp(query, raceList[0].title) ? [] : raceList}
-               //default value if you want to set something in input
-               defaultValue={query}
-               /*onchange of the text changing the state of the query which will trigger
-               the findFilm method to show the suggestions*/
-               onChangeText={text => this.setState({ query: text })}
-               placeholder="Enter the film title"
-               renderItem={({ raceName }) => (
-                 //you can change the view you want to show in suggestion from here
-                 <TouchableOpacity onPress={() => this.setState({ query: raceName })}>
-                   <Text>
-                     {raceName}
-                   </Text>
-                 </TouchableOpacity>
-               )}
-             />
 
             <View style={{ flex: 1, paddingVertical: 10 }}>
               <Text style={{ color: 'white' }}>{"Race"}</Text>

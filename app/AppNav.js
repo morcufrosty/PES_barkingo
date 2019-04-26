@@ -91,19 +91,7 @@ const TabNavigator = createBottomTabNavigator(
          />       )
      },
   },
-  form: {
-    screen: formNewOffer,
-    navigationOptions: {
-       tabBarLabel:"",
-       tabBarIcon: ({focused, tintColor }) => (
-         <TabIcon
-             iconDefault='comment'
-             iconFocused='comment'
-             focused={focused}
-             tintColor={tintColor}
-         />       )
-     },
-  }
+
 },
 
 

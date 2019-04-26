@@ -81,7 +81,6 @@ export default class Chat extends React.Component {
     }
 
     this.setState({ isLoading: false, favouriteOffers: ofertesAux, images: imatgesAux })
-    console.log(this.state);
 
   }
 
