@@ -117,7 +117,7 @@ export default class perfilAnimal extends React.Component {
           width: '100%',
           height: '50%',
           marginBottom: '5%'
-        }} source ={{uri: `data:image/jpeg;base64,${this.state.image}}`}} />
+        }} source ={{uri: `data:image/jpeg;base64,${this.state.image}`}} />
           <Text style={{color: 'white', fontSize: 30, fontWeight:'bold', flex: 1, marginLeft:'10%'}}>{this.state.name}</Text>
           <Text style={{color: 'white', fontSize: 20, flex: 1, marginLeft:'10%'}}>Age: {this.state.age}</Text>
           <Text style={{color: 'white', fontSize: 20, flex: 1, marginLeft:'10%'}}>Race: {this.state.race}</Text>
