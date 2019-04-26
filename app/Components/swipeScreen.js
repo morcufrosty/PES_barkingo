@@ -76,12 +76,22 @@ export default class swipeScreen extends React.Component {
     return await AsyncStorage.getItem(id);
   }
 
+refresh(){
+  this.setState({isLoading: true, offers:[],images:[], currentIndex:0})
+}
+
 
   async handleSwipeLeft(){
     const id = this.state.offers[this.state.currentIndex].id;
     const t = await AsyncStorage.getItem("access_token");
     tokenJson = JSON.parse(t);
     const response = await this.SwipeToAPI(tokenJson, id, 'left');
+
+    if( this.state.currentIndex === (this.state.offers.length)){
+      console.log("Refresh");
+      this.refresh();
+    }
+
 
   }
 
@@ -90,7 +100,12 @@ export default class swipeScreen extends React.Component {
     const t = await AsyncStorage.getItem("access_token");
     tokenJson = JSON.parse(t);
     const response = await this.SwipeToAPI(tokenJson, id, 'right');
-    console.log(response);
+
+    if( this.state.currentIndex === (this.state.offers.length)){
+      console.log("Refresh");
+      this.refresh();
+
+    }
   }
 
 
@@ -242,6 +257,8 @@ export default class swipeScreen extends React.Component {
     const t = await AsyncStorage.getItem('access_token');
     tokenJson = JSON.parse(t);
     const response = await this.getOffers(tokenJson);
+    console.log(response);
+
    
     if (response.success) {
       ofertesAux = response.offers
@@ -266,6 +283,8 @@ export default class swipeScreen extends React.Component {
 
 
   renderUsers = () => {
+
+    if(this.state.offers.length != 0){
 
     return this.state.offers.map((item, i) => {
     
@@ -329,6 +348,9 @@ export default class swipeScreen extends React.Component {
       }
     }).reverse()
   }
+  else return( <Text onPress={() => {this.refresh()}} style={{ color: '#ffffff', fontSize: 17, margin: 'auto', marginTop: '50%', flex: 1, textAlign: 'center', fontWeight: '800', padding: 10,  }}> There are no more offers </Text> )
+
+}
   
 
   render() {
