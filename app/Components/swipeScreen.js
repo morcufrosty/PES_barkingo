@@ -332,7 +332,7 @@ export default class swipeScreen extends React.Component {
             </Animated.View>
             <Image
               style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20 }}
-              source={{uri:`data:image/jpeg;base64,${this.state.images[i+1]}`}}  />
+              source={{uri:`data:image/jpeg;base64,${this.state.images[this.state.currentIndex + 1]}`}}  />
 
           </Animated.View>
 

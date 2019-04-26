@@ -167,7 +167,7 @@ export default class Swipe extends React.Component {
     noOfertes = false
 
     const responseOffers = await this.getMyOffersFromAPI(tokenJson);
-    // const responseUser = await this.getUserFromAPI(tokenJson);
+    const responseUser = await this.getUserFromAPI(tokenJson);
 
     if (responseOffers.success) {
       ofertesAux = responseOffers.offers
@@ -196,7 +196,7 @@ export default class Swipe extends React.Component {
 
     }
 
-    this.setState({ isLoading: false, myOffers: ofertesAux, noOffers: noOfertes, images: imatgesAux })
+    this.setState({ isLoading: false, myOffers: ofertesAux, noOffers: noOfertes, images: imatgesAux, username: responseUser.name })
 
 
   }

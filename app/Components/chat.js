@@ -6,7 +6,8 @@ import {
   Alert,
   Platform,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  ActivityIndicator
 } from 'react-native';
 import Button from './Button';
 import { LinearGradient } from 'expo'
@@ -37,18 +38,61 @@ export default class Chat extends React.Component {
     }
   }
 
+  async getImageFromServer(tokenJson, id) {
+    
+
+    return fetch(`http://10.4.41.164/api/offers/${id}/image`, {
+      method: 'GET',
+      headers: {
+        Accept: '*',
+        'x-access-token': tokenJson.token
+      }
+      }).then((response => {return response.text()}));
+
+  }
+
+  async cacheImage(id, image){
+    await AsyncStorage.setItem(id, image);
+  }
+
+  async getImage(id){
+    return await AsyncStorage.getItem(id);
+  }
+
+
   async handleGetFavouriteOffers(){
 
+    let ofertesAux = []
+    let imatgesAux = []
     const t = await AsyncStorage.getItem('access_token');
     tokenJson = JSON.parse(t);
     const response = await this.getMyFavouritesFromAPI(tokenJson);
-    console.log(response);
-    if(response.success){
-      this.setState({favouriteOffers: response.offers});
+   
+    if (response.success) {
+      ofertesAux = response.offers
+
+      for (let i = 0; i < ofertesAux.length; i++) {
+        let id = ofertesAux[i].id;
+        let image;
+        image = await this.getImage(id);
+        if(image === null){
+         image = await this.getImageFromServer(tokenJson, id);
+         this.cacheImage(id, image);
+         imatgesAux[i] = image;
+        }
+        else {
+          imatgesAux[i] = image;
+
+        }
+        
+      }
+
     }
-    else{
-      Alert.alert("Error", response.msg);
-    }
+
+
+    this.setState({ isLoading: false, favouriteOffers: ofertesAux, images: imatgesAux })
+    console.log(this.state);
+
   }
 
   async getMyFavouritesFromAPI(tokenJson){
@@ -73,7 +117,7 @@ export default class Chat extends React.Component {
 
 
 renderFavorites = () => {
-    return placeHolderImages.map((data,index)=>{
+    return this.state.favouriteOffers.map((data,index)=>{
       return(
       <View>
         <Image style={{
@@ -83,7 +127,7 @@ renderFavorites = () => {
           marginRight: 5,
           width: 80,
           height: 80
-        }} source ={placeHolderImages[index].uri} />
+        }} source ={{uri:`data:image/jpeg;base64,${this.state.images[index]}`}} />
       </View>
       )
     })
@@ -101,7 +145,7 @@ renderFavorites = () => {
           width: 100,
           height: 100,
           marginLeft: '5%'
-        }} source ={placeHolderImages[index].uri} />
+        }} source ={{uri:`data:image/jpeg;base64,${this.state.images[index]}`}} />
       <Text
       style={{
         position:'absolute',
@@ -129,9 +173,28 @@ renderFavorites = () => {
 
   render() {
     if (this.state.isLoading){
+
+      
+
       this.handleGetFavouriteOffers();
       console.log(this.state.favouriteOffers);
       this.setState({isLoading: false});
+
+      return   <LinearGradient colors = {['#F15A24', '#D4145A']}
+          start = {[0, 1]}
+          end = {[1, 0]}
+          style={{
+            flex:1,
+            padding: '10%',
+            paddingTop: '30%'
+          }}>
+       <ActivityIndicator size="small" color="#ffffff" />
+
+
+          </LinearGradient>;
+
+
+
     }
     return (
       <LinearGradient colors={['#F15A24', '#D4145A']}

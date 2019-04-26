@@ -135,7 +135,7 @@ async handlePress(){
   else if(this.state.description === ''){
     Alert.alert("Error", "Please specify a description of the pet" )
   }
-  else if(this.state.image === null){
+  else if(this.state.image === null && !this.state.update){
     Alert.alert("Error", "Please add an image" )
   }
   else{
@@ -168,6 +168,14 @@ async handlePress(){
     this.props.navigation.state.params.onGoBack();
     this.props.navigation.goBack();
     }
+
+    if(this.state.update){
+
+    //ANAR ENRERE IGUAL QUE HA DALT
+     
+    }
+
+  
 
   }
   else{
