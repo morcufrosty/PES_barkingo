@@ -206,7 +206,7 @@ Animal species:
 
 -   ### GET `/offers/:id/image`
     -   #### Response
-        -   JPG file of the requested image, encoded with base64.
+        -   JPG file of the requested image, encoded with base64 and compressed with 'lz-string' to UTF-16.
 
 -   ### POST `/offers/:id/image`
     -   #### Query parameters
