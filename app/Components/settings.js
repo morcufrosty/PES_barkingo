@@ -13,6 +13,8 @@ import {
 import Button from './Button';
 import { LinearGradient } from 'expo'
 import { Facebook } from 'expo';
+
+
 import TextInputWTitle from './inputText.js';
 import InputPassword from './inputPassword.js';
 import { AsyncStorage } from 'react-native';
@@ -175,18 +177,9 @@ export default class Swipe extends React.Component {
 
       for (let i = 0; i < ofertesAux.length; i++) {
         let id = ofertesAux[i].id;
-        let image;
-        image = await this.getImage(id);
-        if(image === null){
-         image = await this.getImageFromServer(tokenJson, id);
-         this.cacheImage(id, image);
-         imatgesAux[i] = image;
-        }
-        else {
-         imatgesAux[i] = image;
+        let image = await this.getImageFromServer(tokenJson, id); 
+        imatgesAux[i] = image;
 
-        }
-        
       }
 
     }
@@ -255,8 +248,11 @@ export default class Swipe extends React.Component {
           }}>
 
        <ActivityIndicator size="small" color="#ffffff" />
+      
 
           </LinearGradient>;
+
+          
       }
 
       var noOffersMessage;
@@ -330,23 +326,27 @@ export default class Swipe extends React.Component {
           </View>
 
           <View style={{ flex: 1, marginTop: 10 }}>
+            
             <Button
               onPress={async () => {
 
                 await AsyncStorage.removeItem('access_token');
                 this.props
-                               .navigation
-                               .dispatch(NavigationActions.reset(
-                                 {
-                                    index: 0,
-                                    actions: [
-                                      NavigationActions.navigate({ routeName: 'Login'})
-                                    ]
-                                  }));              }
+                  .navigation
+                  .dispatch(NavigationActions.reset(
+                    {
+                      index: 0,
+                      actions: [
+                        NavigationActions.navigate({ routeName: 'Login' })
+                      ]
+                    }));
+              }
               }
               title="Log out"
               color="#FF0000"
             />
+            
+
           </View>
         </ScrollView>
       </LinearGradient>
