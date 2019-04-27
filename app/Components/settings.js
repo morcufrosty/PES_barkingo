@@ -19,6 +19,7 @@ import TextInputWTitle from './inputText.js';
 import InputPassword from './inputPassword.js';
 import { AsyncStorage } from 'react-native';
 import { NavigationActions, StackActions } from 'react-navigation';
+const blankImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8NH36fwAHxAMhxQoqFAAAAABJRU5ErkJggg==";
 
 const placeHolderImages = [
     { id: "1", uri: require('../assets/1.jpg') },
@@ -178,9 +179,16 @@ export default class Swipe extends React.Component {
 
             for (let i = 0; i < ofertesAux.length; i++) {
                 let id = ofertesAux[i].id;
-                let image = await this.getImageFromServer(tokenJson, id);
-                imatgesAux[i] = image;
-            }
+                this.getImageFromServer(tokenJson, id, i).then( (value)=> {
+                  let images = this.state.images;
+                  let image = this.state.images[i];
+                  image = "data:image/jpeg;base64," + value;
+                  images[i] = image;
+                  this.setState({images: images});} ) 
+        
+                imatgesAux[i] = blankImage;
+        
+              }
         }
 
         else {
@@ -202,7 +210,7 @@ export default class Swipe extends React.Component {
                         marginLeft: 10,
                         width: 200,
                         height: 200
-                    }} source={{ uri: `data:image/jpeg;base64,${this.state.images[index]}` }} />
+                    }} source={{ uri: `${this.state.images[index]}` }} />
                     <TouchableOpacity
                         style={{
                             position: 'absolute',
