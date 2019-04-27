@@ -240,9 +240,7 @@ refresh(){
         let id = ofertesAux[i].id;
         this.getImageFromServer(tokenJson, id, i).then( (value)=> {
           let images = this.state.images;
-          let image = this.state.images[i];
-          image = "data:image/jpeg;base64," + value;
-          images[i] = image;
+          images[i] = "data:image/jpeg;base64," + value;
           this.setState({images: images});} ) 
 
         imatgesAux[i] = blankImage;

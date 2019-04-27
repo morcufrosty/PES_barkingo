@@ -180,11 +180,9 @@ export default class Swipe extends React.Component {
             for (let i = 0; i < ofertesAux.length; i++) {
                 let id = ofertesAux[i].id;
                 this.getImageFromServer(tokenJson, id, i).then( (value)=> {
-                  let images = this.state.images;
-                  let image = this.state.images[i];
-                  image = "data:image/jpeg;base64," + value;
-                  images[i] = image;
-                  this.setState({images: images});} ) 
+                    let images = this.state.images;
+                    images[i] = "data:image/jpeg;base64," + value;
+                    this.setState({images: images});} ) 
         
                 imatgesAux[i] = blankImage;
         
