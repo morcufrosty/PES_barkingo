@@ -19,16 +19,6 @@ import { AsyncStorage } from 'react-native';
 
 const blankImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8NH36fwAHxAMhxQoqFAAAAABJRU5ErkJggg==";
 
-const placeHolderImages = [
-    { id: "1", uri: require('../assets/1.jpg') },
-    { id: "2", uri: require('../assets/2.jpg') },
-    { id: "3", uri: require('../assets/3.jpg') },
-    { id: "4", uri: require('../assets/4.jpg') },
-    { id: "5", uri: require('../assets/5.jpg') },
-    { id: "6", uri: require('../assets/3.jpg') },
-    { id: "7", uri: require('../assets/4.jpg') },
-    { id: "8", uri: require('../assets/5.jpg') }
-]
 
 export default class Chat extends React.Component {
     constructor(props) {
@@ -167,6 +157,7 @@ export default class Chat extends React.Component {
     }
 
     render() {
+
         if (this.state.isLoading) {
 
 

@@ -5,13 +5,6 @@ import { AsyncStorage } from 'react-native';
 const SCREEN_HEIGHT = Dimensions.get('window').height
 const SCREEN_WIDTH = Dimensions.get('window').width
 import Icon from 'react-native-vector-icons/Ionicons'
-const PlaceHolderImages = [
-  {  uri: require('../assets/1.jpg') },
-  {  uri: require('../assets/2.jpg') },
-  {  uri: require('../assets/3.jpg') },
-  {  uri: require('../assets/4.jpg') },
-  {  uri: require('../assets/5.jpg') }
-]
 const blankImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8NH36fwAHxAMhxQoqFAAAAABJRU5ErkJggg==";
 
 export default class swipeScreen extends React.Component {
