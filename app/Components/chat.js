@@ -17,8 +17,6 @@ import InputPassword from './inputPassword.js';
 import { decompressFromUTF16 } from 'lz-string';
 import { AsyncStorage } from 'react-native';
 
-const blankImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8NH36fwAHxAMhxQoqFAAAAABJRU5ErkJggg==";
-
 
 export default class Chat extends React.Component {
     constructor(props) {
@@ -69,9 +67,7 @@ export default class Chat extends React.Component {
                     let images = this.state.images;
                     images[i] = "data:image/jpeg;base64," + value;
                     this.setState({images: images});} ) 
-        
-                imatgesAux[i] = blankImage;
-        
+                
               }
 
         }
@@ -111,7 +107,8 @@ export default class Chat extends React.Component {
                         marginLeft: 5,
                         marginRight: 5,
                         width: 80,
-                        height: 80
+                        height: 80,
+                        backgroundColor:"#f29797"
                     }} source={{ uri: `${this.state.images[index]}` }} />
                 </View>
             )
@@ -129,7 +126,8 @@ export default class Chat extends React.Component {
                         marginTop: 5,
                         width: 100,
                         height: 100,
-                        marginLeft: '5%'
+                        marginLeft: '5%',
+                        backgroundColor:"#f29797"
                     }} source={{ uri: `${this.state.images[index]}` }} />
                     <Text
                         style={{

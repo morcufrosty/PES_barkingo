@@ -5,7 +5,6 @@ import { AsyncStorage } from 'react-native';
 const SCREEN_HEIGHT = Dimensions.get('window').height
 const SCREEN_WIDTH = Dimensions.get('window').width
 import Icon from 'react-native-vector-icons/Ionicons'
-const blankImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8NH36fwAHxAMhxQoqFAAAAABJRU5ErkJggg==";
 
 export default class swipeScreen extends React.Component {
 
@@ -236,8 +235,6 @@ refresh(){
           images[i] = "data:image/jpeg;base64," + value;
           this.setState({images: images});} ) 
 
-        imatgesAux[i] = blankImage;
-
       }
 
     }
@@ -280,7 +277,7 @@ refresh(){
             </Animated.View>
 
               <Image
-                style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20 }}
+                style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20, backgroundColor:"#f29797" }}
                 source={{uri:`${this.state.images[i]}`}} />
 
           </Animated.View>
@@ -309,7 +306,7 @@ refresh(){
               <Text style={{ color: '#ffffff', fontSize: 32, fontWeight: '800', padding: 10 }}></Text>
             </Animated.View>
             <Image
-              style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20 }}
+              style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20, backgroundColor:"#f29797" }}
               source={{uri: `${this.state.images[this.state.currentIndex + 1]}`}}  />
 
           </Animated.View>

@@ -19,7 +19,6 @@ import TextInputWTitle from './inputText.js';
 import InputPassword from './inputPassword.js';
 import { AsyncStorage } from 'react-native';
 import { NavigationActions, StackActions } from 'react-navigation';
-const blankImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8NH36fwAHxAMhxQoqFAAAAABJRU5ErkJggg==";
 
 const initialState = {
     myOffers: [],
@@ -164,9 +163,7 @@ export default class Swipe extends React.Component {
                     let images = this.state.images;
                     images[i] = "data:image/jpeg;base64," + value;
                     this.setState({images: images});} ) 
-        
-                imatgesAux[i] = blankImage;
-        
+                
               }
         }
 
@@ -188,7 +185,8 @@ export default class Swipe extends React.Component {
                         overflow: 'hidden',
                         marginLeft: 10,
                         width: 200,
-                        height: 200
+                        height: 200,
+                        backgroundColor:"#f29797"
                     }} source={{ uri: `${this.state.images[index]}` }} />
                     <TouchableOpacity
                         style={{
