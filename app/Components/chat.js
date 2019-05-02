@@ -7,6 +7,7 @@ import {
     Platform,
     Image,
     TouchableOpacity,
+    TouchableHighlight,
     ActivityIndicator
 } from 'react-native';
 import Button from './Button';
@@ -101,6 +102,7 @@ export default class Chat extends React.Component {
         return this.state.favouriteOffers.map((data, index) => {
             return (
                 <View>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('perfilAnimalFavorites', {id: this.state.favouriteOffers[index].id, image: this.state.images[index]} )}>
                     <Image style={{
                         borderRadius: 40,
                         overflow: 'hidden',
@@ -110,6 +112,7 @@ export default class Chat extends React.Component {
                         height: 80,
                         backgroundColor:"#f29797"
                     }} source={{ uri: `${this.state.images[index]}` }} />
+                    </TouchableOpacity>
                 </View>
             )
         })

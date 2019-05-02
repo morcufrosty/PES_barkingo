@@ -16,7 +16,6 @@ export default class swipeScreen extends React.Component {
       currentIndex: 0,
       offers: [],
       images: [],
-      currentImageId: '',
       isLoading: true
     }
 
@@ -147,7 +146,7 @@ refresh(){
 
         }
         if (gestureState.dy > -5  && gestureState.dy < 5 && gestureState.dx > -5 &&  gestureState.dx < 5) {
-          this.props.navigation.navigate('perfilAnimal', {id: this.state.offers[this.state.currentIndex].id, image: this.state.images[this.state.currentIndex]} );
+          this.props.navigation.navigate('perfilAnimalSwipe', {id: this.state.offers[this.state.currentIndex].id, image: this.state.images[this.state.currentIndex]} );
           
 
         }

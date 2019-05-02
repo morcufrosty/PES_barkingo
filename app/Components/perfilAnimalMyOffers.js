@@ -14,7 +14,7 @@ import TextInputWTitle from './inputText.js';
 import InputPassword from './inputPassword.js';
 import { AsyncStorage } from 'react-native';
 
-export default class perfilAnimal extends React.Component {
+export default class perfilAnimalSwipe extends React.Component {
 
     constructor(props) {
         super(props);
@@ -75,6 +75,11 @@ export default class perfilAnimal extends React.Component {
             isLoading: false,
             image: image
         })
+    }
+
+
+    resetState(){
+        this.setState({isLoading: false, id: '1', image: ''})
     }
 
     render() {

@@ -180,14 +180,19 @@ export default class Swipe extends React.Component {
 
             return (
                 <View>
+                    <TouchableOpacity  onPress={() => this.props.navigation.navigate('perfilAnimalMyOffers', {id: this.state.myOffers[index].id, image: this.state.images[index]} )}
+>
                     <Image style={{
                         borderRadius: 5,
                         overflow: 'hidden',
                         marginLeft: 10,
                         width: 200,
                         height: 200,
-                        backgroundColor:"#f29797"
-                    }} source={{ uri: `${this.state.images[index]}` }} />
+                        backgroundColor:"#f29797",
+                    }} source={{ uri: `${this.state.images[index]}` }}
+                    />
+                    </TouchableOpacity>
+
                     <TouchableOpacity
                         style={{
                             position: 'absolute',
