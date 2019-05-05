@@ -400,4 +400,4 @@ module.exports = {
     offerDetails,
     deleteSeenOffers,
     racesList
-}
+};

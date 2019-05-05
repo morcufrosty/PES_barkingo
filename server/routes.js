@@ -12,13 +12,15 @@ router.get('/', (req, res) => {
     res.json({ message: 'Welcome to the Barkingo API!' });
 });
 
-router.post('/register', db.createUser);
+//LOGIN_REGISTER ROUTES
 
-router.post('/login', db.loginUser);
+router.post('/users/register', db.createUser);
 
-router.post('/renewGoogleToken', db.renewGoogleToken);
+router.post('/users/login', db.loginUser);
 
-router.post('/renewFacebookToken', db.renewFacebookToken);
+router.post('/users/renewGoogleToken', db.renewGoogleToken);
+
+router.post('/users/renewFacebookToken', db.renewFacebookToken);
 
 // molt important l'ordre d'aquest middleware pq simplement comprovarà
 // les requests que es troben a sota i per tant assegurarà que no calqui token per iniciar sessió i etc
@@ -55,31 +57,50 @@ router.get('/middletest', (req, res) => {
     res.json({ hey: 'nice' });
 });
 
-router.get('/offers', db.getOffers);
 
-router.get('/offers/:id', db.offerDetails);
+//USERS ROUTES
+
+router.get('/users/currentUser', db.currentUser);
+
+router.get('/users/:id', db.getUser);
+
+router.post('/users/:id', db.createUser);
+
+router.put('/users/:id', db.updateUser);
+
+router.get('/users/:id/image', db.getUserImage);
+
+router.post('/users/:id/image', db.createUserImage);
+
+
+//OFFERS ROUTES
+
+router.get('/offers', db.getOffers);
 
 router.post('/offers', db.createOffer);
 
+router.get('/offers/:id', db.offerDetails);
+
 router.put('/offers/:id', db.updateOffer);
+
+router.post('/offers/:id', db.swipe);
 
 router.delete('/offers/:id', db.deleteOffer);
 
 //router.delete('/offers/:id/elim', db.eliminateOffer);
 
-router.get('/myOffers', db.myOffers);
+router.get('/offers/currentUser', db.myOffers);
 
-router.post('/offers/:id', db.swipe);
+router.get('/offers/favourite', db.favourites);
 
 router.get('/offers/:id/image', db.getImage);
 
 router.post('/offers/:id/image', db.uploadImage);
 
-router.get('/favouriteOffers', db.favourites);
-
 router.delete('/offers/seen', db.deleteSeenOffers);
 
 router.get('/races', db.racesList);
+
 
 // more routes for our API will happen here
 
