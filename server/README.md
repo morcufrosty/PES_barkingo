@@ -225,16 +225,6 @@ Animal species:
         -   `success`: Is either `true` or `false`.
         -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
 
--   ### POST `/offers/:id`
-
-    -   #### Path parameters
-        -   `id` [`required`]: identifier of the offer id
-    -   #### Parameters
-        -   swipe [`required`]: specifies the swipe action direction on the offer, which can be `left` or `right`. This will decide if the offer gets added to the favourite list (viewable by the user) or the discarded list.
-    -   #### Response
-        -   `success`: Is either `true` or `false`.
-        -   `msg`: If success is `false`, short message explaining the causes of the error. If not, contains success message.
-
 -   ### DELETE `/offers/:id`: delete an offer. To do so you must be its creator.
 
     -   #### Response
