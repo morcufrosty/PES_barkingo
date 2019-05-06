@@ -3,13 +3,13 @@ const { createUser,
     renewGoogleToken,
     renewFacebookToken,
     user } = require('./login_register');
-    
+
 const { currentUser,
     getUser,
-    createUser,
+    createProfile,
     updateUser,
     getUserImage,
-    createUserImage } = require('./users');    
+    createUserImage } = require('./users');
 
 const { getOffers,
     createOffer,
@@ -35,7 +35,7 @@ module.exports = {
     //USERS
     currentUser,
     getUser,
-    createUser,
+    createProfile,
     updateUser,
     getUserImage,
     createUserImage,

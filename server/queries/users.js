@@ -13,7 +13,7 @@ const getUser = async (request, response) => {
     response.json({ success: false, msg: 'Not implemented yet getUser' });
 }
 
-const createUser = async (request, response) => {
+const createProfile = async (request, response) => {
     response.json({ success: false, msg: 'Not implemented yet createUser' });
 }
 
@@ -32,7 +32,7 @@ const createUserImage = async (request, response) => {
 module.exports = {
     currentUser,
     getUser,
-    createUser,
+    createProfile,
     updateUser,
     getUserImage,
     createUserImage

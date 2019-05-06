@@ -64,7 +64,7 @@ router.get('/users/currentUser', db.currentUser);
 
 router.get('/users/:id', db.getUser);
 
-router.post('/users/:id', db.createUser);
+router.post('/users/:id', db.createProfile);
 
 router.put('/users/:id', db.updateUser);
 
