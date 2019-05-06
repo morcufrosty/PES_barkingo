@@ -78,7 +78,7 @@ export default class Swipe extends React.Component {
 
     async getMyOffersFromAPI(tokenJson) {
 
-        return fetch('http://10.4.41.164/api/myOffers', {
+        return fetch('http://10.4.41.164/api/offers/currentUser', {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -87,7 +87,7 @@ export default class Swipe extends React.Component {
             }
         }).then((response) => response.json())
             .then((responseJson) => {
-                console.log(responseJson.msg);
+                console.log("THIS IS THE MESSAGE OF OFFERS:" +  responseJson.msg);
                 return responseJson;
             }).catch((error) => {
                 console.error(error);
@@ -97,7 +97,7 @@ export default class Swipe extends React.Component {
 
     async getUserFromAPI(tokenJson) {
 
-        return fetch('http://10.4.41.164/api/user', {
+        return fetch('http://10.4.41.164/api/users/currentUser', {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -106,7 +106,7 @@ export default class Swipe extends React.Component {
             }
         }).then((response) => response.json())
             .then((responseJson) => {
-                console.log(responseJson.msg);
+                console.log("THIS IS THE MESSAGE OF CURRENTUSER:" +responseJson.msg);
                 return responseJson;
             }).catch((error) => {
                 console.error(error);

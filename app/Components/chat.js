@@ -79,7 +79,7 @@ export default class Chat extends React.Component {
 
     async getMyFavouritesFromAPI(tokenJson) {
 
-        return fetch('http://10.4.41.164/api/favouriteOffers', {
+        return fetch('http://10.4.41.164/api/offers/favourite', {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
