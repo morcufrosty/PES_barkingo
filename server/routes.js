@@ -51,13 +51,6 @@ router.use((req, res, next) => {
     }
 });
 
-router.get('/user', db.user);
-
-router.get('/middletest', (req, res) => {
-    res.json({ hey: 'nice' });
-});
-
-
 //USERS ROUTES
 
 router.get('/users/currentUser', db.currentUser);
@@ -79,6 +72,18 @@ router.get('/offers', db.getOffers);
 
 router.post('/offers', db.createOffer);
 
+//router.delete('/offers/:id/elim', db.eliminateOffer);
+
+router.get('/offers/currentUser', db.myOffers);
+
+router.get('/offers/favourite', db.favourites);
+
+router.delete('/offers/seen', db.deleteSeenOffers);
+
+router.get('/offers/:id/image', db.getImage);
+
+router.post('/offers/:id/image', db.uploadImage);
+
 router.get('/offers/:id', db.offerDetails);
 
 router.put('/offers/:id', db.updateOffer);
@@ -86,18 +91,6 @@ router.put('/offers/:id', db.updateOffer);
 router.post('/offers/:id', db.swipe);
 
 router.delete('/offers/:id', db.deleteOffer);
-
-//router.delete('/offers/:id/elim', db.eliminateOffer);
-
-router.get('/offers/currentUser', db.myOffers);
-
-router.get('/offers/favourite', db.favourites);
-
-router.get('/offers/:id/image', db.getImage);
-
-router.post('/offers/:id/image', db.uploadImage);
-
-router.delete('/offers/seen', db.deleteSeenOffers);
 
 router.get('/races', db.racesList);
 
