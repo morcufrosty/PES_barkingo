@@ -78,6 +78,8 @@ router.get('/offers/currentUser', db.myOffers);
 
 router.get('/offers/favourite', db.favourites);
 
+router.delete('/favourites/:id', db.unfavourite);
+
 router.delete('/offers/seen', db.deleteSeenOffers);
 
 router.get('/offers/:id/image', db.getImage);
