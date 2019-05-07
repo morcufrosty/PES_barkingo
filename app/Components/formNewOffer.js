@@ -491,6 +491,7 @@ export default class formNewOffer extends React.Component {
 
                     }}
                     showsVerticalScrollIndicator={false}
+                    keyboardShouldPersistTaps='always'
                 >
                     <Text style={{ color: 'white', fontSize: 45, flex: 1 }}>New Offer</Text>
 
@@ -501,12 +502,17 @@ export default class formNewOffer extends React.Component {
                     </View>
 
 
-                    <View style={{ flex: 1, paddingVertical: 10 }}>
+                    <View style={{ flex:1, paddingVertical: 10 }}>
                         <Text style={{ color: 'white' }}>{"Race"}</Text>
+                        <View styles = {styles.autocompleteContainer}>
                         <Autocomplete
                           autoCapitalize="none"
                           autoCorrect={false}
-                          containerStyle={styles.autocompleteContainer}
+                          containerStyle={styles.autocompleteContainer2}
+                          style={styles.input}
+                          inputContainerStyle={{borderWidth:0}}
+                          listContainerStyle={styles.listContainer}
+                          listStyle={styles.list}
                           data={raceList.length === 1 && comp(query, raceList[0].raceName) ? [] : raceList}
                           defaultValue={query}
                           onChangeText={text => this.setState({ query: text })}
@@ -518,6 +524,7 @@ export default class formNewOffer extends React.Component {
                             </TouchableOpacity>
                           )}
                         />
+                        </View>
                     </View>
 
 
@@ -599,20 +606,36 @@ export default class formNewOffer extends React.Component {
     }
 }
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#F5FCFF',
-    flex: 1,
-    paddingTop: 25
-  },
-  autocompleteContainer: {
-    backgroundColor: 'white',
-    opacity: 0.5,
-    borderRadius: 5,
-    paddingVertical: 0,
-    height: 35,
-    zIndex:1,
-    position: 'absolute',
 
+  input:
+      {backgroundColor: 'rgba(255, 255, 255, 0)', borderWidth:0, height: 35 },
+  list:
+      {backgroundColor:"white",  opacity: 0.5, borderWidth: 0 },
+  listContainer:
+          {borderWidth: 0 },
+  autocompleteContainer2: {
+      backgroundColor: '#EC91A5',
+      borderWidth: 0,
+      //opacity: 0.35,
+    },
+
+  autocompleteContainer: {
+        flex: 1,
+        left: 0,
+        position: 'absolute',
+        right: 0,
+        top: 0,
+        zIndex: 1,
+        backgroundColor: "#EC91A5",
+        borderWidth: 0,
+
+  },
+  itemText: {
+    fontSize: 15,
+    paddingTop: 5,
+    paddingBottom: 5,
+    backgroundColor:"#EC91A5"
+  //  margin: 2,
   },
 
 });
