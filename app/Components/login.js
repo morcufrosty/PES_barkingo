@@ -63,7 +63,7 @@ export default class App extends React.Component {
                 })
                 console.log("enter fetch API barkingo google");
 
-                const resFromBarkingo = await this.renewGoogleTokenToAPI('http://10.4.41.164/api/renewGoogleToken');
+                const resFromBarkingo = await this.renewGoogleTokenToAPI('http://10.4.41.164/api/users/renewGoogleToken');
                 console.log("google response content:" + resFromBarkingo.success + " " + resFromBarkingo.msg);
                 if (resFromBarkingo.success) {
                     this.storeToken(resFromBarkingo.token);
@@ -146,7 +146,7 @@ export default class App extends React.Component {
 
     async renewFacebookTokenToAPI(facebookName, facebookEmail, facebookToken) {
 
-        return fetch('http://10.4.41.164/api/renewFacebookToken', {
+        return fetch('http://10.4.41.164/api/users/renewFacebookToken', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -227,7 +227,7 @@ export default class App extends React.Component {
 
     async loginUsingAPI() {
 
-        return fetch('http://10.4.41.164/api/login', {
+        return fetch('http://10.4.41.164/api/users/login', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -248,7 +248,7 @@ export default class App extends React.Component {
 
     async loginDevUsingAPI() {
 
-        return fetch('http://10.4.41.164/api/login', {
+        return fetch('http://10.4.41.164/api/users/login', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',

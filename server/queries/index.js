@@ -4,37 +4,53 @@ const { createUser,
     renewFacebookToken,
     user } = require('./login_register');
 
+const { currentUser,
+    getUser,
+    createProfile,
+    updateUser,
+    getUserImage,
+    createUserImage } = require('./users');
+
 const { getOffers,
     createOffer,
+    offerDetails,
     updateOffer,
+    swipe,
     deleteOffer,
     //eliminateOffer,
     myOffers,
-    swipe,
+    favourites,
     getImage,
     uploadImage,
-    favourites,
-    offerDetails,
     deleteSeenOffers,
     racesList } = require('./offers');
 
 module.exports = {
+    //LOGIN_REGISTER
     createUser,
     loginUser,
     renewGoogleToken,
     renewFacebookToken,
     user,
+    //USERS
+    currentUser,
+    getUser,
+    createProfile,
+    updateUser,
+    getUserImage,
+    createUserImage,
+    //OFFERS
     getOffers,
     createOffer,
+    offerDetails,
     updateOffer,
+    swipe,
     deleteOffer,
     //eliminateOffer,
     myOffers,
-    swipe,
+    favourites,
     getImage,
     uploadImage,
-    favourites,
-    offerDetails,
     deleteSeenOffers,
     racesList
 };

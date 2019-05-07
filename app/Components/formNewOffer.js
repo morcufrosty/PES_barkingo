@@ -180,12 +180,11 @@ export default class formNewOffer extends React.Component {
                     this.props.navigation.state.params.onGoBack();
                     this.props.navigation.goBack();
                 }
-
-                if (this.state.update) {
-
-                    //ANAR ENRERE IGUAL QUE HA DALT
-
+                else{
+                    this.props.navigation.state.params.onGoBack();
+                    this.props.navigation.goBack();
                 }
+
 
             }
             else {

@@ -20,7 +20,7 @@ export default class Register extends React.Component {
     }
 
     async registerToApiAsync() {
-        return fetch('http://10.4.41.164/api/register', {
+        return fetch('http://10.4.41.164/api/users/register', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',

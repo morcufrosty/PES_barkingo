@@ -14,7 +14,7 @@ import TextInputWTitle from './inputText.js';
 import InputPassword from './inputPassword.js';
 import { AsyncStorage } from 'react-native';
 
-export default class perfilAnimal extends React.Component {
+export default class perfilAnimalSwipe extends React.Component {
 
     constructor(props) {
         super(props);
@@ -77,6 +77,11 @@ export default class perfilAnimal extends React.Component {
         })
     }
 
+
+    resetState(){
+        this.setState({isLoading: false, id: '1', image: ''})
+    }
+
     render() {
         if (this.state.isLoading) {
             this.handleStart();
@@ -104,7 +109,7 @@ export default class perfilAnimal extends React.Component {
                         width: '100%',
                         height: '50%',
                         marginBottom: '5%'
-                    }} source={{ uri: `data:image/jpeg;base64,${this.state.image}` }} />
+                    }} source={{ uri: `${this.state.image}` }} />
                     <Text style={{ color: 'white', fontSize: 30, fontWeight: 'bold', flex: 1, marginLeft: '10%' }}>{this.state.name}</Text>
                     <Text style={{ color: 'white', fontSize: 20, flex: 1, marginLeft: '10%' }}>Age: {this.state.age}</Text>
                     <Text style={{ color: 'white', fontSize: 20, flex: 1, marginLeft: '10%' }}>Race: {this.state.race}</Text>

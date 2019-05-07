@@ -7,6 +7,7 @@ import {
     Platform,
     Image,
     TouchableOpacity,
+    TouchableHighlight,
     ActivityIndicator
 } from 'react-native';
 import Button from './Button';
@@ -17,17 +18,6 @@ import InputPassword from './inputPassword.js';
 import { decompressFromUTF16 } from 'lz-string';
 import { AsyncStorage } from 'react-native';
 
-
-const placeHolderImages = [
-    { id: "1", uri: require('../assets/1.jpg') },
-    { id: "2", uri: require('../assets/2.jpg') },
-    { id: "3", uri: require('../assets/3.jpg') },
-    { id: "4", uri: require('../assets/4.jpg') },
-    { id: "5", uri: require('../assets/5.jpg') },
-    { id: "6", uri: require('../assets/3.jpg') },
-    { id: "7", uri: require('../assets/4.jpg') },
-    { id: "8", uri: require('../assets/5.jpg') }
-]
 
 export default class Chat extends React.Component {
     constructor(props) {
@@ -74,9 +64,12 @@ export default class Chat extends React.Component {
 
             for (let i = 0; i < ofertesAux.length; i++) {
                 let id = ofertesAux[i].id;
-                let image = await this.getImageFromServer(tokenJson, id);
-                imatgesAux[i] = image;
-            }
+                this.getImageFromServer(tokenJson, id, i).then( (value)=> {
+                    let images = this.state.images;
+                    images[i] = "data:image/jpeg;base64," + value;
+                    this.setState({images: images});} ) 
+                
+              }
 
         }
 
@@ -86,7 +79,7 @@ export default class Chat extends React.Component {
 
     async getMyFavouritesFromAPI(tokenJson) {
 
-        return fetch('http://10.4.41.164/api/favouriteOffers', {
+        return fetch('http://10.4.41.164/api/offers/favourite', {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -109,14 +102,17 @@ export default class Chat extends React.Component {
         return this.state.favouriteOffers.map((data, index) => {
             return (
                 <View>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('perfilAnimalFavorites', {id: this.state.favouriteOffers[index].id, image: this.state.images[index]} )}>
                     <Image style={{
                         borderRadius: 40,
                         overflow: 'hidden',
                         marginLeft: 5,
                         marginRight: 5,
                         width: 80,
-                        height: 80
-                    }} source={{ uri: `data:image/jpeg;base64,${this.state.images[index]}` }} />
+                        height: 80,
+                        backgroundColor:"#f29797"
+                    }} source={{ uri: `${this.state.images[index]}` }} />
+                    </TouchableOpacity>
                 </View>
             )
         })
@@ -133,8 +129,9 @@ export default class Chat extends React.Component {
                         marginTop: 5,
                         width: 100,
                         height: 100,
-                        marginLeft: '5%'
-                    }} source={{ uri: `data:image/jpeg;base64,${this.state.images[index]}` }} />
+                        marginLeft: '5%',
+                        backgroundColor:"#f29797"
+                    }} source={{ uri: `${this.state.images[index]}` }} />
                     <Text
                         style={{
                             position: 'absolute',
@@ -161,6 +158,7 @@ export default class Chat extends React.Component {
     }
 
     render() {
+
         if (this.state.isLoading) {
 
 

@@ -195,35 +195,11 @@ const renewFacebookToken = async (request, response) => {
     });
 };
 
-const user = async (request, response) => {
-    const { email, name } = request.decoded;
-    await pool.connect(async (err, client, done) => {
-        if (err) {
-            response.json({ success: false, msg: 'Error accessing the database' });
-            done();
-            return;
-        }
-        await client.query('BEGIN');
-        await client.query('SELECT id, email, name FROM users WHERE email=$1 AND name=$2', [email, name], (err, result) => {
-            if (err || result.rowCount == 0) {
-                response.json({ success: false, msg: 'User not found' });
-                done();
-                return;
-            } else {
-                response.json({ success: true, id: result.rows[0].id, email: result.rows[0].email, name: result.rows[0].name });
-                done();
-                return;
-            }
-        })
-    })
-}
-
 module.exports = {
     createUser,
     loginUser,
     renewGoogleToken,
     renewFacebookToken,
-    user
 };
 
 // ref: https://blog.logrocket.com/setting-up-a-restful-api-with-node-js-and-postgresql-d96d6fc892d8

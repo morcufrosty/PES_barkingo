@@ -8,15 +8,17 @@ import React, { Component } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Settings from "./Components/settings";
 import Chat from "./Components/chat"
-import perfilAnimal from "./Components/perfilAnimal"
+import perfilAnimalSwipe from "./Components/perfilAnimalSwipe"
+import perfilAnimalMyOffers from "./Components/perfilAnimalMyOffers"
+import perfilAnimalFavorites from "./Components/perfilAnimalFavorites"
 import formNewOffer from "./Components/formNewOffer"
 import TabIcon from './TabIcon';
 import AutocompleteExample from "./Components/autocomplete"
 
 const SettingsNavigator = createStackNavigator({
     LoginScreen: { screen: Login },
-
     SettingsScreen: { screen: Settings },
+    perfilAnimalMyOffers: {screen: perfilAnimalMyOffers},
     formNewOffer: {
         screen: formNewOffer
     }
@@ -35,7 +37,7 @@ const SettingsNav = createAppContainer(SettingsNavigator);
 const SwipeNavigator = createStackNavigator({
 
     SwipeScreen: { screen: swipeScreen },
-    perfilAnimal: { screen: perfilAnimal }
+    perfilAnimalSwipe: { screen: perfilAnimalSwipe }
 },
     {
         initialRouteName: 'SwipeScreen',
@@ -45,6 +47,21 @@ const SwipeNavigator = createStackNavigator({
         }
 
     });
+
+    const ChatNavigator = createStackNavigator({
+        Chat: { screen: Chat },
+        perfilAnimalFavorites: { screen: perfilAnimalFavorites }
+    },
+        {
+            initialRouteName: 'Chat',
+            headerMode: 'none',
+            navigationOptions: {
+                headerVisible: false,
+            }
+    
+        });
+
+    const ChatNav = createAppContainer(ChatNavigator);
 
 const SwipeNav = createAppContainer(SwipeNavigator);
 
@@ -80,7 +97,7 @@ const TabNavigator = createBottomTabNavigator(
         },
 
         chat: {
-            screen: Chat,
+            screen: ChatNav,
             navigationOptions: {
                 tabBarLabel: "",
                 tabBarIcon: ({ focused, tintColor }) => (

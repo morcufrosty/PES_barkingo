@@ -41,9 +41,9 @@ Animal species:
 
 ### Login and Register
 
--   ### POST `/register`
+-   ### POST `/users/register`
 
-    -   #### Query arameters
+    -   #### Parameters
 
         -   `email` [`required`]: A valid email that the user provided.
         -   `name` [`required`]: The name of the user, spaces must be expressed with an underscore (`_`).
@@ -53,9 +53,9 @@ Animal species:
         -   `success`: Is either true or false.
         -   `msg`: Short message explaining the causes of the result.
 
--   ### POST `/login`
+-   ### POST `/users/login`
 
-    -   #### Query arameters
+    -   #### Parameters
 
         -   `email` [`required`]: A valid email that the user provided.
         -   `password` [`required`]: The password provided by the user, in plain text.
@@ -64,9 +64,9 @@ Animal species:
         -   `success`: Is either true or false.
         -   `msg`: In case the request was not a successs, this parameter is a short message explaining the causes of the result. If the request was successful, it also includes a token that the app must keep for a day (as it's only vlaid for such time) and send in every request that needs token based authentication.
 
--   ### POST `/renewGoogleToken`
+-   ### POST `/users/renewGoogleToken`
 
-    -   #### Query parameters
+    -   #### Parameters
         -   `email` [`required`]: A valid email from the Google Account
         -   `token` [`required`]: A valid Google authenthetication token
         -   `name` [`required`]: The name of the user, spaces must be expressed with an underscore (`_`).
@@ -74,7 +74,7 @@ Animal species:
         -   `success`: Is either true or false.
         -   `msg`: In case the request was not a successs, this parameter is a short message explaining the causes of the result. If the request was successful, it also includes a token that the app must keep for a day (as it's only vlaid for such time) and send in every request that needs token based authentication.
 
--   ### POST `/renewFacebookToken`
+-   ### POST `/users/renewFacebookToken`
 
     -   #### Query parameters
 
@@ -86,8 +86,9 @@ Animal species:
         -   `success`: Is either true or false.
         -   `msg`: In case the request was not a successs, this parameter is a short message explaining the causes of the result. If the request was successful, it also includes a token that the app must keep for a day (as it's only vlaid for such time) and send in every request that needs token based authentication.
 
--   ### GET `/user`: returns information about the logged-in user.
-    -   #### Query parameters
+-   ### GET `/users/currentUser`: returns short information about the logged-in user.
+
+    -   #### Header
         -   `token` [`required`]: Barkingo authenthetication token
     -   #### Response
         -   `id`: identifier of the user
@@ -96,14 +97,75 @@ Animal species:
         -   `success`: Is either true or false.
         -   `msg`: Short message explaining the causes of the result.
 
+-   ### GET `/users/:id/`: returns information about the requested user.
+
+    -   #### Path parameters
+        -   `id` [`required`]: identifier of the user
+    -   #### Response
+        -   `id`: identifier of the user
+        -   `email`: A valid email from the Facebook Account
+        -   `name`: The name of the user, spaces must be expressed with an underscore (`_`).
+        -   `bio`: short description of the user
+        -   `country`: country of the user
+        -   `city`: city of the user
+        -   `success`: Is either true or false.
+        -   `msg`: Short message explaining the causes of the result.
+
+-   ### POST `/users/:id`: creates a profile for the current user
+    -   ### Header
+        -   `token` [`required`]: Barkingo authenthetication token
+    -   ### Path parameters
+        -   `id` [`required`]: identifier of the requested offer.
+    -   ### Parameters
+        -   `bio` [`required`]: short description of the user
+        -   `country` [`required`]: country of the user
+        -   `city` [`required`]: city of the user
+    -   #### Response
+        -   `id`: identifier of the user
+        -   `success`: Is either true or false.
+        -   `msg`: Short message explaining the causes of the result.
+
+-   ### PUT `/users/:id`: edits the profile for the current user, provided its id
+
+    -   #### Header
+        -   `token` [`required`]: Barkingo authenthetication token
+    -   ### Parameters
+        -   `name` [`required`]: The name of the user. Any spaces must be expressed with an underscore (`_`).
+        -   `bio` [`required`]: short description of the user
+        -   `country` [`required`]: country of the user
+        -   `city` [`required`]: city of the user
+    -   #### Response
+        -   `id`: identifier of the user
+        -   `success`: Is either true or false.
+        -   `msg`: Short message explaining the causes of the result.
+
+-   ### GET `/users/:id/image`: obtain profile picture of the requested user
+    -   #### Path parameters
+        -   `id` [`required`]: identifier of the user
+    -   #### Response
+        -   Profile picture jpg file of the requested user.
+
+-   ### POST `/users/:id/image`
+
+    -   #### Path parameters
+        -   `id` [`required`]: identifier of the offer id
+    -   #### Parameters
+        -   `image`[`required`]: image file in jpg format, passed through form-data.
+    -   #### Response
+        -   `success`: Is either `true` or `false`.
+        -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
+
 ### View, edit and interact with offers
 
 -   ### GET `/offers`: returns all the offers given some search paramters
 
     -   #### Query parameters
-
+        -   `sex` [`optional`]
         -   `type` [`optional`]: can either be `adoption` o `foster`.
-        -   `race` [`optional`]: race of the animals to be displayed.
+        -   `species` [`optional`]: species of the animals to be displayed.
+        -   `city` [`optional`]: city of the requested
+        -   `minAge` [`optional`]: minimum age of the offered animal
+        -   `maxAge` [`optional`]: maximum age of the offered animal
 
     -   ### Response
         -   `offers`: list containing the offers that match the given search parameters, with the following attributes for each element.
@@ -115,7 +177,7 @@ Animal species:
 
 -   ### POST `/offers`: creates a new offer
 
-    -   #### Query parameters
+    -   #### Parameters
         -   `name` [`required`]: name of the animal.
         -   `type` [`required`]: type of offer, which can be `0` (`adoption`) or `1` (`foster`)
         -   `race` [`required`]: race of the animal in the offer, which in turn identifies its species.
@@ -131,7 +193,7 @@ Animal species:
 
 -   ### GET `/offers/:id`: returns information about a single offer
 
-    -   ### Address parameters
+    -   ### Path parameters
 
         -   `id` [`required`]: identifier of the requested offer.
 
@@ -148,9 +210,9 @@ Animal species:
         -   `nameOwner`: name of the owner of the offered animal.
         -   `emailOwner`: email of the owner of the offered animal.
 
--   ### POST `/offers/:id`
+-   ### PUT `/offers/:id`: edit an offer
 
-    -   #### Query parameters
+    -   #### Pparameters
         -   `name` [`optional`]: name of the animal.
         -   `type` [`optional`]: type of offer, which can be `0` (`adoption`) or `1` (`foster`)
         -   `race` [`optional`]: race of the animal in the offer, which in turn identifies its species.
@@ -163,21 +225,13 @@ Animal species:
         -   `success`: Is either `true` or `false`.
         -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
 
--   ### PUT `/offers/:id`
-
-    -   #### Query parameters
-        -   swipe [`required`]: specifies the swipe action direction on the offer, which can be `left` or `right`. This will decide if the offer gets added to the favourite list (viewable by the user) or the discarded list.
-    -   #### Response
-        -   `success`: Is either `true` or `false`.
-        -   `msg`: If success is `false`, short message explaining the causes of the error. If not, contains success message.
-
 -   ### DELETE `/offers/:id`: delete an offer. To do so you must be its creator.
 
     -   #### Response
         -   `success`: Is either `true` or `false`.
         -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
 
--   ### GET `/myOffers`: returns all the given user's offers
+-   ### GET `/offers/currentUser`: returns all the current user offers, provided the token on the parameters
 
     -   #### Response
         -   `offers`: list containing the offers that match the given search parameters, with the following attributes for each element.
@@ -187,7 +241,7 @@ Animal species:
             -   `sex`: sex of the offered animal.
             -   `species`: species of the animal in the offer.
 
--   ### GET `/favouriteOffers`: returns all the user's favourite offers
+-   ### GET `/offers/favourite`: returns all the user's favourite offers
 
     -   ### Response
         -   `offers`: list containing the offers that match the given search parameters, with the following attributes for each element.
@@ -198,24 +252,34 @@ Animal species:
             -   `offerType`: type of the offer
 
 -   ### POST `/offers/:id`: swipe on an offer
-    -   #### Query parameters
+
+    -   #### Path parameters
+        -   `id` [`required`]: identifier of the offer id
+    -   #### Parameters
         -   `direction`: direction of the swipe action, can only be `right` or `left`
     -   #### Response
         -   `success`: Is either `true` or `false`.
         -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
 
 -   ### GET `/offers/:id/image`
+
+    -   #### Path parameters
+        -   `id` [`required`]: identifier of the offer id
     -   #### Response
         -   JPG file of the requested image, encoded with base64.
 
 -   ### POST `/offers/:id/image`
-    -   #### Query parameters
+
+    -   #### Path parameters
+        -   `id` [`required`]: identifier of the offer id
+    -   #### Parameters
         -   `image`[`required`]: image file in jpg format, passed through form-data.
     -   #### Response
         -   `success`: Is either `true` or `false`.
         -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
 
 -   ### DELETE `/offers/seen`
+
     -   #### Response
         -   `success`: Is either `true` or `false`.
         -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.

@@ -20,25 +20,6 @@ import InputPassword from './inputPassword.js';
 import { AsyncStorage } from 'react-native';
 import { NavigationActions, StackActions } from 'react-navigation';
 
-const placeHolderImages = [
-    { id: "1", uri: require('../assets/1.jpg') },
-    { id: "2", uri: require('../assets/2.jpg') },
-    { id: "3", uri: require('../assets/3.jpg') },
-    { id: "4", uri: require('../assets/4.jpg') },
-    { id: "5", uri: require('../assets/5.jpg') },
-    { id: "6", uri: require('../assets/1.jpg') },
-    { id: "7", uri: require('../assets/2.jpg') },
-    { id: "8", uri: require('../assets/3.jpg') },
-    { id: "9", uri: require('../assets/4.jpg') },
-    { id: "10", uri: require('../assets/5.jpg') },
-    { id: "11", uri: require('../assets/1.jpg') },
-    { id: "12", uri: require('../assets/2.jpg') },
-    { id: "13", uri: require('../assets/3.jpg') },
-    { id: "14", uri: require('../assets/4.jpg') },
-    { id: "15", uri: require('../assets/5.jpg') },
-
-]
-
 const initialState = {
     myOffers: [],
     images: [],
@@ -97,7 +78,7 @@ export default class Swipe extends React.Component {
 
     async getMyOffersFromAPI(tokenJson) {
 
-        return fetch('http://10.4.41.164/api/myOffers', {
+        return fetch('http://10.4.41.164/api/offers/currentUser', {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -106,7 +87,7 @@ export default class Swipe extends React.Component {
             }
         }).then((response) => response.json())
             .then((responseJson) => {
-                console.log(responseJson.msg);
+                console.log("THIS IS THE MESSAGE OF OFFERS:" +  responseJson.msg);
                 return responseJson;
             }).catch((error) => {
                 console.error(error);
@@ -116,7 +97,7 @@ export default class Swipe extends React.Component {
 
     async getUserFromAPI(tokenJson) {
 
-        return fetch('http://10.4.41.164/api/user', {
+        return fetch('http://10.4.41.164/api/users/currentUser', {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -125,7 +106,7 @@ export default class Swipe extends React.Component {
             }
         }).then((response) => response.json())
             .then((responseJson) => {
-                console.log(responseJson.msg);
+                console.log("THIS IS THE MESSAGE OF CURRENTUSER:" +responseJson.msg);
                 return responseJson;
             }).catch((error) => {
                 console.error(error);
@@ -154,7 +135,7 @@ export default class Swipe extends React.Component {
     }
 
     editOffer(id) {
-        this.props.navigation.navigate('formNewOffer', { id: id, update: true });
+        this.props.navigation.navigate('formNewOffer', { id: id, update: true, onGoBack: () => this.refresh() });
     }
 
     refresh() {
@@ -178,9 +159,12 @@ export default class Swipe extends React.Component {
 
             for (let i = 0; i < ofertesAux.length; i++) {
                 let id = ofertesAux[i].id;
-                let image = await this.getImageFromServer(tokenJson, id);
-                imatgesAux[i] = image;
-            }
+                this.getImageFromServer(tokenJson, id, i).then( (value)=> {
+                    let images = this.state.images;
+                    images[i] = "data:image/jpeg;base64," + value;
+                    this.setState({images: images});} ) 
+                
+              }
         }
 
         else {
@@ -196,13 +180,19 @@ export default class Swipe extends React.Component {
 
             return (
                 <View>
+                    <TouchableOpacity  onPress={() => this.props.navigation.navigate('perfilAnimalMyOffers', {id: this.state.myOffers[index].id, image: this.state.images[index]} )}
+>
                     <Image style={{
                         borderRadius: 5,
                         overflow: 'hidden',
                         marginLeft: 10,
                         width: 200,
-                        height: 200
-                    }} source={{ uri: `data:image/jpeg;base64,${this.state.images[index]}` }} />
+                        height: 200,
+                        backgroundColor:"#f29797",
+                    }} source={{ uri: `${this.state.images[index]}` }}
+                    />
+                    </TouchableOpacity>
+
                     <TouchableOpacity
                         style={{
                             position: 'absolute',
