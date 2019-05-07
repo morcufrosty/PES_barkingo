@@ -11,6 +11,7 @@ import Chat from "./Components/chat"
 import perfilAnimal from "./Components/perfilAnimal"
 import formNewOffer from "./Components/formNewOffer"
 import TabIcon from './TabIcon';
+import AutocompleteExample from "./Components/autocomplete"
 
 const SettingsNavigator = createStackNavigator({
     LoginScreen: { screen: Login },
@@ -91,6 +92,8 @@ const TabNavigator = createBottomTabNavigator(
                     />)
             },
         },
+
+      
 
     },
 

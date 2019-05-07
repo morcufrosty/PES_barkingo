@@ -21,12 +21,11 @@ import { ImagePicker, Permissions } from 'expo';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Ionicons } from "@expo/vector-icons";
 import Autocomplete from 'react-native-autocomplete-input';
-import races from "./races"
-import raceList from './races.json';
+import racesJSON from './races.json';
 
 export default class formNewOffer extends React.Component {
     componentDidMount() {
-        this.setState({ raceList });
+        this.setState({ raceList: racesJSON });
     }
     constructor(props) {
         super(props)
@@ -45,14 +44,6 @@ export default class formNewOffer extends React.Component {
             update: false,
             isLoading: true,
             query: '',
-            data: ["Apples",
-                "Broccoli",
-                "Chicken",
-                "Duck",
-                "Eggs",
-                "Fish",
-                "Granola",
-                "Hash Browns",],
             raceList: []
 
         }
@@ -61,29 +52,7 @@ export default class formNewOffer extends React.Component {
     async prepareUpdate() {
         let response;
 
-        /*
-        var jsonOfList = await AsyncStorage.getItem("raceList");
-        if(jsonOfList === null){
 
-          console.log("seartching race list")
-
-          const token = await AsyncStorage.getItem("access_token");
-          tokenJson = JSON.parse(token);
-          response = await this.getRaceListFromAPI(tokenJson);
-          console.log("got race list from api")
-
-          if(response.success){
-            console.log(response.list)
-            const list = response.list;
-            var jsonOfList = await AsyncStorage.setItem("raceList", JSON.stringify(list));
-          //  console.log(JSON.parse(jsonOfList))
-          }else{
-            console.log(response.msg)
-          }
-        }
-        //console.log(JSON.parse(jsonOfList));
-
-        */
 
         if (this.props.navigation.getParam('update', false)) {
             console.log("UPDATE")
@@ -535,10 +504,24 @@ export default class formNewOffer extends React.Component {
 
                     <View style={{ flex: 1, paddingVertical: 10 }}>
                         <Text style={{ color: 'white' }}>{"Race"}</Text>
-                        <TextInput onChangeText={(race) => this.setState({ race })} value={this.state.race}
-                            style={{ backgroundColor: 'white', opacity: 0.5, borderRadius: 5, paddingVertical: 0, height: 35 }}>
-                        </TextInput>
+                        <Autocomplete
+                          autoCapitalize="none"
+                          autoCorrect={false}
+                          containerStyle={styles.autocompleteContainer}
+                          data={raceList.length === 1 && comp(query, raceList[0].raceName) ? [] : raceList}
+                          defaultValue={query}
+                          onChangeText={text => this.setState({ query: text })}
+                          renderItem={({ raceName, speciesName }) => (
+                            <TouchableOpacity onPress={() => this.setState({ query: raceName })}>
+                              <Text style={styles.itemText}>
+                                {raceName} - ({speciesName})
+                              </Text>
+                            </TouchableOpacity>
+                          )}
+                        />
                     </View>
+
+
 
 
                     <View style={{ flex: 1, paddingVertical: 10 }}>
@@ -563,7 +546,7 @@ export default class formNewOffer extends React.Component {
                         <Text style={{ color: 'white' }}>{"Sexe"}</Text>
                         <RadioForm
                             formHorizontal={true}
-                            animation={true}
+                            animation={false}
                             buttonColor={"#ffffff"}
                             selectedButtonColor={"#ffffff"}
                             style={{ paddingVertical: 10 }}
@@ -582,7 +565,7 @@ export default class formNewOffer extends React.Component {
                         <Text style={{ color: 'white' }}>{"Type of offer"}</Text>
                         <RadioForm
                             formHorizontal={true}
-                            animation={true}
+                            animation={false}
                             buttonColor={"#ffffff"}
                             selectedButtonColor={"#ffffff"}
                             style={{ paddingVertical: 10 }}
@@ -616,3 +599,21 @@ export default class formNewOffer extends React.Component {
         );
     }
 }
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#F5FCFF',
+    flex: 1,
+    paddingTop: 25
+  },
+  autocompleteContainer: {
+    backgroundColor: 'white',
+    opacity: 0.5,
+    borderRadius: 5,
+    paddingVertical: 0,
+    height: 35,
+    zIndex:1,
+    position: 'absolute',
+
+  },
+
+});
