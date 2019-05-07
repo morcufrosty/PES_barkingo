@@ -250,6 +250,14 @@ Animal species:
             -   `sex`: sex of the offered animal.
             -   `species`: species of the animal in the offer.
             -   `offerType`: type of the offer
+            
+-   ### DELETE `/favourites/:id`: deletes offer from favourites
+
+    -   #### Path parameters
+        -   `id` [`required`]: identifier of the offer id
+    -   #### Response
+        -   `success`: Is either `true` or `false`.
+        -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
 
 -   ### POST `/offers/:id`: swipe on an offer
 
