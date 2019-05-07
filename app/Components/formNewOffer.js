@@ -291,6 +291,20 @@ export default class formNewOffer extends React.Component {
         //  }
 
     }
+
+    escapeReg(text) {
+      if (!arguments.callee.sRE) {
+        var specials = [
+          '/', '.', '*', '+', '?', '|',
+          '(', ')', '[', ']', '{', '}', '\\'
+        ];
+        arguments.callee.sRE = new RegExp(
+          '(\\' + specials.join('|\\') + ')', 'g'
+        );
+      }
+      return text.replace(arguments.callee.sRE, '\\$1');
+    }
+
     findRace(query) {
 
         //method called everytime when we change the value of the input
@@ -300,9 +314,10 @@ export default class formNewOffer extends React.Component {
         }
         const { raceList } = this.state;
         //making a case insensitive regular expression to get similar value from the film json
-        const regex = new RegExp(`${query.trim()}`, 'i');
+        const regex = this.escapeReg(query)
+        const regex2 = new RegExp(`${regex.trim()}`, 'i');
         //return the filtered film array according the query from the input
-        return raceList.filter(race => race.raceName.search(regex) >= 0);
+        return raceList.filter(race => race.raceName.search(regex2) >= 0);
     }
 
     render() {
@@ -516,8 +531,8 @@ export default class formNewOffer extends React.Component {
                           data={raceList.length === 1 && comp(query, raceList[0].raceName) ? [] : raceList}
                           defaultValue={query}
                           onChangeText={text => this.setState({ query: text })}
-                          renderItem={({ raceName, speciesName }) => (
-                            <TouchableOpacity onPress={() => this.setState({ query: raceName })}>
+                          renderItem={({ raceName, speciesName, idSpecies }) => (
+                            <TouchableOpacity onPress={() => this.setState({ query: raceName, race:idSpecies })}>
                               <Text style={styles.itemText}>
                                 {raceName} - ({speciesName})
                               </Text>
