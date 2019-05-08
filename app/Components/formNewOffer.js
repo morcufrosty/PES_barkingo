@@ -506,8 +506,7 @@ export default class formNewOffer extends React.Component {
 
                     }}
                     showsVerticalScrollIndicator={false}
-                    keyboardShouldPersistTaps='always'
-                >
+                    keyboardShouldPersistTaps='always'>
                     <Text style={{ color: 'white', fontSize: 45, flex: 1 }}>New Offer</Text>
 
                     <View style={{ flex: 1, paddingVertical: 10 }}>
@@ -525,14 +524,14 @@ export default class formNewOffer extends React.Component {
                           autoCorrect={false}
                           containerStyle={styles.autocompleteContainer2}
                           style={styles.input}
-                          inputContainerStyle={{borderWidth:0}}
+                          inputContainerStyle={{borderWidth:0, borderRadius: 50}}
                           listContainerStyle={styles.listContainer}
                           listStyle={styles.list}
                           data={raceList.length === 1 && comp(query, raceList[0].raceName) ? [] : raceList}
                           defaultValue={query}
                           onChangeText={text => this.setState({ query: text })}
-                          renderItem={({ raceName, speciesName, idSpecies }) => (
-                            <TouchableOpacity onPress={() => this.setState({ query: raceName, race:idSpecies })}>
+                          renderItem={({ raceName, speciesName, idRace }) => (
+                            <TouchableOpacity onPress={() => this.setState({ query: raceName, race:  idRace})}>
                               <Text style={styles.itemText}>
                                 {raceName} - ({speciesName})
                               </Text>
@@ -598,6 +597,7 @@ export default class formNewOffer extends React.Component {
                             ]}
                             initial={0}
                             onPress={(value) => { this.setState({ type: value }) }}
+                            //onPress={() => {console.log(this.state.race)}}
                         />
                     </View>
 
@@ -623,7 +623,7 @@ export default class formNewOffer extends React.Component {
 const styles = StyleSheet.create({
 
   input:
-      {backgroundColor: 'rgba(255, 255, 255, 0)', borderWidth:0, height: 35 },
+      {backgroundColor: 'rgba(255, 255, 255, 0)', borderWidth:0, height: 35, borderRadius: 50},
   list:
       {backgroundColor:"white",  opacity: 0.5, borderWidth: 0 },
   listContainer:

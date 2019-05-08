@@ -102,7 +102,21 @@ export default class Chat extends React.Component {
         return this.state.favouriteOffers.map((data, index) => {
             return (
                 <View>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('perfilAnimalFavorites', {id: this.state.favouriteOffers[index].id, image: this.state.images[index]} )}>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('perfilAnimalFavorites', {id: this.state.favouriteOffers[index].id, image: this.state.images[index]} )}
+                    onLongPress={()=>
+                        Alert.alert(
+                            'Alert Title',
+                            'My Alert Msg',
+                            [
+                              {
+                                text: 'Cancel',
+                                onPress: () => console.log('Cancel Pressed'),
+                                style: 'cancel',
+                              },
+                              {text: 'OK', onPress: () => console.log('OK Pressed')},
+                            ],
+                            {cancelable: false},
+                          )}>
                     <Image style={{
                         borderRadius: 40,
                         overflow: 'hidden',
