@@ -334,7 +334,16 @@ refresh(){
             paddingTop: '30%'
           }}>
        <ActivityIndicator size="small" color="#ffffff" />
-
+       <TouchableOpacity
+          style={{
+            position: 'absolute',
+            top: 40,
+            right: 15
+          }}
+          onPress={() => Alert.alert("Hauria d'entrar als filtres")}>
+          <Image
+              source={{ uri: "https://flaticons.net/icons/Data/Filter-Standard.png", width: 15, height: 15 }} />
+        </TouchableOpacity>º
 
           </LinearGradient>;
       }
@@ -347,6 +356,17 @@ refresh(){
       style={{
         flex:1,
       }}>
+        <TouchableOpacity
+          style={{
+            position: 'absolute',
+            top: 40,
+            right: 15
+          }}
+          onPress={() => Alert.alert("Hauria d'entrar als filtres")}>
+          <Image
+              source={{ uri: "https://flaticons.net/icons/Data/Filter-Standard.png", width: 15, height: 15 }} />
+        </TouchableOpacity>
+
         <View style={{ height: 60 }}>
         </View>
 
