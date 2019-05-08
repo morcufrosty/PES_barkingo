@@ -112,6 +112,7 @@ Animal species:
         -   `msg`: Short message explaining the causes of the result.
 
 -   ### POST `/users/:id`: creates a profile for the current user
+
     -   ### Header
         -   `token` [`required`]: Barkingo authenthetication token
     -   ### Path parameters
@@ -140,6 +141,7 @@ Animal species:
         -   `msg`: Short message explaining the causes of the result.
 
 -   ### GET `/users/:id/image`: obtain profile picture of the requested user
+
     -   #### Path parameters
         -   `id` [`required`]: identifier of the user
     -   #### Response
@@ -160,6 +162,7 @@ Animal species:
 -   ### GET `/offers`: returns all the offers given some search paramters
 
     -   #### Query parameters
+
         -   `sex` [`optional`]
         -   `type` [`optional`]: can either be `adoption` o `foster`.
         -   `species` [`optional`]: species of the animals to be displayed.
@@ -245,13 +248,14 @@ Animal species:
 
     -   ### Response
         -   `offers`: list containing the offers that match the given search parameters, with the following attributes for each element.
+
             -   `id`: identifier of the animal, which will be used in further requests.
             -   `name`: name of the animal.
             -   `sex`: sex of the offered animal.
             -   `species`: species of the animal in the offer.
             -   `offerType`: type of the offer
-            
--   ### DELETE `/favourites/:id`: deletes offer from favourites
+
+-   ### DELETE `/offers/:id/favourite`: deletes offer from favourites
 
     -   #### Path parameters
         -   `id` [`required`]: identifier of the offer id
