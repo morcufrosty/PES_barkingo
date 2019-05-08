@@ -30,7 +30,7 @@ export default class filter extends React.Component {
                         <TextInput keyboardType='numeric' style={{width:'30%', backgroundColor: 'white', opacity: 0.5, borderRadius: 5, paddingVertical: 0, height: 35 }}></TextInput>
                     </View>
                 </View>
-                
+
             </LinearGradient>
         );
     }
