@@ -39,6 +39,8 @@ const SettingsNav = createAppContainer(SettingsNavigator);
 const SwipeNavigator = createStackNavigator({
 
     SwipeScreen: { screen: swipeScreen },
+    Filter: {screen: Filter},
+
     perfilAnimalSwipe: { screen: perfilAnimalSwipe }
 },
     {

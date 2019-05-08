@@ -147,7 +147,7 @@ refresh(){
         }
         if (gestureState.dy > -5  && gestureState.dy < 5 && gestureState.dx > -5 &&  gestureState.dx < 5) {
           this.props.navigation.navigate('perfilAnimalSwipe', {id: this.state.offers[this.state.currentIndex].id, image: this.state.images[this.state.currentIndex]} );
-          
+
 
         }
         else {
@@ -160,13 +160,13 @@ refresh(){
     })
   }
 
- 
+
     async handleGetOffers(){
 
       const t = await AsyncStorage.getItem('access_token');
       tokenJson = JSON.parse(t);
       const response = await this.getOffers(tokenJson);
-    
+
 /*
       console.log("success: " + response.success);
       console.log("msg: " + response.msg);
@@ -183,7 +183,7 @@ refresh(){
     }
 
   async getOffers(tokenJson) {
-    
+
 
     return fetch('http://10.4.41.164/api/offers', {
       method: 'GET',
@@ -201,7 +201,7 @@ refresh(){
   }
 
   async getImageFromServer(tokenJson, id, i) {
-    
+
 
     return fetch(`http://10.4.41.164/api/offers/${id}/image`, {
       method: 'GET',
@@ -223,7 +223,7 @@ refresh(){
     const response = await this.getOffers(tokenJson);
     //console.log(response);
 
-   
+
     if (response.success) {
       ofertesAux = response.offers
 
@@ -232,7 +232,7 @@ refresh(){
         this.getImageFromServer(tokenJson, id, i).then( (value)=> {
           let images = this.state.images;
           images[i] = "data:image/jpeg;base64," + value;
-          this.setState({images: images});} ) 
+          this.setState({images: images});} )
 
       }
 
@@ -253,7 +253,7 @@ refresh(){
     if(this.state.offers.length != 0){
 
     return this.state.offers.map((item, i) => {
-    
+
 
       if (i < this.state.currentIndex) {
         return null
@@ -318,13 +318,13 @@ refresh(){
 
 
 }
-  
+
 
   render() {
 
     if (this.state.isLoading) {
       this.handleStart();
-    
+
         return   <LinearGradient colors = {['#F15A24', '#D4145A']}
           start = {[0, 1]}
           end = {[1, 0]}
@@ -340,10 +340,10 @@ refresh(){
             top: 40,
             right: 15
           }}
-          onPress={() => Alert.alert("Hauria d'entrar als filtres")}>
+          onPress={()  => this.props.navigation.navigate('Filter')}>
           <Image
               source={{ uri: "https://flaticons.net/icons/Data/Filter-Standard.png", width: 15, height: 15 }} />
-        </TouchableOpacity>º
+        </TouchableOpacity>
 
           </LinearGradient>;
       }
@@ -362,7 +362,7 @@ refresh(){
             top: 40,
             right: 15
           }}
-          onPress={() => Alert.alert("Hauria d'entrar als filtres")}>
+          onPress={()  => this.props.navigation.navigate('Filter')}>
           <Image
               source={{ uri: "https://flaticons.net/icons/Data/Filter-Standard.png", width: 15, height: 15 }} />
         </TouchableOpacity>
