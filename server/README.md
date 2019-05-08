@@ -205,7 +205,7 @@ Animal species:
         -   `name`: name of the animal.
         -   `type`: type of offer, which can be `adoption` o `foster`
         -   `species`: species of the animal in the offer.
-        -   `idSpecies`: species of the animal in the offer.
+        -   `idRace`: id of the race of the animal in the offer.
         -   `race`: if the animal's species is that of a dog or a cat, this field will contain its race.
         -   `sex`: sex of the animal.
         -   `age`: age of the animal.
