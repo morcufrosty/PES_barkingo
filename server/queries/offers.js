@@ -327,7 +327,7 @@ const unfavourite = async (request, response) => {
                     response.json({ success: false, msg: 'User ' + email + ' doesn\'t exist' });
                 } else {
                     client.query(
-                        'DELETE FROM favourites WHERE idOffer=$1;', [idOffer],
+                        'DELETE FROM favourites WHERE "idOffer"=$1;', [idOffer],
                         (error, res) => {
                             if (error) {
                                 console.error('Unknown error', error);
