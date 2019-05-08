@@ -63,11 +63,15 @@ export default class formNewOffer extends React.Component {
             if (response.success) {
                 console.log("SUCCESS");
             }
+
             this.setState({
                 update: this.props.navigation.getParam('update', false),
                 id: this.props.navigation.getParam('id', '1'),
                 name: response.offer.name,
-                description: response.offer.description, sex: response.offer.sex, race: '0', type: '0', age: '6', isLoading: false,
+                race: response.offer.idRace,
+                query: response.offer.raceName,
+                description: response.offer.description,
+                sex: response.offer.sex, type: '0', age: '6', isLoading: false,
             })
         } else this.setState({ isLoading: false })
 
