@@ -163,9 +163,9 @@ Animal species:
 
     -   #### Query parameters
 
-        -   `sex` [`optional`]
+        -   `sex` [`optional`]: sex of the offered animal
         -   `type` [`optional`]: can either be `adoption` o `foster`.
-        -   `species` [`optional`]: species of the animals to be displayed.
+        -   `species` [`optional`]: number species of the animals to be displayed.
         -   `city` [`optional`]: city of the requested
         -   `minAge` [`optional`]: minimum age of the offered animal
         -   `maxAge` [`optional`]: maximum age of the offered animal
@@ -205,6 +205,7 @@ Animal species:
         -   `name`: name of the animal.
         -   `type`: type of offer, which can be `adoption` o `foster`
         -   `species`: species of the animal in the offer.
+        -   `idSpecies`: species of the animal in the offer.
         -   `race`: if the animal's species is that of a dog or a cat, this field will contain its race.
         -   `sex`: sex of the animal.
         -   `age`: age of the animal.
@@ -215,7 +216,7 @@ Animal species:
 
 -   ### PUT `/offers/:id`: edit an offer
 
-    -   #### Pparameters
+    -   #### Parameters
         -   `name` [`optional`]: name of the animal.
         -   `type` [`optional`]: type of offer, which can be `0` (`adoption`) or `1` (`foster`)
         -   `race` [`optional`]: race of the animal in the offer, which in turn identifies its species.
