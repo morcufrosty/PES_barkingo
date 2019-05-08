@@ -73,7 +73,7 @@ const createProfile = async (request, response) => {
                 } else {
                     if(result.rows[0].id == idUser) {
                         client.query(
-                            'UPDATE users SET bio=$1, country=$2, city=$3 WHERE id=$4;),
+                            'UPDATE users SET bio=$1, country=$2, city=$3 WHERE id=$4;)',
                             [bio, country, city, idUser],
                             (error, res) => {
                                 if (error) {
