@@ -389,7 +389,7 @@ const offerDetails = async (request, response) => {
             'SELECT "openedOffers".id, "openedOffers"."name", "openedOffers"."age", "openedOffers".description, "openedOffers".sex, race."raceName", species."speciesName", users.name AS "userName" FROM "openedOffers", race, species, users WHERE "openedOffers".id = $1 and "openedOffers"."idOwner"=users.id and "openedOffers".race=race."idRace" and race."idSpecies"=species.id;', [idOffer],
             (err, result) => {
                 if (err || result.rowCount == 0) {
-                    console.log(err)
+                    console.log(err);
                     response.json({ success: false, msg: 'Offer doesn\'t exist' });
                 } else {
                     response.json({ success: true, msg: 'Offer', offer: result.rows[0] });

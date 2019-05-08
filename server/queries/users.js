@@ -29,7 +29,26 @@ const currentUser = async (request, response) => {
 }
 
 const getUser = async (request, response) => {
-    response.json({ success: false, msg: 'Not implemented yet getUser' });
+    //response.json({ success: false, msg: 'Not implemented yet getUser' });
+    const { id: idUser } = request.params;
+    await pool.connect(async (err, client, done) => {
+        if (err) {
+            response.json({ success: false, msg: 'Error accessing the database' });
+            done();
+            return;
+        }
+        await client.query('BEGIN');
+        await client.query('SELECT id, email, name, bio, country, city FROM users WHERE id=$1', [idUser], (err, result) => {
+            if (err || result.rowCount == 0) {
+                console.log(err);
+                response.json({ success: false, msg: 'User not found' });
+            } else {
+                response.json({ success: true, user: result.rows[0] });
+            }
+        });
+        done();
+        return;
+    })
 }
 
 const createProfile = async (request, response) => {
