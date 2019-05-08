@@ -162,8 +162,8 @@ export default class Swipe extends React.Component {
                 this.getImageFromServer(tokenJson, id, i).then( (value)=> {
                     let images = this.state.images;
                     images[i] = "data:image/jpeg;base64," + value;
-                    this.setState({images: images});} ) 
-                
+                    this.setState({images: images});} )
+
               }
         }
 
@@ -298,9 +298,9 @@ export default class Swipe extends React.Component {
 
                     <View style={{ flex: 1, marginTop: 10 }}>
                         <Button
-                            onPress={() => this.setState({ isLoading: true, myOffers: [] })
+                            onPress={() => this.props.navigation.navigate('Filter')
                             }
-                            title="Settings"
+                            title="Filters"
                             color="#ff3b28"
 
                         />

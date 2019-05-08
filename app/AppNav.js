@@ -14,10 +14,12 @@ import perfilAnimalFavorites from "./Components/perfilAnimalFavorites"
 import formNewOffer from "./Components/formNewOffer"
 import TabIcon from './TabIcon';
 import AutocompleteExample from "./Components/autocomplete"
+import Filter from "./Components/filter"
 
 const SettingsNavigator = createStackNavigator({
     LoginScreen: { screen: Login },
     SettingsScreen: { screen: Settings },
+    Filter: {screen: Filter},
     perfilAnimalMyOffers: {screen: perfilAnimalMyOffers},
     formNewOffer: {
         screen: formNewOffer
@@ -37,6 +39,8 @@ const SettingsNav = createAppContainer(SettingsNavigator);
 const SwipeNavigator = createStackNavigator({
 
     SwipeScreen: { screen: swipeScreen },
+    Filter: {screen: Filter},
+
     perfilAnimalSwipe: { screen: perfilAnimalSwipe }
 },
     {
@@ -58,7 +62,7 @@ const SwipeNavigator = createStackNavigator({
             navigationOptions: {
                 headerVisible: false,
             }
-    
+
         });
 
     const ChatNav = createAppContainer(ChatNavigator);
@@ -110,7 +114,7 @@ const TabNavigator = createBottomTabNavigator(
             },
         },
 
-      
+
 
     },
 
