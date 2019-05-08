@@ -30,6 +30,7 @@ const currentUser = async (request, response) => {
 
 const getUser = async (request, response) => {
     //response.json({ success: false, msg: 'Not implemented yet getUser' });
+    const { email, name } = request.decoded;
     const { id: idUser } = request.params;
     await pool.connect(async (err, client, done) => {
         if (err) {
@@ -52,7 +53,45 @@ const getUser = async (request, response) => {
 }
 
 const createProfile = async (request, response) => {
-    response.json({ success: false, msg: 'Not implemented yet createUser' });
+    //response.json({ success: false, msg: 'Not implemented yet createUser' });
+    const { email, name } = request.decoded;
+    const { id: idUser } = request.params;
+    const { bio, country, city } = request.body || request.query;
+    await pool.connect(async (err, client, done) => {
+        if (err) {
+            response.json({ success: false, msg: 'Error accessing the database' });
+            done();
+            return;
+        }
+        await client.query('BEGIN');
+        await client.query(
+            'SELECT id FROM users WHERE email=$1 AND name=$2;', [email, name],
+            (err, result) => {
+                if (err || result.rowCount == 0) {
+                    console.log(err)
+                    response.json({ success: false, msg: 'User ' + email + ' doesn\'t exist' });
+                } else {
+                    if(result.rows[0].id == idUser) {
+                        client.query(
+                            'UPDATE users SET bio=$1, country=$2, city=$3 WHERE id=$4;),
+                            [bio, country, city, idUser],
+                            (error, res) => {
+                                if (error) {
+                                    console.error('Unknown error', error);
+                                    response.json({ success: false, msg: 'Unknown error' });
+                                } else {
+                                    client.query('COMMIT');
+                                    response.json({ success: true, msg: 'Profile created successfully', id: idUser });
+                                }
+                        });
+                    }
+                    else {
+                        response.json({ success: false, msg: 'No authorized for operation' });
+                    }
+                }
+            });
+        done();
+    })
 }
 
 const updateUser = async (request, response) => {
