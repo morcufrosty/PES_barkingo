@@ -7,6 +7,9 @@ const imagesDir = '.images';
 
 const getOffers = async (request, response) => {
     const { email, name } = request.decoded;
+    let {sex = null, type = null, species = null, city = null, minAge = null, maxAge = null} = request.query || null;
+    let query = 'SELECT "openedOffers".id, "openedOffers".name, "openedOffers".sex, "openedOffers".race, "openedOffers"."TypeName" FROM "openedOffers" WHERE "openedOffers"."idOwner"<>$1 and NOT EXISTS (SELECT * FROM seen WHERE seen."idOffer"="openedOffers".id and seen."idUser"=$1) and NOT EXISTS (SELECT * FROM favourites WHERE favourites."idOffer"="openedOffers".id and favourites."idUser"=$1) ';
+        + ';'
     await pool.connect(async (err, client, done) => {
         if (err) {
             response.json({ success: false, msg: 'Error accessing the database' });
@@ -22,7 +25,7 @@ const getOffers = async (request, response) => {
                     response.json({ success: false, msg: 'User ' + email + ' doesn\'t exist' });
                 } else {
                     client.query(
-                        'SELECT "openedOffers".id, "openedOffers".name, "openedOffers".sex, "openedOffers".race, "openedOffers"."TypeName" FROM "openedOffers" WHERE "openedOffers"."idOwner"<>$1 and NOT EXISTS (SELECT * FROM seen WHERE seen."idOffer"="openedOffers".id and seen."idUser"=$1) and NOT EXISTS (SELECT * FROM favourites WHERE favourites."idOffer"="openedOffers".id and favourites."idUser"=$1);',
+                        query,
                         [result.rows[0].id], (err, res) => {
                             if (err || res.rowCount == 0) {
                                 console.log(err)
@@ -77,7 +80,7 @@ const createOffer = async (request, response) => {
 const updateOffer = async (request, response) => {
     const { email, name: userName } = request.decoded;
     const { id: idOffer } = request.params;
-    let { name, type, race, sex, age, description, iniDate, endDate } = request.body || request.query;
+    const { name = null, type = null, race = null, sex = null, age = null, description = null, iniDate = null, endDate = null } = request.body || request.query;
     await pool.connect(async (err, client, done) => {
         if (err) {
             response.json({ success: false, msg: 'Error accessing the database' });
@@ -85,9 +88,6 @@ const updateOffer = async (request, response) => {
             return;
         }
         await client.query('BEGIN');
-        if (description === undefined) description = "null";
-        if (iniDate === undefined) iniDate = "null";
-        if (endDate === undefined) endDate = "null";
         await client.query(
             'SELECT id FROM users WHERE email=$1 AND name=$2;', [email, userName],
             (err, result) => {
@@ -276,7 +276,6 @@ const uploadImage = async (request, response) => {
     });
 }
 
-
 const favourites = async (request, response) => {
     const { email, name } = request.decoded;
     await pool.connect(async (err, client, done) => {
@@ -386,7 +385,7 @@ const offerDetails = async (request, response) => {
         }
         await client.query('BEGIN');
         await client.query(
-            'SELECT "openedOffers".id, "openedOffers"."name", "openedOffers"."age", "openedOffers".description, "openedOffers".sex, race."raceName", species."speciesName", users.name AS "userName" FROM "openedOffers", race, species, users WHERE "openedOffers".id = $1 and "openedOffers"."idOwner"=users.id and "openedOffers".race=race."idRace" and race."idSpecies"=species.id;', [idOffer],
+            'SELECT "openedOffers".id, "openedOffers"."name", "openedOffers"."age", "openedOffers".description, "openedOffers".sex, race."raceName", species."speciesName", species."idSpecies" users.name AS "userName" FROM "openedOffers", race, species, users WHERE "openedOffers".id = $1 and "openedOffers"."idOwner"=users.id and "openedOffers".race=race."idRace" and race."idSpecies"=species.id;', [idOffer],
             (err, result) => {
                 if (err || result.rowCount == 0) {
                     console.log(err)
