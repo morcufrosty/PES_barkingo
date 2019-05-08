@@ -331,6 +331,7 @@ const unfavourite = async (request, response) => {
                         (error, res) => {
                             if (error) {
                                 console.error('Unknown error', error);
+                                response.json({ success: false, msg: 'Unknown error' });
                             } else {
                                 client.query('COMMIT');
                                 response.json({ success: true, msg: 'Offer deleted from favourites successfully', id: idOffer });
