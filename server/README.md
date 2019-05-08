@@ -177,6 +177,7 @@ Animal species:
             -   `sex`: sex of the offered animal.
             -   `species`: species of the animal in the offer.
             -   `offerType`: type of the offer
+            -   `age`: age of the offered animal
 
 -   ### POST `/offers`: creates a new offer
 
