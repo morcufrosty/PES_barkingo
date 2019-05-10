@@ -268,6 +268,8 @@ const swipe = async (request, response) => {
                                 )
                             }
                         }
+                    )
+                }
             }
         );
         done();
