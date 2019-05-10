@@ -173,7 +173,6 @@ export default class Swipe extends React.Component {
 
         this.setState({ isLoading: false, myOffers: ofertesAux, noOffers: noOfertes, images: imatgesAux, username: responseUser.name })
     }
-
     renderPublications = () => {
 
         return this.state.myOffers.map((item, index) => {
@@ -267,11 +266,13 @@ export default class Swipe extends React.Component {
                         flexDirection: 'row',
                         height: 64
                     }}>
+                    <TouchableOpacity  onPress={() => this.props.navigation.navigate('formPerfilUsuari')}>
                         <Image style={{
                             borderRadius: 64,
                             overflow: 'hidden'
                         }} source={{ uri: "https://facebook.github.io/react-native/img/favicon.png", width: 64, height: 64 }} />
                         <Text style={{ fontSize: 20, marginLeft: 10, color: 'white', flex: 1, justifyContent: 'center', alignItems: 'center', height: 64, textAlignVertical: 'center' }}>{this.state.username}</Text>
+                    </TouchableOpacity>
                     </View>
                     <Text style={{
                         paddingTop: '5%',
@@ -298,8 +299,7 @@ export default class Swipe extends React.Component {
 
                     <View style={{ flex: 1, marginTop: 10 }}>
                         <Button
-                            onPress={() => this.props.navigation.navigate('Filter')
-                            }
+                            onPress={() => this.props.navigation.navigate('Filter')}
                             title="Filters"
                             color="#ff3b28"
 
