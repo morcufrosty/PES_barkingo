@@ -29,6 +29,7 @@ export default class formPerfilUsuari extends React.Component {
             name: '',
             description: '',
             image: null,
+            profilePlaceHolder: null
         }
     }
 
@@ -70,7 +71,7 @@ export default class formPerfilUsuari extends React.Component {
             Alert.alert("Error", "Please enter the race of the pet" )
           }
         */
-        
+
 
         else if (this.state.description === null) {
             Alert.alert("Error", "Please specify a description")
@@ -276,12 +277,28 @@ export default class formPerfilUsuari extends React.Component {
                 </View>);
 
         } else {
+            var random = Math.random();
+            var source;
+            var imagePlace;
+            if (random < 0.5){
+              imagePlace=(
+                <Image
+                    source={require("../assets/Profile_m.png")}
+                    style={{ width: 100, height: 100, borderRadius:100 }}
+                />
+              )
+            } else {
+              imagePlace=(
+                <Image
+                    source={require("../assets/Profile_f.png")}
+                    style={{ width: 100, height: 100, borderRadius:100 }}
+                />
+              )
+            }
             imageForm = (
                 <View style={{ flex: 1, marginTop: 10, marginBottom: 20, flexDirection: 'row' }}>
-                    <Image
-                        source={require('../assets/no_image.png')}
-                        style={{ width: 100, height: 100 }}
-                    />
+
+                    {imagePlace}
                     <View
                         style={{
                             alignItems: "center",

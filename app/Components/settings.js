@@ -57,6 +57,28 @@ export default class Swipe extends React.Component {
         }
     }
 
+    async getProfileImageFromServer(tokenJson, id) {
+        return fetch(`http://10.4.41.164/api/users/${id}/image`, {
+            method: 'GET',
+            headers: {
+                Accept: '*',
+                'x-access-token': tokenJson.token
+            }
+        }).then((response => { return response.text() }))
+
+    }
+
+
+    async handleProfileImage(tokenJson, id){
+        this.getProfileImageFromServer(tokenJson, id).then( (value)=> {
+        let image;
+        image = "data:image/jpeg;base64," + value;
+        this.setState({profileImage: image});
+    } )
+
+
+    }
+
     async deleteOffer(tokenJson, id) {
         console.log(id);
         return fetch(`http://10.4.41.164/api/offers/${id}`, {
@@ -153,6 +175,11 @@ export default class Swipe extends React.Component {
         const responseOffers = await this.getMyOffersFromAPI(tokenJson);
         const responseUser = await this.getUserFromAPI(tokenJson);
 
+        if(responseUser.success){
+           // uId = responseUser.id;
+           // handleProfileImage(tokenJson, uId );
+        }
+
         if (responseOffers.success) {
             ofertesAux = responseOffers.offers
             console.log(ofertesAux);
@@ -171,7 +198,8 @@ export default class Swipe extends React.Component {
             noOfertes = true
         }
 
-        this.setState({ isLoading: false, myOffers: ofertesAux, noOffers: noOfertes, images: imatgesAux, username: responseUser.name })
+        this.setState({ isLoading: false, myOffers: ofertesAux, noOffers: noOfertes, images: imatgesAux, username: responseUser.user.username, userId: uId })
+   
     }
 
     renderPublications = () => {
@@ -267,11 +295,16 @@ export default class Swipe extends React.Component {
                         flexDirection: 'row',
                         height: 64
                     }}>
+                    <TouchableOpacity>
                         <Image style={{
                             borderRadius: 64,
-                            overflow: 'hidden'
-                        }} source={{ uri: "https://facebook.github.io/react-native/img/favicon.png", width: 64, height: 64 }} />
-                        <Text style={{ fontSize: 20, marginLeft: 10, color: 'white', flex: 1, justifyContent: 'center', alignItems: 'center', height: 64, textAlignVertical: 'center' }}>{this.state.username}</Text>
+                            overflow: 'hidden',
+                            width: 64, height: 64,
+                            backgroundColor: "#f29797"
+                        }} source={{ uri: this.state.profileImage }} />
+                    </TouchableOpacity>
+                    <Text style={{ fontSize: 20, marginLeft: 10, color: 'white', flex: 1, justifyContent: 'center', alignItems: 'center', height: 64, textAlignVertical: 'center' }}>{this.state.username}</Text>
+
                     </View>
                     <Text style={{
                         paddingTop: '5%',
@@ -300,9 +333,8 @@ export default class Swipe extends React.Component {
                         <Button
                             onPress={() => this.props.navigation.navigate('Filter')
                             }
-                            title="Filters"
+                            title="Settings"
                             color="#ff3b28"
-
                         />
                     </View>
 
