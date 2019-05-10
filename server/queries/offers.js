@@ -5,9 +5,9 @@ const path = require('path');
 const homedir = require('os').homedir();
 const imagesDir = '.images';
 
-var toType = function(obj) {
+var toType = function (obj) {
     return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase()
-  }
+}
 
 const getOffers = async (request, response) => {
     const { email, name } = request.decoded;
@@ -242,22 +242,32 @@ const swipe = async (request, response) => {
             'SELECT id FROM users WHERE email=$1 AND name=$2;', [email, name],
             (err, result) => {
                 if (err || result.rowCount == 0) {
-                    console.log(err)
+                    console.log(err);
+                    response.status(404);
                     response.json({ success: false, msg: 'User doesn\'t exist' });
                 } else {
-                    client.query(
-                        'INSERT INTO ' + table + '("idUser", "idOffer") VALUES ($1, $2);', [result.rows[0].id, idOffer],
+                    await client.query(
+                        'SELECT "openedOffers".id FROM "openedOffers" WHERE "openedOffers".id=$1;', [idOffer],
                         (err, result) => {
-                            if (err) {
+                            if (err || result.rowCount == 0) {
                                 console.log(err)
-                                response.json({ success: false, msg: 'Offer is already in ' + table + ' or an error occured' });
+                                response.status(404);
+                                response.json({ success: false, msg: 'Offer doesn\'t exist' });
                             } else {
-                                client.query('COMMIT');
-                                response.json({ success: true, msg: 'Offer added to ' + table });
+                                client.query(
+                                    'INSERT INTO ' + table + '("idUser", "idOffer") VALUES ($1, $2);', [result.rows[0].id, idOffer],
+                                    (err, result) => {
+                                        if (err) {
+                                            console.log(err)
+                                            response.json({ success: false, msg: 'Offer is already in ' + table + ' or an error occured' });
+                                        } else {
+                                            client.query('COMMIT');
+                                            response.json({ success: true, msg: 'Offer added to ' + table });
+                                        }
+                                    }
+                                )
                             }
                         }
-                    )
-                }
             }
         );
         done();
