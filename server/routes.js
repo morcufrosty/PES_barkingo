@@ -96,6 +96,11 @@ router.delete('/offers/:id', db.deleteOffer);
 
 router.get('/races', db.racesList);
 
+router.get('/chats', db.getChats);
+
+router.post('/offers/:id/chat', db.createChat);
+
+router.delete('/chats/:id', db.deleteChat);
 
 // more routes for our API will happen here
 
