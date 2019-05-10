@@ -96,7 +96,7 @@ const createProfile = async (request, response) => {
 
 const updateUser = async (request, response) => {
     //response.json({ success: false, msg: 'Not implemented yet updateUser' });
-    const { email, name } = request.decoded;
+    const { email, name: nameUser } = request.decoded;
     const { id: idUser } = request.params;
     const { name, bio, country, city } = request.body || request.query;
     await pool.connect(async (err, client, done) => {
@@ -107,7 +107,7 @@ const updateUser = async (request, response) => {
         }
         await client.query('BEGIN');
         await client.query(
-            'SELECT id FROM users WHERE email=$1 AND name=$2;', [email, name],
+            'SELECT id FROM users WHERE email=$1 AND name=$2;', [email, nameUser],
             (err, result) => {
                 if (err || result.rowCount == 0) {
                     console.log(err)
@@ -115,7 +115,7 @@ const updateUser = async (request, response) => {
                 } else {
                     if(result.rows[0].id == idUser) {
                         client.query(
-                            'UPDATE users SET name=$1, bio=$2, country=$3, city=$4 WHERE id=$5;)',
+                            'UPDATE users SET name=$1, bio=$2, country=$3, city=$4 WHERE id=$5;',
                             [name, bio, country, city, idUser],
                             (error, res) => {
                                 if (error) {

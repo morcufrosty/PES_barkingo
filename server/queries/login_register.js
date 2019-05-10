@@ -16,6 +16,7 @@ const createUser = async (request, response) => {
         if (password === undefined) response.json({ success: false, msg: 'Password not defined' });
         let pwd = '';
         const f = async () => {
+            let username = email.split("@")[0];
             await client.query('SELECT id FROM users WHERE email=$1', [email], (err, result) => {
                 if (err) throw err;
                 if (result.rows[0]) {
