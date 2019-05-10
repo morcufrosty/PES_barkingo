@@ -178,8 +178,13 @@ export default class Swipe extends React.Component {
 
         const responseOffers = await this.getMyOffersFromAPI(tokenJson);
         const responseUser = await this.getUserFromAPI(tokenJson);
+<<<<<<< HEAD
 
         console.log(responseUser);
+=======
+        
+        console.log(responseUser.user.username);
+>>>>>>> 52a7e528e2439236cb69a71e0f7e4a17819ad5e4
 
 
         if(responseUser.success){
@@ -205,6 +210,7 @@ export default class Swipe extends React.Component {
         }
 
         this.setState({ isLoading: false, myOffers: ofertesAux, noOffers: noOfertes, images: imatgesAux, username: responseUser.user.username, userId: uId })
+   
     }
     renderPublications = () => {
 
@@ -306,8 +312,9 @@ export default class Swipe extends React.Component {
                             width: 64, height: 64,
                             backgroundColor: "#f29797"
                         }} source={{ uri: this.state.profileImage }} />
-                        <Text style={{ fontSize: 20, marginLeft: 10, color: 'white', flex: 1, justifyContent: 'center', alignItems: 'center', height: 64, textAlignVertical: 'center' }}>{this.state.username}</Text>
                     </TouchableOpacity>
+                    <Text style={{ fontSize: 20, marginLeft: 10, color: 'white', flex: 1, justifyContent: 'center', alignItems: 'center', height: 64, textAlignVertical: 'center' }}>{this.state.username}</Text>
+
                     </View>
                     <Text style={{
                         paddingTop: '5%',
@@ -334,8 +341,14 @@ export default class Swipe extends React.Component {
 
                     <View style={{ flex: 1, marginTop: 10 }}>
                         <Button
+<<<<<<< HEAD
                             onPress={() => this.props.navigation.navigate('Filter')}
                             title="Filters"
+=======
+                            onPress={() => this.setState({ isLoading: true, myOffers: [] })
+                            }
+                            title="Settings"
+>>>>>>> 52a7e528e2439236cb69a71e0f7e4a17819ad5e4
                             color="#ff3b28"
 
                         />

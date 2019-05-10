@@ -214,8 +214,7 @@ Animal species:
         -   `age`: age of the animal.
         -   `iniDate`: if the offer is of type `foster` this will indicate the date in which the animal would be fostered.
         -   `endDate`: if the offer is of type `foster` this will indicate the date in which the animal will end its fostering.
-        -   `nameOwner`: name of the owner of the offered animal.
-        -   `emailOwner`: email of the owner of the offered animal.
+        -   `idOwner`: id of the owner.
 
 -   ### PUT `/offers/:id`: edit an offer
 
@@ -303,14 +302,23 @@ Animal species:
 
 ### Chat
 
--   ### GET `/chats`: obtain the current user's chats
+-   ### GET `/chats`: obtain the current user's chats.
 
     -   #### Response
-        -   JPG file of the requested image, encoded with base64.
+        -   `success`: Is either `true` or `false`.
+        -   `chats`: List of chats
+            -   `idChat`: id of the chat
 
--   ### POST `/offers/:id/chat`: creates chat with the owner of the offer
+-   ### POST `/offers/:id/chat`: creates chat with the owner of the offer.
     -   #### Path parameters
         -   `id` [`required`]: identifier of the offer.
+    -   #### Response
+        -   `success`: Is either `true` or `false`.
+        -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
+
+-   ### DELETE `/chat/:id`: closes a chat from the databas and the chat server.
+    -   #### Path parameters
+        -   `id` [`required`]: identifier of the chat.
     -   #### Response
         -   `success`: Is either `true` or `false`.
         -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
