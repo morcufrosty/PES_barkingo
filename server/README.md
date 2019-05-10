@@ -316,7 +316,7 @@ Animal species:
         -   `success`: Is either `true` or `false`.
         -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
 
--   ### DELETE `/chat/:id`: deletes a chat from the databas and the chat server.
+-   ### DELETE `/chat/:id`: closes a chat from the databas and the chat server.
     -   #### Path parameters
         -   `id` [`required`]: identifier of the chat.
     -   #### Response
