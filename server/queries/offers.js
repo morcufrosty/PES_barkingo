@@ -122,7 +122,7 @@ const updateOffer = async (request, response) => {
                                     }
                                 });
                         }
-                    })
+                    });
                 }
             });
         done();
