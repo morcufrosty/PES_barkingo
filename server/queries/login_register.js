@@ -15,14 +15,14 @@ const createUser = async (request, response) => {
         await client.query('BEGIN');
         if (password === undefined) response.json({ success: false, msg: 'Password not defined' });
         let pwd = '';
+        let username = email.split("@")[0];
         const f = async () => {
-            let username = email.split("@")[0];
             await client.query('SELECT id FROM users WHERE email=$1', [email], (err, result) => {
                 if (err) throw err;
                 if (result.rows[0]) {
                     response.json({ success: false, msg: 'User already exists' });
                 } else {
-                    client.query('INSERT INTO users (id, name, email, password) VALUES ($1, $2, $3, $4)', [uuidv4(), name, email, pwd], (err, result) => {
+                    client.query('INSERT INTO users (id, name, email, password, username) VALUES ($1, $2, $3, $4, $5)', [uuidv4(), name, email, pwd, username], (err, result) => {
                         if (err) {
                             console.error('Unknown error', err);
                         } else {

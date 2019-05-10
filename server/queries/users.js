@@ -14,13 +14,13 @@ const currentUser = async (request, response) => {
             return;
         }
         await client.query('BEGIN');
-        await client.query('SELECT id, email, name FROM users WHERE email=$1 AND name=$2', [email, name], (err, result) => {
+        await client.query('SELECT id, email, name, username FROM users WHERE email=$1 AND name=$2', [email, name], (err, result) => {
             if (err || result.rowCount == 0) {
                 response.json({ success: false, msg: 'User not found' });
                 done();
                 return;
             } else {
-                response.json({ success: true, id: result.rows[0].id, email: result.rows[0].email, name: result.rows[0].name });
+                response.json({ success: true, user: result.rows[0] });
                 done();
                 return;
             }
@@ -96,9 +96,9 @@ const createProfile = async (request, response) => {
 
 const updateUser = async (request, response) => {
     //response.json({ success: false, msg: 'Not implemented yet updateUser' });
-    const { email, name: nameUser } = request.decoded;
+    const { email, name } = request.decoded;
     const { id: idUser } = request.params;
-    const { name, bio, country, city } = request.body || request.query;
+    const { username, bio, country, city } = request.body || request.query;
     await pool.connect(async (err, client, done) => {
         if (err) {
             response.json({ success: false, msg: 'Error accessing the database' });
@@ -107,7 +107,7 @@ const updateUser = async (request, response) => {
         }
         await client.query('BEGIN');
         await client.query(
-            'SELECT id FROM users WHERE email=$1 AND name=$2;', [email, nameUser],
+            'SELECT id FROM users WHERE email=$1 AND name=$2;', [email, name],
             (err, result) => {
                 if (err || result.rowCount == 0) {
                     console.log(err)
@@ -115,8 +115,8 @@ const updateUser = async (request, response) => {
                 } else {
                     if(result.rows[0].id == idUser) {
                         client.query(
-                            'UPDATE users SET name=$1, bio=$2, country=$3, city=$4 WHERE id=$5;',
-                            [name, bio, country, city, idUser],
+                            'UPDATE users SET username=$1, bio=$2, country=$3, city=$4 WHERE id=$5;',
+                            [username, bio, country, city, idUser],
                             (error, res) => {
                                 if (error) {
                                     console.error('Unknown error', error);
