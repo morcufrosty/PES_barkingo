@@ -35,6 +35,8 @@ export default class perfilAnimalFavorites extends React.Component {
         }
 
     }
+    
+
     async getOfferInfoFromAPI(tokenJson, id) {
 
         return fetch(`http://10.4.41.164/api/offers/${id}`, {

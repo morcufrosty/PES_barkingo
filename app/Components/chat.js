@@ -49,6 +49,44 @@ export default class Chat extends React.Component {
     async getImage(id) {
         return await AsyncStorage.getItem(id);
     }
+    async handleDeleteOffer(id) {
+        const t = await AsyncStorage.getItem('access_token');
+        tokenJson = JSON.parse(t);
+        const response = await this.deleteFavourite(tokenJson, id);
+        console.log("retorna delete")
+        if (response.success) {
+            ToastAndroid.showWithGravityAndOffset(
+                'Favourite offer deleted succesfully!',
+                ToastAndroid.SHORT,
+                ToastAndroid.BOTTOM,
+                25,
+                50,
+            );
+            this.setState({ isLoading: true, favouriteOffers: [] })
+        }
+        else {
+            Alert.alert("Favorite offer has not been deleted!", response.msg);
+        }
+    }
+
+    async deleteFavourite(tokenJson, id) {
+        console.log(id);
+        return fetch(`http://10.4.41.164/api/offers/${id}/favourite`, {
+            method: 'DELETE',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': tokenJson.token
+            }
+
+        }).then((response) => response.json())
+            .then((responseJson) => {
+                console.log(responseJson.msg);
+                return responseJson;
+            }).catch((error) => {
+                console.error(error);
+            });
+    }
 
 
     async handleGetFavouriteOffers() {
@@ -113,7 +151,7 @@ export default class Chat extends React.Component {
                                 onPress: () => console.log('Cancel Pressed'),
                                 style: 'cancel',
                               },
-                              {text: 'OK', onPress: () => console.log('OK Pressed')},
+                              {text: 'OK', onPress:  () => this.handleDeleteOffer(this.state.favouriteOffers[index].id)},
                             ],
                             {cancelable: false},
                           )}>
