@@ -363,7 +363,7 @@ refresh(){
             right: 15
           }}
           onPress={()  => this.props.navigation.navigate('Filter')}>
-          <Image
+            <Image
               source={{ uri: "https://flaticons.net/icons/Data/Filter-Standard.png", width: 15, height: 15 }} />
         </TouchableOpacity>
 

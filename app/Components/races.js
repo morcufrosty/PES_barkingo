@@ -1,16 +1,6 @@
 export default [
-        {
-            "idSpecies": 0,
-            "speciesName": "Dog",
-            "idRace": 0,
-            "raceName": "Retriever"
-        },
-        {
-            "idSpecies": 0,
-            "speciesName": "Dog",
-            "idRace": 1,
-            "raceName": "Retrievers (Labrador)"
-        },
+
+      
         {
             "idSpecies": 0,
             "speciesName": "Dog",

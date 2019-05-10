@@ -206,7 +206,6 @@ export default class Swipe extends React.Component {
 
         this.setState({ isLoading: false, myOffers: ofertesAux, noOffers: noOfertes, images: imatgesAux, username: responseUser.user.username, userId: uId })
     }
-
     renderPublications = () => {
 
         return this.state.myOffers.map((item, index) => {
@@ -300,6 +299,7 @@ export default class Swipe extends React.Component {
                         flexDirection: 'row',
                         height: 64
                     }}>
+                    <TouchableOpacity  onPress={() => this.props.navigation.navigate('formPerfilUsuari')}>
                         <Image style={{
                             borderRadius: 64,
                             overflow: 'hidden',
@@ -307,6 +307,7 @@ export default class Swipe extends React.Component {
                             backgroundColor: "#f29797"
                         }} source={{ uri: this.state.profileImage }} />
                         <Text style={{ fontSize: 20, marginLeft: 10, color: 'white', flex: 1, justifyContent: 'center', alignItems: 'center', height: 64, textAlignVertical: 'center' }}>{this.state.username}</Text>
+                    </TouchableOpacity>
                     </View>
                     <Text style={{
                         paddingTop: '5%',
@@ -333,9 +334,14 @@ export default class Swipe extends React.Component {
 
                     <View style={{ flex: 1, marginTop: 10 }}>
                         <Button
+<<<<<<< HEAD
+                            onPress={() => this.props.navigation.navigate('Filter')}
+                            title="Filters"
+=======
                             onPress={() => this.setState({ isLoading: true, myOffers: [] })
                             }
                             title="Settings"
+>>>>>>> 23a49a0a08d0eb3db985937dd70c557e5ef96a0d
                             color="#ff3b28"
 
                         />
