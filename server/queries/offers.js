@@ -37,7 +37,7 @@ const getOffers = async (request, response) => {
                         query,
                         [result.rows[0].id, sex, type, species, city, minAge, maxAge], (err, res) => {
                             if (err || res.rowCount == 0) {
-                                console.log('Error: ', err.message, ' Code: ', err.code)
+                                console.log(err);
                                 response.json({ success: false, msg: 'No offers found' });
                             } else {
                                 response.json({ success: true, msg: 'Offers found', offers: res.rows.slice(0, 10) });
