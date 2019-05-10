@@ -24,16 +24,16 @@ FROM
     animals, "offerType"
 WHERE animals.status = 0 AND animals.offer = "offerType"."idType";
 
---see offers
-SELECT "openedOffers".id, "openedOffers".name, "openedOffers".sex, "openedOffers".race, "openedOffers"."TypeName"
-FROM "openedOffers"
-WHERE "openedOffers"."idOwner"<>'6947fa31-67a0-4820-976d-296db10929f5'
-    and NOT EXISTS (SELECT *
-    FROM seen
-    WHERE seen."idOffer"="openedOffers".id and seen."idUser"='6947fa31-67a0-4820-976d-296db10929f5')
-    and NOT EXISTS (SELECT *
-    FROM favourites
-    WHERE favourites."idOffer"="openedOffers".id and favourites."idUser"='6947fa31-67a0-4820-976d-296db10929f5')
+--see offers with filters
+SELECT "openedOffers".id, "openedOffers".name, "openedOffers".sex, "openedOffers".race, "openedOffers"."TypeName", race."idSpecies", "openedOffers".age
+FROM "openedOffers", race
+WHERE "openedOffers"."idOwner"<>'1'
+	and "openedOffers".race=race."idRace"
+	and NOT EXISTS (SELECT * FROM seen WHERE seen."idOffer"="openedOffers".id and seen."idUser"='1')
+	and NOT EXISTS (SELECT * FROM favourites WHERE favourites."idOffer"="openedOffers".id and favourites."idUser"='1')
+	and (NULL IS NULL or "openedOffers".sex='') and (NULL IS NULL or "openedOffers"."TypeName"='')
+	and (NULL IS NULL or race."idSpecies"=0) and (NULL IS NULL or ''=(SELECT city FROM users WHERE users.id="openedOffers"."idOwner"))
+	and (0 IS NULL or "openedOffers".age>1) and (0 IS NULL or "openedOffers".age<10)
 ORDER BY "openedOffers".id;
 
 --offers

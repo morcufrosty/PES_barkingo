@@ -6,7 +6,9 @@
 2. [API Usage](#API-Usage)
 3. [Endpoints](#endpoints)
     - [Login and Register](#Login-and-Register)
-    - [View, edit and interact with offers](#View,-edit-and-interact-with-offers)
+    - [View, edit and interact with offers](#View-edit-and-interact-with-offers)
+    - [Chat](#chat)
+    - [Other](#other)
 
 ## Running
 
@@ -150,7 +152,7 @@ Animal species:
 -   ### POST `/users/:id/image`
 
     -   #### Path parameters
-        -   `id` [`required`]: identifier of the offer id
+        -   `id` [`required`]: identifier of the offer.
     -   #### Parameters
         -   `image`[`required`]: image file in jpg format, passed through form-data.
     -   #### Response
@@ -177,6 +179,7 @@ Animal species:
             -   `sex`: sex of the offered animal.
             -   `species`: species of the animal in the offer.
             -   `offerType`: type of the offer
+            -   `age`: age of the offered animal
 
 -   ### POST `/offers`: creates a new offer
 
@@ -248,6 +251,7 @@ Animal species:
 -   ### GET `/offers/favourite`: returns all the user's favourite offers
 
     -   ### Response
+
         -   `offers`: list containing the offers that match the given search parameters, with the following attributes for each element.
 
             -   `id`: identifier of the animal, which will be used in further requests.
@@ -259,7 +263,7 @@ Animal species:
 -   ### DELETE `/offers/:id/favourite`: deletes offer from favourites
 
     -   #### Path parameters
-        -   `id` [`required`]: identifier of the offer id
+        -   `id` [`required`]: identifier of the offer.
     -   #### Response
         -   `success`: Is either `true` or `false`.
         -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
@@ -267,7 +271,7 @@ Animal species:
 -   ### POST `/offers/:id`: swipe on an offer
 
     -   #### Path parameters
-        -   `id` [`required`]: identifier of the offer id
+        -   `id` [`required`]: identifier of the offer.
     -   #### Parameters
         -   `direction`: direction of the swipe action, can only be `right` or `left`
     -   #### Response
@@ -277,14 +281,14 @@ Animal species:
 -   ### GET `/offers/:id/image`
 
     -   #### Path parameters
-        -   `id` [`required`]: identifier of the offer id
+        -   `id` [`required`]: identifier of the offer.
     -   #### Response
         -   JPG file of the requested image, encoded with base64.
 
 -   ### POST `/offers/:id/image`
 
     -   #### Path parameters
-        -   `id` [`required`]: identifier of the offer id
+        -   `id` [`required`]: identifier of the offer.
     -   #### Parameters
         -   `image`[`required`]: image file in jpg format, passed through form-data.
     -   #### Response
@@ -297,6 +301,21 @@ Animal species:
         -   `success`: Is either `true` or `false`.
         -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
 
+### Chat
+
+-   ### GET `/chats`: obtain the current user's chats
+
+    -   #### Response
+        -   JPG file of the requested image, encoded with base64.
+
+-   ### POST `/offers/:id/chat`: creates chat with the owner of the offer
+    -   #### Path parameters
+        -   `id` [`required`]: identifier of the offer.
+    -   #### Response
+        -   `success`: Is either `true` or `false`.
+        -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
+
+### Other
 -   ### GET `/races`: list of races and its species
     -   #### Response
         -   `success`: Is either `true` or `false`.
