@@ -39,7 +39,7 @@ const getUser = async (request, response) => {
             return;
         }
         await client.query('BEGIN');
-        await client.query('SELECT id, email, name, bio, country, city FROM users WHERE id=$1', [idUser], (err, result) => {
+        await client.query('SELECT id, email, username, name, bio, country, city FROM users WHERE id=$1', [idUser], (err, result) => {
             if (err || result.rowCount == 0) {
                 console.log(err);
                 response.json({ success: false, msg: 'User not found' });
