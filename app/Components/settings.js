@@ -74,12 +74,12 @@ export default class Swipe extends React.Component {
 
     async handleProfileImage(tokenJson, id){
         this.getProfileImageFromServer(tokenJson, id).then( (value)=> {
-        let image; 
+        let image;
         image = "data:image/jpeg;base64," + value;
         this.setState({profileImage: image});
-    } ) 
-                
-              
+    } )
+
+
     }
 
     async deleteOffer(tokenJson, id) {
@@ -178,7 +178,7 @@ export default class Swipe extends React.Component {
 
         const responseOffers = await this.getMyOffersFromAPI(tokenJson);
         const responseUser = await this.getUserFromAPI(tokenJson);
-        
+
         console.log(responseUser);
 
 
@@ -195,8 +195,8 @@ export default class Swipe extends React.Component {
                 this.getImageFromServer(tokenJson, id, i).then( (value)=> {
                     let images = this.state.images;
                     images[i] = "data:image/jpeg;base64," + value;
-                    this.setState({images: images});} ) 
-                
+                    this.setState({images: images});} )
+
               }
         }
 
@@ -334,14 +334,8 @@ export default class Swipe extends React.Component {
 
                     <View style={{ flex: 1, marginTop: 10 }}>
                         <Button
-<<<<<<< HEAD
                             onPress={() => this.props.navigation.navigate('Filter')}
                             title="Filters"
-=======
-                            onPress={() => this.setState({ isLoading: true, myOffers: [] })
-                            }
-                            title="Settings"
->>>>>>> 23a49a0a08d0eb3db985937dd70c557e5ef96a0d
                             color="#ff3b28"
 
                         />
