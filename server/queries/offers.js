@@ -248,8 +248,8 @@ const swipe = async (request, response) => {
                 } else {
                     client.query(
                         'SELECT "openedOffers".id FROM "openedOffers" WHERE "openedOffers".id=$1;', [idOffer],
-                        (err, result) => {
-                            if (err || result.rowCount == 0) {
+                        (err, result2) => {
+                            if (err || result2.rowCount == 0) {
                                 console.log(err)
                                 response.status(404);
                                 response.json({ success: false, msg: 'Offer doesn\'t exist' });
@@ -415,7 +415,7 @@ const offerDetails = async (request, response) => {
         }
         await client.query('BEGIN');
         await client.query(
-            'SELECT "openedOffers".id, "openedOffers"."name", "openedOffers"."age", "openedOffers".description, "openedOffers".sex, race."raceName", species."speciesName" AS "species", race."idRace", users.name AS "userName" FROM "openedOffers", race, species, users WHERE "openedOffers".id = $1 and "openedOffers"."idOwner"=users.id and "openedOffers".race=race."idRace" and race."idSpecies"=species.id;', [idOffer],
+            'SELECT "openedOffers".id, "openedOffers"."name", "openedOffers"."age", "openedOffers".description, "openedOffers".sex, race."raceName", species."speciesName" AS "species", race."idRace", users.id AS "idOwner" FROM "openedOffers", race, species, users WHERE "openedOffers".id = $1 and "openedOffers"."idOwner"=users.id and "openedOffers".race=race."idRace" and race."idSpecies"=species.id;', [idOffer],
             (err, result) => {
                 if (err || result.rowCount == 0) {
                     console.log(err);

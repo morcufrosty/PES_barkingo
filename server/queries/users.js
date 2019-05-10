@@ -3,7 +3,7 @@ const uuidv4 = require('uuid/v4');
 const fs = require('fs');
 const path = require('path');
 const homedir = require('os').homedir();
-const imagesDir = '.images';
+const imagesDir = '.users';
 
 const currentUser = async (request, response) => {
     const { email, name } = request.decoded;
@@ -137,11 +137,34 @@ const updateUser = async (request, response) => {
 }
 
 const getUserImage = async (request, response) => {
-    response.json({ success: false, msg: 'Not implemented yet getUserImage' });
+    //response.json({ success: false, msg: 'Not implemented yet getUserImage' });
+    const { id: idUser } = request.params;
+    fs.readFile(path.join(homedir, imagesDir, idUser + '.jpg'), (err, data) => {
+        if (err) {
+            console.error(err);
+            response.json({ success: false, msg: 'Image couldn\'t be found' });
+        } else {
+            const img = new Buffer.from(data).toString('base64');
+            response.writeHead(200, {
+                // 'Content-Type': 'image/jpeg',
+                'Content-Length': img.length
+            });
+            response.end(img);
+        }
+    });
 }
 
 const createUserImage = async (request, response) => {
-    response.json({ success: false, msg: 'Not implemented yet createUserImage' });
+    //response.json({ success: false, msg: 'Not implemented yet createUserImage' });
+    const { id: idUser } = request.params;
+    const image = request.files.image;
+
+    require("fs").writeFile(path.join(homedir, imagesDir, idUser + '.jpg'), image.data, (err) => {
+        if (err) {
+            console.log(err);
+            response.json({ success: false, msg: 'Image couldn\'t be uploaded' });
+        } else response.json({ success: true, msg: 'Image added successfully' });
+    });
 }
 
 module.exports = {

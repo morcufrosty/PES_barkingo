@@ -101,7 +101,7 @@ export default class Chat extends React.Component {
     renderFavorites = () => {
         return this.state.favouriteOffers.map((data, index) => {
             return (
-                <View>
+                <View style={{flexDirection: 'row', padding:'2%'}}>
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('perfilAnimalFavorites', {id: this.state.favouriteOffers[index].id, image: this.state.images[index]} )}
                     onLongPress={()=>
                         Alert.alert(
@@ -127,6 +127,8 @@ export default class Chat extends React.Component {
                         backgroundColor:"#f29797"
                     }} source={{ uri: `${this.state.images[index]}` }} />
                     </TouchableOpacity>
+                    <Text style={{ color: 'white', fontSize: 20, marginLeft: '2%', marginRight: '2%', justifyContent: 'center', alignItems: 'center', textAlignVertical: 'center' 
+                         }}>Nom del puto gos</Text>                
                 </View>
             )
         })
@@ -214,22 +216,12 @@ export default class Chat extends React.Component {
                     fontWeight: 'bold'
                 }}>Favorited</Text>
                 <ScrollView
-                    horizontal={true}
+                    horizontal={false}
                     style={{
                         height: 110,
                     }}
                 >
                     {this.renderFavorites()}
-                </ScrollView>
-                <Text style={{
-                    paddingLeft: '5%',
-                    paddingTop: '5%',
-                    color: 'white',
-                    fontSize: 30,
-                    fontWeight: 'bold'
-                }}>Chats</Text>
-                <ScrollView>
-                    {this.renderChats()}
                 </ScrollView>
             </LinearGradient>
         );
