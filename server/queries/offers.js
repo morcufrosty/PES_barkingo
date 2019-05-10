@@ -246,7 +246,7 @@ const swipe = async (request, response) => {
                     response.status(404);
                     response.json({ success: false, msg: 'User doesn\'t exist' });
                 } else {
-                    await client.query(
+                    client.query(
                         'SELECT "openedOffers".id FROM "openedOffers" WHERE "openedOffers".id=$1;', [idOffer],
                         (err, result) => {
                             if (err || result.rowCount == 0) {
