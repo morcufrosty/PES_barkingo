@@ -19,16 +19,13 @@ import TextInputWTitle from './inputText.js';
 import InputPassword from './inputPassword.js';
 import { AsyncStorage } from 'react-native';
 import { NavigationActions, StackActions } from 'react-navigation';
-import { black } from 'ansi-colors';
 
 const initialState = {
     myOffers: [],
     images: [],
-    profileImage:"",
     isLoading: true,
     username: '',
-    noOffers: false,
-    userId: ''
+    noOffers: false
 };
 export default class Swipe extends React.Component {
 
@@ -74,12 +71,12 @@ export default class Swipe extends React.Component {
 
     async handleProfileImage(tokenJson, id){
         this.getProfileImageFromServer(tokenJson, id).then( (value)=> {
-        let image; 
+        let image;
         image = "data:image/jpeg;base64," + value;
         this.setState({profileImage: image});
-    } ) 
-                
-              
+    } )
+
+
     }
 
     async deleteOffer(tokenJson, id) {
@@ -174,13 +171,9 @@ export default class Swipe extends React.Component {
         ofertesAux = []
         imatgesAux = []
         noOfertes = false
-        let uId;
 
         const responseOffers = await this.getMyOffersFromAPI(tokenJson);
         const responseUser = await this.getUserFromAPI(tokenJson);
-        
-        console.log(responseUser.user.username);
-
 
         if(responseUser.success){
            // uId = responseUser.id;
@@ -189,14 +182,15 @@ export default class Swipe extends React.Component {
 
         if (responseOffers.success) {
             ofertesAux = responseOffers.offers
+            console.log(ofertesAux);
 
             for (let i = 0; i < ofertesAux.length; i++) {
                 let id = ofertesAux[i].id;
                 this.getImageFromServer(tokenJson, id, i).then( (value)=> {
                     let images = this.state.images;
                     images[i] = "data:image/jpeg;base64," + value;
-                    this.setState({images: images});} ) 
-                
+                    this.setState({images: images});} )
+
               }
         }
 
@@ -207,6 +201,7 @@ export default class Swipe extends React.Component {
         this.setState({ isLoading: false, myOffers: ofertesAux, noOffers: noOfertes, images: imatgesAux, username: responseUser.user.username, userId: uId })
    
     }
+
     renderPublications = () => {
 
         return this.state.myOffers.map((item, index) => {
@@ -300,7 +295,7 @@ export default class Swipe extends React.Component {
                         flexDirection: 'row',
                         height: 64
                     }}>
-                    <TouchableOpacity  onPress={() => this.props.navigation.navigate('formPerfilUsuari')}>
+                    <TouchableOpacity>
                         <Image style={{
                             borderRadius: 64,
                             overflow: 'hidden',
@@ -336,11 +331,10 @@ export default class Swipe extends React.Component {
 
                     <View style={{ flex: 1, marginTop: 10 }}>
                         <Button
-                            onPress={() => this.setState({ isLoading: true, myOffers: [] })
+                            onPress={() => this.props.navigation.navigate('Filter')
                             }
                             title="Settings"
                             color="#ff3b28"
-
                         />
                     </View>
 
