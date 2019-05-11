@@ -20,6 +20,7 @@ export default class perfilAnimalSwipe extends React.Component {
         super(props);
         this.state = {
             id: '1',
+            uId: '',
             name: '',
             type: '',
             species: '',
@@ -53,8 +54,28 @@ export default class perfilAnimalSwipe extends React.Component {
             });
     }
 
+
+
+    async getUserInfoFromAPI(tokenJson, id) {
+
+        return fetch(`http://10.4.41.164/api/users/${id}`, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': tokenJson.token
+            }
+        }).then((response) => response.json())
+            .then((responseJson) => {
+                console.log(responseJson);
+                return responseJson;
+            }).catch((error) => {
+                console.error(error);
+            });
+    }
+
     async handleStart() {
-        let desc, name, race, age, id, image
+        let desc, name, race, age, id, image, uIdd
         id = this.props.navigation.getParam('id', '1')
         image = this.props.navigation.getParam('image', 'undefined')
         console.log(id)
@@ -66,6 +87,11 @@ export default class perfilAnimalSwipe extends React.Component {
                 desc = responseOffer.offer.description,
                 race = responseOffer.offer.raceName,
                 age = responseOffer.offer.age
+                uIdd = responseOffer.idOwner
+
+               // const responseUser = await getUserInfoFromAPI(tokenJson, uId);
+               // console.log(responseUser);
+
         }
         this.setState({
             name: name,
@@ -73,7 +99,8 @@ export default class perfilAnimalSwipe extends React.Component {
             race: race,
             age: age,
             isLoading: false,
-            image: image
+            image: image,
+            uId: uIdd
         })
     }
 
