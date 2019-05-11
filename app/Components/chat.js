@@ -49,20 +49,17 @@ export default class Chat extends React.Component {
     async getImage(id) {
         return await AsyncStorage.getItem(id);
     }
-    async handleDeleteOffer(id) {
+    async handleDeleteOffer(id, index) {
         const t = await AsyncStorage.getItem('access_token');
         tokenJson = JSON.parse(t);
         const response = await this.deleteFavourite(tokenJson, id);
         console.log("retorna delete")
         if (response.success) {
-            ToastAndroid.showWithGravityAndOffset(
-                'Favourite offer deleted succesfully!',
-                ToastAndroid.SHORT,
-                ToastAndroid.BOTTOM,
-                25,
-                50,
-            );
-            this.setState({ isLoading: true, favouriteOffers: [] })
+            let auxFav = this.state.favouriteOffers;
+            let auxImg = this.state.images;
+            auxFav.splice(index, 1);
+            auxImg.splice(index, 1);
+            this.setState({favouriteOffers : auxFav, images : auxImg});
         }
         else {
             Alert.alert("Favorite offer has not been deleted!", response.msg);
@@ -143,15 +140,15 @@ export default class Chat extends React.Component {
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('perfilAnimalFavorites', {id: this.state.favouriteOffers[index].id, image: this.state.images[index]} )}
                     onLongPress={()=>
                         Alert.alert(
-                            'Alert Title',
-                            'My Alert Msg',
+                            'UnFavourite',
+                            'Remove from favourited list',
                             [
                               {
                                 text: 'Cancel',
                                 onPress: () => console.log('Cancel Pressed'),
                                 style: 'cancel',
                               },
-                              {text: 'OK', onPress:  () => this.handleDeleteOffer(this.state.favouriteOffers[index].id)},
+                              {text: 'OK', onPress:  () => this.handleDeleteOffer(this.state.favouriteOffers[index].id, index)},
                             ],
                             {cancelable: false},
                           )}>
