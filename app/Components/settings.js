@@ -33,7 +33,38 @@ export default class Swipe extends React.Component {
         super(props)
         this.state = initialState;
     }
+    async handleDeleteUser(tokenJson) {
+        const t = await AsyncStorage.getItem('access_token');
+        tokenJson = JSON.parse(t);
+        const response = await this.deleteFavourite(tokenJson, id);
+        console.log("retorna delete user")
+        if (response.success) {
+            Alert.alert("User has been deleted!", response.msg);
+            //navigate cap al login, eliminar access token
+        }
+        else {
+            Alert.alert("User has not been deleted!", response.msg);
+        }
+    }
 
+    async deleteUser(tokenJson) {
+        console.log(tokenJson);
+        return fetch(`http://10.4.41.164/api/offers/${id}/favourite`, {
+            method: 'DELETE',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': tokenJson.token
+            }
+
+        }).then((response) => response.json())
+            .then((responseJson) => {
+                console.log(responseJson.msg);
+                return responseJson;
+            }).catch((error) => {
+                console.error(error);
+            });
+    }
 
     async handleDeleteOffer(id) {
         this.setState({ isLoading: true, myOffers: [] })
@@ -79,6 +110,10 @@ export default class Swipe extends React.Component {
 
     }
 
+
+
+    
+
     async deleteOffer(tokenJson, id) {
         console.log(id);
         return fetch(`http://10.4.41.164/api/offers/${id}`, {
@@ -116,6 +151,8 @@ export default class Swipe extends React.Component {
             });
 
     }
+
+
 
     async getUserFromAPI(tokenJson) {
 

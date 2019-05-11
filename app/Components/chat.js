@@ -49,7 +49,7 @@ export default class Chat extends React.Component {
     async getImage(id) {
         return await AsyncStorage.getItem(id);
     }
-    async handleDeleteOffer(id, index) {
+    async handleDeleteFavourite(id, index) {
         const t = await AsyncStorage.getItem('access_token');
         tokenJson = JSON.parse(t);
         const response = await this.deleteFavourite(tokenJson, id);
@@ -148,7 +148,7 @@ export default class Chat extends React.Component {
                                 onPress: () => console.log('Cancel Pressed'),
                                 style: 'cancel',
                               },
-                              {text: 'OK', onPress:  () => this.handleDeleteOffer(this.state.favouriteOffers[index].id, index)},
+                              {text: 'OK', onPress:  () => this.handleDeleteFavourite(this.state.favouriteOffers[index].id, index)},
                             ],
                             {cancelable: false},
                           )}>
@@ -163,7 +163,7 @@ export default class Chat extends React.Component {
                     }} source={{ uri: `${this.state.images[index]}` }} />
                     </TouchableOpacity>
                     <Text style={{ color: 'white', fontSize: 20, marginLeft: '2%', marginRight: '2%', justifyContent: 'center', alignItems: 'center', textAlignVertical: 'center' 
-                         }}>Nom del puto gos</Text>                
+                         }}>{this.state.favouriteOffers[index].name}</Text>                
                 </View>
             )
         })
