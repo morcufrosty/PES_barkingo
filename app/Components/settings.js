@@ -235,7 +235,7 @@ export default class Swipe extends React.Component {
             noOfertes = true
         }
 
-        this.setState({ isLoading: false, myOffers: ofertesAux, noOffers: noOfertes, images: imatgesAux, username: responseUser.user.username, userId: uId })
+        this.setState({ isLoading: false, myOffers: ofertesAux, noOffers: noOfertes, images: imatgesAux, username: responseUser.user.username })
    
     }
 
