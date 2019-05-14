@@ -49,6 +49,41 @@ export default class Chat extends React.Component {
     async getImage(id) {
         return await AsyncStorage.getItem(id);
     }
+    async handleDeleteFavourite(id, index) {
+        const t = await AsyncStorage.getItem('access_token');
+        tokenJson = JSON.parse(t);
+        const response = await this.deleteFavourite(tokenJson, id);
+        console.log("retorna delete")
+        if (response.success) {
+            let auxFav = this.state.favouriteOffers;
+            let auxImg = this.state.images;
+            auxFav.splice(index, 1);
+            auxImg.splice(index, 1);
+            this.setState({favouriteOffers : auxFav, images : auxImg});
+        }
+        else {
+            Alert.alert("Favorite offer has not been deleted!", response.msg);
+        }
+    }
+
+    async deleteFavourite(tokenJson, id) {
+        console.log(id);
+        return fetch(`http://10.4.41.164/api/offers/${id}/favourite`, {
+            method: 'DELETE',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': tokenJson.token
+            }
+
+        }).then((response) => response.json())
+            .then((responseJson) => {
+                console.log(responseJson.msg);
+                return responseJson;
+            }).catch((error) => {
+                console.error(error);
+            });
+    }
 
 
     async handleGetFavouriteOffers() {
@@ -101,8 +136,22 @@ export default class Chat extends React.Component {
     renderFavorites = () => {
         return this.state.favouriteOffers.map((data, index) => {
             return (
-                <View>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('perfilAnimalFavorites', {id: this.state.favouriteOffers[index].id, image: this.state.images[index]} )}>
+                <View style={{flexDirection: 'row', padding:'2%'}}>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('perfilAnimalFavorites', {id: this.state.favouriteOffers[index].id, image: this.state.images[index]} )}
+                    onLongPress={()=>
+                        Alert.alert(
+                            'UnFavourite',
+                            'Remove from favourited list',
+                            [
+                              {
+                                text: 'Cancel',
+                                onPress: () => console.log('Cancel Pressed'),
+                                style: 'cancel',
+                              },
+                              {text: 'OK', onPress:  () => this.handleDeleteFavourite(this.state.favouriteOffers[index].id, index)},
+                            ],
+                            {cancelable: false},
+                          )}>
                     <Image style={{
                         borderRadius: 40,
                         overflow: 'hidden',
@@ -113,6 +162,8 @@ export default class Chat extends React.Component {
                         backgroundColor:"#f29797"
                     }} source={{ uri: `${this.state.images[index]}` }} />
                     </TouchableOpacity>
+                    <Text style={{ color: 'white', fontSize: 20, marginLeft: '2%', marginRight: '2%', justifyContent: 'center', alignItems: 'center', textAlignVertical: 'center' 
+                         }}>{this.state.favouriteOffers[index].name}</Text>                
                 </View>
             )
         })
@@ -200,22 +251,12 @@ export default class Chat extends React.Component {
                     fontWeight: 'bold'
                 }}>Favorited</Text>
                 <ScrollView
-                    horizontal={true}
+                    horizontal={false}
                     style={{
                         height: 110,
                     }}
                 >
                     {this.renderFavorites()}
-                </ScrollView>
-                <Text style={{
-                    paddingLeft: '5%',
-                    paddingTop: '5%',
-                    color: 'white',
-                    fontSize: 30,
-                    fontWeight: 'bold'
-                }}>Chats</Text>
-                <ScrollView>
-                    {this.renderChats()}
                 </ScrollView>
             </LinearGradient>
         );

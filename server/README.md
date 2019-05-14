@@ -6,7 +6,9 @@
 2. [API Usage](#API-Usage)
 3. [Endpoints](#endpoints)
     - [Login and Register](#Login-and-Register)
-    - [View, edit and interact with offers](#View,-edit-and-interact-with-offers)
+    - [View, edit and interact with offers](#View-edit-and-interact-with-offers)
+    - [Chat](#chat)
+    - [Other](#other)
 
 ## Running
 
@@ -150,7 +152,7 @@ Animal species:
 -   ### POST `/users/:id/image`
 
     -   #### Path parameters
-        -   `id` [`required`]: identifier of the offer id
+        -   `id` [`required`]: identifier of the offer.
     -   #### Parameters
         -   `image`[`required`]: image file in jpg format, passed through form-data.
     -   #### Response
@@ -163,9 +165,9 @@ Animal species:
 
     -   #### Query parameters
 
-        -   `sex` [`optional`]
+        -   `sex` [`optional`]: sex of the offered animal
         -   `type` [`optional`]: can either be `adoption` o `foster`.
-        -   `species` [`optional`]: species of the animals to be displayed.
+        -   `species` [`optional`]: number species of the animals to be displayed.
         -   `city` [`optional`]: city of the requested
         -   `minAge` [`optional`]: minimum age of the offered animal
         -   `maxAge` [`optional`]: maximum age of the offered animal
@@ -177,6 +179,7 @@ Animal species:
             -   `sex`: sex of the offered animal.
             -   `species`: species of the animal in the offer.
             -   `offerType`: type of the offer
+            -   `age`: age of the offered animal
 
 -   ### POST `/offers`: creates a new offer
 
@@ -205,17 +208,17 @@ Animal species:
         -   `name`: name of the animal.
         -   `type`: type of offer, which can be `adoption` o `foster`
         -   `species`: species of the animal in the offer.
+        -   `idRace`: id of the race of the animal in the offer.
         -   `race`: if the animal's species is that of a dog or a cat, this field will contain its race.
         -   `sex`: sex of the animal.
         -   `age`: age of the animal.
         -   `iniDate`: if the offer is of type `foster` this will indicate the date in which the animal would be fostered.
         -   `endDate`: if the offer is of type `foster` this will indicate the date in which the animal will end its fostering.
-        -   `nameOwner`: name of the owner of the offered animal.
-        -   `emailOwner`: email of the owner of the offered animal.
+        -   `idOwner`: id of the owner.
 
 -   ### PUT `/offers/:id`: edit an offer
 
-    -   #### Pparameters
+    -   #### Parameters
         -   `name` [`optional`]: name of the animal.
         -   `type` [`optional`]: type of offer, which can be `0` (`adoption`) or `1` (`foster`)
         -   `race` [`optional`]: race of the animal in the offer, which in turn identifies its species.
@@ -247,6 +250,7 @@ Animal species:
 -   ### GET `/offers/favourite`: returns all the user's favourite offers
 
     -   ### Response
+
         -   `offers`: list containing the offers that match the given search parameters, with the following attributes for each element.
 
             -   `id`: identifier of the animal, which will be used in further requests.
@@ -258,7 +262,7 @@ Animal species:
 -   ### DELETE `/offers/:id/favourite`: deletes offer from favourites
 
     -   #### Path parameters
-        -   `id` [`required`]: identifier of the offer id
+        -   `id` [`required`]: identifier of the offer.
     -   #### Response
         -   `success`: Is either `true` or `false`.
         -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
@@ -266,7 +270,7 @@ Animal species:
 -   ### POST `/offers/:id`: swipe on an offer
 
     -   #### Path parameters
-        -   `id` [`required`]: identifier of the offer id
+        -   `id` [`required`]: identifier of the offer.
     -   #### Parameters
         -   `direction`: direction of the swipe action, can only be `right` or `left`
     -   #### Response
@@ -276,14 +280,14 @@ Animal species:
 -   ### GET `/offers/:id/image`
 
     -   #### Path parameters
-        -   `id` [`required`]: identifier of the offer id
+        -   `id` [`required`]: identifier of the offer.
     -   #### Response
         -   JPG file of the requested image, encoded with base64.
 
 -   ### POST `/offers/:id/image`
 
     -   #### Path parameters
-        -   `id` [`required`]: identifier of the offer id
+        -   `id` [`required`]: identifier of the offer.
     -   #### Parameters
         -   `image`[`required`]: image file in jpg format, passed through form-data.
     -   #### Response
@@ -296,6 +300,30 @@ Animal species:
         -   `success`: Is either `true` or `false`.
         -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
 
+### Chat
+
+-   ### GET `/chats`: obtain the current user's chats.
+
+    -   #### Response
+        -   `success`: Is either `true` or `false`.
+        -   `chats`: List of chats
+            -   `idChat`: id of the chat
+
+-   ### POST `/offers/:id/chat`: creates chat with the owner of the offer.
+    -   #### Path parameters
+        -   `id` [`required`]: identifier of the offer.
+    -   #### Response
+        -   `success`: Is either `true` or `false`.
+        -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
+
+-   ### DELETE `/chat/:id`: closes a chat from the database and the chat server.
+    -   #### Path parameters
+        -   `id` [`required`]: identifier of the chat.
+    -   #### Response
+        -   `success`: Is either `true` or `false`.
+        -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
+
+### Other
 -   ### GET `/races`: list of races and its species
     -   #### Response
         -   `success`: Is either `true` or `false`.
