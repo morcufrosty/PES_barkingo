@@ -107,16 +107,19 @@ export default class perfilAnimalFavorites extends React.Component {
                 style={{
                     flex: 1,
                 }}>
-                    <Image style={{
-                        overflow: 'hidden',
-                        marginLeft: 10,
-                        width: 50,
-                        height: 50,
-                        zIndex:10,
-                        position:'absolute',
-                        bottom: '5%',
-                        right:'5%'
-                    }} source={{ uri: "http://cdn.onlinewebfonts.com/svg/img_54456.png" }}/>
+                    <TouchableOpacity
+                        style={{
+                            position: 'absolute',
+                            bottom: 20,
+                            right: 20,
+                            zIndex: 100,
+                            height: 70,
+                            width: 70
+                        }}
+                        onPress={() => this.props.navigation.navigate('chatScreen')}>
+                        <Image
+                            source={{ uri: "http://cdn.onlinewebfonts.com/svg/img_54456.png", width: 70, height: 70 }} />
+                    </TouchableOpacity>
 
                 <View style={{ flex: 1 }}>
                     <Image style={{
