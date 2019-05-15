@@ -112,7 +112,7 @@ export default class Swipe extends React.Component {
 
 
 
-    
+
 
     async deleteOffer(tokenJson, id) {
         console.log(id);
@@ -236,7 +236,7 @@ export default class Swipe extends React.Component {
         }
 
         this.setState({ isLoading: false, myOffers: ofertesAux, noOffers: noOfertes, images: imatgesAux, username: responseUser.user.username })
-   
+
     }
 
     renderPublications = () => {
@@ -332,7 +332,7 @@ export default class Swipe extends React.Component {
                         flexDirection: 'row',
                         height: 64
                     }}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('formPerfilUsuari')}  >
                         <Image style={{
                             borderRadius: 64,
                             overflow: 'hidden',
