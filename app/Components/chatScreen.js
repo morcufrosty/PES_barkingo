@@ -1,5 +1,8 @@
 import React from "react";
+import { View, Platform } from 'react-native';
 import { GiftedChat } from "react-native-gifted-chat";
+import KeyboardSpacer from 'react-native-keyboard-spacer';
+
 
 export default class charScreen extends React.Component {
     state = {
@@ -31,14 +34,17 @@ export default class charScreen extends React.Component {
     
       render() {
         return (
-          <GiftedChat
-            textInputProps={{autoFocus: true}}
-            messages={this.state.messages}
-            onSend={messages => this.onSend(messages)}
-            user={{
-              _id: 1
-            }}
-          />
+            <View style={{flex: 1}}>
+                <GiftedChat
+                    textInputProps={{autoFocus: true}}
+                    messages={this.state.messages}
+                    onSend={messages => this.onSend(messages)}
+                    user={{
+                    _id: 1
+                }}
+                />
+                {Platform.OS === 'android' ? <KeyboardSpacer /> : null }
+            </View>
         );
       }
 }
