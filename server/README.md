@@ -180,7 +180,7 @@ Animal species:
         -   `sex` [`optional`]: sex of the offered animal
         -   `type` [`optional`]: can either be `adoption` o `foster`.
         -   `species` [`optional`]: number species of the animals to be displayed.
-        -   `city` [`optional`]: city of the requested
+        -   `radius` [`optional`]: radius within the offers should be (the user needs to have set their location)
         -   `minAge` [`optional`]: minimum age of the offered animal
         -   `maxAge` [`optional`]: maximum age of the offered animal
 
