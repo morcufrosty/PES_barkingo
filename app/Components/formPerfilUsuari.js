@@ -128,7 +128,7 @@ export default class formPerfilUsuari extends React.Component {
       })
 
 
-      if (this.state.isoComunity != null){
+      if (this.state.isoComunity != ''){
         let flagURI = "http://flags.ox3.in/mini/"+this.state.isoCountry.toLowerCase()+"/"+this.state.isoComunity.toLowerCase()+".png";
         this.setState({flagURI});
       }else{
@@ -478,7 +478,7 @@ export default class formPerfilUsuari extends React.Component {
                         <Text style={{ color: 'white', opacity:0.5 }}>
                           {this.state.postalCode} - {this.state.country}
                         </Text>
-                        <Image source={{ uri:`${this.state.flagURI}` , width: 15, height: 15 }} />
+                        <Image source={{ uri:`${this.state.flagURI}` , width: 20, height: 15 }} />
                       </View>
 
 
