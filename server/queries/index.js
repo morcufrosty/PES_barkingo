@@ -8,6 +8,7 @@ const { currentUser,
     getUser,
     createProfile,
     updateUser,
+    deleteUser,
     getUserImage,
     createUserImage } = require('./users');
 
@@ -42,6 +43,7 @@ module.exports = {
     getUser,
     createProfile,
     updateUser,
+    deleteUser,
     getUserImage,
     createUserImage,
     //OFFERS

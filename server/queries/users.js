@@ -136,6 +136,10 @@ const updateUser = async (request, response) => {
     })
 }
 
+deleteUser = async (request, response) => {
+    response.json({ success: false, msg: 'Not implemented yet getUserImage' });
+}
+
 const getUserImage = async (request, response) => {
     //response.json({ success: false, msg: 'Not implemented yet getUserImage' });
     const { id: idUser } = request.params;
@@ -172,6 +176,7 @@ module.exports = {
     getUser,
     createProfile,
     updateUser,
+    deleteUser,
     getUserImage,
     createUserImage
 };
