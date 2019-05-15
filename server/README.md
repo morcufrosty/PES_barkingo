@@ -132,8 +132,10 @@ Animal species:
 
     -   #### Header
         -   `token` [`required`]: Barkingo authenthetication token
+    -   ### Path parameters
+        -   `id` [`required`]: identifier of the requested offer.
     -   ### Parameters
-        -   `name` [`required`]: The name of the user. Any spaces must be expressed with an underscore (`_`).
+        -   `username` [`required`]: The username of the user. Any spaces must be expressed with an underscore (`_`).
         -   `bio` [`required`]: short description of the user
         -   `country` [`required`]: country of the user
         -   `city` [`required`]: city of the user
@@ -141,6 +143,16 @@ Animal species:
         -   `id`: identifier of the user
         -   `success`: Is either true or false.
         -   `msg`: Short message explaining the causes of the result.
+        
+-   ### DELETE `/users/:id`: deletes the profile for the current user, provided its id
+
+    -   #### Header
+        -   `token` [`required`]: Barkingo authenthetication token
+    -   ### Path parameters
+        -   `id` [`required`]: identifier of the requested offer.
+    -   #### Response
+        -   `success`: Is either `true` or `false`.
+        -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
 
 -   ### GET `/users/:id/image`: obtain profile picture of the requested user
 
@@ -168,7 +180,7 @@ Animal species:
         -   `sex` [`optional`]: sex of the offered animal
         -   `type` [`optional`]: can either be `adoption` o `foster`.
         -   `species` [`optional`]: number species of the animals to be displayed.
-        -   `city` [`optional`]: city of the requested
+        -   `radius` [`optional`]: radius within the offers should be (the user needs to have set their location)
         -   `minAge` [`optional`]: minimum age of the offered animal
         -   `maxAge` [`optional`]: maximum age of the offered animal
 

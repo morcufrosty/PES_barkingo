@@ -17,7 +17,7 @@ import { Facebook } from 'expo';
 import DatePicker from 'react-native-datepicker'
 import { AsyncStorage } from 'react-native';
 //import ImagePicker from 'react-native-image-picker';
-import { ImagePicker, Permissions } from 'expo';
+import { ImagePicker, Permissions, Constants, Location } from 'expo';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Ionicons } from "@expo/vector-icons";
 
@@ -29,10 +29,115 @@ export default class formPerfilUsuari extends React.Component {
             name: '',
             description: '',
             image: null,
-            profilePlaceHolder: null
+            profilePlaceHolder: null,
+            location: null,
+            errorMessage: null,
+            longitude: 0,
+            latitude:0,
+            city:'',
+            region:'',
+            postalCode:'',
+            country:'',
+            isoCountry:'',
+            isoComunity:'',
+            flagURI:''
+
+
         }
     }
+    componentWillMount() {
+      if (Platform.OS === 'android' && !Constants.isDevice) {
+        this.setState({
+          errorMessage: 'Oops, this will not work on Sketch in an Android emulator. Try it on your device!',
 
+        });
+        console.log("polla grossa");
+      } else {
+        console.log("getting location");
+        this._getLocationAsync();
+      }
+    }
+
+    _getLocationAsync = async () => {
+      let { status } = await Permissions.askAsync(Permissions.LOCATION);
+      if (status !== 'granted') {
+        this.setState({
+          errorMessage: 'Permission to access location was denied',
+        });
+      }
+        let location = await Location.getCurrentPositionAsync({});
+
+        this.setState({ location });
+        console.log(JSON.stringify(this.state.location))
+        this.setState({ longitude: location.coords.longitude});
+        this.setState({ latitude: location.coords.latitude});
+
+      let map = {
+        'Andalucía':'AN',
+        'Aragón':'AR',
+        'Principado de Asturias':'AS',
+        'Canarias':'CN',
+        'Cantabria':'CB',
+        'Castilla-La Mancha':'CM',
+        'Castilla La Mancha':'CM',
+        'Castilla la Mancha': 'CM',
+        'Castilla y León':'CL',
+        'Catalunya':'CT',
+        'Cataluña':'CT',
+        'Extremadura':'EX',
+        'Galicia':'GA',
+        'Illes Balears':'IB',
+        'Islas Baleares':'IB',
+        'La Rioja':'RI',
+        'Madrid, Comunidad de':'MD',
+        'Comunidad de Madrid':'MD',
+        'Murcia, Región de':'MC',
+        'Murica':'MC',
+        'Región de Murcia':'MC',
+        'Navarra, Comunidad Foral de':'NC',
+        'Navarra':'NC',
+        'Comunidad Foral de Navarra':'NC',
+        'Nafarroako Foru Komunitatea':'NC',
+        'País Vasco':'PV',
+        'Euskal Herria':'PV',
+        'Valenciana, Comunidad':'VC',
+        'Comunidad Valenciana':'VC',
+        'Valenciana, Comunidat':'VC',
+        'Comunidat Valenciana':'VC',
+
+      }
+      let locationJSON = {
+        'longitude':location.coords.longitude,
+        'latitude': location.coords.latitude
+      }
+      console.log(JSON.stringify(locationJSON))
+      let parsedLocation = await Location.reverseGeocodeAsync(locationJSON);
+      console.log(JSON.stringify(parsedLocation))
+      if (parsedLocation[0].country ==="Espanya"){
+        let region = parsedLocation[0].region;
+        let isoComunity = map[region];
+        console.log(isoComunity);
+        this.setState({isoComunity})
+      }
+      this.setState({isoCountry: parsedLocation[0].isoCountryCode,
+                    city: parsedLocation[0].city,
+                    region: parsedLocation[0].region,
+                    postalCode:parsedLocation[0].postalCode,
+                    country:parsedLocation[0].country,
+
+      })
+
+
+      if (this.state.isoComunity != ''){
+        let flagURI = "http://flags.ox3.in/mini/"+this.state.isoCountry.toLowerCase()+"/"+this.state.isoComunity.toLowerCase()+".png";
+        this.setState({flagURI});
+      }else{
+        let flagURI = "http://flags.ox3.in/mini/"+this.state.isoCountry.toLowerCase()+".png";
+        this.setState({flagURI});
+
+      }
+      console.log(this.state.flagURI);
+    };
 
     async getProfileInfoFromApi(tokenJson, id) {
         //AQUI POSAR EL PERFIL
@@ -348,13 +453,13 @@ export default class formPerfilUsuari extends React.Component {
                     {imageForm}
 
                     <View style={{ flex: 1, paddingVertical: 10 }}>
-                        <Text style={{ color: 'white' }}>{"What's your name"}</Text>
+                        <Text style={{ color: 'white',fontWeight: 'bold' }}>{"What's your name"}</Text>
                         <TextInput onChangeText={(name) => this.setState({ name })} value={this.state.name}
                             style={{ backgroundColor: 'white', opacity: 0.5, borderRadius: 5, paddingVertical: 0, height: 35 }}></TextInput>
                     </View>
 
                     <View style={{ flex: 1, paddingVertical: 10 }}>
-                        <Text style={{ color: 'white' }}>{"Add a little description about yourself!"}</Text>
+                        <Text style={{ color: 'white' ,fontWeight: 'bold'}}>{"Add a little description about yourself!"}</Text>
                         <TextInput
                             multiline={true}
                             numberOfLines={4}
@@ -363,6 +468,18 @@ export default class formPerfilUsuari extends React.Component {
                             style={{ backgroundColor: 'white', opacity: 0.5, borderRadius: 5, paddingVertical: 0, height: 80 }}>
                         </TextInput>
                     </View>
+
+
+                    <View style={{ flex: 1, paddingVertical: 10 }}>
+                        <Text style={{ color: 'white',fontWeight: 'bold' }}>{"You are from..."}</Text>
+                        <Text style={{ color: 'white' }}>
+                          { this.state.city } - {this.state.region}
+                        </Text>
+                        <Text style={{ color: 'white', opacity:0.5 }}>
+                          {this.state.postalCode} - {this.state.country}
+                        </Text>
+                        <Image source={{ uri:`${this.state.flagURI}` , width: 20, height: 15 }} />
+                      </View>
 
 
                     <Button
