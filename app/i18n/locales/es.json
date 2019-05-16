@@ -1,6 +1,11 @@
 {
-    "Offers": {
-		"NoOffers": "Ets un paquet",
-		"0Offers" : "There are no more offers"
+	"swipeScreen": {
+		"NoOffers": "There are no more offers",
+		"Like" : "Like",
+		"Dislike" : "Dislike"
+	},
+	"chat": {
+		"ErrorDeleted": "Favorite offer has not been deleted!"
+
 	}
 }

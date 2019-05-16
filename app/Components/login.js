@@ -16,6 +16,7 @@ import { AsyncStorage } from 'react-native';
 import * as Expo from "expo"
 //import { getMaxListeners } from 'cluster';
 import { StackActions, NavigationActions } from 'react-navigation';
+import strings from '../i18n/i18n';
 
 
 const ACCESS_TOKEN = 'access_token';
@@ -214,14 +215,14 @@ export default class App extends React.Component {
                     });
                     this.props.navigation.dispatch(resetAction);
                 }
-                else Alert.Alert("Login error", responseBarkingo.msg);
+                else Alert.Alert(strings('login.loginError'), responseBarkingo.msg);
 
                 //Alert.alert("You are logged in!", `Hi ${responseFb.json().name}!`);
             } else {
                 // type === 'cancel'
             }
         } catch ({ message }) {
-            alert(`Facebook Login Error: ${message}`);
+            alert(strings(login.faceError, {m: message}));
         }
     }
 
@@ -309,13 +310,13 @@ export default class App extends React.Component {
 
         }
         else if (this.state.email == '') {
-            Alert.alert("Error", "Please enter your email");
+            Alert.alert(string(login.error), string(login.enterEmail));
             return;
         }
 
 
         else if (this.state.password == '') {
-            Alert.alert("Error", "Please enter your password");
+            Alert.alert(string(login.error), string(login.enterPassword));
             return;
         }
 
@@ -333,9 +334,9 @@ export default class App extends React.Component {
         }
         else {
             if (response.msg === undefined)
-                Alert.alert("Login error", "Server error");
+                Alert.alert(strings('login.loginError'), strings.apply('login.serverError'));
             else
-                Alert.alert("Login error", response.msg);
+                Alert.alert(strings('login.loginError'), response.msg);
         }
     }
 
@@ -363,46 +364,46 @@ export default class App extends React.Component {
                     padding: '10%',
                     paddingTop: '30%'
                 }}>
-                <Text style={{ color: 'white', fontSize: 45, flex: 1 }}>Login</Text>
+                <Text style={{ color: 'white', fontSize: 45, flex: 1 }}>{strings('login.loginText')}</Text>
 
                 <View style={{ flex: 1 }}>
-                    <Text style={{ color: 'white' }}>{"Email"}</Text>
+                    <Text style={{ color: 'white' }}>{strings('login.email')}</Text>
                     <TextInput onChangeText={(email) => this.setState({ email })} value={this.state.email} textAlign={'center'} autoCapitalize={'none'}
                         style={{ backgroundColor: 'white', opacity: 0.5, borderRadius: 5, paddingVertical: 0, height: 35 }}></TextInput>
                 </View>
 
                 <View style={{ flex: 1 }}>
-                    <Text style={{ color: 'white' }}>{"Password"}</Text>
+                    <Text style={{ color: 'white' }}>{strings('login.password')}</Text>
                     <TextInput secureTextEntry={true} onChangeText={(password) => this.setState({ password })} value={this.state.password} textAlign={'center'} autoCapitalize={'none'}
                         style={{ backgroundColor: 'white', opacity: 0.5, borderRadius: 5, paddingVertical: 0, height: 35 }}></TextInput>
                 </View>
 
                 <View style={{ flex: 1 }}>
                     <Button
-                        title='Login'
+                        title={strings('login.loginText')}
                         color='#ff3b28'
                         onPress={async () => this.handleLoginButton()}>
                     </Button>
                 </View>
 
                 <View style={{ flex: 1 }}>
-                    <Text style={{ color: 'white' }}> Don't have an account?<Text> </Text>
+                    <Text style={{ color: 'white' }}> {strings('login.noAccount')}<Text> </Text>
                         <Text style={{ textDecorationLine: "underline" }}
                             onPress={() => this.props.navigation.navigate('Register')
                             }>
-                            Register now!
+                            {strings('login.register')}
             </Text>
                     </Text>
                     <View style={{ flex: 1, padding: '11%', marginTop: 20 }}>
                         <Button
-                            title='Login with Facebook'
+                            title={strings('login.loginFace')}
                             color='#3b5998'
                             onPress={() => this.handlePressFBLogin()}
                         ></Button>
                     </View>
                     <View style={{ flex: 1, padding: '11%' }}>
                         <Button
-                            title='Login with Google'
+                            title={strings('login.loginGoogle')}
                             color='#D84B37'
                             onPress={() => this.pressGoogleLogin()}
                         ></Button>

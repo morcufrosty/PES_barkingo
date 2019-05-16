@@ -267,10 +267,10 @@ refresh(){
             {...this.PanResponder.panHandlers}
             key={item.id} style={[this.rotateAndTranslate, { height: SCREEN_HEIGHT - 180, width: SCREEN_WIDTH, padding: 10, position: 'absolute' }]}>
             <Animated.View style={{ opacity: this.likeOpacity, transform: [{ rotate: '-30deg' }], position: 'absolute', top: 50, left: 40, zIndex: 1000 }}>
-              <Text style={{ borderWidth: 1, borderColor: 'green', color: 'green', fontSize: 32, fontWeight: '800', padding: 10 }}>LIKE</Text>
+              <Text style={{ borderWidth: 1, borderColor: 'green', color: 'green', fontSize: 32, fontWeight: '800', padding: 10 }}>{strings('swipeScreen.Like')}</Text>
             </Animated.View>
             <Animated.View style={{ opacity: this.dislikeOpacity, transform: [{ rotate: '30deg' }], position: 'absolute', top: 50, right: 40, zIndex: 1000 }}>
-              <Text style={{ borderWidth: 1, borderColor: 'red', color: 'red', fontSize: 32, fontWeight: '800', padding: 10 }}>NOPE</Text>
+              <Text style={{ borderWidth: 1, borderColor: 'red', color: 'red', fontSize: 32, fontWeight: '800', padding: 10 }}>{strings('swipeScreen.Dislike')}</Text>
             </Animated.View>
             <Animated.View style={{ opacity: 1, position: 'absolute', bottom: 20, right: 40, zIndex: 1000 }}>
               <Text style={{ color: '#ffffff', fontSize: 32, fontWeight: '800', padding: 10 }}> {item.name}</Text>
@@ -297,10 +297,10 @@ refresh(){
             }]}>
 
             <Animated.View style={{ opacity: 0, transform: [{ rotate: '-30deg' }], position: 'absolute', top: 50, left: 40, zIndex: 1000 }}>
-              <Text style={{ borderWidth: 1, borderColor: 'green', color: 'green', fontSize: 32, fontWeight: '800', padding: 10 }}>LIKE</Text>
+              <Text style={{ borderWidth: 1, borderColor: 'green', color: 'green', fontSize: 32, fontWeight: '800', padding: 10 }}>{strings('swipeScreen.Like')}</Text>
             </Animated.View>
             <Animated.View style={{ opacity: 0, transform: [{ rotate: '30deg' }], position: 'absolute', top: 50, right: 40, zIndex: 1000 }}>
-              <Text style={{ borderWidth: 1, borderColor: 'red', color: 'red', fontSize: 32, fontWeight: '800', padding: 10 }}>NOPE</Text>
+              <Text style={{ borderWidth: 1, borderColor: 'red', color: 'red', fontSize: 32, fontWeight: '800', padding: 10 }}>{strings('swipeScreen.DisLike')}</Text>
             </Animated.View>
             <Animated.View style={{ opacity: 1, position: 'absolute', bottom: 20, right: 40, zIndex: 1000 }}>
               <Text style={{ color: '#ffffff', fontSize: 32, fontWeight: '800', padding: 10 }}></Text>
@@ -315,7 +315,7 @@ refresh(){
       }
     }).reverse()
   }
-  else return( <Text onPress={() => {this.refresh()}} style={{ color: '#ffffff', fontSize: 17, margin: 'auto', marginTop: '50%', flex: 1, textAlign: 'center', fontWeight: '800', padding: 10,  }}> {strings('Offers.NoOffers')} </Text> )
+  else return( <Text onPress={() => {this.refresh()}} style={{ color: '#ffffff', fontSize: 17, margin: 'auto', marginTop: '50%', flex: 1, textAlign: 'center', fontWeight: '800', padding: 10,  }}> {strings('swipeScreen.NoOffers')} </Text> )
 
 
 }

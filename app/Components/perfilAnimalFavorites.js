@@ -14,6 +14,7 @@ import { Facebook } from 'expo';
 import TextInputWTitle from './inputText.js';
 import InputPassword from './inputPassword.js';
 import { AsyncStorage } from 'react-native';
+import strings from '../i18n/i18n';
 
 export default class perfilAnimalFavorites extends React.Component {
 
@@ -128,10 +129,10 @@ export default class perfilAnimalFavorites extends React.Component {
                     }} source={{ uri: `${this.state.image}` }} />
                     <ScrollView>
                         <Text style={{ marginTop: '5%', color: 'white', fontSize: 30, fontWeight: 'bold', marginLeft: '10%' }}>{this.state.name}</Text>
-                        <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%' }}>Age: {this.state.age}</Text>
-                        <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%' }}>Race: {this.state.race}</Text>
-                        <Text style={{ color: 'white', fontSize: 20,  marginLeft: '10%' }}>Sex: {this.state.sex}</Text>
-                        <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%', marginBottom:'5%'}}>Description: {this.state.description}</Text>
+                        <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%' }}>{strings('perfilAnimal.age', {a: this.state.age})}</Text>
+                        <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%' }}>{strings('perfilAnimal.race', {r: this.state.race})}</Text>
+                        <Text style={{ color: 'white', fontSize: 20,  marginLeft: '10%' }}>{strings('perfilAnimal.sex', {s: this.state.sex})}</Text>
+                        <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%', marginBottom:'5%'}}>{strings('perfilAnimal.description', {d: this.state.description})}</Text>
                         <View style={{marginBottom:'20%', marginLeft:'10%', marginRight:'10%', borderRadius: 5, backgroundColor: 'rgba(255, 255, 255, 0.2)'}}>
                             <View style={{flexDirection: 'row', padding:'5%'}} >
                                 <Image style={{
@@ -139,9 +140,9 @@ export default class perfilAnimalFavorites extends React.Component {
                                     overflow: 'hidden'
                                 }} source={{ uri: "https://facebook.github.io/react-native/img/favicon.png", width: 64, height: 64 }} />
                                 <Text style={{fontWeight: 'bold', color: 'white', fontSize: 25, marginLeft: '10%', marginRight: '10%', justifyContent: 'center', alignItems: 'center', textAlignVertical: 'center' 
-                            }}>Nom de l'amo</Text>
+                            }}>{strings('perfilAnimal.ownerName')}</Text>
                             </View>
-                            <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%', marginBottom:'5%', marginRight:'5%' }}>Sobre l'amo: {this.state.description}</Text>
+                            <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%', marginBottom:'5%', marginRight:'5%' }}>{strings('perfilAnimal.ownerDescription', {od: this.state.description})}</Text>
                         </View>
                     </ScrollView>
                 </View>

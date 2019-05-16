@@ -1,6 +1,37 @@
 {
-	"Offers": {
-		"NoOffers": "En buch es un deu",
-		"0Offers" : "There are no more offers"
+	"swipeScreen": {
+		"NoOffers": "There are no more offers",
+		"Like" : "Like",
+		"Dislike" : "Dislike"
+	},
+	"chat": {
+		"ErrorDeleted": "Favorite offer has not been deleted!"
+
+	},
+	"login": {
+		"loginText": "Login",
+		"email": "Email",
+		"password": "Password",
+		"noAccount": "Don't have an account?",
+		"register" : "Register now!",
+		"loginFace" : "LOGIN WITH FACEBOOK",
+		"loginGoogle": "LOGIN WITH GOOGLE",
+		"loginError": "Login error",
+		"serverError": "Server error",
+		"faceError" : "Facebook Login Error: {{m}}",
+		"googleError" : "Google Login Error: {{message}}",
+		"error" : "Error",
+		"enterEmail": "Please enter your email",
+		"enterPassword": "Please enter your password",
+	},
+	"perfilAnimalFavorites":{
+		"age" : "Age: {{a}}",
+		"sex" : "Sex:",
+		"description" : "Description:",
+		"race": "Race:",
+		"ownerName" : "Owner name:",
+		"ownerDescription": "Owner description:"
+
 	}
+
 }
