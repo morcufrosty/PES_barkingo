@@ -332,7 +332,7 @@ export default class Swipe extends React.Component {
                         flexDirection: 'row',
                         height: 64
                     }}>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('formPerfilUsuari')}  >
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('formPerfilUsuari', {onGoBack: () => this.refresh()})}  >
                         <Image style={{
                             borderRadius: 64,
                             overflow: 'hidden',

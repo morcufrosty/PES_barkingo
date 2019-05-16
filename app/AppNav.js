@@ -36,6 +36,8 @@ const SettingsNavigator = createStackNavigator({
 
 const SettingsNav = createAppContainer(SettingsNavigator);
 
+
+
 const perfilAnimalFavoritesa = createStackNavigator({
     perfilAnimalFavorites: {screen: perfilAnimalFavorites},
     chatScreen: {screen: chatScreen}
@@ -144,10 +146,26 @@ const TabNavigator = createBottomTabNavigator(
 
 const BottomNavigation = createAppContainer(TabNavigator);
 
+const newProfileFormScreen = createStackNavigator({
+    BottomNavigation: { screen: BottomNavigation },
+    formPerfilUsuari: { screen: formPerfilUsuari}
+  },
+    {
+        initialRouteName: 'formPerfilUsuari',
+        headerMode: 'none',
+        navigationOptions: {
+            headerVisible: false,
+        }
+
+    });
+
+const newProfileFormScreenNav = createAppContainer(newProfileFormScreen);
+
 const MainNavigator = createStackNavigator({
     Register: { screen: Register },
     Login: { screen: Login },
-    AppAfterLogin: { screen: BottomNavigation }
+    AppAfterLogin: { screen: BottomNavigation },
+    newProfileFormScreen:{screen: newProfileFormScreenNav}
 },
     {
         initialRouteName: 'Login',
