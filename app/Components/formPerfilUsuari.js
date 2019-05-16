@@ -234,7 +234,7 @@ export default class formPerfilUsuari extends React.Component {
                     });
                     console.log(id);
                     const responsePostImg = await this.handleSubmitImage(jsonToken, id, data);
-                    Alert.alert(responsePostImg.msg);
+                    //Alert.alert(responsePostImg.msg);
                     console.log("going back")
                     if(!this.state.new){
                       this.props.navigation.state.params.onGoBack();
