@@ -28,6 +28,7 @@ export default class formPerfilUsuari extends React.Component {
         this.state = {
             name: '',
             description: '',
+            update: true,
             image: null,
             profilePlaceHolder: null,
             location: null,
@@ -40,11 +41,22 @@ export default class formPerfilUsuari extends React.Component {
             country:'',
             isoCountry:'',
             isoComunity:'',
-            flagURI:''
+            flagURI:'',
+            isLoading: true
 
 
         }
     }
+
+    async handleStart(){
+        const token = await AsyncStorage.getItem("access_token");
+        const jsonToken = JSON.parse(token);
+        let response = await this.getCurrentUserFromAPI(jsonToken);
+        console.log(response);
+        this.setState({isLoading:false});
+
+    }
+
     componentWillMount() {
       if (Platform.OS === 'android' && !Constants.isDevice) {
         this.setState({
@@ -140,8 +152,7 @@ export default class formPerfilUsuari extends React.Component {
     };
 
     async getProfileInfoFromApi(tokenJson, id) {
-        //AQUI POSAR EL PERFIL
-        return fetch(`http://10.4.41.164/api/ueueueueueueueu/${id}`, {
+        return fetch(`http://10.4.41.164/api/users/${id}`, {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -156,6 +167,7 @@ export default class formPerfilUsuari extends React.Component {
                 console.error(error);
             });
     }
+
 
     async handlePress() {
         console.log(
@@ -187,14 +199,19 @@ export default class formPerfilUsuari extends React.Component {
 
             const token = await AsyncStorage.getItem("access_token");
             const jsonToken = JSON.parse(token);
+            console.log(jsonToken.token)
+            const responseCurrentUser = await this.getCurrentUserFromAPI(jsonToken);
+            const id = responseCurrentUser.id;
             let response;
             if (!this.state.update) {
-                response = await this.newOfferUsingAPI(jsonToken);
+                response = await this.newPerfilUsingAPI(jsonToken, id);
                 console.log("response: " + response);
 
             }
             else {
-                response = await this.updateOfferUsingAPI(jsonToken);
+                response = await this.updateProfileUsingAPI(jsonToken, id);
+                console.log("response: " + response);
+
             }
 
             if (response.success) {
@@ -227,7 +244,7 @@ export default class formPerfilUsuari extends React.Component {
 
     async handleSubmitImage(tokenJson, id, data) {
 
-        return fetch(`http://10.4.41.164/api/offers/${id}/image`, {
+        return fetch(`http://10.4.41.164/api/users/${id}/image`, {
             method: 'POST',
             headers: {
                 Accept: '*',
@@ -244,9 +261,29 @@ export default class formPerfilUsuari extends React.Component {
             });
     }
 
-    async newOfferUsingAPI(tokenJson) {
 
-        return fetch("http://10.4.41.164/api/offers", {
+    async getCurrentUserFromAPI(tokenJson) {
+
+        return fetch('http://10.4.41.164/api/users/currentUser', {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': tokenJson.token
+            }
+        }).then((response) => response.json())
+            .then((responseJson) => {
+                return responseJson;
+            }).catch((error) => {
+                console.error(error);
+            });
+
+    }
+
+
+    async newPerfilUsingAPI(tokenJson, id) {
+
+        return fetch(`http://10.4.41.164/api/users/${id}`, {
             method: 'POST',
             headers: {
                 Accept: '*',
@@ -271,12 +308,12 @@ export default class formPerfilUsuari extends React.Component {
             });
     }
 
-    async updateOfferUsingAPI(tokenJson) {
+    async updateProfileUsingAPI(tokenJson, id) {
 
-        return fetch(`http://10.4.41.164/api/offers/${this.state.id}`, {
+        return fetch(`http://10.4.41.164/api/users/${id}`, {
             method: 'PUT',
             headers: {
-                Accept: '*',
+                Accept: 'application/json',
                 'Content-Type': 'application/json',
                 'x-access-token': tokenJson.token
             },
@@ -329,7 +366,8 @@ export default class formPerfilUsuari extends React.Component {
     render() {
 
         if (this.state.isLoading) {
-
+            console.log("loading");
+            this.handleStart();
             return <LinearGradient colors={['#F15A24', '#D4145A']}
                 start={[0, 1]}
                 end={[1, 0]}
