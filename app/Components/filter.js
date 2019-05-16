@@ -16,6 +16,7 @@ export default class filter extends React.Component {
 
     state = {
         user: '',
+        sliderOneValue: [5],
         multiSliderValue: [0, 20],
     }
 
@@ -26,6 +27,14 @@ export default class filter extends React.Component {
     multiSliderValuesChange = values => {
         this.setState({
             multiSliderValue: values,
+        });
+    };
+
+    sliderOneValuesChange = values => {
+        let newValues = [0];
+        newValues[0] = values[0];
+        this.setState({
+            sliderOneValue: newValues,
         });
     };
  
@@ -82,14 +91,25 @@ export default class filter extends React.Component {
                     </Picker>
                 </View>
                 <View style={{ flex: 1 }}>
-                    <Text style={{ color: 'white' }}>{"Distancia"}</Text>
-                    <Picker style={{color:'white'}} selectedValue = {this.state.user} onValueChange = {this.updateUser}>
-                        <Picker.Item label = "10km" value = "verynear" />
-                        <Picker.Item label = "25km" value = "near" />
-                        <Picker.Item label = "50km" value = "medium" />
-                        <Picker.Item label = "100km" value = "far" />
-                        <Picker.Item label = "200km" value = "veryfar" />
-                    </Picker>
+                    <View style={{flexDirection: 'row'}} >
+                        <Text style={{ color: 'white' }}>{"Distancia"}: </Text>
+                        <Text style={{ color: 'white' }}>{this.state.sliderOneValue} km</Text>
+                    </View>
+                    <MultiSlider
+                        values={this.state.sliderOneValue}
+                        sliderLength={280}
+                        sliderLength={300}
+                        min={0}
+                        max={50}
+                        step={1}
+                        selectedStyle={{
+                            backgroundColor: '#D84B37',
+                        }}
+                        markerStyle={{
+                            backgroundColor:'#D84B37'
+                        }}
+                        onValuesChange={this.sliderOneValuesChange}
+                    />
                 </View>
                 <View style={{ flex: 1 }}>
                     <Text style={{ color: 'white' }}>{"Sexe"}</Text>
