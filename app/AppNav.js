@@ -16,6 +16,7 @@ import TabIcon from './TabIcon';
 import AutocompleteExample from "./Components/autocomplete"
 import Filter from "./Components/filter"
 import formPerfilUsuari from "./Components/formPerfilUsuari"
+import chatScreen from "./Components/chatScreen"
 
 const SettingsNavigator = createStackNavigator({
     LoginScreen: { screen: Login },
@@ -23,8 +24,7 @@ const SettingsNavigator = createStackNavigator({
     Filter: {screen: Filter},
     perfilAnimalMyOffers: {screen: perfilAnimalMyOffers},
     formNewOffer: { screen: formNewOffer},
-    formPerfilUsuari:{screen: formPerfilUsuari}
-},
+    formPerfilUsuari:{screen: formPerfilUsuari}},
     {
         initialRouteName: 'SettingsScreen',
         headerMode: 'none',
@@ -35,6 +35,19 @@ const SettingsNavigator = createStackNavigator({
     });
 
 const SettingsNav = createAppContainer(SettingsNavigator);
+
+const perfilAnimalFavoritesa = createStackNavigator({
+    perfilAnimalFavorites: {screen: perfilAnimalFavorites},
+    chatScreen: {screen: chatScreen}
+},
+{
+    headerMode: 'none',
+    navigationOptions: {
+        headerVisible: false,
+    }
+});
+
+const perfilAnimalFavoritesNav = createAppContainer(perfilAnimalFavoritesa);
 
 const SwipeNavigator = createStackNavigator({
 
@@ -54,7 +67,7 @@ const SwipeNavigator = createStackNavigator({
 
     const ChatNavigator = createStackNavigator({
         Chat: { screen: Chat },
-        perfilAnimalFavorites: { screen: perfilAnimalFavorites }
+        perfilAnimalFavorites: { screen: perfilAnimalFavoritesNav }
     },
         {
             initialRouteName: 'Chat',

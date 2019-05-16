@@ -61,6 +61,8 @@ router.post('/users/:id', db.createProfile);
 
 router.put('/users/:id', db.updateUser);
 
+router.delete('/users/:id', db.deleteUser);
+
 router.get('/users/:id/image', db.getUserImage);
 
 router.post('/users/:id/image', db.createUserImage);

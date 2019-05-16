@@ -11,13 +11,13 @@ var toType = function (obj) {
 
 const getOffers = async (request, response) => {
     const { email, name } = request.decoded;
-    let { sex = null, type = null, species = null, city = null, minAge = null, maxAge = null } = request.query || request.body;
+    let { sex = null, type = null, species = null, radius = null, minAge = null, maxAge = null } = request.query || request.body;
     if (minAge) minAge = parseInt(minAge);
     if (maxAge) maxAge = parseInt(maxAge);
     if (species) species = parseInt(species);
     let query = 'SELECT "openedOffers".id, "openedOffers".name, "openedOffers".sex, "openedOffers".race, "openedOffers"."TypeName", race."idSpecies", "openedOffers".age FROM "openedOffers", race WHERE "openedOffers"."idOwner"<>$1 and "openedOffers".race=race."idRace" and NOT EXISTS (SELECT * FROM seen WHERE seen."idOffer"="openedOffers".id and seen."idUser"=$1) and NOT EXISTS (SELECT * FROM favourites WHERE favourites."idOffer"="openedOffers".id and favourites."idUser"=$1) '
         + 'and ($2::varchar IS NULL or "openedOffers".sex=$2::varchar) and ($3::varchar IS NULL or "openedOffers"."TypeName"=$3::varchar) '
-        + 'and ($4::int IS NULL or race."idSpecies"=$4) and ($5::varchar IS NULL or (SELECT city FROM users WHERE users.id="openedOffers"."idOwner")=$5::varchar) '
+        + 'and ($4::int IS NULL or race."idSpecies"=$4) and ($5::int IS NULL or $5::int >= (SELECT ((ACOS(SIN($8::float * PI() / 180) * SIN(users.latitude * PI() / 180) + COS($8::float * PI() / 180) * COS(users.latitude * PI() / 180) * COS(($9::float - users.longitude) * PI() / 180)) * 180 / PI()) * 60 * 1.1515) * 1.609344 FROM users WHERE users.id="openedOffers"."idOwner" AND users.latitude IS NOT NULL AND users.longitude IS NOT NULL)) '
         + 'and ($6::int IS NULL or "openedOffers".age>=$6::int) and ($7::int IS NULL or "openedOffers".age<=$7::int);'
     await pool.connect(async (err, client, done) => {
         if (err) {
@@ -27,22 +27,27 @@ const getOffers = async (request, response) => {
         }
         await client.query('BEGIN');
         await client.query(
-            'SELECT id FROM users WHERE email=$1 AND name=$2;', [email, name],
+            'SELECT id, latitude, longitude FROM users WHERE email=$1 AND name=$2;', [email, name],
             (err, result) => {
                 if (err || result.rowCount == 0) {
                     console.log(err)
                     response.json({ success: false, msg: 'User ' + email + ' doesn\'t exist' });
                 } else {
-                    client.query(
-                        query,
-                        [result.rows[0].id, sex, type, species, city, minAge, maxAge], (err, res) => {
-                            if (err || res.rowCount == 0) {
-                                console.log(err);
-                                response.json({ success: false, msg: 'No offers found' });
-                            } else {
-                                response.json({ success: true, msg: 'Offers found', offers: res.rows.slice(0, 10) });
-                            }
-                        });
+                    console.log(result.rows[0])
+                    if (radius != null && (result.rows[0].latitude == null || result.rows[0].longitude == null)) {
+                        response.json({ success: false, msg: 'You can\'t filter by radius if you haven\'t set your coordinates' });
+                    } else {
+                        client.query(
+                            query,
+                            [result.rows[0].id, sex, type, species, radius, minAge, maxAge, result.rows[0].latitude, result.rows[0].longitude], (err, res) => {
+                                if (err || res.rowCount == 0) {
+                                    console.log(err);
+                                    response.json({ success: false, msg: 'No offers found' });
+                                } else {
+                                    response.json({ success: true, msg: 'Offers found', offers: res.rows.slice(0, 10) });
+                                }
+                            });
+                    }
                 }
             });
         done();
