@@ -10,15 +10,24 @@ import {
 import Button from './Button';
 import { LinearGradient } from 'expo'
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
-
+import MultiSlider from '@ptomasroos/react-native-multi-slider'
 
 export default class filter extends React.Component {
 
-    state = {user: ''}
+    state = {
+        user: '',
+        multiSliderValue: [0, 20],
+    }
 
     updateUser = (user) => {
        this.setState({ user: user })
     }
+
+    multiSliderValuesChange = values => {
+        this.setState({
+            multiSliderValue: values,
+        });
+    };
  
     render() {
         return (
@@ -33,16 +42,38 @@ export default class filter extends React.Component {
                 <Text style={{ flex:1, color: 'white', fontSize: 45, flex: 1 }}>Filters</Text>
                 <View style={{ flex: 1 }}>
                     <Text style={{ color: 'white', paddingBottom:'2%' }}>{"Rang d'edat"}</Text>
-                    <View style={{flexDirection: 'row'}} >
-                        <Text style={{ color: 'white', paddingRight: '2%' }}>{"De:"}</Text>
-                        <TextInput keyboardType='numeric' style={{width:'30%', paddingRight: '5%', backgroundColor: 'white', opacity: 0.5, borderRadius: 5, paddingVertical: 0, height: 35 }}></TextInput>
-                        <Text style={{ color: 'white', paddingRight: '2%' }}>{"Fins:"}</Text>
-                        <TextInput keyboardType='numeric' style={{width:'30%', paddingRight: '2%', backgroundColor: 'white', opacity: 0.5, borderRadius: 5, paddingVertical: 0, height: 35 }}></TextInput>
+                    <View style={{flexDirection: 'row', flex:1}} >
+                        <Text style={{ color: 'white', margin:1 }}>{this.state.multiSliderValue[0]}</Text>
+                        <MultiSlider
+                            values={[
+                                this.state.multiSliderValue[0],
+                                this.state.multiSliderValue[1],
+                            ]}
+                            sliderLength={300}
+                            onValuesChange={this.multiSliderValuesChange}
+                            min={0}
+                            max={50}
+                            step={1}
+                            selectedStyle={{
+                                backgroundColor: '#D84B37',
+                            }}
+                            markerStyle={{
+                                backgroundColor:'#D84B37'
+                            }}
+                            style={{
+                                margin:40
+                            }}
+
+                            allowOverlap
+                            snapped
+                        />                    
+                        <Text style={{ color: 'white',margin:1 }}>{this.state.multiSliderValue[1]}</Text>
                     </View>
                 </View>
                 <View style={{ flex: 1 }}>
                     <Text style={{ color: 'white' }}>{"Especie"}</Text>
                     <Picker style={{color:'white'}} selectedValue = {this.state.user} onValueChange = {this.updateUser}>
+                        <Picker.Item label = "Tots" value = "all" />
                         <Picker.Item label = "Gossos" value = "dog" />
                         <Picker.Item label = "Gats" value = "cat" />
                         <Picker.Item label = "Peixos" value = "fish" />
