@@ -4,7 +4,7 @@ import {
     ScrollView,
     TextInput,
     Alert,
-    Platform, Image
+    Platform, Image, TouchableOpacity
 
 } from 'react-native';
 import Button from './Button';
@@ -131,6 +131,33 @@ export default class perfilAnimalSwipe extends React.Component {
             style={{
                 flex: 1,
             }}>
+                <TouchableOpacity
+                    style={{
+                        position: 'absolute',
+                        bottom: 20,
+                        right: 20,
+                        zIndex: 100,
+                        height: 70,
+                        width: 70
+                    }}
+                    onPress={() => 
+                
+                        Alert.alert(
+                            'Finalitzar oferta',
+                            'Està segur que desitja finalitzar la oferta?',
+                            [
+                              {text: 'No', onPress: () => console.log('No')},
+                              {text: 'Si', onPress: () => console.log('Si')},
+                            ],
+                            {cancelable: false},
+                          )
+                    
+                    }>
+                    <Image
+                        source={{ uri: "https://pbs.twimg.com/profile_images/2265449598/TheENDFund_Roundel-01.png", width: 70, height: 70 }} />
+                </TouchableOpacity>
+
+
             <View style={{ flex: 1 }}>
                 <Image style={{
                     width: '100%',

@@ -17,11 +17,13 @@ import AutocompleteExample from "./Components/autocomplete"
 import Filter from "./Components/filter"
 import formPerfilUsuari from "./Components/formPerfilUsuari"
 import chatScreen from "./Components/chatScreen"
+import changeSettings from "./Components/changeSettings"
 
 const SettingsNavigator = createStackNavigator({
     LoginScreen: { screen: Login },
     SettingsScreen: { screen: Settings },
     Filter: {screen: Filter},
+    changeSettings: {screen: changeSettings},
     perfilAnimalMyOffers: {screen: perfilAnimalMyOffers},
     formNewOffer: { screen: formNewOffer},
     formPerfilUsuari:{screen: formPerfilUsuari}},
