@@ -162,31 +162,11 @@ refresh(){
   }
 
 
-    async handleGetOffers(){
-
-      const t = await AsyncStorage.getItem('access_token');
-      tokenJson = JSON.parse(t);
-      const response = await this.getOffers(tokenJson);
-
-/*
-      console.log("success: " + response.success);
-      console.log("msg: " + response.msg);
-      console.log("response: " + response.offers);
-      */
-
-      console.log(response);
-      if(response.success){
-        this.setState({offers: response.offers});
-      }
-      else{
-        Alert.alert("Error", response.msg);
-      }
-    }
-
-  async getOffers(tokenJson) {
+  
+  async getOffers(tokenJson, str) {
 
 
-    return fetch('http://10.4.41.164/api/offers', {
+    return fetch(`http://10.4.41.164/api/offers${str}`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -215,14 +195,65 @@ refresh(){
 
   }
 
+handleQuery(filterJson){
+  str = "?"
+      str += "radius=" + filterJson.radius
+      if(filterJson.sex!="")
+      str += "&sex=" + filterJson.sex
+      str += "&minAge=" + filterJson.minAge
+      str += "&maxAge=" + filterJson.maxAge
+    if(filterJson.species!="")
+      str += "&species=" + filterJson.species
+    if(filterJson.type!="")
+      str += "&type=" + filterJson.type
+      return str
+}
+
+
+  async getCurrentUserFromAPI(tokenJson) {
+
+    return fetch('http://10.4.41.164/api/users/currentUser', {
+        method: 'GET',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            'x-access-token': tokenJson.token
+        }
+    }).then((response) => response.json())
+        .then((responseJson) => {
+            return responseJson;
+        }).catch((error) => {
+            console.error(error);
+        });
+
+}
   async handleStart(){
 
     let ofertesAux = []
     let imatgesAux = []
+    let filterJson;
+    let str = ""
     const t = await AsyncStorage.getItem('access_token');
     tokenJson = JSON.parse(t);
-    const response = await this.getOffers(tokenJson);
-    //console.log(response);
+    
+    const currentUserResponse = await this.getCurrentUserFromAPI(tokenJson);
+    
+    if(currentUserResponse.success){
+
+      let filters = await AsyncStorage.getItem(currentUserResponse.user.id);
+      filterJson = JSON.parse(filters);
+
+    }
+
+    if(filterJson!= null){
+
+    str = this.handleQuery(filterJson)
+  }
+
+  
+      console.log(str);
+    const response = await this.getOffers(tokenJson, str);
+    console.log(response);
 
 
     if (response.success) {
@@ -341,7 +372,7 @@ refresh(){
             top: 40,
             right: 15
           }}
-          onPress={()  => this.props.navigation.navigate('Filter')}>
+          onPress={()  => this.props.navigation.navigate('Filter', {onGoBack: () => this.refresh()})}>
           <Image
               source={{ uri: "https://flaticons.net/icons/Data/Filter-Standard.png", width: 15, height: 15 }} />
         </TouchableOpacity>
@@ -363,7 +394,7 @@ refresh(){
             top: 40,
             right: 15
           }}
-          onPress={()  => this.props.navigation.navigate('Filter')}>
+          onPress={()  => this.props.navigation.navigate('Filter', {onGoBack: () => this.refresh()})}>
             <Image
               source={{ uri: "https://flaticons.net/icons/Data/Filter-Standard.png", width: 15, height: 15 }} />
         </TouchableOpacity>

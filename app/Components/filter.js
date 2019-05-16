@@ -9,24 +9,27 @@ import {
 } from 'react-native';
 import Button from './Button';
 import { LinearGradient } from 'expo'
+import { AsyncStorage } from 'react-native';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import MultiSlider from '@ptomasroos/react-native-multi-slider'
 
 export default class filter extends React.Component {
 
     state = {
-        user: '',
-        sliderOneValue: [5],
-        multiSliderValue: [0, 20],
+        distance: [5],
+        ageRange: [0, 20],
+        sex: "",
+        species: "",
+        type: ""
     }
 
-    updateUser = (user) => {
-       this.setState({ user: user })
+    updateUser = (value) => {
+       this.setState({ species: value })
     }
 
     multiSliderValuesChange = values => {
         this.setState({
-            multiSliderValue: values,
+            ageRange: values,
         });
     };
 
@@ -34,10 +37,53 @@ export default class filter extends React.Component {
         let newValues = [0];
         newValues[0] = values[0];
         this.setState({
-            sliderOneValue: newValues,
+            distance: values,
         });
     };
  
+    async getCurrentUserFromAPI(tokenJson) {
+
+        return fetch('http://10.4.41.164/api/users/currentUser', {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': tokenJson.token
+            }
+        }).then((response) => response.json())
+            .then((responseJson) => {
+                return responseJson;
+            }).catch((error) => {
+                console.error(error);
+            });
+
+    }
+
+    async handleChangeFilters(){
+
+        const token = await AsyncStorage.getItem("access_token");
+        const jsonToken = JSON.parse(token);
+        jsonObject = { sex: this.state.sex , type: this.state.type , species: this.state.species , radius: this.state.distance[0] , minAge: this.state.ageRange[0] , maxAge: this.state.ageRange[1] };
+        console.log(jsonObject);
+
+        const userResponse = await this.getCurrentUserFromAPI(jsonToken)
+        console.log(userResponse);
+
+        if(userResponse.success)
+            await AsyncStorage.setItem(userResponse.user.id, JSON.stringify(jsonObject));
+            
+        else console.log(userResponse.msg)
+
+
+        this.props.navigation.state.params.onGoBack();
+        this.props.navigation.goBack();
+        
+
+    }
+
+
+
+
     render() {
         return (
             <LinearGradient colors={['#F15A24', '#D4145A']}
@@ -52,11 +98,11 @@ export default class filter extends React.Component {
                 <View style={{ flex: 1 }}>
                     <Text style={{ color: 'white', paddingBottom:'2%' }}>{"Rang d'edat"}</Text>
                     <View style={{flexDirection: 'row', flex:1}} >
-                        <Text style={{ color: 'white', margin:1 }}>{this.state.multiSliderValue[0]}</Text>
+                        <Text style={{ color: 'white', margin:1 }}>{this.state.ageRange[0]}</Text>
                         <MultiSlider
                             values={[
-                                this.state.multiSliderValue[0],
-                                this.state.multiSliderValue[1],
+                                this.state.ageRange[0],
+                                this.state.ageRange[1],
                             ]}
                             sliderLength={300}
                             onValuesChange={this.multiSliderValuesChange}
@@ -76,27 +122,28 @@ export default class filter extends React.Component {
                             allowOverlap
                             snapped
                         />                    
-                        <Text style={{ color: 'white',margin:1 }}>{this.state.multiSliderValue[1]}</Text>
+                        <Text style={{ color: 'white',margin:1 }}>{this.state.ageRange[1]}</Text>
                     </View>
                 </View>
                 <View style={{ flex: 1 }}>
                     <Text style={{ color: 'white' }}>{"Especie"}</Text>
-                    <Picker style={{color:'white'}} selectedValue = {this.state.user} onValueChange = {this.updateUser}>
-                        <Picker.Item label = "Tots" value = "all" />
-                        <Picker.Item label = "Gossos" value = "dog" />
-                        <Picker.Item label = "Gats" value = "cat" />
-                        <Picker.Item label = "Peixos" value = "fish" />
-                        <Picker.Item label = "Ocells" value = "birds" />
-                        <Picker.Item label = "Altres" value = "other" />
+                    <Picker style={{color:'white'}} selectedValue = {this.state.species} onValueChange = {this.updateUser}>
+                        <Picker.Item label = "Tots" value = "" />
+                        <Picker.Item label = "Gossos" value = "0" />
+                        <Picker.Item label = "Gats" value = "1" />
+                        <Picker.Item label = "Peixos" value = "2" />
+                        <Picker.Item label = "Reptil" value = "3" />
+                        <Picker.Item label = "Ocells" value = "4" />
+                        <Picker.Item label = "Altres" value = "5" />
                     </Picker>
                 </View>
                 <View style={{ flex: 1 }}>
                     <View style={{flexDirection: 'row'}} >
                         <Text style={{ color: 'white' }}>{"Distancia"}: </Text>
-                        <Text style={{ color: 'white' }}>{this.state.sliderOneValue} km</Text>
+                        <Text style={{ color: 'white' }}>{this.state.distance} km</Text>
                     </View>
                     <MultiSlider
-                        values={this.state.sliderOneValue}
+                        values={this.state.distance}
                         sliderLength={280}
                         sliderLength={300}
                         min={0}
@@ -122,11 +169,35 @@ export default class filter extends React.Component {
                             labelStyle={{ color: 'white' }}
                             radioStyle={{ paddingRight: 20, opacity: 0.5 }}
                             radio_props={[
-                                { label: 'Mascle', value: "0" },
-                                { label: 'Femella', value: "1" }
+                                { label: 'Any', value: "" },
+                                { label: 'Male', value: "Male" },
+                                { label: 'Female', value: "Female" }
+
                             ]}
                             initial={0}
-                            onPress={(value) => { Alert.alert('canviat') }}
+                            onPress={(value) => { this.setState({ sex: value }) }}
+                            //onPress={() => {console.log(this.state.race)}}
+                        />
+                </View>
+
+                <View style={{ flex: 1 }}>
+                    <Text style={{ color: 'white' }}>{"Type"}</Text>
+                    <RadioForm
+                            formHorizontal={true}
+                            animation={false}
+                            buttonColor={"#ffffff"}
+                            selectedButtonColor={"#ffffff"}
+                            style={{ paddingVertical: 10 }}
+                            labelStyle={{ color: 'white' }}
+                            radioStyle={{ paddingRight: 20, opacity: 0.5 }}
+                            radio_props={[
+                                { label: 'Any', value: "" },
+                                { label: 'Adoption', value: "adoption" },
+                                { label: 'Foster', value: "foster" }
+
+                            ]}
+                            initial={0}
+                            onPress={(value) => { this.setState({ type: value }) }}
                             //onPress={() => {console.log(this.state.race)}}
                         />
                 </View>
@@ -134,7 +205,7 @@ export default class filter extends React.Component {
                     style={{color:'white', flex:1}}
                     title='Change filters'
                     color='#D84B37'
-                    onPress={() => Alert.alert("sexe")}
+                    onPress={() => this.handleChangeFilters()}
                 ></Button>
 
 
