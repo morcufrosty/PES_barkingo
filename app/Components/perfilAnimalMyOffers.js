@@ -13,6 +13,7 @@ import { Facebook } from 'expo';
 import TextInputWTitle from './inputText.js';
 import InputPassword from './inputPassword.js';
 import { AsyncStorage } from 'react-native';
+import strings from '../i18n/i18n';
 
 export default class perfilAnimalMyOffers extends React.Component {
 
