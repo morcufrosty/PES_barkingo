@@ -7,6 +7,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@ptomasroos/react-native-multi-slider": "^1.0.0",
     "ex-react-native-i18n": "0.0.5",
     "expo": "^32.0.0",
     "expo-google-sign-in": "^4.0.0",
@@ -24,8 +25,8 @@
     "react-native-i18n": "^2.0.15",
     "react-native-image-picker": "^0.28.1",
     "react-native-keyboard-aware-scroll-view": "^0.8.0",
-    "react-native-localization": "^2.1.1",
     "react-native-keyboard-spacer": "^0.4.1",
+    "react-native-localization": "^2.1.1",
     "react-native-platform-stylesheet": "0.0.6",
     "react-native-simple-radio-button": "^2.7.3",
     "react-native-storage": "^1.0.1",

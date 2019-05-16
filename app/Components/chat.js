@@ -132,7 +132,6 @@ export default class Chat extends React.Component {
     }
 
 
-
     renderFavorites = () => {
         return this.state.favouriteOffers.map((data, index) => {
             return (
@@ -253,11 +252,13 @@ export default class Chat extends React.Component {
                 <ScrollView
                     horizontal={false}
                     style={{
-                        height: 110,
+                        height: '90%',
                     }}
                 >
                     {this.renderFavorites()}
                 </ScrollView>
+                {/* Aqui shan de fer ifs. Si no hi ha cap favorited que no surti i si ningu ha fet favorited dons que no surti */}
+                
             </LinearGradient>
         );
     }

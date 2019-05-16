@@ -326,6 +326,16 @@ export default class Swipe extends React.Component {
                     paddingTop: '20%',
                     padding: '5%'
                 }}>
+                <TouchableOpacity
+                    style={{
+                        position: 'absolute',
+                        top: 40,
+                        right: 15
+                    }}
+                    onPress={()  => this.props.navigation.navigate('changeSettings')}>
+                    <Image
+                        source={{ uri: "https://flaticons.net/icons/Mobile%20Application/Settings-01.png", width: 15, height: 15 }} />
+                </TouchableOpacity>
                 <ScrollView>
                     <View style={{
                         flex: 1,
@@ -364,35 +374,7 @@ export default class Swipe extends React.Component {
                             color="#ff3b28"
 
                         />
-                    </View>
-
-                    <View style={{ flex: 1, marginTop: 10 }}>
-                        <Button
-                            onPress={() => this.props.navigation.navigate('Filter')
-                            }
-                            title="Settings"
-                            color="#ff3b28"
-                        />
-                    </View>
-
-                    <View style={{ flex: 1, marginTop: 10 }}>
-
-                        <Button
-                            onPress={async () => {
-
-                                await AsyncStorage.removeItem('access_token');
-                                const resetAction = StackActions.reset({
-                                    index: 0,
-                                    actions: [NavigationActions.navigate({ routeName: 'Login' })],
-                                });
-                                this.props.navigation.dispatch(resetAction);
-                            }
-                            }
-                            title="Log out"
-                            color="#FF0000"
-                        />
-
-                    </View>
+                    </View>           
                 </ScrollView>
             </LinearGradient>
         );

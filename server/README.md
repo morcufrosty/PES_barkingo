@@ -96,6 +96,9 @@ Animal species:
         -   `id`: identifier of the user
         -   `email`: A valid email from the Facebook Account
         -   `name`: The name of the user, spaces must be expressed with an underscore (`_`).
+        -   `bio`: Biography of the user
+        -   `latitude`: latitude of the user
+        -   `longitude`: longitude of the user
         -   `success`: Is either true or false.
         -   `msg`: Short message explaining the causes of the result.
 
@@ -108,8 +111,8 @@ Animal species:
         -   `email`: A valid email from the Facebook Account
         -   `name`: The name of the user, spaces must be expressed with an underscore (`_`).
         -   `bio`: short description of the user
-        -   `country`: country of the user
-        -   `city`: city of the user
+        -   `latitude`: latitude of the user
+        -   `longitude`: longitude of the user
         -   `success`: Is either true or false.
         -   `msg`: Short message explaining the causes of the result.
 
@@ -121,8 +124,8 @@ Animal species:
         -   `id` [`required`]: identifier of the requested offer.
     -   ### Parameters
         -   `bio` [`required`]: short description of the user
-        -   `country` [`required`]: country of the user
-        -   `city` [`required`]: city of the user
+        -   `latitude` [`required`]: latitude of the user
+        -   `longitude` [`required`]: longitude of the user
     -   #### Response
         -   `id`: identifier of the user
         -   `success`: Is either true or false.
@@ -137,13 +140,14 @@ Animal species:
     -   ### Parameters
         -   `username` [`required`]: The username of the user. Any spaces must be expressed with an underscore (`_`).
         -   `bio` [`required`]: short description of the user
-        -   `country` [`required`]: country of the user
-        -   `city` [`required`]: city of the user
+        -   `latitude` [`required`]: latitude of the user
+        -   `longitude` [`required`]: longitude of the user
     -   #### Response
+
         -   `id`: identifier of the user
         -   `success`: Is either true or false.
         -   `msg`: Short message explaining the causes of the result.
-        
+
 -   ### DELETE `/users/:id`: deletes the profile for the current user, provided its id
 
     -   #### Header
@@ -320,8 +324,11 @@ Animal species:
         -   `success`: Is either `true` or `false`.
         -   `chats`: List of chats
             -   `idChat`: id of the chat
+            -   `idUserAsker`: id of the user asking for the offered animal
+            -   `idUserOffer`:
 
 -   ### POST `/offers/:id/chat`: creates chat with the owner of the offer.
+
     -   #### Path parameters
         -   `id` [`required`]: identifier of the offer.
     -   #### Response
@@ -336,6 +343,7 @@ Animal species:
         -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
 
 ### Other
+
 -   ### GET `/races`: list of races and its species
     -   #### Response
         -   `success`: Is either `true` or `false`.
