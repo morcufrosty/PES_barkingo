@@ -21,7 +21,7 @@ var router = require('./routes.js');
 app.use('/api', router);
 
 app.use((req, res, next) => {
-    return res.status(404).json({ success: false, msg: 'Route' + req.url + ' Not found.' });
+    return res.status(404).json({ success: false, msg: 'Route ' + req.url + ' Not found.' });
 });
 
 // 500 - Any server error

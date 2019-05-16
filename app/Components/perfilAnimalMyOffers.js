@@ -32,6 +32,9 @@ export default class perfilAnimalSwipe extends React.Component {
             endDate: '2019-04-15',
             description: '',
             image: '',
+            ownerName:'',
+            ownerImage:'',
+            ownerDesc:'',
             isLoading: true
         }
 
@@ -74,8 +77,11 @@ export default class perfilAnimalSwipe extends React.Component {
             });
     }
 
+
+
+
     async handleStart() {
-        let desc, name, race, age, id, image, uIdd
+        var desc, name, race, age, id, image, uIdd, ownerN, ownerD, ownerI
         id = this.props.navigation.getParam('id', '1')
         image = this.props.navigation.getParam('image', 'undefined')
         console.log(id)
@@ -84,13 +90,21 @@ export default class perfilAnimalSwipe extends React.Component {
         const responseOffer = await this.getOfferInfoFromAPI(tokenJson, id);
         if (responseOffer.success) {
             name = responseOffer.offer.name,
-                desc = responseOffer.offer.description,
-                race = responseOffer.offer.raceName,
-                age = responseOffer.offer.age
-                uIdd = responseOffer.idOwner
+            desc = responseOffer.offer.description,
+            race = responseOffer.offer.raceName,
+            age = responseOffer.offer.age,
+            uIdd = responseOffer.offer.idOwner
 
-               // const responseUser = await getUserInfoFromAPI(tokenJson, uId);
-               // console.log(responseUser);
+                console.log(responseOffer);
+                console.log(uIdd);
+                const responseUser = await this.getUserInfoFromAPI(tokenJson, uIdd);
+                console.log(responseUser);
+                ownerN = responseUser.user.username;
+                ownerD = responseUser.user.bio;
+                ownerI = null;
+
+
+
 
         }
         this.setState({
@@ -100,7 +114,9 @@ export default class perfilAnimalSwipe extends React.Component {
             age: age,
             isLoading: false,
             image: image,
-            uId: uIdd
+            uId: uIdd,
+            ownerDesc: ownerD,
+            ownerName: ownerN
         })
     }
 
@@ -176,9 +192,9 @@ export default class perfilAnimalSwipe extends React.Component {
                                 overflow: 'hidden'
                             }} source={{ uri: "https://facebook.github.io/react-native/img/favicon.png", width: 64, height: 64 }} />
                             <Text style={{fontWeight: 'bold', color: 'white', fontSize: 25, marginLeft: '10%', marginRight: '10%', justifyContent: 'center', alignItems: 'center', textAlignVertical: 'center' 
-                         }}>Nom de l'amo</Text>
+                         }}>{this.state.ownerName}</Text>
                         </View>
-                        <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%', marginBottom:'5%', marginRight:'5%' }}>Sobre l'amo: {this.state.description}</Text>
+                        <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%', marginBottom:'5%', marginRight:'5%' }}>Sobre l'amo: {this.state.ownerDesc}</Text>
                     </View>
                 </ScrollView>
             </View>

@@ -20,6 +20,7 @@ export default class perfilAnimalSwipe extends React.Component {
         super(props);
         this.state = {
             id: '1',
+            uId: '',
             name: '',
             type: '',
             species: '',
@@ -31,6 +32,9 @@ export default class perfilAnimalSwipe extends React.Component {
             endDate: '2019-04-15',
             description: '',
             image: '',
+            ownerName:'',
+            ownerImage:'',
+            ownerDesc:'',
             isLoading: true
         }
 
@@ -53,8 +57,31 @@ export default class perfilAnimalSwipe extends React.Component {
             });
     }
 
+
+
+    async getUserInfoFromAPI(tokenJson, id) {
+
+        return fetch(`http://10.4.41.164/api/users/${id}`, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': tokenJson.token
+            }
+        }).then((response) => response.json())
+            .then((responseJson) => {
+                console.log(responseJson);
+                return responseJson;
+            }).catch((error) => {
+                console.error(error);
+            });
+    }
+
+
+
+
     async handleStart() {
-        let desc, name, race, age, id, image
+        var desc, name, race, age, id, image, uIdd, ownerN, ownerD, ownerI
         id = this.props.navigation.getParam('id', '1')
         image = this.props.navigation.getParam('image', 'undefined')
         console.log(id)
@@ -63,9 +90,22 @@ export default class perfilAnimalSwipe extends React.Component {
         const responseOffer = await this.getOfferInfoFromAPI(tokenJson, id);
         if (responseOffer.success) {
             name = responseOffer.offer.name,
-                desc = responseOffer.offer.description,
-                race = responseOffer.offer.raceName,
-                age = responseOffer.offer.age
+            desc = responseOffer.offer.description,
+            race = responseOffer.offer.raceName,
+            age = responseOffer.offer.age,
+            uIdd = responseOffer.offer.idOwner
+
+                console.log(responseOffer);
+                console.log(uIdd);
+                const responseUser = await this.getUserInfoFromAPI(tokenJson, uIdd);
+                console.log(responseUser);
+                ownerN = responseUser.user.username;
+                ownerD = responseUser.user.bio;
+                ownerI = null;
+
+
+
+
         }
         this.setState({
             name: name,
@@ -73,7 +113,10 @@ export default class perfilAnimalSwipe extends React.Component {
             race: race,
             age: age,
             isLoading: false,
-            image: image
+            image: image,
+            uId: uIdd,
+            ownerDesc: ownerD,
+            ownerName: ownerN
         })
     }
 
@@ -99,12 +142,12 @@ export default class perfilAnimalSwipe extends React.Component {
 
         return (
             <LinearGradient colors={['#F15A24', '#D4145A']}
-                start={[0, 1]}
-                end={[1, 0]}
-                style={{
-                    flex: 1,
-                }}>
-                <View style={{ flex: 1 }}>
+            start={[0, 1]}
+            end={[1, 0]}
+            style={{
+                flex: 1,
+            }}>
+            <View style={{ flex: 1 }}>
                 <Image style={{
                     width: '100%',
                     height: '50%',
@@ -122,13 +165,13 @@ export default class perfilAnimalSwipe extends React.Component {
                                 overflow: 'hidden'
                             }} source={{ uri: "https://facebook.github.io/react-native/img/favicon.png", width: 64, height: 64 }} />
                             <Text style={{fontWeight: 'bold', color: 'white', fontSize: 25, marginLeft: '10%', marginRight: '10%', justifyContent: 'center', alignItems: 'center', textAlignVertical: 'center' 
-                         }}>Nom de l'amo</Text>
+                         }}>{this.state.ownerName}</Text>
                         </View>
-                        <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%', marginBottom:'5%', marginRight:'5%' }}>Sobre l'amo: {this.state.description}</Text>
+                        <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%', marginBottom:'5%', marginRight:'5%' }}>Sobre l'amo: {this.state.ownerDesc}</Text>
                     </View>
                 </ScrollView>
             </View>
-            </LinearGradient>
+        </LinearGradient>
         );
     }
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, Dimensions, Image, Animated, PanResponder,TouchableOpacity,Alert, ActivityIndicator } from 'react-native';
 import { LinearGradient } from 'expo';
 import { AsyncStorage } from 'react-native';
+import strings from '../i18n/i18n';
 const SCREEN_HEIGHT = Dimensions.get('window').height
 const SCREEN_WIDTH = Dimensions.get('window').width
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -314,7 +315,7 @@ refresh(){
       }
     }).reverse()
   }
-  else return( <Text onPress={() => {this.refresh()}} style={{ color: '#ffffff', fontSize: 17, margin: 'auto', marginTop: '50%', flex: 1, textAlign: 'center', fontWeight: '800', padding: 10,  }}> There are no more offers </Text> )
+  else return( <Text onPress={() => {this.refresh()}} style={{ color: '#ffffff', fontSize: 17, margin: 'auto', marginTop: '50%', flex: 1, textAlign: 'center', fontWeight: '800', padding: 10,  }}> {strings('Offers.NoOffers')} </Text> )
 
 
 }
