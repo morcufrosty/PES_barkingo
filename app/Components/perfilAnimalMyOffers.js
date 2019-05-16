@@ -4,7 +4,7 @@ import {
     ScrollView,
     TextInput,
     Alert,
-    Platform, Image
+    Platform, Image, TouchableOpacity
 
 } from 'react-native';
 import Button from './Button';
@@ -14,7 +14,7 @@ import TextInputWTitle from './inputText.js';
 import InputPassword from './inputPassword.js';
 import { AsyncStorage } from 'react-native';
 
-export default class perfilAnimalSwipe extends React.Component {
+export default class perfilAnimalMyOffers extends React.Component {
 
     constructor(props) {
         super(props);
@@ -32,6 +32,9 @@ export default class perfilAnimalSwipe extends React.Component {
             endDate: '2019-04-15',
             description: '',
             image: '',
+            ownerName:'',
+            ownerImage:'',
+            ownerDesc:'',
             isLoading: true
         }
 
@@ -54,6 +57,16 @@ export default class perfilAnimalSwipe extends React.Component {
             });
     }
 
+    async getProfileImageFromServer(tokenJson, id) {
+        return fetch(`http://10.4.41.164/api/users/${id}/image`, {
+            method: 'GET',
+            headers: {
+                Accept: '*',
+                'x-access-token': tokenJson.token
+            }
+        }).then((response => { return response.text() }))
+
+    }
 
 
     async getUserInfoFromAPI(tokenJson, id) {
@@ -74,8 +87,11 @@ export default class perfilAnimalSwipe extends React.Component {
             });
     }
 
+
+
+
     async handleStart() {
-        let desc, name, race, age, id, image, uIdd
+        var desc, name, race, age, id, image, uIdd, ownerN, ownerD, ownerI
         id = this.props.navigation.getParam('id', '1')
         image = this.props.navigation.getParam('image', 'undefined')
         console.log(id)
@@ -84,13 +100,23 @@ export default class perfilAnimalSwipe extends React.Component {
         const responseOffer = await this.getOfferInfoFromAPI(tokenJson, id);
         if (responseOffer.success) {
             name = responseOffer.offer.name,
-                desc = responseOffer.offer.description,
-                race = responseOffer.offer.raceName,
-                age = responseOffer.offer.age
-                uIdd = responseOffer.idOwner
+            desc = responseOffer.offer.description,
+            race = responseOffer.offer.raceName,
+            age = responseOffer.offer.age,
+            uIdd = responseOffer.offer.idOwner
 
-               // const responseUser = await getUserInfoFromAPI(tokenJson, uId);
-               // console.log(responseUser);
+                console.log(responseOffer);
+                console.log(uIdd);
+                const responseUser = await this.getUserInfoFromAPI(tokenJson, uIdd);
+                console.log(responseUser);
+                ownerN = responseUser.user.username;
+                ownerD = responseUser.user.bio;
+
+            this.getProfileImageFromServer(tokenJson,  uIdd).then( (value)=> {
+                profileImage = "data:image/jpeg;base64," + value;
+                this.setState({ownerImage: profileImage});})
+
+
 
         }
         this.setState({
@@ -100,7 +126,9 @@ export default class perfilAnimalSwipe extends React.Component {
             age: age,
             isLoading: false,
             image: image,
-            uId: uIdd
+            uId: uIdd,
+            ownerDesc: ownerD,
+            ownerName: ownerN
         })
     }
 
@@ -109,6 +137,7 @@ export default class perfilAnimalSwipe extends React.Component {
         this.setState({isLoading: false, id: '1', image: ''})
     }
 
+    
     render() {
         if (this.state.isLoading) {
             this.handleStart();

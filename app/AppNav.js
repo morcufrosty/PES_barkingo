@@ -17,11 +17,13 @@ import AutocompleteExample from "./Components/autocomplete"
 import Filter from "./Components/filter"
 import formPerfilUsuari from "./Components/formPerfilUsuari"
 import chatScreen from "./Components/chatScreen"
+import changeSettings from "./Components/changeSettings"
 
 const SettingsNavigator = createStackNavigator({
     LoginScreen: { screen: Login },
     SettingsScreen: { screen: Settings },
     Filter: {screen: Filter},
+    changeSettings: {screen: changeSettings},
     perfilAnimalMyOffers: {screen: perfilAnimalMyOffers},
     formNewOffer: { screen: formNewOffer},
     formPerfilUsuari:{screen: formPerfilUsuari}},
@@ -35,6 +37,8 @@ const SettingsNavigator = createStackNavigator({
     });
 
 const SettingsNav = createAppContainer(SettingsNavigator);
+
+
 
 const perfilAnimalFavoritesa = createStackNavigator({
     perfilAnimalFavorites: {screen: perfilAnimalFavorites},
@@ -144,10 +148,26 @@ const TabNavigator = createBottomTabNavigator(
 
 const BottomNavigation = createAppContainer(TabNavigator);
 
+const newProfileFormScreen = createStackNavigator({
+    BottomNavigation: { screen: BottomNavigation },
+    formPerfilUsuari: { screen: formPerfilUsuari}
+  },
+    {
+        initialRouteName: 'formPerfilUsuari',
+        headerMode: 'none',
+        navigationOptions: {
+            headerVisible: false,
+        }
+
+    });
+
+const newProfileFormScreenNav = createAppContainer(newProfileFormScreen);
+
 const MainNavigator = createStackNavigator({
     Register: { screen: Register },
     Login: { screen: Login },
-    AppAfterLogin: { screen: BottomNavigation }
+    AppAfterLogin: { screen: BottomNavigation },
+    newProfileFormScreen:{screen: newProfileFormScreenNav}
 },
     {
         initialRouteName: 'Login',

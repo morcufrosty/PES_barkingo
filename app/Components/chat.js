@@ -29,6 +29,12 @@ export default class Chat extends React.Component {
         }
     }
 
+    refresh(){
+        this.setState({favouriteOffers: [],
+            images: [],
+            isLoading: true})
+    }
+
     async getImageFromServer(tokenJson, id) {
 
 
@@ -132,12 +138,11 @@ export default class Chat extends React.Component {
     }
 
 
-
     renderFavorites = () => {
         return this.state.favouriteOffers.map((data, index) => {
             return (
                 <View style={{flexDirection: 'row', padding:'2%'}}>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('perfilAnimalFavorites', {id: this.state.favouriteOffers[index].id, image: this.state.images[index]} )}
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('perfilAnimalFavorites', {id: this.state.favouriteOffers[index].id, image: this.state.images[index], onGoBack: () => this.refresh() } )}
                     onLongPress={()=>
                         Alert.alert(
                             'UnFavourite',
@@ -212,11 +217,8 @@ export default class Chat extends React.Component {
 
         if (this.state.isLoading) {
 
-
-
             this.handleGetFavouriteOffers();
-            console.log(this.state.favouriteOffers);
-            this.setState({ isLoading: false });
+            
 
             return <LinearGradient colors={['#F15A24', '#D4145A']}
                 start={[0, 1]}
@@ -253,11 +255,13 @@ export default class Chat extends React.Component {
                 <ScrollView
                     horizontal={false}
                     style={{
-                        height: 110,
+                        height: '90%',
                     }}
                 >
                     {this.renderFavorites()}
                 </ScrollView>
+                {/* Aqui shan de fer ifs. Si no hi ha cap favorited que no surti i si ningu ha fet favorited dons que no surti */}
+                
             </LinearGradient>
         );
     }

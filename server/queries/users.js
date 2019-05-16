@@ -14,7 +14,7 @@ const currentUser = async (request, response) => {
             return;
         }
         await client.query('BEGIN');
-        await client.query('SELECT id, email, name, username FROM users WHERE email=$1 AND name=$2', [email, name], (err, result) => {
+        await client.query('SELECT id, email, name, username, bio, latitude, longitude FROM users WHERE email=$1 AND name=$2', [email, name], (err, result) => {
             if (err || result.rowCount == 0) {
                 response.json({ success: false, msg: 'User not found' });
                 done();
@@ -39,7 +39,7 @@ const getUser = async (request, response) => {
             return;
         }
         await client.query('BEGIN');
-        await client.query('SELECT id, email, username, name, bio, country, city FROM users WHERE id=$1', [idUser], (err, result) => {
+        await client.query('SELECT id, email, username, name, bio, latitude, longitude FROM users WHERE id=$1', [idUser], (err, result) => {
             if (err || result.rowCount == 0) {
                 console.log(err);
                 response.json({ success: false, msg: 'User not found' });
@@ -56,7 +56,7 @@ const createProfile = async (request, response) => {
     //response.json({ success: false, msg: 'Not implemented yet createUser' });
     const { email, name } = request.decoded;
     const { id: idUser } = request.params;
-    const { bio, country, city } = request.body || request.query;
+    const { bio, latitude, longitude } = request.body || request.query;
     await pool.connect(async (err, client, done) => {
         if (err) {
             response.json({ success: false, msg: 'Error accessing the database' });
@@ -73,8 +73,8 @@ const createProfile = async (request, response) => {
                 } else {
                     if(result.rows[0].id == idUser) {
                         client.query(
-                            'UPDATE users SET bio=$1, country=$2, city=$3 WHERE id=$4;)',
-                            [bio, country, city, idUser],
+                            'UPDATE users SET bio=$1, latitude=$2, longitude=$3 WHERE id=$4;)',
+                            [bio, latitude, longitude, idUser],
                             (error, res) => {
                                 if (error) {
                                     console.error('Unknown error', error);
@@ -98,7 +98,7 @@ const updateUser = async (request, response) => {
     //response.json({ success: false, msg: 'Not implemented yet updateUser' });
     const { email, name } = request.decoded;
     const { id: idUser } = request.params;
-    const { username, bio, country, city } = request.body || request.query;
+    const { username, bio, latitude, longitude } = request.body || request.query;
     await pool.connect(async (err, client, done) => {
         if (err) {
             response.json({ success: false, msg: 'Error accessing the database' });
@@ -115,8 +115,8 @@ const updateUser = async (request, response) => {
                 } else {
                     if(result.rows[0].id == idUser) {
                         client.query(
-                            'UPDATE users SET username=$1, bio=$2, country=$3, city=$4 WHERE id=$5;',
-                            [username, bio, country, city, idUser],
+                            'UPDATE users SET username=$1, bio=$2, latitude=$3, longitude=$4 WHERE id=$5;',
+                            [username, bio, latitude, longitude, idUser],
                             (error, res) => {
                                 if (error) {
                                     console.error('Unknown error', error);

@@ -4,7 +4,7 @@ import {
     ScrollView,
     TextInput,
     Alert,
-    Platform, Image
+    Platform, Image, TouchableOpacity
 
 } from 'react-native';
 import Button from './Button';
@@ -20,6 +20,7 @@ export default class perfilAnimalSwipe extends React.Component {
         super(props);
         this.state = {
             id: '1',
+            uId: '',
             name: '',
             type: '',
             species: '',
@@ -31,6 +32,9 @@ export default class perfilAnimalSwipe extends React.Component {
             endDate: '2019-04-15',
             description: '',
             image: '',
+            ownerName:'',
+            ownerImage:'',
+            ownerDesc:'',
             isLoading: true
         }
 
@@ -53,8 +57,41 @@ export default class perfilAnimalSwipe extends React.Component {
             });
     }
 
+    async getProfileImageFromServer(tokenJson, id) {
+        return fetch(`http://10.4.41.164/api/users/${id}/image`, {
+            method: 'GET',
+            headers: {
+                Accept: '*',
+                'x-access-token': tokenJson.token
+            }
+        }).then((response => { return response.text() }))
+
+    }
+
+
+    async getUserInfoFromAPI(tokenJson, id) {
+
+        return fetch(`http://10.4.41.164/api/users/${id}`, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': tokenJson.token
+            }
+        }).then((response) => response.json())
+            .then((responseJson) => {
+                console.log(responseJson);
+                return responseJson;
+            }).catch((error) => {
+                console.error(error);
+            });
+    }
+
+
+
+
     async handleStart() {
-        let desc, name, race, age, id, image
+        var desc, name, race, age, id, image, uIdd, ownerN, ownerD, ownerI
         id = this.props.navigation.getParam('id', '1')
         image = this.props.navigation.getParam('image', 'undefined')
         console.log(id)
@@ -63,9 +100,22 @@ export default class perfilAnimalSwipe extends React.Component {
         const responseOffer = await this.getOfferInfoFromAPI(tokenJson, id);
         if (responseOffer.success) {
             name = responseOffer.offer.name,
-                desc = responseOffer.offer.description,
-                race = responseOffer.offer.raceName,
-                age = responseOffer.offer.age
+            desc = responseOffer.offer.description,
+            race = responseOffer.offer.raceName,
+            age = responseOffer.offer.age,
+            uIdd = responseOffer.offer.idOwner
+
+                const responseUser = await this.getUserInfoFromAPI(tokenJson, uIdd);
+                ownerN = responseUser.user.username;
+                ownerD = responseUser.user.bio;
+
+
+            this.getProfileImageFromServer(tokenJson,  uIdd).then( (value)=> {
+                profileImage = "data:image/jpeg;base64," + value;
+                this.setState({ownerImage: profileImage});})
+
+
+
         }
         this.setState({
             name: name,
@@ -73,7 +123,10 @@ export default class perfilAnimalSwipe extends React.Component {
             race: race,
             age: age,
             isLoading: false,
-            image: image
+            image: image,
+            uId: uIdd,
+            ownerDesc: ownerD,
+            ownerName: ownerN
         })
     }
 
@@ -82,8 +135,10 @@ export default class perfilAnimalSwipe extends React.Component {
         this.setState({isLoading: false, id: '1', image: ''})
     }
 
+
     render() {
         if (this.state.isLoading) {
+
             this.handleStart();
             return <LinearGradient colors={['#F15A24', '#D4145A']}
                 start={[0, 1]}
@@ -96,38 +151,40 @@ export default class perfilAnimalSwipe extends React.Component {
 
             </LinearGradient>;
         }
-
         return (
             <LinearGradient colors={['#F15A24', '#D4145A']}
-                start={[0, 1]}
-                end={[1, 0]}
-                style={{
-                    flex: 1,
-                }}>
+            start={[0, 1]}
+            end={[1, 0]}
+            style={{
+                flex: 1,
+            }}>
                 <View style={{ flex: 1 }}>
-                <Image style={{
-                    width: '100%',
-                    height: '50%',
-                }} source={{ uri: `${this.state.image}` }} />
-                <ScrollView>
-                    <Text style={{ marginTop: '5%', color: 'white', fontSize: 30, fontWeight: 'bold', marginLeft: '10%' }}>{this.state.name}</Text>
-                    <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%' }}>Age: {this.state.age}</Text>
-                    <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%' }}>Race: {this.state.race}</Text>
-                    <Text style={{ color: 'white', fontSize: 20,  marginLeft: '10%' }}>Sex: {this.state.sex}</Text>
-                    <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%', marginBottom:'5%'}}>Description: {this.state.description}</Text>
-                    <View style={{marginBottom:'20%', marginLeft:'10%', marginRight:'10%', borderRadius: 5, backgroundColor: 'rgba(255, 255, 255, 0.2)'}}>
-                        <View style={{flexDirection: 'row', padding:'5%'}} >
-                            <Image style={{
-                                borderRadius: 64,
-                                overflow: 'hidden'
-                            }} source={{ uri: "https://facebook.github.io/react-native/img/favicon.png", width: 64, height: 64 }} />
-                            <Text style={{fontWeight: 'bold', color: 'white', fontSize: 25, marginLeft: '10%', marginRight: '10%', justifyContent: 'center', alignItems: 'center', textAlignVertical: 'center' 
-                         }}>Nom de l'amo</Text>
+                    <Image style={{
+                        width: '100%',
+                        height: '50%',
+                        backgroundColor:"#f29797"
+                    }} source={{ uri: `${this.state.image}` }} />
+                    <ScrollView>
+                        <Text style={{ marginTop: '5%', color: 'white', fontSize: 30, fontWeight: 'bold', marginLeft: '10%' }}>{this.state.name}</Text>
+                        <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%' }}>Age: {this.state.age}</Text>
+                        <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%' }}>Race: {this.state.race}</Text>
+                        <Text style={{ color: 'white', fontSize: 20,  marginLeft: '10%' }}>Sex: {this.state.sex}</Text>
+                        <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%', marginBottom:'5%'}}>Description: {this.state.description}</Text>
+                        <View style={{marginBottom:'20%', marginLeft:'10%', marginRight:'10%', borderRadius: 5, backgroundColor: 'rgba(255, 255, 255, 0.2)'}}>
+                            <View style={{flexDirection: 'row', padding:'5%'}} >
+                                <Image style={{
+                                    borderRadius: 64,
+                                    overflow: 'hidden',
+                                    backgroundColor:"#f29797",
+                                    width: 64, height: 64
+                                }} source={{ uri: `${this.state.ownerImage}`}} />
+                                <Text style={{fontWeight: 'bold', color: 'white', fontSize: 25, marginLeft: '10%', marginRight: '10%', justifyContent: 'center', alignItems: 'center', textAlignVertical: 'center' 
+                            }}>{this.state.ownerName}</Text>
+                            </View>
+                            <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%', marginBottom:'5%', marginRight:'5%' }}>Sobre l'amo: {this.state.ownerDesc}</Text>
                         </View>
-                        <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%', marginBottom:'5%', marginRight:'5%' }}>Sobre l'amo: {this.state.description}</Text>
-                    </View>
-                </ScrollView>
-            </View>
+                    </ScrollView>
+                </View>
             </LinearGradient>
         );
     }

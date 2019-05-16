@@ -2,6 +2,8 @@ import React from "react";
 import { View, Platform } from 'react-native';
 import { GiftedChat } from "react-native-gifted-chat";
 import KeyboardSpacer from 'react-native-keyboard-spacer';
+import { AsyncStorage } from 'react-native';
+
 
 
 export default class charScreen extends React.Component {
@@ -11,6 +13,11 @@ export default class charScreen extends React.Component {
     
       componentWillMount() {
         this.setState({
+
+
+          offerId: "1",
+          isLoading:true,
+
           messages: [
             {
               _id: 1,
@@ -25,6 +32,34 @@ export default class charScreen extends React.Component {
           ]
         });
       }
+
+      async openChatToAPI(tokenJson, id) {
+
+        return fetch(`http://10.4.41.164/api/offers/${id}/chat`, {
+            method: 'POST',
+            headers: {
+                Accept: '*',
+                'Content-Type': 'application/json',
+                'x-access-token': tokenJson.token
+            }
+        }).then((response) => response.json())
+            .then((responseJson) => {
+                console.log(responseJson.msg);
+                return responseJson;
+            }).catch((error) => {
+                console.error(error);
+            });
+    }
+
+      async handleStart(){
+        const token = await AsyncStorage.getItem("access_token");
+        tokenJson = JSON.parse(token);
+        id = this.props.navigation.getParam('offerId', '1')
+        const response = await this.openChatToAPI(tokenJson, id)
+
+        this.setState({offerId:id, isLoading:false } )
+
+      }
     
       onSend(messages = []) {
         this.setState(previousState => ({
@@ -33,6 +68,11 @@ export default class charScreen extends React.Component {
       }
     
       render() {
+
+        if(this.state.isLoading){
+          this.handleStart()
+        }
+
         return (
             <View style={{flex: 1}}>
                 <GiftedChat

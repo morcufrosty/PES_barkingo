@@ -68,6 +68,13 @@ export default class App extends React.Component {
                 console.log("google response content:" + resFromBarkingo.success + " " + resFromBarkingo.msg);
                 if (resFromBarkingo.success) {
                     this.storeToken(resFromBarkingo.token);
+                    var profile = await this.checkIfUserHasProfile(resFromBarkingo.token);
+                    if(profile){
+                      console.log("USUARI AMB PERFIL");
+                    }else{
+                      console.log("USUARI SENSE PERFIL");
+
+                    }
                     this.resetState();
                     const resetAction = StackActions.reset({
                         index: 0,
@@ -145,6 +152,33 @@ export default class App extends React.Component {
         }
     }
 
+    async checkIfUserHasProfile(jsonToken) {
+      const responseCurrentUser = await this.getCurrentUserFromAPI(jsonToken);
+      if (responseCurrentUser.user.latitude == '' || responseCurrentUser.user.latitude == null){
+        return false;
+      }
+      return true;
+
+    }
+
+    async getCurrentUserFromAPI(tokenJson) {
+
+        return fetch('http://10.4.41.164/api/users/currentUser', {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': tokenJson.token
+            }
+        }).then((response) => response.json())
+            .then((responseJson) => {
+                return responseJson;
+            }).catch((error) => {
+                console.error(error);
+            });
+
+    }
+
     async renewFacebookTokenToAPI(facebookName, facebookEmail, facebookToken) {
 
         return fetch('http://10.4.41.164/api/users/renewFacebookToken', {
@@ -209,11 +243,23 @@ export default class App extends React.Component {
                 const responseBarkingo = await this.renewFacebookTokenToAPI(responseFbJson.name, responseFbJson.email, token);
                 if (responseBarkingo.success) {
                     this.storeToken(responseBarkingo.token);
-                    const resetAction = StackActions.reset({
-                        index: 0,
-                        actions: [NavigationActions.navigate({ routeName: 'AppAfterLogin' })],
-                    });
-                    this.props.navigation.dispatch(resetAction);
+                    var profile = await this.checkIfUserHasProfile(resFromBarkingo.token);
+                    if(profile){
+                      console.log("USUARI AMB PERFIL");
+                      const resetAction = StackActions.reset({
+                          index: 0,
+                          actions: [NavigationActions.navigate({ routeName: 'AppAfterLogin' })],
+                      });
+                      this.props.navigation.dispatch(resetAction);
+                    }else{
+                      console.log("USUARI SENSE PERFIL");
+                      const resetAction = StackActions.reset({
+                          index: 0,
+                          actions: [NavigationActions.navigate(   'newProfileFormScreen' , {new: true} )],
+                      });
+                      this.props.navigation.dispatch(resetAction);
+                    }
+
                 }
                 else Alert.Alert(strings('login.loginError'), responseBarkingo.msg);
 
@@ -297,13 +343,22 @@ export default class App extends React.Component {
                 if (response.success) {
                     console.log(response.token);
                     this.storeToken(response.token);
-                    this.resetState();
-                    const resetAction = StackActions.reset({
-                        index: 0,
-                        actions: [NavigationActions.navigate({ routeName: 'AppAfterLogin' })],
-                    });
-                    this.props.navigation.dispatch(resetAction);
-                    this.setState({ count: 0 });
+                    var profile = await this.checkIfUserHasProfile(response.token);
+                    if(profile){
+                      console.log("USUARI AMB PERFIL");
+                      const resetAction = StackActions.reset({
+                          index: 0,
+                          actions: [NavigationActions.navigate({ routeName: 'AppAfterLogin' })],
+                      });
+                      this.props.navigation.dispatch(resetAction);
+                    }else{
+                      console.log("USUARI SENSE PERFIL");
+                      const resetAction = StackActions.reset({
+                          index: 0,
+                          actions: [NavigationActions.navigate( {routeName: 'newProfileFormScreen',params: {new: true} } )],
+                      });
+                      this.props.navigation.dispatch(resetAction);
+                    }
                 }
             }
             return;
@@ -324,6 +379,13 @@ export default class App extends React.Component {
         console.log(response.msg);
         if (response.success) {
             console.log(response.token);
+            var profile = await this.checkIfUserHasProfile(response.token);
+            if(profile){
+              console.log("USUARI AMB PERFIL");
+            }else{
+              console.log("USUARI SENSE PERFIL");
+
+            }
             this.storeToken(response.token);
             this.resetState();
             const resetAction = StackActions.reset({

@@ -4,8 +4,7 @@ import {
     ScrollView,
     TextInput,
     Alert,
-    Platform, Image,
-    TouchableOpacity
+    Platform, Image, TouchableOpacity
 
 } from 'react-native';
 import Button from './Button';
@@ -22,9 +21,11 @@ export default class perfilAnimalFavorites extends React.Component {
         super(props);
         this.state = {
             id: '1',
+            uId: '',
             name: '',
             type: '',
             species: '',
+            token: '',
             race: '',
             sex: 'Male',
             age: '',
@@ -33,12 +34,13 @@ export default class perfilAnimalFavorites extends React.Component {
             endDate: '2019-04-15',
             description: '',
             image: '',
+            ownerName:'',
+            ownerImage:'',
+            ownerDesc:'',
             isLoading: true
         }
 
     }
-    
-
     async getOfferInfoFromAPI(tokenJson, id) {
 
         return fetch(`http://10.4.41.164/api/offers/${id}`, {
@@ -57,8 +59,69 @@ export default class perfilAnimalFavorites extends React.Component {
             });
     }
 
+    async getProfileImageFromServer(tokenJson, id) {
+        return fetch(`http://10.4.41.164/api/users/${id}/image`, {
+            method: 'GET',
+            headers: {
+                Accept: '*',
+                'x-access-token': tokenJson.token
+            }
+        }).then((response => { return response.text() }))
+
+    }
+
+    async handleEndOffer(){
+
+        const response = await this.deleteOfferFromFavorites();
+        console.log(response);
+
+        this.props.navigation.state.params.onGoBack();
+        this.props.navigation.navigate("Chat");
+
+    }
+
+    
+    async deleteOfferFromFavorites() {
+        return fetch(`http://10.4.41.164/api/offers/${this.state.id}/favourite`, {
+            method: 'DELETE',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': this.state.token.token
+            }
+
+        }).then((response) => response.json())
+            .then((responseJson) => {
+                console.log(responseJson.msg);
+                return responseJson;
+            }).catch((error) => {
+                console.error(error);
+            });
+    }
+
+    async getUserInfoFromAPI(tokenJson, id) {
+
+        return fetch(`http://10.4.41.164/api/users/${id}`, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': tokenJson.token
+            }
+        }).then((response) => response.json())
+            .then((responseJson) => {
+                console.log(responseJson);
+                return responseJson;
+            }).catch((error) => {
+                console.error(error);
+            });
+    }
+
+
+
+
     async handleStart() {
-        let desc, name, race, age, id, image
+        var desc, name, race, age, id, image, uIdd, ownerN, ownerD, ownerI
         id = this.props.navigation.getParam('id', '1')
         image = this.props.navigation.getParam('image', 'undefined')
         console.log(id)
@@ -67,9 +130,24 @@ export default class perfilAnimalFavorites extends React.Component {
         const responseOffer = await this.getOfferInfoFromAPI(tokenJson, id);
         if (responseOffer.success) {
             name = responseOffer.offer.name,
-                desc = responseOffer.offer.description,
-                race = responseOffer.offer.raceName,
-                age = responseOffer.offer.age
+            desc = responseOffer.offer.description,
+            race = responseOffer.offer.raceName,
+            age = responseOffer.offer.age,
+            uIdd = responseOffer.offer.idOwner
+
+                console.log(responseOffer);
+                console.log(uIdd);
+                const responseUser = await this.getUserInfoFromAPI(tokenJson, uIdd);
+                console.log(responseUser);
+                ownerN = responseUser.user.username;
+                ownerD = responseUser.user.bio;
+
+            this.getProfileImageFromServer(tokenJson,  uIdd).then( (value)=> {
+                profileImage = "data:image/jpeg;base64," + value;
+                this.setState({ownerImage: profileImage});})
+
+
+
         }
         this.setState({
             name: name,
@@ -77,7 +155,12 @@ export default class perfilAnimalFavorites extends React.Component {
             race: race,
             age: age,
             isLoading: false,
-            image: image
+            image: image,
+            uId: uIdd,
+            ownerDesc: ownerD,
+            ownerName: ownerN,
+            token: tokenJson,
+            id:id
         })
     }
 
@@ -85,6 +168,7 @@ export default class perfilAnimalFavorites extends React.Component {
     resetState(){
         this.setState({isLoading: false, id: '1', image: ''})
     }
+
 
     render() {
         if (this.state.isLoading) {
@@ -117,15 +201,42 @@ export default class perfilAnimalFavorites extends React.Component {
                             height: 70,
                             width: 70
                         }}
-                        onPress={() => this.props.navigation.navigate('chatScreen')}>
+                        onPress={() => this.props.navigation.navigate('chatScreen', {offerId: this.state.id})}>
                         <Image
                             source={{ uri: "http://cdn.onlinewebfonts.com/svg/img_54456.png", width: 70, height: 70 }} />
                     </TouchableOpacity>
+
+                    <TouchableOpacity
+                    style={{
+                        position: 'absolute',
+                        bottom: 20,
+                        left: 20,
+                        zIndex: 100,
+                        height: 70,
+                        width: 70
+                    }}
+                    onPress={() => 
+                
+                        Alert.alert(
+                            'Finalitzar oferta',
+                            'Està segur que desitja finalitzar la oferta?',
+                            [
+                              {text: 'No', onPress: () => console.log("NO")},
+                              {text: 'Si', onPress: () => this.handleEndOffer()},
+                            ],
+                            {cancelable: false},
+                          )
+                    
+                    }>
+                    <Image
+                        source={{ uri: "https://pbs.twimg.com/profile_images/2265449598/TheENDFund_Roundel-01.png", width: 70, height: 70 }} />
+                </TouchableOpacity>
 
                 <View style={{ flex: 1 }}>
                     <Image style={{
                         width: '100%',
                         height: '50%',
+                        backgroundColor:"#f29797"
                     }} source={{ uri: `${this.state.image}` }} />
                     <ScrollView>
                         <Text style={{ marginTop: '5%', color: 'white', fontSize: 30, fontWeight: 'bold', marginLeft: '10%' }}>{this.state.name}</Text>
@@ -135,10 +246,12 @@ export default class perfilAnimalFavorites extends React.Component {
                         <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%', marginBottom:'5%'}}>{strings('perfilAnimal.description', {d: this.state.description})}</Text>
                         <View style={{marginBottom:'20%', marginLeft:'10%', marginRight:'10%', borderRadius: 5, backgroundColor: 'rgba(255, 255, 255, 0.2)'}}>
                             <View style={{flexDirection: 'row', padding:'5%'}} >
-                                <Image style={{
+                            <Image style={{
                                     borderRadius: 64,
-                                    overflow: 'hidden'
-                                }} source={{ uri: "https://facebook.github.io/react-native/img/favicon.png", width: 64, height: 64 }} />
+                                    overflow: 'hidden',
+                                    backgroundColor:"#f29797",
+                                    width: 64, height: 64
+                                }} source={{ uri: `${this.state.ownerImage}`}} />
                                 <Text style={{fontWeight: 'bold', color: 'white', fontSize: 25, marginLeft: '10%', marginRight: '10%', justifyContent: 'center', alignItems: 'center', textAlignVertical: 'center' 
                             }}>{strings('perfilAnimal.ownerName')}</Text>
                             </View>

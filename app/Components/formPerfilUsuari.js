@@ -28,6 +28,7 @@ export default class formPerfilUsuari extends React.Component {
         this.state = {
             name: '',
             description: '',
+            new: false,
             image: null,
             profilePlaceHolder: null,
             location: null,
@@ -40,11 +41,37 @@ export default class formPerfilUsuari extends React.Component {
             country:'',
             isoCountry:'',
             isoComunity:'',
-            flagURI:''
+            flagURI:'',
+            isLoading: true
 
 
         }
     }
+
+    async handleStart(){
+        const token = await AsyncStorage.getItem("access_token");
+        const jsonToken = JSON.parse(token);
+        let response = await this.getCurrentUserFromAPI(jsonToken);
+        console.log(response)
+        this.setState({
+          name: response.user.username,
+          description: response.user.bio,
+          longitude: response.user.longitude,
+          latitude: response.user.latitude,
+        });
+        if (this.props.navigation.getParam('new', false)) {
+          this.setState({new: true})
+          console.log("new")
+        }else{
+          this.setState({new: false})
+        }
+        this.setState({isLoading:false});
+
+
+    }
+
+
+
     componentWillMount() {
       if (Platform.OS === 'android' && !Constants.isDevice) {
         this.setState({
@@ -57,6 +84,24 @@ export default class formPerfilUsuari extends React.Component {
         this._getLocationAsync();
       }
     }
+
+
+        async getProfileInfoFromApi(tokenJson, id) {
+            return fetch(`http://10.4.41.164/api/users/${id}`, {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'x-access-token': tokenJson.token
+                }
+            }).then((response) => response.json())
+                .then((responseJson) => {
+                    console.log(responseJson);
+                    return responseJson;
+                }).catch((error) => {
+                    console.error(error);
+                });
+        }
 
     _getLocationAsync = async () => {
       let { status } = await Permissions.askAsync(Permissions.LOCATION);
@@ -139,64 +184,44 @@ export default class formPerfilUsuari extends React.Component {
       console.log(this.state.flagURI);
     };
 
-    async getProfileInfoFromApi(tokenJson, id) {
-        //AQUI POSAR EL PERFIL
-        return fetch(`http://10.4.41.164/api/ueueueueueueueu/${id}`, {
-            method: 'GET',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                'x-access-token': tokenJson.token
-            }
-        }).then((response) => response.json())
-            .then((responseJson) => {
-                console.log(responseJson);
-                return responseJson;
-            }).catch((error) => {
-                console.error(error);
-            });
-    }
 
     async handlePress() {
         console.log(
             this.state.name,
             this.state.description,
+            this.state.longitude,
+            this.state.latitude
         )
 
         if (this.state.name === '') {
             Alert.alert("Error", "Please enter the your name")
         }
-        /*
-          else if(this.state.species === ''){
-            Alert.alert("Error", "Please enter the scpecies of the pet" )
-          }
-          */
-        /*
-          else if(this.state.race === ''){
-            Alert.alert("Error", "Please enter the race of the pet" )
-          }
-        */
-
 
         else if (this.state.description === null) {
             Alert.alert("Error", "Please specify a description")
         }
 
-
         else {
 
             const token = await AsyncStorage.getItem("access_token");
             const jsonToken = JSON.parse(token);
+            console.log(jsonToken.token)
+            const responseCurrentUser = await this.getCurrentUserFromAPI(jsonToken);
+            const id = responseCurrentUser.user.id;
+            console.log("ID: "+id)
             let response;
-            if (!this.state.update) {
-                response = await this.newOfferUsingAPI(jsonToken);
+            if (!this.state.new) {
+                response = await this.updatePerfilUsingAPI(jsonToken, id);
                 console.log("response: " + response);
 
             }
             else {
-                response = await this.updateOfferUsingAPI(jsonToken);
+                response = await this.newPerfilUsingAPI(jsonToken, id);
+                console.log("response: " + response);
+
             }
 
+            console.log("RESPOSTA:" + response.success);
             if (response.success) {
                 //  Alert.alert("Amazing!", response.msg);
                 if (this.state.image != null) {
@@ -207,14 +232,32 @@ export default class formPerfilUsuari extends React.Component {
                         type: 'image/jpeg',
                         name: this.state.name
                     });
-                    const responsePostImg = await this.handleSubmitImage(jsonToken, response.id, data);
-                    //  Alert.alert(responsePostImg);
-                    this.props.navigation.state.params.onGoBack();
-                    this.props.navigation.goBack();
+                    console.log(id);
+                    const responsePostImg = await this.handleSubmitImage(jsonToken, id, data);
+                    //Alert.alert(responsePostImg.msg);
+                    console.log("going back")
+                    if(!this.state.new){
+                      this.props.navigation.state.params.onGoBack();
+                      this.props.navigation.goBack();
+                    }else{
+                      const resetAction = StackActions.reset({
+                          index: 0,
+                          actions: [NavigationActions.navigate({ routeName: 'BottomNavigation' })],
+                      });
+                    }
                 }
                 else{
+                  console.log("going back")
+                  if(!this.state.new){
                     this.props.navigation.state.params.onGoBack();
                     this.props.navigation.goBack();
+                  }else{
+                    const resetAction = StackActions.reset({
+                        index: 0,
+                        actions: [NavigationActions.navigate({ routeName: 'BottomNavigation' })],
+                    });
+                  }
+
                 }
 
 
@@ -227,7 +270,7 @@ export default class formPerfilUsuari extends React.Component {
 
     async handleSubmitImage(tokenJson, id, data) {
 
-        return fetch(`http://10.4.41.164/api/offers/${id}/image`, {
+        return fetch(`http://10.4.41.164/api/users/${id}/image`, {
             method: 'POST',
             headers: {
                 Accept: '*',
@@ -244,9 +287,29 @@ export default class formPerfilUsuari extends React.Component {
             });
     }
 
-    async newOfferUsingAPI(tokenJson) {
 
-        return fetch("http://10.4.41.164/api/offers", {
+    async getCurrentUserFromAPI(tokenJson) {
+
+        return fetch('http://10.4.41.164/api/users/currentUser', {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': tokenJson.token
+            }
+        }).then((response) => response.json())
+            .then((responseJson) => {
+                return responseJson;
+            }).catch((error) => {
+                console.error(error);
+            });
+
+    }
+
+
+    async newPerfilUsingAPI(tokenJson, id) {
+
+        return fetch(`http://10.4.41.164/api/users/${id}`, {
             method: 'POST',
             headers: {
                 Accept: '*',
@@ -254,13 +317,10 @@ export default class formPerfilUsuari extends React.Component {
                 'x-access-token': tokenJson.token
             },
             body: JSON.stringify({
-                name: this.state.name,
-                type: this.state.type,
-                race: this.state.race,
-                sex: this.state.sex,
-                age: this.state.age,
-                description: this.state.description
-
+              username: this.state.name,
+              bio: this.state.description,
+              latitude: this.state.latitude,
+              longitude: this.state.longitude,
             }),
         }).then((response) => response.json())
             .then((responseJson) => {
@@ -271,22 +331,21 @@ export default class formPerfilUsuari extends React.Component {
             });
     }
 
-    async updateOfferUsingAPI(tokenJson) {
-
-        return fetch(`http://10.4.41.164/api/offers/${this.state.id}`, {
+    async updatePerfilUsingAPI(tokenJson, id) {
+        console.log(tokenJson.token);
+        console.log(id);
+        return fetch(`http://10.4.41.164/api/users/${id}`, {
             method: 'PUT',
             headers: {
-                Accept: '*',
+                Accept: 'application/json',
                 'Content-Type': 'application/json',
                 'x-access-token': tokenJson.token
             },
             body: JSON.stringify({
-                name: this.state.name,
-                type: this.state.type,
-                race: this.state.race,
-                sex: this.state.sex,
-                age: this.state.age,
-                description: this.state.description
+              username: this.state.name,
+              bio: this.state.description,
+              latitude: this.state.latitude,
+              longitude: this.state.longitude,
 
             }),
         }).then((response) => response.json())
@@ -329,7 +388,8 @@ export default class formPerfilUsuari extends React.Component {
     render() {
 
         if (this.state.isLoading) {
-
+            console.log("loading");
+            this.handleStart();
             return <LinearGradient colors={['#F15A24', '#D4145A']}
                 start={[0, 1]}
                 end={[1, 0]}
@@ -342,9 +402,12 @@ export default class formPerfilUsuari extends React.Component {
             </LinearGradient>;
         }
 
+
         let { image } = this.state;
         var imageForm;
         var form;
+        var submitButton;
+
 
 
         if (this.state.image != null) {
@@ -482,10 +545,10 @@ export default class formPerfilUsuari extends React.Component {
                       </View>
 
 
-                    <Button
-                        title='Submit'
-                        color='#ff3b28'
-                        onPress={async () => this.handlePress()}>
+                                          <Button
+                                              title='Submit'
+                                              color='#ff3b28'
+                                              onPress={async () => this.handlePress()}>
 
                     </Button>
                 </ScrollView>
