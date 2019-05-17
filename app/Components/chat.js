@@ -220,22 +220,38 @@ export default class Chat extends React.Component {
             this.handleGetFavouriteOffers();
             
 
-            return <LinearGradient colors={['#F15A24', '#D4145A']}
+            return(
+            <LinearGradient colors={['#F15A24', '#D4145A']}
                 start={[0, 1]}
                 end={[1, 0]}
                 style={{
                     flex: 1,
-                    padding: '10%',
-                    paddingTop: '30%'
-                }}>
-                <ActivityIndicator size="small" color="#ffffff" />
+                    paddingTop: 30
+                }}
+            >
+                <Text style={{
+                    paddingLeft: '5%',
+                    paddingBottom: 5,
+                    color: 'white',
+                    fontSize: 30,
+                    fontWeight: 'bold'
+                }}>Favorited</Text>
+                <ScrollView
+                    horizontal={false}
+                    style={{
+                        height: '90%',
+                    }}
+                >
+                <ActivityIndicator size="small" color="#ffffff"  />
+
+                </ScrollView>
+                {/* Aqui shan de fer ifs. Si no hi ha cap favorited que no surti i si ningu ha fet favorited dons que no surti */}
+                
+            </LinearGradient>);
+    }
 
 
-            </LinearGradient>;
 
-
-
-        }
         return (
             <LinearGradient colors={['#F15A24', '#D4145A']}
                 start={[0, 1]}
