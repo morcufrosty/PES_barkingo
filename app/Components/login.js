@@ -16,6 +16,7 @@ import { AsyncStorage } from 'react-native';
 import * as Expo from "expo"
 //import { getMaxListeners } from 'cluster';
 import { StackActions, NavigationActions } from 'react-navigation';
+import strings from '../i18n/i18n';
 
 
 const ACCESS_TOKEN = 'access_token';
@@ -63,10 +64,17 @@ export default class App extends React.Component {
                 })
                 console.log("enter fetch API barkingo google");
 
-                const resFromBarkingo = await this.renewGoogleTokenToAPI('http://10.4.41.164/api/renewGoogleToken');
+                const resFromBarkingo = await this.renewGoogleTokenToAPI('http://10.4.41.164/api/users/renewGoogleToken');
                 console.log("google response content:" + resFromBarkingo.success + " " + resFromBarkingo.msg);
                 if (resFromBarkingo.success) {
                     this.storeToken(resFromBarkingo.token);
+                    var profile = await this.checkIfUserHasProfile(resFromBarkingo.token);
+                    if(profile){
+                      console.log("USUARI AMB PERFIL");
+                    }else{
+                      console.log("USUARI SENSE PERFIL");
+
+                    }
                     this.resetState();
                     const resetAction = StackActions.reset({
                         index: 0,
@@ -144,9 +152,39 @@ export default class App extends React.Component {
         }
     }
 
+    async checkIfUserHasProfile(jsonToken) {
+      console.log("TOKEN1 " + jsonToken)
+      const responseCurrentUser = await this.getCurrentUserFromAPI(jsonToken);
+      console.log(responseCurrentUser);
+      if (responseCurrentUser.user.latitude === null){
+        return false;
+      }
+      return true;
+
+    }
+
+    async getCurrentUserFromAPI(tokenJson) {
+        console.log(tokenJson);
+
+        return fetch('http://10.4.41.164/api/users/currentUser', {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': tokenJson
+            }
+        }).then((response) => response.json())
+            .then((responseJson) => {
+                return responseJson;
+            }).catch((error) => {
+                console.error(error);
+            });
+
+    }
+
     async renewFacebookTokenToAPI(facebookName, facebookEmail, facebookToken) {
 
-        return fetch('http://10.4.41.164/api/renewFacebookToken', {
+        return fetch('http://10.4.41.164/api/users/renewFacebookToken', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -208,26 +246,38 @@ export default class App extends React.Component {
                 const responseBarkingo = await this.renewFacebookTokenToAPI(responseFbJson.name, responseFbJson.email, token);
                 if (responseBarkingo.success) {
                     this.storeToken(responseBarkingo.token);
-                    const resetAction = StackActions.reset({
-                        index: 0,
-                        actions: [NavigationActions.navigate({ routeName: 'AppAfterLogin' })],
-                    });
-                    this.props.navigation.dispatch(resetAction);
+                    var profile = await this.checkIfUserHasProfile(resFromBarkingo.token);
+                    if(profile){
+                      console.log("USUARI AMB PERFIL");
+                      const resetAction = StackActions.reset({
+                          index: 0,
+                          actions: [NavigationActions.navigate({ routeName: 'AppAfterLogin' })],
+                      });
+                      this.props.navigation.dispatch(resetAction);
+                    }else{
+                      console.log("USUARI SENSE PERFIL");
+                      const resetAction = StackActions.reset({
+                          index: 0,
+                          actions: [NavigationActions.navigate(   'newProfileFormScreen' , {new: true} )],
+                      });
+                      this.props.navigation.dispatch(resetAction);
+                    }
+
                 }
-                else Alert.Alert("Login error", responseBarkingo.msg);
+                else Alert.Alert(strings('login.loginError'), responseBarkingo.msg);
 
                 //Alert.alert("You are logged in!", `Hi ${responseFb.json().name}!`);
             } else {
                 // type === 'cancel'
             }
         } catch ({ message }) {
-            alert(`Facebook Login Error: ${message}`);
+            alert(strings(login.faceError, {m: message}));
         }
     }
 
     async loginUsingAPI() {
 
-        return fetch('http://10.4.41.164/api/login', {
+        return fetch('http://10.4.41.164/api/users/login', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -248,7 +298,7 @@ export default class App extends React.Component {
 
     async loginDevUsingAPI() {
 
-        return fetch('http://10.4.41.164/api/login', {
+        return fetch('http://10.4.41.164/api/users/login', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -294,28 +344,38 @@ export default class App extends React.Component {
                 const response = await this.loginDevUsingAPI();
                 console.log(response.msg);
                 if (response.success) {
-                    console.log(response.token);
+                    var token = response.token;
+                    console.log(token);
                     this.storeToken(response.token);
-                    this.resetState();
-                    const resetAction = StackActions.reset({
-                        index: 0,
-                        actions: [NavigationActions.navigate({ routeName: 'AppAfterLogin' })],
-                    });
-                    this.props.navigation.dispatch(resetAction);
-                    this.setState({ count: 0 });
+                    var profile = await this.checkIfUserHasProfile(token);
+                    if(profile){
+                      console.log("USUARI AMB PERFIL");
+                      const resetAction = StackActions.reset({
+                          index: 0,
+                          actions: [NavigationActions.navigate({ routeName: 'AppAfterLogin' })],
+                      });
+                      this.props.navigation.dispatch(resetAction);
+                    }else{
+                      console.log("USUARI SENSE PERFIL");
+                      const resetAction = StackActions.reset({
+                          index: 0,
+                          actions: [NavigationActions.navigate( {routeName: 'newProfileFormScreen',params: {new: true} } )],
+                      });
+                      this.props.navigation.dispatch(resetAction);
+                    }
                 }
             }
             return;
 
         }
         else if (this.state.email == '') {
-            Alert.alert("Error", "Please enter your email");
+            Alert.alert(string(login.error), string(login.enterEmail));
             return;
         }
 
 
         else if (this.state.password == '') {
-            Alert.alert("Error", "Please enter your password");
+            Alert.alert(string(login.error), string(login.enterPassword));
             return;
         }
 
@@ -323,19 +383,34 @@ export default class App extends React.Component {
         console.log(response.msg);
         if (response.success) {
             console.log(response.token);
-            this.storeToken(response.token);
-            this.resetState();
-            const resetAction = StackActions.reset({
-                index: 0,
-                actions: [NavigationActions.navigate({ routeName: 'AppAfterLogin' })],
-            });
-            this.props.navigation.dispatch(resetAction);
+            var profile = await this.checkIfUserHasProfile(response.token);
+            if(profile){
+              console.log("USUARI AMB PERFIL");
+              this.storeToken(response.token);
+              this.resetState();
+              const resetAction = StackActions.reset({
+                  index: 0,
+                  actions: [NavigationActions.navigate({ routeName: 'AppAfterLogin' })],
+              });
+              this.props.navigation.dispatch(resetAction);
+            }else{
+              console.log("USUARI SENSE PERFIL");
+              this.storeToken(response.token);
+              this.resetState();
+              const resetAction = StackActions.reset({
+                  index: 0,
+                  actions: [NavigationActions.navigate( {routeName: 'newProfileFormScreen',params: {new: true} } )],
+              });
+              this.props.navigation.dispatch(resetAction);
+
+            }
+
         }
         else {
             if (response.msg === undefined)
-                Alert.alert("Login error", "Server error");
+                Alert.alert(strings('login.loginError'), strings.apply('login.serverError'));
             else
-                Alert.alert("Login error", response.msg);
+                Alert.alert(strings('login.loginError'), response.msg);
         }
     }
 
@@ -363,46 +438,46 @@ export default class App extends React.Component {
                     padding: '10%',
                     paddingTop: '30%'
                 }}>
-                <Text style={{ color: 'white', fontSize: 45, flex: 1 }}>Login</Text>
+                <Text style={{ color: 'white', fontSize: 45, flex: 1 }}>{strings('login.loginText')}</Text>
 
                 <View style={{ flex: 1 }}>
-                    <Text style={{ color: 'white' }}>{"Email"}</Text>
+                    <Text style={{ color: 'white' }}>{strings('login.email')}</Text>
                     <TextInput onChangeText={(email) => this.setState({ email })} value={this.state.email} textAlign={'center'} autoCapitalize={'none'}
                         style={{ backgroundColor: 'white', opacity: 0.5, borderRadius: 5, paddingVertical: 0, height: 35 }}></TextInput>
                 </View>
 
                 <View style={{ flex: 1 }}>
-                    <Text style={{ color: 'white' }}>{"Password"}</Text>
+                    <Text style={{ color: 'white' }}>{strings('login.password')}</Text>
                     <TextInput secureTextEntry={true} onChangeText={(password) => this.setState({ password })} value={this.state.password} textAlign={'center'} autoCapitalize={'none'}
                         style={{ backgroundColor: 'white', opacity: 0.5, borderRadius: 5, paddingVertical: 0, height: 35 }}></TextInput>
                 </View>
 
                 <View style={{ flex: 1 }}>
                     <Button
-                        title='Login'
+                        title={strings('login.loginText')}
                         color='#ff3b28'
                         onPress={async () => this.handleLoginButton()}>
                     </Button>
                 </View>
 
                 <View style={{ flex: 1 }}>
-                    <Text style={{ color: 'white' }}> Don't have an account?<Text> </Text>
+                    <Text style={{ color: 'white' }}> {strings('login.noAccount')}<Text> </Text>
                         <Text style={{ textDecorationLine: "underline" }}
                             onPress={() => this.props.navigation.navigate('Register')
                             }>
-                            Register now!
+                            {strings('login.register')}
             </Text>
                     </Text>
                     <View style={{ flex: 1, padding: '11%', marginTop: 20 }}>
                         <Button
-                            title='Login with Facebook'
+                            title={strings('login.loginFace')}
                             color='#3b5998'
                             onPress={() => this.handlePressFBLogin()}
                         ></Button>
                     </View>
                     <View style={{ flex: 1, padding: '11%' }}>
                         <Button
-                            title='Login with Google'
+                            title={strings('login.loginGoogle')}
                             color='#D84B37'
                             onPress={() => this.pressGoogleLogin()}
                         ></Button>

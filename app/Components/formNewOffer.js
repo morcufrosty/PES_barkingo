@@ -21,12 +21,11 @@ import { ImagePicker, Permissions } from 'expo';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Ionicons } from "@expo/vector-icons";
 import Autocomplete from 'react-native-autocomplete-input';
-import races from "./races"
-import raceList from './races.json';
+import racesJSON from './races.json';
 
 export default class formNewOffer extends React.Component {
     componentDidMount() {
-        this.setState({ raceList });
+        this.setState({ raceList: racesJSON });
     }
     constructor(props) {
         super(props)
@@ -45,14 +44,6 @@ export default class formNewOffer extends React.Component {
             update: false,
             isLoading: true,
             query: '',
-            data: ["Apples",
-                "Broccoli",
-                "Chicken",
-                "Duck",
-                "Eggs",
-                "Fish",
-                "Granola",
-                "Hash Browns",],
             raceList: []
 
         }
@@ -61,29 +52,7 @@ export default class formNewOffer extends React.Component {
     async prepareUpdate() {
         let response;
 
-        /*
-        var jsonOfList = await AsyncStorage.getItem("raceList");
-        if(jsonOfList === null){
 
-          console.log("seartching race list")
-
-          const token = await AsyncStorage.getItem("access_token");
-          tokenJson = JSON.parse(token);
-          response = await this.getRaceListFromAPI(tokenJson);
-          console.log("got race list from api")
-
-          if(response.success){
-            console.log(response.list)
-            const list = response.list;
-            var jsonOfList = await AsyncStorage.setItem("raceList", JSON.stringify(list));
-          //  console.log(JSON.parse(jsonOfList))
-          }else{
-            console.log(response.msg)
-          }
-        }
-        //console.log(JSON.parse(jsonOfList));
-
-        */
 
         if (this.props.navigation.getParam('update', false)) {
             console.log("UPDATE")
@@ -94,11 +63,15 @@ export default class formNewOffer extends React.Component {
             if (response.success) {
                 console.log("SUCCESS");
             }
+
             this.setState({
                 update: this.props.navigation.getParam('update', false),
                 id: this.props.navigation.getParam('id', '1'),
                 name: response.offer.name,
-                description: response.offer.description, sex: response.offer.sex, race: '0', type: '0', age: '6', isLoading: false,
+                race: response.offer.idRace,
+                query: response.offer.raceName,
+                description: response.offer.description,
+                sex: response.offer.sex, type: '0', age: '6', isLoading: false,
             })
         } else this.setState({ isLoading: false })
 
@@ -211,12 +184,11 @@ export default class formNewOffer extends React.Component {
                     this.props.navigation.state.params.onGoBack();
                     this.props.navigation.goBack();
                 }
-
-                if (this.state.update) {
-
-                    //ANAR ENRERE IGUAL QUE HA DALT
-
+                else{
+                    this.props.navigation.state.params.onGoBack();
+                    this.props.navigation.goBack();
                 }
+
 
             }
             else {
@@ -323,6 +295,20 @@ export default class formNewOffer extends React.Component {
         //  }
 
     }
+
+    escapeReg(text) {
+      if (!arguments.callee.sRE) {
+        var specials = [
+          '/', '.', '*', '+', '?', '|',
+          '(', ')', '[', ']', '{', '}', '\\'
+        ];
+        arguments.callee.sRE = new RegExp(
+          '(\\' + specials.join('|\\') + ')', 'g'
+        );
+      }
+      return text.replace(arguments.callee.sRE, '\\$1');
+    }
+
     findRace(query) {
 
         //method called everytime when we change the value of the input
@@ -332,9 +318,10 @@ export default class formNewOffer extends React.Component {
         }
         const { raceList } = this.state;
         //making a case insensitive regular expression to get similar value from the film json
-        const regex = new RegExp(`${query.trim()}`, 'i');
+        const regex = this.escapeReg(query)
+        const regex2 = new RegExp(`${regex.trim()}`, 'i');
         //return the filtered film array according the query from the input
-        return raceList.filter(race => race.raceName.search(regex) >= 0);
+        return raceList.filter(race => race.raceName.search(regex2) >= 0);
     }
 
     render() {
@@ -523,7 +510,7 @@ export default class formNewOffer extends React.Component {
 
                     }}
                     showsVerticalScrollIndicator={false}
-                >
+                    keyboardShouldPersistTaps='always'>
                     <Text style={{ color: 'white', fontSize: 45, flex: 1 }}>New Offer</Text>
 
                     <View style={{ flex: 1, paddingVertical: 10 }}>
@@ -533,12 +520,32 @@ export default class formNewOffer extends React.Component {
                     </View>
 
 
-                    <View style={{ flex: 1, paddingVertical: 10 }}>
+                    <View style={{ flex:1, paddingVertical: 10 }}>
                         <Text style={{ color: 'white' }}>{"Race"}</Text>
-                        <TextInput onChangeText={(race) => this.setState({ race })} value={this.state.race}
-                            style={{ backgroundColor: 'white', opacity: 0.5, borderRadius: 5, paddingVertical: 0, height: 35 }}>
-                        </TextInput>
+                        <View styles = {styles.autocompleteContainer}>
+                        <Autocomplete
+                          autoCapitalize="none"
+                          autoCorrect={false}
+                          containerStyle={styles.autocompleteContainer2}
+                          style={styles.input}
+                          inputContainerStyle={{borderWidth:0, borderRadius: 50}}
+                          listContainerStyle={styles.listContainer}
+                          listStyle={styles.list}
+                          data={raceList.length === 1 && comp(query, raceList[0].raceName) ? [] : raceList}
+                          defaultValue={query}
+                          onChangeText={text => this.setState({ query: text })}
+                          renderItem={({ raceName, speciesName, idRace }) => (
+                            <TouchableOpacity onPress={() => this.setState({ query: raceName, race:  idRace})}>
+                              <Text style={styles.itemText}>
+                                {raceName} - ({speciesName})
+                              </Text>
+                            </TouchableOpacity>
+                          )}
+                        />
+                        </View>
                     </View>
+
+
 
 
                     <View style={{ flex: 1, paddingVertical: 10 }}>
@@ -563,7 +570,7 @@ export default class formNewOffer extends React.Component {
                         <Text style={{ color: 'white' }}>{"Sexe"}</Text>
                         <RadioForm
                             formHorizontal={true}
-                            animation={true}
+                            animation={false}
                             buttonColor={"#ffffff"}
                             selectedButtonColor={"#ffffff"}
                             style={{ paddingVertical: 10 }}
@@ -582,7 +589,7 @@ export default class formNewOffer extends React.Component {
                         <Text style={{ color: 'white' }}>{"Type of offer"}</Text>
                         <RadioForm
                             formHorizontal={true}
-                            animation={true}
+                            animation={false}
                             buttonColor={"#ffffff"}
                             selectedButtonColor={"#ffffff"}
                             style={{ paddingVertical: 10 }}
@@ -594,6 +601,7 @@ export default class formNewOffer extends React.Component {
                             ]}
                             initial={0}
                             onPress={(value) => { this.setState({ type: value }) }}
+                            //onPress={() => {console.log(this.state.race)}}
                         />
                     </View>
 
@@ -616,3 +624,37 @@ export default class formNewOffer extends React.Component {
         );
     }
 }
+const styles = StyleSheet.create({
+
+  input:
+      {backgroundColor: 'rgba(255, 255, 255, 0)', borderWidth:0, height: 35, borderRadius: 50},
+  list:
+      {backgroundColor:"white",  opacity: 0.5, borderWidth: 0 },
+  listContainer:
+          {borderWidth: 0 },
+  autocompleteContainer2: {
+      backgroundColor: '#EC91A5',
+      borderWidth: 0,
+      //opacity: 0.35,
+    },
+
+  autocompleteContainer: {
+        flex: 1,
+        left: 0,
+        position: 'absolute',
+        right: 0,
+        top: 0,
+        zIndex: 1,
+        backgroundColor: "#EC91A5",
+        borderWidth: 0,
+
+  },
+  itemText: {
+    fontSize: 15,
+    paddingTop: 5,
+    paddingBottom: 5,
+    backgroundColor:"#EC91A5"
+  //  margin: 2,
+  },
+
+});

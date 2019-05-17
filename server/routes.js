@@ -12,13 +12,15 @@ router.get('/', (req, res) => {
     res.json({ message: 'Welcome to the Barkingo API!' });
 });
 
-router.post('/register', db.createUser);
+//LOGIN_REGISTER ROUTES
 
-router.post('/login', db.loginUser);
+router.post('/users/register', db.createUser);
 
-router.post('/renewGoogleToken', db.renewGoogleToken);
+router.post('/users/login', db.loginUser);
 
-router.post('/renewFacebookToken', db.renewFacebookToken);
+router.post('/users/renewGoogleToken', db.renewGoogleToken);
+
+router.post('/users/renewFacebookToken', db.renewFacebookToken);
 
 // molt important l'ordre d'aquest middleware pq simplement comprovarà
 // les requests que es troben a sota i per tant assegurarà que no calqui token per iniciar sessió i etc
@@ -49,37 +51,58 @@ router.use((req, res, next) => {
     }
 });
 
-router.get('/user', db.user);
+//USERS ROUTES
 
-router.get('/middletest', (req, res) => {
-    res.json({ hey: 'nice' });
-});
+router.get('/users/currentUser', db.currentUser);
+
+router.get('/users/:id', db.getUser);
+
+router.post('/users/:id', db.createProfile);
+
+router.put('/users/:id', db.updateUser);
+
+router.delete('/users/:id', db.deleteUser);
+
+router.get('/users/:id/image', db.getUserImage);
+
+router.post('/users/:id/image', db.createUserImage);
+
+
+//OFFERS ROUTES
 
 router.get('/offers', db.getOffers);
 
-router.get('/offers/:id', db.offerDetails);
-
 router.post('/offers', db.createOffer);
-
-router.put('/offers/:id', db.updateOffer);
-
-router.delete('/offers/:id', db.deleteOffer);
 
 //router.delete('/offers/:id/elim', db.eliminateOffer);
 
-router.get('/myOffers', db.myOffers);
+router.get('/offers/currentUser', db.myOffers);
 
-router.post('/offers/:id', db.swipe);
+router.get('/offers/favourite', db.favourites);
+
+router.delete('/offers/seen', db.deleteSeenOffers);
+
+router.delete('/offers/:id/favourite', db.unfavourite);
 
 router.get('/offers/:id/image', db.getImage);
 
 router.post('/offers/:id/image', db.uploadImage);
 
-router.get('/favouriteOffers', db.favourites);
+router.get('/offers/:id', db.offerDetails);
 
-router.delete('/offers/seen', db.deleteSeenOffers);
+router.put('/offers/:id', db.updateOffer);
+
+router.post('/offers/:id', db.swipe);
+
+router.delete('/offers/:id', db.deleteOffer);
 
 router.get('/races', db.racesList);
+
+router.get('/chats', db.getChats);
+
+router.post('/offers/:id/chat', db.createChat);
+
+router.delete('/chats/:id', db.deleteChat);
 
 // more routes for our API will happen here
 

@@ -1,0 +1,74 @@
+{
+	"swipeScreen": {
+		"NoOffers": "There are no more offers",
+		"Like" : "Like",
+		"Dislike" : "Dislike"
+	},
+	"chat": {
+		"ErrorDeleted": "Favorite offer has not been deleted!"
+
+	},
+	"login": {
+		"loginText": "Login",
+		"email": "Correu Electronic",
+		"password": "Contrasenya",
+		"noAccount": "Don't have an account?",
+		"register" : "Register now!",
+		"loginFace" : "LOGIN WITH FACEBOOK",
+		"loginGoogle": "LOGIN WITH GOOGLE",
+		"loginError": "Login error",
+		"serverError": "Server error",
+		"faceError" : "Facebook Login Error: {{m}}",
+		"googleError" : "Google Login Error: {{message}}",
+		"error" : "Error",
+		"enterEmail": "Please enter your email",
+		"enterPassword": "Please enter your password"
+	},
+	"perfilAnimal": {
+		"age" : "Age: {{a}}",
+		"sex" : "Sex: {{s}}",
+		"description" : "Description: {{d}}",
+		"race": "Race: {{r}}",
+		"ownerName" : "Owner name: {{on}}",
+		"ownerDescription": "about owner: "
+
+	},
+	"autoComplete" : {
+		"raceName" : "Enter race name"
+	},
+	
+	"changeSettings" : {
+		"language" : "Select language",
+		"delete" : "Delete account",
+		"deleteQuestion" : "Are you sure you want to delete your account?",
+		"no" : "No",
+		"yes" : "Yes",
+		"selectedLanguage" : "selectedLanguage",
+		"settings" : "settings",
+		"logOut" : "Log Out",
+		"languageSucces": "Language has changed succesfully",
+		"languageError" : "ERROR. Language has not been changed"
+	},
+
+	"filter" : {
+		"title" : "Filters",
+		"ageRange" : "Age range",
+		"specie" : "specie",
+		"all" : "All",
+		"dog" : "Dogs",
+		"cat" : "Cats",
+		"fish" : "Fishes",
+		"reptile" : "Reptiles",
+		"bird" : "Birds",
+		"other" : "Others",
+		"sex" : "Sex",
+		"any" : "Any",
+		"male" : "Male",
+		"female" : "Female",
+		"type" : "Type",
+		"adoption" : "Adoption",
+		"foster" : "Foster",
+		"change" : "CHANGE FILTERS"
+	}
+
+}

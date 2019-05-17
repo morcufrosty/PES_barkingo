@@ -19,13 +19,14 @@ import { decompressFromUTF16 } from 'lz-string';
 import { AsyncStorage } from 'react-native';
 
 
-export default class Chat extends React.Component {
+export default class ChatDirectory extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
             favouriteOffers: [],
             images: [],
             isLoading: true,
+            chats:[]
         }
     }
 
@@ -55,7 +56,7 @@ export default class Chat extends React.Component {
     async getImage(id) {
         return await AsyncStorage.getItem(id);
     }
-    async handleDeleteFavourite(id, index) {
+    async handleDeleteChat(id, index) {
         const t = await AsyncStorage.getItem('access_token');
         tokenJson = JSON.parse(t);
         const response = await this.deleteFavourite(tokenJson, id);
@@ -91,36 +92,219 @@ export default class Chat extends React.Component {
             });
     }
 
+    async getCurrentUserFromAPI(tokenJson) {
 
-    async handleGetFavouriteOffers() {
+        return fetch('http://10.4.41.164/api/users/currentUser', {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': tokenJson.token
+            }
+        }).then((response) => response.json())
+            .then((responseJson) => {
+                return responseJson;
+            }).catch((error) => {
+                console.error(error);
+            });
+
+    }
+
+    async getUserInfoFromAPI(tokenJson, id) {
+
+        return fetch(`http://10.4.41.164/api/users/${id}`, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': tokenJson.token
+            }
+        }).then((response) => response.json())
+            .then((responseJson) => {
+                console.log(responseJson);
+                return responseJson;
+            }).catch((error) => {
+                console.error(error);
+            });
+    }
+
+    async getProfileImageFromServer(tokenJson, id) {
+        return fetch(`http://10.4.41.164/api/users/${id}/image`, {
+            method: 'GET',
+            headers: {
+                Accept: '*',
+                'x-access-token': tokenJson.token
+            }
+        }).then((response => { return response.text() }))
+
+    }
+
+    async getMyOffersFromAPI(tokenJson) {
+
+        return fetch('http://10.4.41.164/api/offers/currentUser', {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': tokenJson.token
+            }
+        }).then((response) => response.json())
+            .then((responseJson) => {
+                console.log("THIS IS THE MESSAGE OF OFFERS:" +  responseJson.msg);
+                return responseJson;
+            }).catch((error) => {
+                console.error(error);
+            });
+
+    }
+
+    async getOfferInfoFromAPI(tokenJson, id) {
+
+        return fetch(`http://10.4.41.164/api/offers/${id}`, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': tokenJson.token
+            }
+        }).then((response) => response.json())
+            .then((responseJson) => {
+                console.log(responseJson);
+                return responseJson;
+            }).catch((error) => {
+                console.error(error);
+            });
+    }
+
+
+    async getImageFromServer(tokenJson, id) {
+
+
+        return fetch(`http://10.4.41.164/api/offers/${id}/image`, {
+          method: 'GET',
+          headers: {
+            Accept: '*',
+            'x-access-token': tokenJson.token
+          }
+          }).then((response =>  {return response.text();
+          }))
+    
+      }
+
+    async handleGetChats() {
 
         let ofertesAux = []
-        let imatgesAux = []
+        chatAux = []
+        let myOffers = []
+        let myOffersIds = []
+
+        
         const t = await AsyncStorage.getItem('access_token');
         tokenJson = JSON.parse(t);
-        const response = await this.getMyFavouritesFromAPI(tokenJson);
+
+
+        const myOffersResponse = await this.getMyOffersFromAPI(tokenJson);
+
+        if(myOffersResponse.success){
+            myOffers = myOffersResponse.offers;
+            for ( let i = 0; i < myOffers.length; i++){
+
+                myOffersIds[i] = myOffers[i].id
+
+            }
+        }
+
+
+        const response = await this.getMyChatsFromAPI(tokenJson);
 
         if (response.success) {
-            ofertesAux = response.offers
+            chatResponse = response.offers
+            console.log(chatResponse)
 
-            for (let i = 0; i < ofertesAux.length; i++) {
-                let id = ofertesAux[i].id;
+
+            for (let i = 0; i < chatResponse.length; i++) {
+
+                offer = false
+                user = false
+                let chatOfferId = chatResponse[i].idOffer;
+                let chatUserId = chatResponse[i].idUser;
+
+                    
+
+                    if(myOffersIds.includes(chatOfferId)){
+                        user = true;
+                    }
+                    
+                    else offer = true;
+
+                    if(user){
+
+                        responseUser = await this.getUserInfoFromAPI(tokenJson, chatUserId)
+                        responseOffer = await this.getOfferInfoFromAPI(tokenJson, chatOfferId)
+
+
+                        if(responseUser.success && responseOffer.success){
+
+                        chatAux[i] = {name: responseUser.user.username, desc: " (interested in " + responseOffer.offer.name + ")", type: "user", id: "id"};
+
+                        this.getProfileImageFromServer(tokenJson,  responseUser.user.id, i).then( (value)=> {
+                            profileImage = "data:image/jpeg;base64," + value;
+                            let imagesA = this.state.images
+                            imagesA[i] = profileImage
+                            //let name = this.state.chats[i].name
+                            //this.setState({images: imagesA})
+                            ;})
+            
+                    
+
+                }
+                    
+                }
+                    else if (offer){
+
+                    responseOffer = await this.getOfferInfoFromAPI(tokenJson, chatOfferId)
+                    responseUser = await this.getUserInfoFromAPI(tokenJson, chatUserId)
+
+
+
+                    if(responseOffer.success && responseUser.success){
+
+                    chatAux[i] = {name:responseOffer.offer.name, desc: " (" + responseUser.user.username + "'s pet)"}
+
+                    this.getImageFromServer(tokenJson, responseOffer.offer.id, i).then( (value)=> {
+                        profileImage = "data:image/jpeg;base64," + value;
+                        let imagesA = this.state.images
+                        imagesA[i] = profileImage
+                        //let name = this.state.chats[i].name
+                        //this.setState({images: imagesA})
+                        ;})
+        
+    
+
+                    console.log(responseOffer.offer.name)
+
+                    }
+                }
+
+
+                    /*
                 this.getImageFromServer(tokenJson, id, i).then( (value)=> {
                     let images = this.state.images;
                     images[i] = "data:image/jpeg;base64," + value;
-                    this.setState({images: images});} ) 
+                    this.setState({images: images});} ) */
                 
               }
 
         }
+    
 
-        this.setState({ isLoading: false, favouriteOffers: ofertesAux, images: imatgesAux })
+        this.setState({ isLoading: false, chats: chatAux })
 
     }
 
-    async getMyFavouritesFromAPI(tokenJson) {
+    async getMyChatsFromAPI(tokenJson) {
 
-        return fetch('http://10.4.41.164/api/offers/favourite', {
+        return fetch('http://10.4.41.164/api/chats', {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -139,10 +323,10 @@ export default class Chat extends React.Component {
 
 
     renderFavorites = () => {
-        return this.state.favouriteOffers.map((data, index) => {
+        return this.state.chats.map((data, index) => {
             return (
                 <View style={{flexDirection: 'row', padding:'2%'}}>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('perfilAnimalFavorites', {id: this.state.favouriteOffers[index].id, image: this.state.images[index], onGoBack: () => this.refresh() } )}
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('chatScreen', {offerId: this.state.id} )}
                     onLongPress={()=>
                         Alert.alert(
                             'UnFavourite',
@@ -153,7 +337,7 @@ export default class Chat extends React.Component {
                                 onPress: () => console.log('Cancel Pressed'),
                                 style: 'cancel',
                               },
-                              {text: 'OK', onPress:  () => this.handleDeleteFavourite(this.state.favouriteOffers[index].id, index)},
+                              {text: 'OK', onPress:  () => this.handleDeleteFavourite(this.state.chats[index].id, index)},
                             ],
                             {cancelable: false},
                           )}>
@@ -167,8 +351,11 @@ export default class Chat extends React.Component {
                         backgroundColor:"#f29797"
                     }} source={{ uri: `${this.state.images[index]}` }} />
                     </TouchableOpacity>
-                    <Text style={{ color: 'white', fontSize: 20, marginLeft: '2%', marginRight: '2%', justifyContent: 'center', alignItems: 'center', textAlignVertical: 'center' 
-                         }}>{this.state.favouriteOffers[index].name}</Text>                
+                    <Text style={{ color: 'white', fontSize: 20, bottom:20, marginLeft: '2%', marginRight: '2%', justifyContent: 'center', alignItems: 'center', textAlignVertical: 'center' 
+                         }}>{this.state.chats[index].name}</Text>    
+                    <Text style={{ fontStyle: "italic", color: 'white',bottom:20,  fontSize: 15, marginLeft: '1%', marginRight: '2%', justifyContent: 'center', alignItems: 'center', textAlignVertical: 'center' 
+                    }}>{this.state.chats[index].desc }</Text>        
+               
                 </View>
             )
         })
@@ -217,7 +404,7 @@ export default class Chat extends React.Component {
 
         if (this.state.isLoading) {
 
-            this.handleGetFavouriteOffers();
+            this.handleGetChats();
             
 
             return(
@@ -235,7 +422,7 @@ export default class Chat extends React.Component {
                     color: 'white',
                     fontSize: 30,
                     fontWeight: 'bold'
-                }}>Favorited</Text>
+                }}>Chats</Text>
                 <ScrollView
                     horizontal={false}
                     style={{
@@ -267,7 +454,7 @@ export default class Chat extends React.Component {
                     color: 'white',
                     fontSize: 30,
                     fontWeight: 'bold'
-                }}>Favorited</Text>
+                }}>Chats</Text>
                 <ScrollView
                     horizontal={false}
                     style={{

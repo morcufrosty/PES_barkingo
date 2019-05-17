@@ -4,39 +4,65 @@ const { createUser,
     renewFacebookToken,
     user } = require('./login_register');
 
+const { currentUser,
+    getUser,
+    createProfile,
+    updateUser,
+    deleteUser,
+    getUserImage,
+    createUserImage } = require('./users');
+
 const { getOffers,
     createOffer,
+    offerDetails,
     updateOffer,
+    swipe,
     deleteOffer,
     //eliminateOffer,
     myOffers,
-    swipe,
+    favourites,
+    unfavourite,
     getImage,
     uploadImage,
-    favourites,
-    offerDetails,
     deleteSeenOffers,
     racesList } = require('./offers');
 
+const { getChats,
+    createChat,
+    deleteChat } = require('./chat');
+
 module.exports = {
+    //LOGIN_REGISTER
     createUser,
     loginUser,
     renewGoogleToken,
     renewFacebookToken,
     user,
+    //USERS
+    currentUser,
+    getUser,
+    createProfile,
+    updateUser,
+    deleteUser,
+    getUserImage,
+    createUserImage,
+    //OFFERS
     getOffers,
     createOffer,
+    offerDetails,
     updateOffer,
+    swipe,
     deleteOffer,
     //eliminateOffer,
     myOffers,
-    swipe,
+    favourites,
+    unfavourite,
     getImage,
     uploadImage,
-    favourites,
-    offerDetails,
     deleteSeenOffers,
-    racesList
+    racesList,
+    //CHAT
+    getChats,
+    createChat,
+    deleteChat
 };
-
-// TODO: paginacio https://www.moesif.com/blog/technical/api-design/REST-API-Design-Filtering-Sorting-and-Pagination/#

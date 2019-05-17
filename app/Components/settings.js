@@ -20,31 +20,13 @@ import InputPassword from './inputPassword.js';
 import { AsyncStorage } from 'react-native';
 import { NavigationActions, StackActions } from 'react-navigation';
 
-const placeHolderImages = [
-    { id: "1", uri: require('../assets/1.jpg') },
-    { id: "2", uri: require('../assets/2.jpg') },
-    { id: "3", uri: require('../assets/3.jpg') },
-    { id: "4", uri: require('../assets/4.jpg') },
-    { id: "5", uri: require('../assets/5.jpg') },
-    { id: "6", uri: require('../assets/1.jpg') },
-    { id: "7", uri: require('../assets/2.jpg') },
-    { id: "8", uri: require('../assets/3.jpg') },
-    { id: "9", uri: require('../assets/4.jpg') },
-    { id: "10", uri: require('../assets/5.jpg') },
-    { id: "11", uri: require('../assets/1.jpg') },
-    { id: "12", uri: require('../assets/2.jpg') },
-    { id: "13", uri: require('../assets/3.jpg') },
-    { id: "14", uri: require('../assets/4.jpg') },
-    { id: "15", uri: require('../assets/5.jpg') },
-
-]
-
 const initialState = {
     myOffers: [],
     images: [],
     isLoading: true,
     username: '',
-    noOffers: false
+    noOffers: false,
+    pImage:''
 };
 export default class Swipe extends React.Component {
 
@@ -52,7 +34,37 @@ export default class Swipe extends React.Component {
         super(props)
         this.state = initialState;
     }
+    async handleDeleteUser(tokenJson) {
+        const t = await AsyncStorage.getItem('access_token');
+        tokenJson = JSON.parse(t);
+        const response = await this.deleteFavourite(tokenJson, id);
+        console.log("retorna delete user")
+        if (response.success) {
+            Alert.alert("User has been deleted!", response.msg);
+            //navigate cap al login, eliminar access token
+        }
+        else {
+            Alert.alert("User has not been deleted!", response.msg);
+        }
+    }
 
+    async deleteUser(tokenJson) {
+        return fetch(`http://10.4.41.164/api/offers/${id}/favourite`, {
+            method: 'DELETE',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': tokenJson.token
+            }
+
+        }).then((response) => response.json())
+            .then((responseJson) => {
+                console.log(responseJson.msg);
+                return responseJson;
+            }).catch((error) => {
+                console.error(error);
+            });
+    }
 
     async handleDeleteOffer(id) {
         this.setState({ isLoading: true, myOffers: [] })
@@ -76,6 +88,18 @@ export default class Swipe extends React.Component {
         }
     }
 
+    async getProfileImageFromServer(tokenJson, id) {
+        return fetch(`http://10.4.41.164/api/users/${id}/image`, {
+            method: 'GET',
+            headers: {
+                Accept: '*',
+                'x-access-token': tokenJson.token
+            }
+        }).then((response => { return response.text() }))
+
+    }
+
+
     async deleteOffer(tokenJson, id) {
         console.log(id);
         return fetch(`http://10.4.41.164/api/offers/${id}`, {
@@ -97,7 +121,7 @@ export default class Swipe extends React.Component {
 
     async getMyOffersFromAPI(tokenJson) {
 
-        return fetch('http://10.4.41.164/api/myOffers', {
+        return fetch('http://10.4.41.164/api/offers/currentUser', {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -106,7 +130,7 @@ export default class Swipe extends React.Component {
             }
         }).then((response) => response.json())
             .then((responseJson) => {
-                console.log(responseJson.msg);
+                console.log("THIS IS THE MESSAGE OF OFFERS:" +  responseJson.msg);
                 return responseJson;
             }).catch((error) => {
                 console.error(error);
@@ -114,9 +138,11 @@ export default class Swipe extends React.Component {
 
     }
 
-    async getUserFromAPI(tokenJson) {
 
-        return fetch('http://10.4.41.164/api/user', {
+
+    async getCurrentUserFromAPI(tokenJson) {
+
+        return fetch('http://10.4.41.164/api/users/currentUser', {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -125,7 +151,6 @@ export default class Swipe extends React.Component {
             }
         }).then((response) => response.json())
             .then((responseJson) => {
-                console.log(responseJson.msg);
                 return responseJson;
             }).catch((error) => {
                 console.error(error);
@@ -154,7 +179,7 @@ export default class Swipe extends React.Component {
     }
 
     editOffer(id) {
-        this.props.navigation.navigate('formNewOffer', { id: id, update: true });
+        this.props.navigation.navigate('formNewOffer', { id: id, update: true, onGoBack: () => this.refresh() });
     }
 
     refresh() {
@@ -168,26 +193,38 @@ export default class Swipe extends React.Component {
         ofertesAux = []
         imatgesAux = []
         noOfertes = false
+        profileImage = ''
 
         const responseOffers = await this.getMyOffersFromAPI(tokenJson);
-        const responseUser = await this.getUserFromAPI(tokenJson);
+        const responseUser = await this.getCurrentUserFromAPI(tokenJson);
+
+        if(responseUser.success){
+           uId = responseUser.user.id;
+           this.getProfileImageFromServer(tokenJson, uId).then( (value)=> {
+            profileImage = "data:image/jpeg;base64," + value;
+            this.setState({pImage: profileImage});})
+        }
+    
 
         if (responseOffers.success) {
             ofertesAux = responseOffers.offers
-            console.log(ofertesAux);
 
             for (let i = 0; i < ofertesAux.length; i++) {
                 let id = ofertesAux[i].id;
-                let image = await this.getImageFromServer(tokenJson, id);
-                imatgesAux[i] = image;
-            }
+                this.getImageFromServer(tokenJson, id, i).then( (value)=> {
+                    let images = this.state.images;
+                    images[i] = "data:image/jpeg;base64," + value;
+                    this.setState({images: images});} )
+
+              }
         }
 
         else {
             noOfertes = true
         }
 
-        this.setState({ isLoading: false, myOffers: ofertesAux, noOffers: noOfertes, images: imatgesAux, username: responseUser.name })
+        this.setState({ isLoading: false, myOffers: ofertesAux, noOffers: noOfertes, images: imatgesAux, username: responseUser.user.username })
+
     }
 
     renderPublications = () => {
@@ -196,13 +233,19 @@ export default class Swipe extends React.Component {
 
             return (
                 <View>
+                    <TouchableOpacity  onPress={() => this.props.navigation.navigate('perfilAnimalMyOffers', {id: this.state.myOffers[index].id, image: this.state.images[index]} )}
+>
                     <Image style={{
                         borderRadius: 5,
                         overflow: 'hidden',
                         marginLeft: 10,
                         width: 200,
-                        height: 200
-                    }} source={{ uri: `data:image/jpeg;base64,${this.state.images[index]}` }} />
+                        height: 200,
+                        backgroundColor:"#f29797",
+                    }} source={{ uri: `${this.state.images[index]}` }}
+                    />
+                    </TouchableOpacity>
+
                     <TouchableOpacity
                         style={{
                             position: 'absolute',
@@ -232,18 +275,68 @@ export default class Swipe extends React.Component {
 
         if (this.state.isLoading) {
             this.handleStart();
-            return <LinearGradient colors={['#F15A24', '#D4145A']}
-                start={[0, 1]}
-                end={[1, 0]}
+            return (<LinearGradient colors={['#F15A24', '#D4145A']}
+            start={[0, 1]}
+            end={[1, 0]}
+            style={{
+                flex: 1,
+                paddingTop: '20%',
+                padding: '5%'
+            }}>
+            <TouchableOpacity
                 style={{
+                    position: 'absolute',
+                    top: 40,
+                    right: 15
+                }}
+                onPress={()  => this.props.navigation.navigate('changeSettings')}>
+                <Image
+                    source={{ uri: "https://flaticons.net/icons/Mobile%20Application/Settings-01.png", width: 15, height: 15 }} />
+            </TouchableOpacity>
+            <ScrollView>
+                <View style={{
                     flex: 1,
-                    padding: '10%',
-                    paddingTop: '30%'
+                    flexDirection: 'row',
+                    height: 64
                 }}>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('formPerfilUsuari', {onGoBack: () => this.refresh()})}  >
+                    <Image style={{
+                        borderRadius: 64,
+                        overflow: 'hidden',
+                        width: 64, height: 64,
+                        backgroundColor: "#f29797"
+                    }} source={{ uri: this.state.pImage }} />
+                </TouchableOpacity>
+                <Text style={{ color:"#f29797", fontSize: 20, marginLeft: 10, color: "#f29797", flex: 1, justifyContent: 'center', alignItems: 'center', height: 64, textAlignVertical: 'center' }}>username</Text>
 
+                </View>
+                <Text style={{
+                    paddingTop: '5%',
+                    paddingBottom: '5%',
+                    color: 'white'
+                }}>Your publications</Text>
+                <ScrollView
+                    horizontal={true}
+                    style={{
+                        marginLeft: -10
+                    }}
+
+                    
+                >
+                </ScrollView>
                 <ActivityIndicator size="small" color="#ffffff" />
 
-            </LinearGradient>;
+                {noOffersMessage}
+                <View style={{ flex: 1, marginTop: 10 }}>
+                    <Button
+                        onPress={() => this.props.navigation.navigate('formNewOffer', { onGoBack: () => this.refresh() })}
+                        title="New Publication"
+                        color="#ff3b28"
+
+                    />
+                </View>           
+            </ScrollView>
+        </LinearGradient>)
         }
 
         var noOffersMessage;
@@ -271,17 +364,34 @@ export default class Swipe extends React.Component {
                     paddingTop: '20%',
                     padding: '5%'
                 }}>
+                <TouchableOpacity
+                    style={{
+                        position: 'absolute',
+                        top: 40,
+                        right: 15,
+                        height:20,
+                        width:20
+                    }}
+                    onPress={()  => this.props.navigation.navigate('changeSettings')}>
+                    <Image
+                        source={{ uri: "https://flaticons.net/icons/Mobile%20Application/Settings-01.png", width: 20, height: 20 }} />
+                </TouchableOpacity>
                 <ScrollView>
                     <View style={{
                         flex: 1,
                         flexDirection: 'row',
                         height: 64
                     }}>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('formPerfilUsuari', {onGoBack: () => this.refresh()})}  >
                         <Image style={{
                             borderRadius: 64,
-                            overflow: 'hidden'
-                        }} source={{ uri: "https://facebook.github.io/react-native/img/favicon.png", width: 64, height: 64 }} />
-                        <Text style={{ fontSize: 20, marginLeft: 10, color: 'white', flex: 1, justifyContent: 'center', alignItems: 'center', height: 64, textAlignVertical: 'center' }}>{this.state.username}</Text>
+                            overflow: 'hidden',
+                            width: 64, height: 64,
+                            backgroundColor: "#f29797"
+                        }} source={{ uri: this.state.pImage }} />
+                    </TouchableOpacity>
+                    <Text style={{ fontSize: 20, marginLeft: 10, color: 'white', flex: 1, justifyContent: 'center', alignItems: 'center', height: 64, textAlignVertical: 'center' }}>{this.state.username}</Text>
+
                     </View>
                     <Text style={{
                         paddingTop: '5%',
@@ -304,36 +414,7 @@ export default class Swipe extends React.Component {
                             color="#ff3b28"
 
                         />
-                    </View>
-
-                    <View style={{ flex: 1, marginTop: 10 }}>
-                        <Button
-                            onPress={() => this.setState({ isLoading: true, myOffers: [] })
-                            }
-                            title="Settings"
-                            color="#ff3b28"
-
-                        />
-                    </View>
-
-                    <View style={{ flex: 1, marginTop: 10 }}>
-
-                        <Button
-                            onPress={async () => {
-
-                                await AsyncStorage.removeItem('access_token');
-                                const resetAction = StackActions.reset({
-                                    index: 0,
-                                    actions: [NavigationActions.navigate({ routeName: 'Login' })],
-                                });
-                                this.props.navigation.dispatch(resetAction);
-                            }
-                            }
-                            title="Log out"
-                            color="#FF0000"
-                        />
-
-                    </View>
+                    </View>           
                 </ScrollView>
             </LinearGradient>
         );

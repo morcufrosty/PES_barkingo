@@ -8,18 +8,28 @@ import React, { Component } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Settings from "./Components/settings";
 import Chat from "./Components/chat"
-import perfilAnimal from "./Components/perfilAnimal"
+import perfilAnimalSwipe from "./Components/perfilAnimalSwipe"
+import perfilAnimalMyOffers from "./Components/perfilAnimalMyOffers"
+import perfilAnimalFavorites from "./Components/perfilAnimalFavorites"
 import formNewOffer from "./Components/formNewOffer"
 import TabIcon from './TabIcon';
+import AutocompleteExample from "./Components/autocomplete"
+import Filter from "./Components/filter"
+import formPerfilUsuari from "./Components/formPerfilUsuari"
+import chatScreen from "./Components/chatScreen"
+import changeSettings from "./Components/changeSettings"
+import chatDirectory from "./Components/chatDirectory"
+
+
 
 const SettingsNavigator = createStackNavigator({
     LoginScreen: { screen: Login },
-
     SettingsScreen: { screen: Settings },
-    formNewOffer: {
-        screen: formNewOffer
-    }
-},
+    Filter: {screen: Filter},
+    changeSettings: {screen: changeSettings},
+    perfilAnimalMyOffers: {screen: perfilAnimalMyOffers},
+    formNewOffer: { screen: formNewOffer},
+    formPerfilUsuari:{screen: formPerfilUsuari}},
     {
         initialRouteName: 'SettingsScreen',
         headerMode: 'none',
@@ -31,10 +41,27 @@ const SettingsNavigator = createStackNavigator({
 
 const SettingsNav = createAppContainer(SettingsNavigator);
 
+
+
+const perfilAnimalFavoritesa = createStackNavigator({
+    perfilAnimalFavorites: {screen: perfilAnimalFavorites},
+    chatScreen: {screen: chatScreen}
+},
+{
+    headerMode: 'none',
+    navigationOptions: {
+        headerVisible: false,
+    }
+});
+
+const perfilAnimalFavoritesNav = createAppContainer(perfilAnimalFavoritesa);
+
 const SwipeNavigator = createStackNavigator({
 
     SwipeScreen: { screen: swipeScreen },
-    perfilAnimal: { screen: perfilAnimal }
+    Filter: {screen: Filter},
+
+    perfilAnimalSwipe: { screen: perfilAnimalSwipe }
 },
     {
         initialRouteName: 'SwipeScreen',
@@ -44,6 +71,21 @@ const SwipeNavigator = createStackNavigator({
         }
 
     });
+
+    const ChatNavigator = createStackNavigator({
+        Chat: { screen: Chat },
+        perfilAnimalFavorites: { screen: perfilAnimalFavoritesNav }
+    },
+        {
+            initialRouteName: 'Chat',
+            headerMode: 'none',
+            navigationOptions: {
+                headerVisible: false,
+            }
+
+        });
+
+    const ChatNav = createAppContainer(ChatNavigator);
 
 const SwipeNav = createAppContainer(SwipeNavigator);
 
@@ -79,7 +121,20 @@ const TabNavigator = createBottomTabNavigator(
         },
 
         chat: {
-            screen: Chat,
+            screen: ChatNav,
+            navigationOptions: {
+                tabBarLabel: "",
+                tabBarIcon: ({ focused, tintColor }) => (
+                    <TabIcon
+                        iconDefault='heart'
+                        iconFocused='heart'
+                        focused={focused}
+                        tintColor={tintColor}
+                    />)
+            },
+        },
+        chatDirectory: {
+            screen: chatDirectory,
             navigationOptions: {
                 tabBarLabel: "",
                 tabBarIcon: ({ focused, tintColor }) => (
@@ -91,6 +146,10 @@ const TabNavigator = createBottomTabNavigator(
                     />)
             },
         },
+
+
+
+
 
     },
 
@@ -107,10 +166,26 @@ const TabNavigator = createBottomTabNavigator(
 
 const BottomNavigation = createAppContainer(TabNavigator);
 
+const newProfileFormScreen = createStackNavigator({
+    BottomNavigation: { screen: BottomNavigation },
+    formPerfilUsuari: { screen: formPerfilUsuari}
+  },
+    {
+        initialRouteName: 'formPerfilUsuari',
+        headerMode: 'none',
+        navigationOptions: {
+            headerVisible: false,
+        }
+
+    });
+
+const newProfileFormScreenNav = createAppContainer(newProfileFormScreen);
+
 const MainNavigator = createStackNavigator({
     Register: { screen: Register },
     Login: { screen: Login },
-    AppAfterLogin: { screen: BottomNavigation }
+    AppAfterLogin: { screen: BottomNavigation },
+    newProfileFormScreen:{screen: newProfileFormScreenNav}
 },
     {
         initialRouteName: 'Login',

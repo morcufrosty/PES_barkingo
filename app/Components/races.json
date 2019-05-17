@@ -23,12 +23,7 @@
             "idRace": 3,
             "raceName": "Retrievers (Golden)"
         },
-        {
-            "idSpecies": 0,
-            "speciesName": "Dog",
-            "idRace": 4,
-            "raceName": "French Bulldogs  "
-        },
+
         {
             "idSpecies": 0,
             "speciesName": "Dog",
@@ -482,12 +477,6 @@
         {
             "idSpecies": 0,
             "speciesName": "Dog",
-            "idRace": 80,
-            "raceName": "Staffordshire Bull Terriers  "
-        },
-        {
-            "idSpecies": 0,
-            "speciesName": "Dog",
             "idRace": 81,
             "raceName": "Coton de Tulear  "
         },
@@ -659,12 +648,7 @@
             "idRace": 109,
             "raceName": "Spinoni Italiani  "
         },
-        {
-            "idSpecies": 0,
-            "speciesName": "Dog",
-            "idRace": 110,
-            "raceName": "Miniature Bull Terriers  "
-        },
+
         {
             "idSpecies": 0,
             "speciesName": "Dog",
