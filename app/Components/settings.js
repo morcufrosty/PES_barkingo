@@ -137,6 +137,41 @@ export default class Swipe extends React.Component {
             });
 
     }
+    async handleFinishOffer(id, index) {
+        const t = await AsyncStorage.getItem('access_token');
+        tokenJson = JSON.parse(t);
+        const response = await this.finishOffer(tokenJson, id);
+        console.log("retorna delete")
+        if (response.success) {
+            let auxFav = this.state.favouriteOffers;
+            let auxImg = this.state.images;
+            auxFav.splice(index, 1);
+            auxImg.splice(index, 1);
+            this.setState({favouriteOffers : auxFav, images : auxImg});
+        }
+        else {
+            Alert.alert("Favorite offer has not been deleted!", response.msg);
+        }
+    }
+
+    async finishOffer(tokenJson, id) {
+        console.log(id);
+        return fetch(`http://10.4.41.164/api/offers/${id}/favourite`, {
+            method: 'DELETE',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': tokenJson.token
+            }
+
+        }).then((response) => response.json())
+            .then((responseJson) => {
+                console.log(responseJson.msg);
+                return responseJson;
+            }).catch((error) => {
+                console.error(error);
+            });
+    }
 
 
 
@@ -266,6 +301,32 @@ export default class Swipe extends React.Component {
                         <Image
                             source={{ uri: "https://png.pngtree.com/svg/20170121/delete_286553.png", width: 40, height: 40 }} />
                     </TouchableOpacity>
+                    <TouchableOpacity
+                    style={{
+                        position: 'absolute',
+                        bottom: 10,
+                        left: 10,
+                        zIndex: 100,
+                        height: 35,
+                        width: 35
+                    }}
+                    onPress={() => 
+                
+                        Alert.alert(
+                            'Finalitzar oferta',
+                            'Està segur que desitja finalitzar la oferta?',
+                            [
+                              {text: 'No', onPress: () => console.log("NO")},
+                              {text: 'Si', onPress: () => this.handleFinishOffer(this.state.myOffers[index].id, index)},
+                            ],
+                            {cancelable: false},
+                          )
+                    
+                    }>
+                    <Image
+                        source={{ uri: "https://cdn1.iconfinder.com/data/icons/basic-ui-elements-coloricon/21/15-512.png",   height: 35,
+                        width: 35}} />
+                </TouchableOpacity>
                 </View>
             )
         })
@@ -338,6 +399,7 @@ export default class Swipe extends React.Component {
                             backgroundColor: "#f29797"
                         }} source={{ uri: this.state.pImage }} />
                     </TouchableOpacity>
+                    
                     <Text style={{ fontSize: 20, marginLeft: 10, color: 'white', flex: 1, justifyContent: 'center', alignItems: 'center', height: 64, textAlignVertical: 'center' }}>{this.state.username}</Text>
 
                     </View>
