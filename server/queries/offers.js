@@ -161,6 +161,17 @@ const deleteOffer = async (request, response) => {
                                 response.json({ success: true, msg: 'Offer deleted successfully', id: idOffer });
                             }
                         });
+                    client.query(
+                        'DELETE FROM favourites WHERE "idOffer"=$1;', [idOffer],
+                        (error, res) => {
+                            if (error) {
+                                console.error('Unknown error', error);
+                                response.json({ success: false, msg: 'Unknown error' });
+                            } else {
+                                client.query('COMMIT');
+                                response.json({ success: true, msg: 'Offer deleted from favourites successfully', id: idOffer });
+                            }
+                        });
                 }
             });
         done();
@@ -360,8 +371,9 @@ const unfavourite = async (request, response) => {
                     console.log(err)
                     response.json({ success: false, msg: 'User ' + email + ' doesn\'t exist' });
                 } else {
+                    let idUser = result.rows[0].id;
                     client.query(
-                        'DELETE FROM favourites WHERE "idOffer"=$1;', [idOffer],
+                        'DELETE FROM favourites WHERE "idOffer"=$1 AND "idUser"=$2;', [idOffer, idUser],
                         (error, res) => {
                             if (error) {
                                 console.error('Unknown error', error);
