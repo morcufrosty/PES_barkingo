@@ -370,11 +370,13 @@ handleQuery(filterJson){
           style={{
             position: 'absolute',
             top: 40,
-            right: 15
+            right: 15,
+            width:20,
+            height:20
           }}
           onPress={()  => this.props.navigation.navigate('Filter', {onGoBack: () => this.refresh()})}>
           <Image
-              source={{ uri: "https://flaticons.net/icons/Data/Filter-Standard.png", width: 15, height: 15 }} />
+              source={{ uri: "https://flaticons.net/icons/Data/Filter-Standard.png", width: 20, height: 20 }} />
         </TouchableOpacity>
 
           </LinearGradient>;
