@@ -253,9 +253,9 @@ export default class perfilAnimalFavorites extends React.Component {
                                     width: 64, height: 64
                                 }} source={{ uri: `${this.state.ownerImage}`}} />
                                 <Text style={{fontWeight: 'bold', color: 'white', fontSize: 25, marginLeft: '10%', marginRight: '10%', justifyContent: 'center', alignItems: 'center', textAlignVertical: 'center' 
-                            }}>{strings('perfilAnimal.ownerName')}</Text>
+                            }}>{strings('perfilAnimal.ownerName', {on:this.state.ownerName})}</Text>
                             </View>
-                            <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%', marginBottom:'5%', marginRight:'5%' }}>{strings('perfilAnimal.ownerDescription', {od: this.state.description})}</Text>
+                            <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%', marginBottom:'5%', marginRight:'5%' }}>{strings('perfilAnimal.ownerDescription')} {this.state.ownerDesc}</Text>
                         </View>
                     </ScrollView>
                 </View>
