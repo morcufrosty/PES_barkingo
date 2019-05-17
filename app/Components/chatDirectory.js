@@ -247,7 +247,7 @@ export default class ChatDirectory extends React.Component {
 
                         chatAux[i] = {name: responseUser.user.username, desc: " (interested in " + responseOffer.offer.name + ")", type: "user", id: "id"};
 
-                        this.getProfileImageFromServer(tokenJson,  chatUserId, i).then( (value)=> {
+                        this.getProfileImageFromServer(tokenJson,  responseUser.user.id, i).then( (value)=> {
                             profileImage = "data:image/jpeg;base64," + value;
                             let imagesA = this.state.images
                             imagesA[i] = profileImage
@@ -326,7 +326,7 @@ export default class ChatDirectory extends React.Component {
         return this.state.chats.map((data, index) => {
             return (
                 <View style={{flexDirection: 'row', padding:'2%'}}>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('perfilAnimalFavorites', {id: this.state.chats[index].id, image: this.state.images[index], onGoBack: () => this.refresh() } )}
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('chatScreen', {offerId: this.state.id} )}
                     onLongPress={()=>
                         Alert.alert(
                             'UnFavourite',
