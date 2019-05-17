@@ -19,7 +19,7 @@ import { decompressFromUTF16 } from 'lz-string';
 import { AsyncStorage } from 'react-native';
 
 
-export default class Chat extends React.Component {
+export default class chatDirectory extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -108,8 +108,8 @@ export default class Chat extends React.Component {
                 this.getImageFromServer(tokenJson, id, i).then( (value)=> {
                     let images = this.state.images;
                     images[i] = "data:image/jpeg;base64," + value;
-                    this.setState({images: images});} ) 
-                
+                    this.setState({images: images});} )
+
               }
 
         }
@@ -167,8 +167,8 @@ export default class Chat extends React.Component {
                         backgroundColor:"#f29797"
                     }} source={{ uri: `${this.state.images[index]}` }} />
                     </TouchableOpacity>
-                    <Text style={{ color: 'white', fontSize: 20, marginLeft: '2%', marginRight: '2%', justifyContent: 'center', alignItems: 'center', textAlignVertical: 'center' 
-                         }}>{this.state.favouriteOffers[index].name}</Text>                
+                    <Text style={{ color: 'white', fontSize: 20, marginLeft: '2%', marginRight: '2%', justifyContent: 'center', alignItems: 'center', textAlignVertical: 'center'
+                         }}>{this.state.favouriteOffers[index].name}</Text>
                 </View>
             )
         })
@@ -218,40 +218,24 @@ export default class Chat extends React.Component {
         if (this.state.isLoading) {
 
             this.handleGetFavouriteOffers();
-            
 
-            return(
-            <LinearGradient colors={['#F15A24', '#D4145A']}
+
+            return <LinearGradient colors={['#F15A24', '#D4145A']}
                 start={[0, 1]}
                 end={[1, 0]}
                 style={{
                     flex: 1,
-                    paddingTop: 30
-                }}
-            >
-                <Text style={{
-                    paddingLeft: '5%',
-                    paddingBottom: 5,
-                    color: 'white',
-                    fontSize: 30,
-                    fontWeight: 'bold'
-                }}>Favorited</Text>
-                <ScrollView
-                    horizontal={false}
-                    style={{
-                        height: '90%',
-                    }}
-                >
-                <ActivityIndicator size="small" color="#ffffff"  />
+                    padding: '10%',
+                    paddingTop: '30%'
+                }}>
+                <ActivityIndicator size="small" color="#ffffff" />
 
-                </ScrollView>
-                {/* Aqui shan de fer ifs. Si no hi ha cap favorited que no surti i si ningu ha fet favorited dons que no surti */}
-                
-            </LinearGradient>);
-    }
+
+            </LinearGradient>;
 
 
 
+        }
         return (
             <LinearGradient colors={['#F15A24', '#D4145A']}
                 start={[0, 1]}
@@ -277,7 +261,7 @@ export default class Chat extends React.Component {
                     {this.renderFavorites()}
                 </ScrollView>
                 {/* Aqui shan de fer ifs. Si no hi ha cap favorited que no surti i si ningu ha fet favorited dons que no surti */}
-                
+
             </LinearGradient>
         );
     }
