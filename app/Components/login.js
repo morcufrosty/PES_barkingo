@@ -395,6 +395,8 @@ export default class App extends React.Component {
               this.props.navigation.dispatch(resetAction);
             }else{
               console.log("USUARI SENSE PERFIL");
+              this.storeToken(response.token);
+              this.resetState();
               const resetAction = StackActions.reset({
                   index: 0,
                   actions: [NavigationActions.navigate( {routeName: 'newProfileFormScreen',params: {new: true} } )],

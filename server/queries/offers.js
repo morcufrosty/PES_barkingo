@@ -296,6 +296,7 @@ const getImage = async (request, response) => {
     fs.readFile(path.join(homedir, imagesDir, idOffer + '.jpg'), (err, data) => {
         if (err) {
             console.error(err);
+            response.status(404);
             response.json({ success: false, msg: 'Image couldn\'t be found' });
         } else {
             const img = new Buffer.from(data).toString('base64');
