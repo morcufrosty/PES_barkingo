@@ -4,6 +4,7 @@ import {
     ScrollView,
     TextInput,
     Alert,
+    ToastAndroid,
     Platform, Image, Picker, TouchableOpacity
 
 } from 'react-native';
@@ -12,9 +13,23 @@ import { LinearGradient } from 'expo'
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import { AsyncStorage } from 'react-native';
 import { NavigationActions, StackActions } from 'react-navigation';
+import strings, {ChangeLanguage} from '../i18n/i18n';
 
 
 export default class changeSettings extends React.Component {
+
+    ChangeLanguageHandler = (lang) => {
+        if (ChangeLanguage(lang) != lang){
+            Alert.alert(strings('changeSettings.LanguageError'));
+        }
+        ToastAndroid.showWithGravityAndOffset(
+            strings('changeSettings.LanguageSuccess'),
+            ToastAndroid.SHORT,
+            ToastAndroid.BOTTOM,
+            25,
+            50,
+        );
+    }
 
     render() {
         return (
@@ -26,12 +41,12 @@ export default class changeSettings extends React.Component {
                     padding: '5%',
                     paddingTop: '10%'
                 }}>
-                <Text style={{ flex:1, color: 'white', fontSize: 45, flex: 1 }}>Ajustaments</Text>
+                <Text style={{ flex:1, color: 'white', fontSize: 45, flex: 1 }}>{strings('changeSettings.settings')}</Text>
                 <View style={{ flex: 1 }}>
-                    <Text style={{ color: 'white', paddingBottom:'2%' }}>{"Selecciona l'idioma"}</Text>
+                    <Text style={{ color: 'white', paddingBottom:'2%' }}>{strings('changeSettings.language')}</Text>
                     <View style={{flexDirection: 'row'}} >
                         <TouchableOpacity
-                        onPress={()=>Alert.alert('idioma triat')}
+                        onPress={()=>ChangeLanguageHandler('en')}
                         style={{
                             height: 70,
                             width: '35%',
@@ -41,7 +56,7 @@ export default class changeSettings extends React.Component {
                                 source={{ uri: "https://upload.wikimedia.org/wikipedia/en/thumb/a/ae/Flag_of_the_United_Kingdom.svg/1280px-Flag_of_the_United_Kingdom.svg.png", width: 70, height: 70 }} />
                         </TouchableOpacity>  
                         <TouchableOpacity
-                        onPress={()=>Alert.alert('idioma triat')}
+                        onPress={()=>ChangeLanguageHandler('ca-ES')}
                         style={{
                             height: 70,
                             width: '35%',
@@ -51,7 +66,7 @@ export default class changeSettings extends React.Component {
                                 source={{ uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Flag_of_Catalonia.svg/2000px-Flag_of_Catalonia.svg.png", width: 70, height: 70 }} />
                         </TouchableOpacity>  
                         <TouchableOpacity
-                        onPress={()=>Alert.alert('idioma triat')}
+                        onPress={()=>ChangeLanguageHandler('es')}
                         style={{
                             height: 70,
                             width: '35%',
@@ -64,7 +79,7 @@ export default class changeSettings extends React.Component {
                 </View>
                 <Button
                     style={{color:'white', flex:1}}
-                    title='Log out'
+                    title= {strings('changeSettings.logOut')}
                     color='#D84B37'
                     onPress={async () => {
 
@@ -79,11 +94,11 @@ export default class changeSettings extends React.Component {
                 <Text style={{color: 'white', textDecorationLine: "underline", flex:1 }}
                             onPress={() => 
                                 Alert.alert(
-                                    'Esborrar conta',
-                                    'Està segur que desitja esborrar la seva conta?',
+                                    strings('changeSettings.delete'),
+                                    strings('changeSettings.deleteQuestion'),
                                     [
-                                      {text: 'No', onPress: () => console.log('No')},
-                                      {text: 'Si', onPress: () => console.log('Si')},
+                                      {text: strings('changeSettings.no'), onPress: () => console.log('No')},
+                                      {text: strings('changeSettings.yes'), onPress: () => console.log('Si')},
                                     ],
                                     {cancelable: false},
                                   )

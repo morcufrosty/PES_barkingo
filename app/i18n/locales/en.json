@@ -32,6 +32,43 @@
 		"ownerName" : "Owner name: {{on}}",
 		"ownerDescription": "about owner: "
 
+	},
+	"autoComplete" : {
+		"raceName" : "Enter race name"
+	},
+	
+	"changeSettings" : {
+		"language" : "Select language",
+		"delete" : "Delete account",
+		"deleteQuestion" : "Are you sure you want to delete your account?",
+		"no" : "No",
+		"yes" : "Yes",
+		"selectedLanguage" : "selectedLanguage",
+		"settings" : "settings",
+		"logOut" : "Log Out",
+		"languageSucces": "Language has changed succesfully",
+		"languageError" : "ERROR. Language has not been changed"
+	},
+
+	"filter" : {
+		"title" : "Filters",
+		"ageRange" : "Age range",
+		"specie" : "specie",
+		"all" : "All",
+		"dog" : "Dogs",
+		"cat" : "Cats",
+		"fish" : "Fishes",
+		"reptile" : "Reptiles",
+		"bird" : "Birds",
+		"other" : "Others",
+		"sex" : "Sex",
+		"any" : "Any",
+		"male" : "Male",
+		"female" : "Female",
+		"type" : "Type",
+		"adoption" : "Adoption",
+		"foster" : "Foster",
+		"change" : "CHANGE FILTERS"
 	}
 
 }

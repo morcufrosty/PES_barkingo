@@ -179,9 +179,9 @@ export default class perfilAnimalMyOffers extends React.Component {
                                 overflow: 'hidden'
                             }} source={{ uri: "https://facebook.github.io/react-native/img/favicon.png", width: 64, height: 64 }} />
                             <Text style={{fontWeight: 'bold', color: 'white', fontSize: 25, marginLeft: '10%', marginRight: '10%', justifyContent: 'center', alignItems: 'center', textAlignVertical: 'center' 
-                         }}>{strings('perfilAnimal.ownerName')}</Text>
+                         }}>{strings('perfilAnimal.ownerName', {on: this.state.ownerName})}</Text>
                         </View>
-                        <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%', marginBottom:'5%', marginRight:'5%' }}>{strings('perfilAnimal.ownerDescription', {od: this.state.description})}</Text>
+                        <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%', marginBottom:'5%', marginRight:'5%' }}>{strings('perfilAnimal.ownerDescription')}, {this.state.description}</Text>
                     </View>
                 </ScrollView>
             </View>
