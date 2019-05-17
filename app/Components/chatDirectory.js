@@ -252,7 +252,7 @@ export default class ChatDirectory extends React.Component {
                             let imagesA = this.state.images
                             imagesA[i] = profileImage
                             //let name = this.state.chats[i].name
-                            this.setState({images: imagesA})
+                            //this.setState({images: imagesA})
                             ;})
             
                     
@@ -276,7 +276,7 @@ export default class ChatDirectory extends React.Component {
                         let imagesA = this.state.images
                         imagesA[i] = profileImage
                         //let name = this.state.chats[i].name
-                       this.setState({images: imagesA})
+                        //this.setState({images: imagesA})
                         ;})
         
     
