@@ -251,7 +251,7 @@ handleQuery(filterJson){
   }
 
   
-      console.log(str);
+    console.log(str);
     const response = await this.getOffers(tokenJson, str);
     console.log(response);
 

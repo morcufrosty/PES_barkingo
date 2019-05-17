@@ -18,6 +18,9 @@ import Filter from "./Components/filter"
 import formPerfilUsuari from "./Components/formPerfilUsuari"
 import chatScreen from "./Components/chatScreen"
 import changeSettings from "./Components/changeSettings"
+import chatDirectory from "./Components/chatDirectory"
+
+
 
 const SettingsNavigator = createStackNavigator({
     LoginScreen: { screen: Login },
@@ -123,6 +126,19 @@ const TabNavigator = createBottomTabNavigator(
                 tabBarLabel: "",
                 tabBarIcon: ({ focused, tintColor }) => (
                     <TabIcon
+                        iconDefault='heart'
+                        iconFocused='heart'
+                        focused={focused}
+                        tintColor={tintColor}
+                    />)
+            },
+        },
+        chatDirectory: {
+            screen: chatDirectory,
+            navigationOptions: {
+                tabBarLabel: "",
+                tabBarIcon: ({ focused, tintColor }) => (
+                    <TabIcon
                         iconDefault='comment'
                         iconFocused='comment'
                         focused={focused}
@@ -130,6 +146,8 @@ const TabNavigator = createBottomTabNavigator(
                     />)
             },
         },
+
+
 
 
 
