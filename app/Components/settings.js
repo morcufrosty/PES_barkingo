@@ -275,18 +275,68 @@ export default class Swipe extends React.Component {
 
         if (this.state.isLoading) {
             this.handleStart();
-            return <LinearGradient colors={['#F15A24', '#D4145A']}
-                start={[0, 1]}
-                end={[1, 0]}
+            return (<LinearGradient colors={['#F15A24', '#D4145A']}
+            start={[0, 1]}
+            end={[1, 0]}
+            style={{
+                flex: 1,
+                paddingTop: '20%',
+                padding: '5%'
+            }}>
+            <TouchableOpacity
                 style={{
+                    position: 'absolute',
+                    top: 40,
+                    right: 15
+                }}
+                onPress={()  => this.props.navigation.navigate('changeSettings')}>
+                <Image
+                    source={{ uri: "https://flaticons.net/icons/Mobile%20Application/Settings-01.png", width: 15, height: 15 }} />
+            </TouchableOpacity>
+            <ScrollView>
+                <View style={{
                     flex: 1,
-                    padding: '10%',
-                    paddingTop: '30%'
+                    flexDirection: 'row',
+                    height: 64
                 }}>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('formPerfilUsuari', {onGoBack: () => this.refresh()})}  >
+                    <Image style={{
+                        borderRadius: 64,
+                        overflow: 'hidden',
+                        width: 64, height: 64,
+                        backgroundColor: "#f29797"
+                    }} source={{ uri: this.state.pImage }} />
+                </TouchableOpacity>
+                <Text style={{ color:"#f29797", fontSize: 20, marginLeft: 10, color: "#f29797", flex: 1, justifyContent: 'center', alignItems: 'center', height: 64, textAlignVertical: 'center' }}>username</Text>
 
+                </View>
+                <Text style={{
+                    paddingTop: '5%',
+                    paddingBottom: '5%',
+                    color: 'white'
+                }}>Your publications</Text>
+                <ScrollView
+                    horizontal={true}
+                    style={{
+                        marginLeft: -10
+                    }}
+
+                    
+                >
+                </ScrollView>
                 <ActivityIndicator size="small" color="#ffffff" />
 
-            </LinearGradient>;
+                {noOffersMessage}
+                <View style={{ flex: 1, marginTop: 10 }}>
+                    <Button
+                        onPress={() => this.props.navigation.navigate('formNewOffer', { onGoBack: () => this.refresh() })}
+                        title="New Publication"
+                        color="#ff3b28"
+
+                    />
+                </View>           
+            </ScrollView>
+        </LinearGradient>)
         }
 
         var noOffersMessage;
@@ -318,11 +368,13 @@ export default class Swipe extends React.Component {
                     style={{
                         position: 'absolute',
                         top: 40,
-                        right: 15
+                        right: 15,
+                        height:20,
+                        width:20
                     }}
                     onPress={()  => this.props.navigation.navigate('changeSettings')}>
                     <Image
-                        source={{ uri: "https://flaticons.net/icons/Mobile%20Application/Settings-01.png", width: 15, height: 15 }} />
+                        source={{ uri: "https://flaticons.net/icons/Mobile%20Application/Settings-01.png", width: 20, height: 20 }} />
                 </TouchableOpacity>
                 <ScrollView>
                     <View style={{

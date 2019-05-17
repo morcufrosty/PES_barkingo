@@ -322,10 +322,10 @@ Animal species:
 
     -   #### Response
         -   `success`: Is either `true` or `false`.
-        -   `chats`: List of chats
-            -   `idChat`: id of the chat
-            -   `idUserAsker`: id of the user asking for the offered animal
-            -   `idUserOffer`:
+        -   `chats`: List of chats.
+            -   `idChat`: id of the chat.
+            -   `idUser`: id of the user that the current user is talking to (remains for the app to see wether he is the owner of the offer or not).
+            -   `idOffer`: id of the offer.
 
 -   ### POST `/offers/:id/chat`: creates chat with the owner of the offer.
 

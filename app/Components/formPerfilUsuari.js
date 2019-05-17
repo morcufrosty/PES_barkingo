@@ -20,6 +20,8 @@ import { AsyncStorage } from 'react-native';
 import { ImagePicker, Permissions, Constants, Location } from 'expo';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Ionicons } from "@expo/vector-icons";
+import { StackActions, NavigationActions } from 'react-navigation';
+
 
 export default class formPerfilUsuari extends React.Component {
 
@@ -43,15 +45,23 @@ export default class formPerfilUsuari extends React.Component {
             isoComunity:'',
             flagURI:'',
             isLoading: true
-
-
         }
     }
 
     async handleStart(){
+        if (this.props.navigation.getParam('new', false)) {
+          this.setState({new: true})
+          console.log("new")
+        }else{
+          this.setState({new: false})
+          console.log("old")
+        }
+        this.setState({isLoading:false});
+
         const token = await AsyncStorage.getItem("access_token");
         const jsonToken = JSON.parse(token);
-        let response = await this.getCurrentUserFromAPI(jsonToken);
+        console.log("TOKEN FROM ASYNC : " + jsonToken);
+        let response = await this.getCurrentUserFromAPI(jsonToken.token);
         console.log(response)
         this.setState({
           name: response.user.username,
@@ -59,14 +69,6 @@ export default class formPerfilUsuari extends React.Component {
           longitude: response.user.longitude,
           latitude: response.user.latitude,
         });
-        if (this.props.navigation.getParam('new', false)) {
-          this.setState({new: true})
-          console.log("new")
-        }else{
-          this.setState({new: false})
-        }
-        this.setState({isLoading:false});
-
 
     }
 
@@ -205,8 +207,8 @@ export default class formPerfilUsuari extends React.Component {
 
             const token = await AsyncStorage.getItem("access_token");
             const jsonToken = JSON.parse(token);
-            console.log(jsonToken.token)
-            const responseCurrentUser = await this.getCurrentUserFromAPI(jsonToken);
+            console.log(jsonToken)
+            const responseCurrentUser = await this.getCurrentUserFromAPI(jsonToken.token);
             const id = responseCurrentUser.user.id;
             console.log("ID: "+id)
             let response;
@@ -235,8 +237,9 @@ export default class formPerfilUsuari extends React.Component {
                     console.log(id);
                     const responsePostImg = await this.handleSubmitImage(jsonToken, id, data);
                     //Alert.alert(responsePostImg.msg);
-                    console.log("going back")
                     if(!this.state.new){
+                      console.log("going back")
+
                       this.props.navigation.state.params.onGoBack();
                       this.props.navigation.goBack();
                     }else{
@@ -244,18 +247,25 @@ export default class formPerfilUsuari extends React.Component {
                           index: 0,
                           actions: [NavigationActions.navigate({ routeName: 'BottomNavigation' })],
                       });
+                      this.props.navigation.dispatch(resetAction);
+
                     }
                 }
                 else{
-                  console.log("going back")
                   if(!this.state.new){
+                    console.log("going back")
+
                     this.props.navigation.state.params.onGoBack();
                     this.props.navigation.goBack();
                   }else{
+                    console.log("going to bottom nav")
+
                     const resetAction = StackActions.reset({
                         index: 0,
-                        actions: [NavigationActions.navigate({ routeName: 'BottomNavigation' })],
+                        actions: [NavigationActions.navigate({ routeName: 'AppAfterLogin' })],
                     });
+                    this.props.navigation.dispatch(resetAction);
+
                   }
 
                 }
@@ -289,13 +299,13 @@ export default class formPerfilUsuari extends React.Component {
 
 
     async getCurrentUserFromAPI(tokenJson) {
-
+        console.log("TOKEN :" + tokenJson);
         return fetch('http://10.4.41.164/api/users/currentUser', {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-                'x-access-token': tokenJson.token
+                'x-access-token': tokenJson
             }
         }).then((response) => response.json())
             .then((responseJson) => {
@@ -310,7 +320,7 @@ export default class formPerfilUsuari extends React.Component {
     async newPerfilUsingAPI(tokenJson, id) {
 
         return fetch(`http://10.4.41.164/api/users/${id}`, {
-            method: 'POST',
+            method: 'PUT',
             headers: {
                 Accept: '*',
                 'Content-Type': 'application/json',

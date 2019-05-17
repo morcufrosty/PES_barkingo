@@ -136,7 +136,7 @@ const updateUser = async (request, response) => {
     })
 }
 
-deleteUser = async (request, response) => {
+const deleteUser = async (request, response) => {
     //response.json({ success: false, msg: 'Not implemented yet getUserImage' });
     const { email, name } = request.decoded;
     const { id: idUser } = request.params;
@@ -177,11 +177,11 @@ deleteUser = async (request, response) => {
 }
 
 const getUserImage = async (request, response) => {
-    //response.json({ success: false, msg: 'Not implemented yet getUserImage' });
     const { id: idUser } = request.params;
     fs.readFile(path.join(homedir, imagesDir, idUser + '.jpg'), (err, data) => {
         if (err) {
             console.error(err);
+            response.status(404);
             response.json({ success: false, msg: 'Image couldn\'t be found' });
         } else {
             const img = new Buffer.from(data).toString('base64');
@@ -195,7 +195,6 @@ const getUserImage = async (request, response) => {
 }
 
 const createUserImage = async (request, response) => {
-    //response.json({ success: false, msg: 'Not implemented yet createUserImage' });
     const { id: idUser } = request.params;
     const image = request.files.image;
 

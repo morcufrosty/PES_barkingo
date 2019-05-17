@@ -1,6 +1,4 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
 import {Card, Button, ListGroup, ListGroupItem, Nav} from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 
@@ -39,17 +37,6 @@ function Animals() {
 
   return (
     <div>
-      <Nav justify variant="tabs" defaultActiveKey="/home">
-        <Nav.Item>
-          <Nav.Link href="/home">Animals</Nav.Link>
-        </Nav.Item>
-        <Nav.Item>
-          <Nav.Link eventKey="link-1">Users</Nav.Link>
-        </Nav.Item>
-        <Nav.Item>
-          <Nav.Link eventKey="link-2">Other Settings</Nav.Link>
-        </Nav.Item>
-      </Nav>;
       <div class='m-3 row fixed'>
       </div>
       <div>

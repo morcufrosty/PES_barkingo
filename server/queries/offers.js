@@ -33,7 +33,6 @@ const getOffers = async (request, response) => {
                     console.log(err)
                     response.json({ success: false, msg: 'User ' + email + ' doesn\'t exist' });
                 } else {
-                    console.log(result.rows[0])
                     if (radius != null && (result.rows[0].latitude == null || result.rows[0].longitude == null)) {
                         response.json({ success: false, msg: 'You can\'t filter by radius if you haven\'t set your coordinates' });
                     } else {
@@ -297,6 +296,7 @@ const getImage = async (request, response) => {
     fs.readFile(path.join(homedir, imagesDir, idOffer + '.jpg'), (err, data) => {
         if (err) {
             console.error(err);
+            response.status(404);
             response.json({ success: false, msg: 'Image couldn\'t be found' });
         } else {
             const img = new Buffer.from(data).toString('base64');

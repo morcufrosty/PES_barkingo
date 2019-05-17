@@ -18,7 +18,7 @@ const getChats = async (request, response) => {
                     response.json({ success: false, msg: 'User ' + email + ' doesn\'t exist' });
                 } else {
                     client.query(
-                        'SELECT chats."idChat", chats."idUserAsker" AS "idUser" FROM chats WHERE chats."idUserOffer"=$1 AND chats.closed=0 UNION SELECT chats."idChat", chats."idUserOffer" AS "idUser" FROM chats WHERE chats."idUserAsker"=$1 AND chats.closed=0;',
+                        'SELECT chats."idChat", chats."idUserAsker" AS "idUser", chats."idOffer" FROM chats WHERE chats."idUserOffer"=$1 AND chats.closed=0 UNION SELECT chats."idChat", chats."idUserOffer" AS "idUser", chats."idOffer" FROM chats WHERE chats."idUserAsker"=$1 AND chats.closed=0;',
                         [result.rows[0].id], (err, res) => {
                             if (err || res.rowCount == 0) {
                                 console.log(err)

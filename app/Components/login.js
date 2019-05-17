@@ -153,8 +153,10 @@ export default class App extends React.Component {
     }
 
     async checkIfUserHasProfile(jsonToken) {
+      console.log("TOKEN1 " + jsonToken)
       const responseCurrentUser = await this.getCurrentUserFromAPI(jsonToken);
-      if (responseCurrentUser.user.latitude == '' || responseCurrentUser.user.latitude == null){
+      console.log(responseCurrentUser);
+      if (responseCurrentUser.user.latitude === null){
         return false;
       }
       return true;
@@ -162,13 +164,14 @@ export default class App extends React.Component {
     }
 
     async getCurrentUserFromAPI(tokenJson) {
+        console.log(tokenJson);
 
         return fetch('http://10.4.41.164/api/users/currentUser', {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-                'x-access-token': tokenJson.token
+                'x-access-token': tokenJson
             }
         }).then((response) => response.json())
             .then((responseJson) => {
@@ -341,9 +344,10 @@ export default class App extends React.Component {
                 const response = await this.loginDevUsingAPI();
                 console.log(response.msg);
                 if (response.success) {
-                    console.log(response.token);
+                    var token = response.token;
+                    console.log(token);
                     this.storeToken(response.token);
-                    var profile = await this.checkIfUserHasProfile(response.token);
+                    var profile = await this.checkIfUserHasProfile(token);
                     if(profile){
                       console.log("USUARI AMB PERFIL");
                       const resetAction = StackActions.reset({
@@ -382,17 +386,25 @@ export default class App extends React.Component {
             var profile = await this.checkIfUserHasProfile(response.token);
             if(profile){
               console.log("USUARI AMB PERFIL");
+              this.storeToken(response.token);
+              this.resetState();
+              const resetAction = StackActions.reset({
+                  index: 0,
+                  actions: [NavigationActions.navigate({ routeName: 'AppAfterLogin' })],
+              });
+              this.props.navigation.dispatch(resetAction);
             }else{
               console.log("USUARI SENSE PERFIL");
+              this.storeToken(response.token);
+              this.resetState();
+              const resetAction = StackActions.reset({
+                  index: 0,
+                  actions: [NavigationActions.navigate( {routeName: 'newProfileFormScreen',params: {new: true} } )],
+              });
+              this.props.navigation.dispatch(resetAction);
 
             }
-            this.storeToken(response.token);
-            this.resetState();
-            const resetAction = StackActions.reset({
-                index: 0,
-                actions: [NavigationActions.navigate({ routeName: 'AppAfterLogin' })],
-            });
-            this.props.navigation.dispatch(resetAction);
+
         }
         else {
             if (response.msg === undefined)

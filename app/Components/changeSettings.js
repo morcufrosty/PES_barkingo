@@ -53,6 +53,9 @@ export default class changeSettings extends React.Component {
                             padding: '3%'
                         }}>
                             <Image
+                                style={{
+                                    borderRadius: 7
+                                }}
                                 source={{ uri: "https://upload.wikimedia.org/wikipedia/en/thumb/a/ae/Flag_of_the_United_Kingdom.svg/1280px-Flag_of_the_United_Kingdom.svg.png", width: 70, height: 70 }} />
                         </TouchableOpacity>  
                         <TouchableOpacity
@@ -63,6 +66,9 @@ export default class changeSettings extends React.Component {
                             padding: '3%'
                         }}>
                             <Image
+                                style={{
+                                    borderRadius: 7
+                                }}
                                 source={{ uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Flag_of_Catalonia.svg/2000px-Flag_of_Catalonia.svg.png", width: 70, height: 70 }} />
                         </TouchableOpacity>  
                         <TouchableOpacity
@@ -73,6 +79,9 @@ export default class changeSettings extends React.Component {
                             padding: '3%'
                         }}>
                             <Image
+                                style={{
+                                    borderRadius: 7
+                                }}
                                 source={{ uri: "https://upload.wikimedia.org/wikipedia/en/thumb/9/9a/Flag_of_Spain.svg/1280px-Flag_of_Spain.svg.png", width: 70, height: 70 }} />
                         </TouchableOpacity>                    
                     </View>
