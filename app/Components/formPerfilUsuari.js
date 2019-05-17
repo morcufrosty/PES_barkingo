@@ -49,6 +49,14 @@ export default class formPerfilUsuari extends React.Component {
     }
 
     async handleStart(){
+        if (this.props.navigation.getParam('new', false)) {
+          this.setState({new: true})
+          console.log("new")
+        }else{
+          this.setState({new: false})
+        }
+        this.setState({isLoading:false});
+
         const token = await AsyncStorage.getItem("access_token");
         const jsonToken = JSON.parse(token);
         let response = await this.getCurrentUserFromAPI(jsonToken);
@@ -59,14 +67,6 @@ export default class formPerfilUsuari extends React.Component {
           longitude: response.user.longitude,
           latitude: response.user.latitude,
         });
-        if (this.props.navigation.getParam('new', false)) {
-          this.setState({new: true})
-          console.log("new")
-        }else{
-          this.setState({new: false})
-        }
-        this.setState({isLoading:false});
-
 
     }
 
@@ -295,7 +295,7 @@ export default class formPerfilUsuari extends React.Component {
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-                'x-access-token': tokenJson.token
+                'x-access-token': tokenJson
             }
         }).then((response) => response.json())
             .then((responseJson) => {
