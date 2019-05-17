@@ -10,8 +10,8 @@
 	},
 	"login": {
 		"loginText": "Login",
-		"email": "Email",
-		"password": "Password",
+		"email": "Correu Electronic",
+		"password": "Contrasenya",
 		"noAccount": "Don't have an account?",
 		"register" : "Register now!",
 		"loginFace" : "LOGIN WITH FACEBOOK",
@@ -22,15 +22,15 @@
 		"googleError" : "Google Login Error: {{message}}",
 		"error" : "Error",
 		"enterEmail": "Please enter your email",
-		"enterPassword": "Please enter your password",
+		"enterPassword": "Please enter your password"
 	},
-	"perfilAnimalFavorites":{
+	"perfilAnimal": {
 		"age" : "Age: {{a}}",
-		"sex" : "Sex:",
-		"description" : "Description:",
-		"race": "Race:",
-		"ownerName" : "Owner name:",
-		"ownerDescription": "Owner description:"
+		"sex" : "Sex: {{s}}",
+		"description" : "Description: {{d}}",
+		"race": "Race: {{r}}",
+		"ownerName" : "Owner name: {{on}}",
+		"ownerDescription": "about owner: "
 
 	}
 

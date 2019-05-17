@@ -29,8 +29,8 @@
 		"sex" : "Sex: {{s}}",
 		"description" : "Description: {{d}}",
 		"race": "Race: {{r}}",
-		"ownerName" : "Owner name: ",
-		"ownerDescription": "about owner: {{od}}"
+		"ownerName" : "Owner name: {{on}}",
+		"ownerDescription": "about owner: "
 
 	}
 
