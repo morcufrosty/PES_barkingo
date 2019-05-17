@@ -10,6 +10,7 @@ import {
 import Button from './Button';
 import { LinearGradient } from 'expo'
 import { AsyncStorage } from 'react-native';
+import strings from '../i18n/i18n';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import MultiSlider from '@ptomasroos/react-native-multi-slider'
 
@@ -94,9 +95,9 @@ export default class filter extends React.Component {
                     padding: '5%',
                     paddingTop: '10%'
                 }}>
-                <Text style={{ flex:1, color: 'white', fontSize: 45, flex: 1 }}>Filters</Text>
+                <Text style={{ flex:1, color: 'white', fontSize: 45, flex: 1 }}>{strings('filter.title')}</Text>
                 <View style={{ flex: 1 }}>
-                    <Text style={{ color: 'white', paddingBottom:'2%' }}>{"Rang d'edat"}</Text>
+                    <Text style={{ color: 'white', paddingBottom:'2%' }}>{strings('filter.ageRange')}</Text>
                     <View style={{flexDirection: 'row', flex:1}} >
                         <Text style={{ color: 'white', margin:1 }}>{this.state.ageRange[0]}</Text>
                         <MultiSlider
@@ -128,13 +129,13 @@ export default class filter extends React.Component {
                 <View style={{ flex: 1 }}>
                     <Text style={{ color: 'white' }}>{"Especie"}</Text>
                     <Picker style={{color:'white'}} selectedValue = {this.state.species} onValueChange = {this.updateUser}>
-                        <Picker.Item label = "Tots" value = "" />
-                        <Picker.Item label = "Gossos" value = "0" />
-                        <Picker.Item label = "Gats" value = "1" />
-                        <Picker.Item label = "Peixos" value = "2" />
-                        <Picker.Item label = "Reptil" value = "3" />
-                        <Picker.Item label = "Ocells" value = "4" />
-                        <Picker.Item label = "Altres" value = "5" />
+                        <Picker.Item label = {strings('filter.all')} value = "" />
+                        <Picker.Item label = {strings('filter.dog')} value = "0" />
+                        <Picker.Item label = {strings('filter.cat')} value = "1" />
+                        <Picker.Item label = {strings('filter.fish')} value = "2" />
+                        <Picker.Item label = {strings('filter.reptile')} value = "3" />
+                        <Picker.Item label = {strings('filter.bird')} value = "4" />
+                        <Picker.Item label = {strings('filter.other')} value = "5" />
                     </Picker>
                 </View>
                 <View style={{ flex: 1 }}>

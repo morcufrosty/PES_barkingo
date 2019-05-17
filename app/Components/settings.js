@@ -368,11 +368,13 @@ export default class Swipe extends React.Component {
                     style={{
                         position: 'absolute',
                         top: 40,
-                        right: 15
+                        right: 15,
+                        height:20,
+                        width:20
                     }}
                     onPress={()  => this.props.navigation.navigate('changeSettings')}>
                     <Image
-                        source={{ uri: "https://flaticons.net/icons/Mobile%20Application/Settings-01.png", width: 15, height: 15 }} />
+                        source={{ uri: "https://flaticons.net/icons/Mobile%20Application/Settings-01.png", width: 20, height: 20 }} />
                 </TouchableOpacity>
                 <ScrollView>
                     <View style={{

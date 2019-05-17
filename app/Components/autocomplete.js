@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
+import strings from '../i18n/i18n'; 
+
 
 const API = 'https://swapi.co/api';
 const ROMAN = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII'];
@@ -64,7 +66,7 @@ class AutocompleteExample extends Component {
           data={films.length === 1 && comp(query, films[0].title) ? [] : films}
           defaultValue={query}
           onChangeText={text => this.setState({ query: text })}
-          placeholder="Enter Star Wars film title"
+          placeholder={strings(autoComplete.raceName)}
           renderItem={({ title, release_date }) => (
             <TouchableOpacity onPress={() => this.setState({ query: title })}>
               <Text style={styles.itemText}>
@@ -78,7 +80,7 @@ class AutocompleteExample extends Component {
             AutocompleteExample.renderFilm(films[0])
           ) : (
             <Text style={styles.infoText}>
-              Enter Title of a Star Wars movie
+              {strings(autoComplete.raceName)}
             </Text>
           )}
         </View>
