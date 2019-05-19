@@ -158,6 +158,32 @@ export default class perfilAnimalSwipe extends React.Component {
             style={{
                 flex: 1,
             }}>
+                <TouchableOpacity
+                    style={{
+                        position: 'absolute',
+                        bottom: 20,
+                        right: 20,
+                        zIndex: 100,
+                        height: 70,
+                        width: 70
+                    }}
+                    onPress={() => 
+                        Alert.alert(
+                          'Report User',
+                          'Creus que aqeuest anunci no compleix les nostres guies? Si es així dóni a acceptar, si no dóni a cancelar ',
+                          [
+                            {
+                              text: 'Cancel',
+                              onPress: () => console.log('Cancel Pressed'),
+                              style: 'cancel',
+                            },
+                            {text: 'OK', onPress: () => console.log('OK Pressed')},
+                          ],
+                          {cancelable: false},
+                        )}>
+                    <Image
+                        source={{ uri: "http://cdn.onlinewebfonts.com/svg/img_54456.png", width: 70, height: 70 }} />
+                </TouchableOpacity>
                 <View style={{ flex: 1 }}>
                     <Image style={{
                         width: '100%',
