@@ -32,6 +32,7 @@ export default class Routing extends React.Component{
 
     changeActivePage = function (par){
         this.state.activePage=par;
+        this.forceUpdate();
         console.log(this.state.activePage);
     }
 
