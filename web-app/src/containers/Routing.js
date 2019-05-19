@@ -39,7 +39,7 @@ export default class Routing extends React.Component{
     getActivePage = function () {
         console.log(this.state.activePage);
         if(this.state.activePage=="Animals") return <Animals/>;
-        if(this.state.activePage=="Users") return <NotFound/>;
+        if(this.state.activePage=="Users") return <Users/>;
         if(this.state.activePage=="Other") return <NotFound/>;
     }
 

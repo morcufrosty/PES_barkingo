@@ -10,19 +10,17 @@ const updatedNums = numbers.map((number)=>{
   return (
     <div class='m-3'>
       <Card style={{ width: '18rem' }}>
-        <Card.Img variant="top" src="https://images.pexels.com/photos/356378/pexels-photo-356378.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" />
+        <Card.Img variant="top" src="https://cdn.thedailymash.co.uk/wp-content/uploads/20190324205212/middle-aged-man-fat-2.jpg" />
         <Card.Body>
-          <Card.Title>Nom gos {number}</Card.Title>
+          <Card.Title>Nom Usuari {number}</Card.Title>
           <Card.Text>
-            Some quick example text to build on the card title and make up the bulk of
-            the card's content.
+            Informació del puto usuari.
           </Card.Text>
         </Card.Body>
         <ListGroup className="list-group-flush">
           <ListGroupItem>Sexe</ListGroupItem>
           <ListGroupItem>Edat</ListGroupItem>
-          <ListGroupItem>Raça</ListGroupItem>
-          <ListGroupItem>Nom del puto usuari</ListGroupItem>
+          <ListGroupItem>Localització</ListGroupItem>
         </ListGroup>
         <Card.Body>
           <Card.Link href="#">Card Link</Card.Link>
