@@ -1,19 +1,20 @@
 import React, { Component } from "react";
 import { Button, FormGroup, FormControl, FormLabel } from "react-bootstrap";
 import "./Login.css";
+import Routing from './Routing.js';
+
 
 export default class Login extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      email: "",
       password: ""
     };
   }
 
   validateForm() {
-    return this.state.email.length > 0 && this.state.password.length > 0;
+    return this.state.password.length > 0;
   }
 
   handleChange = event => {
@@ -24,6 +25,10 @@ export default class Login extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
+    if (this.state.password=="123456"){
+      this.props.login();
+    }
+    console.log(this.props.login);
   }
 
   render() {
