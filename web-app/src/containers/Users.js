@@ -18,13 +18,14 @@ const updatedNums = numbers.map((number)=>{
           </Card.Text>
         </Card.Body>
         <ListGroup className="list-group-flush">
+          <ListGroup.Item variant="danger">Reports: {number}</ListGroup.Item>
+          <ListGroupItem>Email</ListGroupItem>
           <ListGroupItem>Sexe</ListGroupItem>
           <ListGroupItem>Edat</ListGroupItem>
           <ListGroupItem>Localització</ListGroupItem>
         </ListGroup>
         <Card.Body>
-          <Card.Link href="#">Card Link</Card.Link>
-          <Card.Link href="#">Another Link</Card.Link>
+          <Button variant="danger">Eliminar usuari</Button>
         </Card.Body>
       </Card>
     </div>
