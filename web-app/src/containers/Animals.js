@@ -39,7 +39,7 @@ function Animals() {
       <div class='m-3 row fixed'>
       </div>
       <div>
-        <div class="row">
+        <div class="m-3 row">
           {updatedNums}
         </div>
       </div>

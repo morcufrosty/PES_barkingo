@@ -57,7 +57,7 @@ export default class Routing extends React.Component{
                     <Nav.Link eventKey="Users">Users</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                    <Nav.Link eventKey="Other">Other Settings</Nav.Link>
+                    <Nav.Link eventKey="Other">Other</Nav.Link>
                     </Nav.Item>
                 </Nav>
                 {this.getActivePage()}
