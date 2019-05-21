@@ -3,6 +3,8 @@ const app = express(); // define our app using express
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const upload = require('express-fileupload');
+const mongoose = require('mongoose');
+const creds = require('./creds.json');
 
 app.use(morgan('dev'));
 app.disable('etag');
@@ -29,6 +31,8 @@ app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).json({ success: false, msg: 'Server error' });
 });
+
+mongoose.connect(creds.chatDB);
 
 // START THE SERVER
 // =============================================================================
