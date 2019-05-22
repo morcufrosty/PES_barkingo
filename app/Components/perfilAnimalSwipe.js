@@ -13,6 +13,7 @@ import { Facebook } from 'expo';
 import TextInputWTitle from './inputText.js';
 import InputPassword from './inputPassword.js';
 import { AsyncStorage } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default class perfilAnimalSwipe extends React.Component {
 
@@ -165,7 +166,21 @@ export default class perfilAnimalSwipe extends React.Component {
                         right: 20,
                         zIndex: 100,
                         height: 70,
-                        width: 70
+                        width: 70,
+                        alignItems:'center',
+                        justifyContent:'center',
+                        backgroundColor:'rgb(255,255,255)',
+                        borderRadius:35,
+                        shadowColor: "#000",
+                        shadowOffset: {
+                        width: 0,
+                        height: 3,
+                        },
+                        shadowOpacity: 0.27,
+                        shadowRadius: 4.65,
+
+                        elevation: 6,
+                        
                     }}
                     onPress={() => 
                         Alert.alert(
@@ -181,8 +196,7 @@ export default class perfilAnimalSwipe extends React.Component {
                           ],
                           {cancelable: false},
                         )}>
-                    <Image
-                        source={{ uri: "http://cdn.onlinewebfonts.com/svg/img_54456.png", width: 70, height: 70 }} />
+                <Icon name={"flag"} size={40} color="#f95234" />
                 </TouchableOpacity>
                 <View style={{ flex: 1 }}>
                     <Image style={{

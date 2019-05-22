@@ -14,6 +14,7 @@ import TextInputWTitle from './inputText.js';
 import InputPassword from './inputPassword.js';
 import { AsyncStorage } from 'react-native';
 import strings from '../i18n/i18n';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default class perfilAnimalFavorites extends React.Component {
 
@@ -195,15 +196,27 @@ export default class perfilAnimalFavorites extends React.Component {
                     <TouchableOpacity
                         style={{
                             position: 'absolute',
-                            bottom: 20,
-                            right: 20,
-                            zIndex: 100,
-                            height: 70,
-                            width: 70
+                        bottom: 20,
+                        right: 20,
+                        zIndex: 100,
+                        height: 70,
+                        width: 70,
+                        alignItems:'center',
+                        justifyContent:'center',
+                        backgroundColor:'rgb(255,255,255)',
+                        borderRadius:35,
+                        shadowColor: "#000",
+                        shadowOffset: {
+                        width: 0,
+                        height: 3,
+                        },
+                        shadowOpacity: 0.27,
+                        shadowRadius: 4.65,
+
+                        elevation: 6,
                         }}
                         onPress={() => this.props.navigation.navigate('chatScreen', {offerId: this.state.id})}>
-                        <Image
-                            source={{ uri: "http://cdn.onlinewebfonts.com/svg/img_54456.png", width: 70, height: 70 }} />
+                    <Icon name={"comments"} size={40} color="#f95234" />
                     </TouchableOpacity>
 
                     <TouchableOpacity
@@ -213,7 +226,20 @@ export default class perfilAnimalFavorites extends React.Component {
                         left: 20,
                         zIndex: 100,
                         height: 70,
-                        width: 70
+                        width: 70,
+                        alignItems:'center',
+                        justifyContent:'center',
+                        backgroundColor:'rgb(255,255,255)',
+                        borderRadius:35,
+                        shadowColor: "#000",
+                        shadowOffset: {
+                        width: 0,
+                        height: 3,
+                        },
+                        shadowOpacity: 0.27,
+                        shadowRadius: 4.65,
+
+                        elevation: 6,
                     }}
                     onPress={() => 
                 
@@ -228,8 +254,7 @@ export default class perfilAnimalFavorites extends React.Component {
                           )
                     
                     }>
-                    <Image
-                        source={{ uri: "https://pbs.twimg.com/profile_images/2265449598/TheENDFund_Roundel-01.png", width: 70, height: 70 }} />
+                    <Icon name={"trash"} size={40} color="#f95234" />
                 </TouchableOpacity>
 
                 <View style={{ flex: 1 }}>
