@@ -96,6 +96,8 @@ router.post('/offers/:id', db.swipe);
 
 router.delete('/offers/:id', db.deleteOffer);
 
+router.post('/offers/:id/report', db.reportOffer);
+
 router.get('/races', db.racesList);
 
 router.get('/chats', db.getChats);
