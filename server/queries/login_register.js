@@ -106,7 +106,8 @@ const renewGoogleToken = async (request, response) => {
                     response.json({ success: false, msg: 'Server error' });
                 }
                 if (result.rowCount == 0) {
-                    client.query('INSERT INTO users (id, name, email, googletoken) VALUES ($1, $2, $3, $4)', [uuidv4(), name, email, hashed], (err, resultI) => {
+                    let username = email.split("@")[0];
+                    client.query('INSERT INTO users (id, name, email, googletoken) VALUES ($1, $2, $3, $4, $5)', [uuidv4(), name, email, hashed, username], (err, resultI) => {
                         if (err) {
                             console.error('Query error', err);
                         } else {
@@ -170,7 +171,8 @@ const renewFacebookToken = async (request, response) => {
                     done();
                 }
                 if (result.rowCount == 0) {
-                    client.query('INSERT INTO users (id, name, email, facebooktoken) VALUES ($1, $2, $3, $4)', [uuidv4(), name, email, hashed], (err, resultI) => {
+                    let username = email.split("@")[0];
+                    client.query('INSERT INTO users (id, name, email, facebooktoken, username) VALUES ($1, $2, $3, $4, $5)', [uuidv4(), name, email, hashed, username], (err, resultI) => {
                         if (err) {
                             console.log(err);
                         } else {
