@@ -383,6 +383,17 @@ const unfavourite = async (request, response) => {
                                 response.json({ success: true, msg: 'Offer deleted from favourites successfully', id: idOffer });
                             }
                         });
+                    client.query(
+                        'INSERT INTO seen ("idUser", "idOffer") VALUES ($1, $2);', [idUser, idOffer],
+                        (err, result) => {
+                            if (err) {
+                                console.log(err)
+                                response.json({ success: false, msg: 'Offer is already in seen or an error occured' });
+                            } else {
+                                client.query('COMMIT');
+                                response.json({ success: true, msg: 'Offer added to seen' });
+                            }
+                        });
                 }
             });
         done();
