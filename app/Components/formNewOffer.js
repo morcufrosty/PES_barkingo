@@ -44,14 +44,14 @@ export default class formNewOffer extends React.Component {
             update: false,
             isLoading: true,
             query: '',
-            raceList: []
+            raceList: [],
+            imageFromServer:'',
 
         }
     }
 
     async prepareUpdate() {
         let response;
-
 
 
         if (this.props.navigation.getParam('update', false)) {
@@ -63,8 +63,11 @@ export default class formNewOffer extends React.Component {
             if (response.success) {
                 console.log("SUCCESS");
             }
+            imageFromServer = await this.getImageFromAPI(tokenJson, this.props.navigation.getParam('id', '1'));
+            imageServer = "data:image/jpeg;base64," + imageFromServer;
 
             this.setState({
+                imageFromServer: imageServer,
                 update: this.props.navigation.getParam('update', false),
                 id: this.props.navigation.getParam('id', '1'),
                 name: response.offer.name,
@@ -97,6 +100,17 @@ export default class formNewOffer extends React.Component {
 
     }
     */
+    async getImageFromAPI(tokenJson, id){
+          return fetch(`http://10.4.41.164/api/offers/${id}/image`, {
+              method: 'GET',
+              headers: {
+                  Accept: 'application/json',
+                  'Content-Type': 'application/json',
+                  'x-access-token': tokenJson.token
+              }
+          }).then((response => { return response.text() }))
+
+    }
     async getOfferInfoFromAPI(tokenJson, id) {
 
         return fetch(`http://10.4.41.164/api/offers/${id}`, {
@@ -456,6 +470,39 @@ export default class formNewOffer extends React.Component {
                     </View>
                 </View>);
 
+        } else if (this.state.imageFromServer!=''){
+          imageForm = (
+              <View style={{ flex: 1, marginTop: 10, marginBottom: 20, flexDirection: 'row' }}>
+                  <Image
+                      source={{ uri: this.state.imageFromServer }}
+                      style={{ width: 200, height: 200, borderRadius: 50 }}
+                  />
+                  <View
+                      style={{
+                          alignItems: "center",
+                          justifyContent: 'center',
+                          flex: 1
+                      }}>
+                      <TouchableOpacity onPress={this._pickImage}
+                          style={{
+                              //borderWidth:1,
+                              //borderColor:'rgba(0,0,0,0.2)',
+                              opacity: 0.5,
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              width: 60,
+                              height: 60,
+                              backgroundColor: '#fff',
+                              borderRadius: 50,
+                          }}
+                      >
+                          <Icon name={"exchange"} size={20} color="#F15A24" />
+
+                      </TouchableOpacity>
+                      <Text style={{ color: 'white', opacity: 0.5 }}>{"Change image"}</Text>
+
+                  </View>
+              </View>);
         } else {
             imageForm = (
                 <View style={{ flex: 1, marginTop: 10, marginBottom: 20, flexDirection: 'row' }}>

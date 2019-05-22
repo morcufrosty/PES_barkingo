@@ -15,7 +15,7 @@ const getOffers = async (request, response) => {
     if (minAge) minAge = parseInt(minAge);
     if (maxAge) maxAge = parseInt(maxAge);
     if (species) species = parseInt(species);
-    let query = 'SELECT "openedOffers".id, "openedOffers".name, "openedOffers".sex, "openedOffers".race, "openedOffers"."TypeName", race."idSpecies", "openedOffers".age FROM "openedOffers", race WHERE "openedOffers"."idOwner"<>$1 and "openedOffers".race=race."idRace" and NOT EXISTS (SELECT * FROM seen WHERE seen."idOffer"="openedOffers".id and seen."idUser"=$1) and NOT EXISTS (SELECT * FROM favourites WHERE favourites."idOffer"="openedOffers".id and favourites."idUser"=$1) '
+    let query = 'SELECT "openedOffers".id, "openedOffers".name, "openedOffers".sex, "openedOffers".race, "openedOffers"."TypeName", race."idSpecies", "openedOffers".age, "openedOffers".reports FROM "openedOffers", race WHERE "openedOffers"."idOwner"<>$1 and "openedOffers".race=race."idRace" and NOT EXISTS (SELECT * FROM seen WHERE seen."idOffer"="openedOffers".id and seen."idUser"=$1) and NOT EXISTS (SELECT * FROM favourites WHERE favourites."idOffer"="openedOffers".id and favourites."idUser"=$1) '
         + 'and ($2::varchar IS NULL or "openedOffers".sex=$2::varchar) and ($3::varchar IS NULL or "openedOffers"."TypeName"=$3::varchar) '
         + 'and ($4::int IS NULL or race."idSpecies"=$4) and ($5::int IS NULL or $5::int >= (SELECT ((ACOS(SIN($8::float * PI() / 180) * SIN(users.latitude * PI() / 180) + COS($8::float * PI() / 180) * COS(users.latitude * PI() / 180) * COS(($9::float - users.longitude) * PI() / 180)) * 180 / PI()) * 60 * 1.1515) * 1.609344 FROM users WHERE users.id="openedOffers"."idOwner" AND users.latitude IS NOT NULL AND users.longitude IS NOT NULL)) '
         + 'and ($6::int IS NULL or "openedOffers".age>=$6::int) and ($7::int IS NULL or "openedOffers".age<=$7::int);'
@@ -74,7 +74,7 @@ const createOffer = async (request, response) => {
                 } else {
                     let idOffer = uuidv4();
                     client.query(
-                        'INSERT INTO animals (id, name, offer, race, sex, age, description, "idOwner", status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 0);',
+                        'INSERT INTO animals (id, name, offer, race, sex, age, description, "idOwner", status, reports) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 0, 0);',
                         [idOffer, name, type, race, sex, age, description, result.rows[0].id],
                         (error, res) => {
                             if (error) {
@@ -177,7 +177,39 @@ const deleteOffer = async (request, response) => {
     })
 }
 
-/*
+const reportOffer = async (request, response) => {
+    const { email, name: userName } = request.decoded;
+    const { id: idOffer } = request.params;
+    await pool.connect(async (err, client, done) => {
+        if (err) {
+            response.json({ success: false, msg: 'Error accessing the database' });
+            done();
+            return;
+        }
+        await client.query('BEGIN');
+        await client.query(
+            'SELECT id FROM users WHERE email=$1 AND name=$2;', [email, userName],
+            (err, result) => {
+                if (err || result.rowCount == 0) {
+                    console.log(err)
+                    response.json({ success: false, msg: 'User ' + email + ' doesn\'t exist' });
+                } else {
+                    client.query(
+                        'UPDATE animals SET reports=reports+1 WHERE id=$1;', [idOffer],
+                        (error, res) => {
+                            if (error) {
+                                console.error('Unknown error', error);
+                            } else {
+                                client.query('COMMIT');
+                                response.json({ success: true, msg: 'Offer deleted successfully', id: idOffer });
+                            }
+                        });
+                }
+            });
+        done();
+    })
+}
+
 const eliminateOffer = async (request, response) => {
     //response.json({ success: false, msg: 'Not implemented yet' });
     const { email, name: userName } = request.decoded;
@@ -196,21 +228,26 @@ const eliminateOffer = async (request, response) => {
                     console.log(err)
                     response.json({ success: false, msg: 'User ' + email + ' doesn\'t exist' });
                 } else {
-                    client.query(
-                        'DELETE FROM animals WHERE id=$1;', [idOffer],
-                        (error, res) => {
-                            if (error) {
-                                console.error('Unknown error', error);
-                            } else {
-                                client.query('COMMIT');
-                                response.json({ success: true, msg: 'Offer eliminated successfully', id: idOffer });
-                            }
-                        });
+                    if (result.rows[0].id != 1){
+                        console.log("Not authorised, not root user");
+                        response.json({ success: false, msg: 'User ' + email + ' doesn\'t exist' });
+                    } else {
+                        client.query(
+                            'DELETE FROM animals WHERE id=$1;', [idOffer],
+                            (error, res) => {
+                                if (error) {
+                                    console.error('Unknown error', error);
+                                } else {
+                                    client.query('COMMIT');
+                                    response.json({ success: true, msg: 'Offer eliminated successfully', id: idOffer });
+                                }
+                            });
+                    }
                 }
             });
         done();
     })
-}*/
+}
 
 const myOffers = async (request, response) => {
     const { email, name } = request.decoded;
@@ -222,10 +259,10 @@ const myOffers = async (request, response) => {
         }
         await client.query('BEGIN');
         await client.query(
-            'SELECT "openedOffers".id, "openedOffers".name, "openedOffers".sex, "openedOffers".race, "openedOffers"."TypeName" FROM "openedOffers", users WHERE users.name=$1 and users.email=$2 and "openedOffers"."idOwner" = users.id;',
+            'SELECT "openedOffers".id, "openedOffers".name, "openedOffers".sex, "openedOffers".race, "openedOffers"."TypeName", "openedOffers".reports FROM "openedOffers", users WHERE users.name=$1 and users.email=$2 and "openedOffers"."idOwner" = users.id;',
             [name, email], (err, result) => {
                 if (err || result.rowCount == 0) {
-                    console.log(err)
+                    console.log(err);
                     response.json({ success: false, msg: 'No offers found' });
                 } else {
                     response.json({ success: true, msg: 'Offers found', offers: result.rows });
@@ -383,6 +420,17 @@ const unfavourite = async (request, response) => {
                                 response.json({ success: true, msg: 'Offer deleted from favourites successfully', id: idOffer });
                             }
                         });
+                    client.query(
+                        'INSERT INTO seen ("idUser", "idOffer") VALUES ($1, $2);', [idUser, idOffer],
+                        (err, result) => {
+                            if (err) {
+                                console.log(err)
+                                response.json({ success: false, msg: 'Offer is already in seen or an error occured' });
+                            } else {
+                                client.query('COMMIT');
+                                response.json({ success: true, msg: 'Offer added to seen' });
+                            }
+                        });
                 }
             });
         done();
@@ -432,7 +480,7 @@ const offerDetails = async (request, response) => {
         }
         await client.query('BEGIN');
         await client.query(
-            'SELECT "openedOffers".id, "openedOffers"."name", "openedOffers"."age", "openedOffers".description, "openedOffers".sex, race."raceName", species."speciesName" AS "species", race."idRace", users.id AS "idOwner" FROM "openedOffers", race, species, users WHERE "openedOffers".id = $1 and "openedOffers"."idOwner"=users.id and "openedOffers".race=race."idRace" and race."idSpecies"=species.id;', [idOffer],
+            'SELECT "openedOffers".id, "openedOffers"."name", "openedOffers"."age", "openedOffers".description, "openedOffers".sex, "openedOffers".reports, race."raceName", species."speciesName" AS "species", race."idRace", users.id AS "idOwner" FROM "openedOffers", race, species, users WHERE "openedOffers".id = $1 and "openedOffers"."idOwner"=users.id and "openedOffers".race=race."idRace" and race."idSpecies"=species.id;', [idOffer],
             (err, result) => {
                 if (err || result.rowCount == 0) {
                     console.log(err);
@@ -471,7 +519,8 @@ module.exports = {
     createOffer,
     updateOffer,
     deleteOffer,
-    //eliminateOffer,
+    reportOffer,
+    eliminateOffer,
     myOffers,
     swipe,
     getImage,

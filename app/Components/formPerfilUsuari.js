@@ -44,7 +44,8 @@ export default class formPerfilUsuari extends React.Component {
             isoCountry:'',
             isoComunity:'',
             flagURI:'',
-            isLoading: true
+            isLoading: true,
+            imageFromServer: '',
         }
     }
 
@@ -56,20 +57,31 @@ export default class formPerfilUsuari extends React.Component {
           this.setState({new: false})
           console.log("old")
         }
+
         this.setState({isLoading:false});
 
         const token = await AsyncStorage.getItem("access_token");
         const jsonToken = JSON.parse(token);
         console.log("TOKEN FROM ASYNC : " + jsonToken);
         let response = await this.getCurrentUserFromAPI(jsonToken.token);
-        console.log(response)
+        let imageFromServer = await this.getProfileImageFromServer(jsonToken, response.user.id);
+        console.log("debug1: "+ imageFromServer)
+        let imageServer = '';
+
+        if(imageFromServer != '{"success":false,"msg":"Image couldn\'t be found"}'){
+          console.log("diferent")
+          imageServer = "data:image/jpeg;base64," + imageFromServer;
+
+        }
+        console.log("image server:"+ imageServer)
         this.setState({
+          imageFromServer: imageServer,
           name: response.user.username,
           description: response.user.bio,
           longitude: response.user.longitude,
           latitude: response.user.latitude,
         });
-
+        console.log(this.state.getImageFromServer)
     }
 
 
@@ -83,7 +95,7 @@ export default class formPerfilUsuari extends React.Component {
         console.log("polla grossa");
       } else {
         console.log("getting location");
-        this._getLocationAsync();
+      //  this._getLocationAsync();
       }
     }
 
@@ -104,6 +116,19 @@ export default class formPerfilUsuari extends React.Component {
                     console.error(error);
                 });
         }
+
+
+        async getProfileImageFromServer(tokenJson, id) {
+            return fetch(`http://10.4.41.164/api/users/${id}/image`, {
+                method: 'GET',
+                headers: {
+                    Accept: '*',
+                    'x-access-token': tokenJson.token
+                }
+            }).then((response => { return response.text() }))
+
+        }
+
 
     _getLocationAsync = async () => {
       let { status } = await Permissions.askAsync(Permissions.LOCATION);
@@ -420,7 +445,7 @@ export default class formPerfilUsuari extends React.Component {
 
 
 
-        if (this.state.image != null) {
+        if (this.state.image != null ) {
             imageForm = (
                 <View style={{ flex: 1, marginTop: 10, marginBottom: 20, flexDirection: 'row' }}>
                     <Image
@@ -454,7 +479,42 @@ export default class formPerfilUsuari extends React.Component {
                     </View>
                 </View>);
 
-        } else {
+        } else if (this.state.imageFromServer != '')  {
+          console.log("GOT IMAGE FROM SERVER IN RENDER!")
+          imageForm = (
+              <View style={{ flex: 1, marginTop: 10, marginBottom: 20, flexDirection: 'row' }}>
+                  <Image
+                      source={{ uri: this.state.imageFromServer }}
+                      style={{ width: 100, height: 100, borderRadius: 100 }}
+                  />
+                  <View
+                      style={{
+                          alignItems: "center",
+                          justifyContent: 'center',
+                          flex: 1
+                      }}>
+                      <TouchableOpacity onPress={this._pickImage}
+                          style={{
+                              //borderWidth:1,
+                              //borderColor:'rgba(0,0,0,0.2)',
+                              opacity: 0.5,
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              width: 60,
+                              height: 60,
+                              backgroundColor: '#fff',
+                              borderRadius: 50,
+                          }}
+                      >
+                          <Icon name={"exchange"} size={20} color="#F15A24" />
+
+                      </TouchableOpacity>
+                      <Text style={{ color: 'white', opacity: 0.5 }}>{"Change image"}</Text>
+
+                  </View>
+              </View>);
+        }else
+        {
             var random = Math.random();
             var source;
             var imagePlace;

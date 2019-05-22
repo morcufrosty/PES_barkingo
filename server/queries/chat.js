@@ -1,5 +1,6 @@
 const pool = require('./db');
 const uuidv4 = require('uuid/v4');
+const chatHandlers = require('../chat/handlers')
 
 const getChats = async (request, response) => {
     const { email, name } = request.decoded;
@@ -32,6 +33,7 @@ const getChats = async (request, response) => {
         done();
     })
 }
+
 const createChat = async (request, response) => {
     const { email, name } = request.decoded;
     const { id: idOffer } = request.params;
@@ -58,15 +60,19 @@ const createChat = async (request, response) => {
                                 response.status(404);
                                 response.json({ success: false, msg: 'Offer doesn\'t exist' });
                             } else {
+                                const id = uuidv4();
                                 client.query(
-                                    'INSERT INTO chats ("idChat", "idOffer", "idUserOffer", "idUserAsker", closed) VALUES ($1, $2, $3, $4, 0);', [uuidv4(), result.rows[0].id, result.rows[0].idOwner, result1.rows[0].id],
-                                    (err, result) => {
+                                    'INSERT INTO chats ("idChat", "idOffer", "idUserOffer", "idUserAsker", closed) VALUES ($1, $2, $3, $4, 0);', [id, result.rows[0].id, result.rows[0].idOwner, result1.rows[0].id],
+                                    (err, res) => {
                                         if (err) {
                                             console.log(err)
                                             response.json({ success: false, msg: 'Chat already exists or an error occured' });
                                         } else {
-                                            client.query('COMMIT');
-                                            response.json({ success: true, msg: 'Chat created' });
+                                            const mongo = chatHandlers.createConversation({ idChat: id, idUserOwner: result.rows[0].idOwner, idUserAsker: result1.rows[0].id });
+                                            if (mongo.success) {
+                                                client.query('COMMIT');
+                                                response.json({ success: true, msg: 'Chat created' });
+                                            } else response.json(mongo);
                                         }
                                     }
                                 )
