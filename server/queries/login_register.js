@@ -129,7 +129,18 @@ const renewGoogleToken = async (request, response) => {
                             });
                             response.json({ success: true, msg: 'User logged in successfully', token: token });
                         } else {
-                            response.json({ success: false, msg: 'Incorrect token' });
+                            client.query('UPDATE users SET googletoken=$2 WHERE id=$1', [result.rows[0].id, hashed], (err, resultI) => {
+                                if (err) {
+                                    console.log(err);
+                                } else {
+                                    client.query('COMMIT');
+                                    const payload = { email, name };
+                                    var signedToken = jwt.sign(payload, secret, {
+                                        expiresIn: '1 day',
+                                    });
+                                    response.json({ success: true, msg: 'Token updated successfully', token: signedToken });
+                                }
+                            });
                         }
                     });
                 }
@@ -156,6 +167,7 @@ const renewFacebookToken = async (request, response) => {
             await client.query('SELECT id, name, email, facebooktoken FROM users WHERE email=$1', [email], (err, result) => {
                 if (err) {
                     response.json({ success: false, msg: 'Server error' });
+                    done();
                 }
                 if (result.rowCount == 0) {
                     client.query('INSERT INTO users (id, name, email, facebooktoken) VALUES ($1, $2, $3, $4)', [uuidv4(), name, email, hashed], (err, resultI) => {
@@ -168,13 +180,12 @@ const renewFacebookToken = async (request, response) => {
                                 expiresIn: '1 day',
                             });
                             response.json({ success: true, msg: 'User created successfully', token: signedToken });
-                            return;
                         }
                     });
                 } else {
                     bcrypt.compare(token, result.rows[0].facebookToken, (err, check) => {
                         if (err) {
-                            response.json({ success: false, msg: 'Error while checking password' });
+                            response.json({ success: false, msg: 'Error while checking token' });
                         } else if (check) {
                             const payload = { email: result.rows[0].email, name: result.rows[0].name };
                             var signedToken = jwt.sign(payload, secret, {
@@ -182,7 +193,18 @@ const renewFacebookToken = async (request, response) => {
                             });
                             response.json({ success: true, msg: 'User logged in successfully', token: signedToken });
                         } else {
-                            response.json({ success: false, msg: 'Oops. Incorrect token' });
+                            client.query('UPDATE users SET facebooktoken=$2 WHERE id=$1', [result.rows[0].id, hashed], (err, resultI) => {
+                                if (err) {
+                                    console.log(err);
+                                } else {
+                                    client.query('COMMIT');
+                                    const payload = { email, name };
+                                    var signedToken = jwt.sign(payload, secret, {
+                                        expiresIn: '1 day',
+                                    });
+                                    response.json({ success: true, msg: 'Token updated successfully', token: signedToken });
+                                }
+                            });
                         }
                     });
                 }
@@ -202,5 +224,3 @@ module.exports = {
     renewGoogleToken,
     renewFacebookToken,
 };
-
-// ref: https://blog.logrocket.com/setting-up-a-restful-api-with-node-js-and-postgresql-d96d6fc892d8
