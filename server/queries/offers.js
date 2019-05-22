@@ -210,7 +210,6 @@ const reportOffer = async (request, response) => {
     })
 }
 
-/*
 const eliminateOffer = async (request, response) => {
     //response.json({ success: false, msg: 'Not implemented yet' });
     const { email, name: userName } = request.decoded;
@@ -229,21 +228,26 @@ const eliminateOffer = async (request, response) => {
                     console.log(err)
                     response.json({ success: false, msg: 'User ' + email + ' doesn\'t exist' });
                 } else {
-                    client.query(
-                        'DELETE FROM animals WHERE id=$1;', [idOffer],
-                        (error, res) => {
-                            if (error) {
-                                console.error('Unknown error', error);
-                            } else {
-                                client.query('COMMIT');
-                                response.json({ success: true, msg: 'Offer eliminated successfully', id: idOffer });
-                            }
-                        });
+                    if (result.rows[0].id != 1){
+                        console.log("Not authorised, not root user");
+                        response.json({ success: false, msg: 'User ' + email + ' doesn\'t exist' });
+                    } else {
+                        client.query(
+                            'DELETE FROM animals WHERE id=$1;', [idOffer],
+                            (error, res) => {
+                                if (error) {
+                                    console.error('Unknown error', error);
+                                } else {
+                                    client.query('COMMIT');
+                                    response.json({ success: true, msg: 'Offer eliminated successfully', id: idOffer });
+                                }
+                            });
+                    }
                 }
             });
         done();
     })
-}*/
+}
 
 const myOffers = async (request, response) => {
     const { email, name } = request.decoded;
@@ -516,7 +520,7 @@ module.exports = {
     updateOffer,
     deleteOffer,
     reportOffer,
-    //eliminateOffer,
+    eliminateOffer,
     myOffers,
     swipe,
     getImage,

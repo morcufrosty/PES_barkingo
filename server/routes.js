@@ -74,7 +74,7 @@ router.get('/offers', db.getOffers);
 
 router.post('/offers', db.createOffer);
 
-//router.delete('/offers/:id/elim', db.eliminateOffer);
+router.delete('/offers/:id/elim', db.eliminateOffer);
 
 router.get('/offers/currentUser', db.myOffers);
 
