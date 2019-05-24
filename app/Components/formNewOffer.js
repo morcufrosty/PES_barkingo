@@ -22,6 +22,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { Ionicons } from "@expo/vector-icons";
 import Autocomplete from 'react-native-autocomplete-input';
 import racesJSON from './races.json';
+import strings from '../i18n/i18n';
 
 export default class formNewOffer extends React.Component {
     componentDidMount() {
@@ -128,7 +129,7 @@ export default class formNewOffer extends React.Component {
         )
 
         if (this.state.name === '') {
-            Alert.alert("Error", "Please enter the name of the pet")
+            Alert.alert(strings('fromNewOffer.error'), strings('fromNewOffer.errorName'))
         }
         /*
           else if(this.state.species === ''){
@@ -141,19 +142,19 @@ export default class formNewOffer extends React.Component {
           }
         */
         else if (this.state.age === '') {
-            Alert.alert("Error", "Please enter the age of the pet")
+            Alert.alert(strings('fromNewOffer.error'), strings('fromNewOffer.ageError'))
         }
 
 
         else if (this.state.sex === null) {
-            Alert.alert("Error", "Please specify the sex of the pet")
+            Alert.alert(strings('fromNewOffer.error'), strings('fromNewOffer.sexError'))
         }
 
         else if (this.state.description === '') {
-            Alert.alert("Error", "Please specify a description of the pet")
+            Alert.alert(strings('fromNewOffer.error'), strings('fromNewOffer.descriptionError'))
         }
         else if (this.state.image === null && !this.state.update) {
-            Alert.alert("Error", "Please add an image")
+            Alert.alert(strings('fromNewOffer.error'), strings('fromNewOffer.imageError'))
         }
         else {
 
@@ -192,7 +193,7 @@ export default class formNewOffer extends React.Component {
 
             }
             else {
-                Alert.alert("Error", response.msg);
+                Alert.alert(strings('fromNewOffer.error'), response.msg);
             }
         }
     }
@@ -349,12 +350,12 @@ export default class formNewOffer extends React.Component {
                 <View style={{
                     paddingBottom: 30
                 }}>
-                    <Text style={{ color: 'white' }}>{"Data d'inici"}</Text>
+                    <Text style={{ color: 'white' }}>{strings('formNewOffer.startDate')}</Text>
                     <DatePicker
                         style={{ width: 200, margin: 5 }}
                         date={this.state.iniDate}
                         mode="date"
-                        placeholder="select ini date"
+                        placeholder= {strings('formNewOffer.selectStartDate')}
                         format="YYYY-MM-DD"
                         minDate="2016-05-01"
                         maxDate="2020-06-01"
@@ -379,12 +380,12 @@ export default class formNewOffer extends React.Component {
                         }}
                         onDateChange={(date) => { this.setState({ iniDate: date }) }}
                     />
-                    <Text style={{ color: 'white' }}>{"Data fi"}</Text>
+                    <Text style={{ color: 'white' }}>{strings('formNewOffer.endDate')}</Text>
                     <DatePicker
                         style={{ width: 200, margin: 5 }}
                         date={this.state.endDate}
                         mode="date"
-                        placeholder="select end date"
+                        placeholder= {strings('formNewOffer.selectEndDate')}
                         format="YYYY-MM-DD"
                         minDate="2016-05-01"
                         maxDate="2020-06-01"
@@ -451,7 +452,7 @@ export default class formNewOffer extends React.Component {
                             <Icon name={"exchange"} size={20} color="#F15A24" />
 
                         </TouchableOpacity>
-                        <Text style={{ color: 'white', opacity: 0.5 }}>{"Change image"}</Text>
+                        <Text style={{ color: 'white', opacity: 0.5 }}>{strings('formNewOffer.changeImage')}</Text>
 
                     </View>
                 </View>);
@@ -485,7 +486,7 @@ export default class formNewOffer extends React.Component {
                             <Icon name={"plus"} size={20} color="#F15A24" />
 
                         </TouchableOpacity>
-                        <Text style={{ color: 'white', opacity: 0.5 }}>{"Add an image"}</Text>
+                        <Text style={{ color: 'white', opacity: 0.5 }}>{strings('formNewOffer.addImage')}</Text>
 
                     </View>
                 </View>);
@@ -511,17 +512,17 @@ export default class formNewOffer extends React.Component {
                     }}
                     showsVerticalScrollIndicator={false}
                     keyboardShouldPersistTaps='always'>
-                    <Text style={{ color: 'white', fontSize: 45, flex: 1 }}>New Offer</Text>
+                    <Text style={{ color: 'white', fontSize: 45, flex: 1 }}>{strings('formNewOffer.newOffer')}</Text>
 
                     <View style={{ flex: 1, paddingVertical: 10 }}>
-                        <Text style={{ color: 'white' }}>{"Name"}</Text>
+                        <Text style={{ color: 'white' }}>{strings('formNewOffer.name')}</Text>
                         <TextInput onChangeText={(name) => this.setState({ name })} value={this.state.name}
                             style={{ backgroundColor: 'white', opacity: 0.5, borderRadius: 5, paddingVertical: 0, height: 35 }}></TextInput>
                     </View>
 
 
                     <View style={{ flex:1, paddingVertical: 10 }}>
-                        <Text style={{ color: 'white' }}>{"Race"}</Text>
+                        <Text style={{ color: 'white' }}>{strings('formNewOffer.race')}</Text>
                         <View styles = {styles.autocompleteContainer}>
                         <Autocomplete
                           autoCapitalize="none"
@@ -549,14 +550,14 @@ export default class formNewOffer extends React.Component {
 
 
                     <View style={{ flex: 1, paddingVertical: 10 }}>
-                        <Text style={{ color: 'white' }}>{"Age"}</Text>
+                        <Text style={{ color: 'white' }}>{strings('formNewOffer.age')}</Text>
                         <TextInput onChangeText={(age) => this.setState({ age })} value={this.state.age} keyboardType='numeric'
                             style={{ backgroundColor: 'white', opacity: 0.5, borderRadius: 5, paddingVertical: 0, height: 35 }}>
                         </TextInput>
                     </View>
 
                     <View style={{ flex: 1, paddingVertical: 10 }}>
-                        <Text style={{ color: 'white' }}>{"Description"}</Text>
+                        <Text style={{ color: 'white' }}>{strings('formNewOffer.description')}</Text>
                         <TextInput
                             multiline={true}
                             numberOfLines={4}
@@ -567,7 +568,7 @@ export default class formNewOffer extends React.Component {
                     </View>
 
                     <View style={{ flex: 1, paddingVertical: 10 }}>
-                        <Text style={{ color: 'white' }}>{"Sexe"}</Text>
+                        <Text style={{ color: 'white' }}>{strings('formNewOffer.sex')}</Text>
                         <RadioForm
                             formHorizontal={true}
                             animation={false}
@@ -577,8 +578,8 @@ export default class formNewOffer extends React.Component {
                             labelStyle={{ color: 'white' }}
                             radioStyle={{ paddingRight: 20, opacity: 0.5 }}
                             radio_props={[
-                                { label: 'male', value: "Male" },
-                                { label: 'female', value: "Female" }
+                                { label: strings('formNewOffer.male'), value: "Male" },
+                                { label: strings('formNewOffer.female'), value: "Female" }
                             ]}
                             initial={0}
                             onPress={(value) => { this.setState({ sex: value }) }}
@@ -586,7 +587,7 @@ export default class formNewOffer extends React.Component {
                     </View>
 
                     <View style={{ flex: 1, marginTop: 10, marginBottom: 20 }}>
-                        <Text style={{ color: 'white' }}>{"Type of offer"}</Text>
+                        <Text style={{ color: 'white' }}>{strings('formNewOffer.type')}</Text>
                         <RadioForm
                             formHorizontal={true}
                             animation={false}
@@ -596,8 +597,8 @@ export default class formNewOffer extends React.Component {
                             labelStyle={{ color: 'white' }}
                             radioStyle={{ paddingRight: 20, opacity: 0.5 }}
                             radio_props={[
-                                { label: 'adoption', value: "0" },
-                                { label: 'foster', value: "1" }
+                                { label: strings('formNewOffer.adoption'), value: "0" },
+                                { label: strings('formNewOffer.foster'), value: "1" }
                             ]}
                             initial={0}
                             onPress={(value) => { this.setState({ type: value }) }}
@@ -608,12 +609,12 @@ export default class formNewOffer extends React.Component {
                     {form}
 
 
-                    <Text style={{ color: 'white' }}>{"Image"}</Text>
+                    <Text style={{ color: 'white' }}>{strings('formNewOffer.image')}</Text>
                     {imageForm}
 
 
                     <Button
-                        title='Submit'
+                        title={strings('formNewOffer.submit')}
                         color='#ff3b28'
                         onPress={async () => this.handlePress()}>
 

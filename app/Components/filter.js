@@ -127,7 +127,7 @@ export default class filter extends React.Component {
                     </View>
                 </View>
                 <View style={{ flex: 1 }}>
-                    <Text style={{ color: 'white' }}>{"Especie"}</Text>
+                    <Text style={{ color: 'white' }}>{strings('filter.specie')}</Text>
                     <Picker style={{color:'white'}} selectedValue = {this.state.species} onValueChange = {this.updateUser}>
                         <Picker.Item label = {strings('filter.all')} value = "" />
                         <Picker.Item label = {strings('filter.dog')} value = "0" />
@@ -140,8 +140,8 @@ export default class filter extends React.Component {
                 </View>
                 <View style={{ flex: 1 }}>
                     <View style={{flexDirection: 'row'}} >
-                        <Text style={{ color: 'white' }}>{"Distancia"}: </Text>
-                        <Text style={{ color: 'white' }}>{this.state.distance} km</Text>
+                        <Text style={{ color: 'white' }}>{strings('filter.distance')}: </Text>
+                        <Text style={{ color: 'white' }}>{this.state.distance} Km</Text>
                     </View>
                     <MultiSlider
                         values={this.state.distance}
@@ -160,7 +160,7 @@ export default class filter extends React.Component {
                     />
                 </View>
                 <View style={{ flex: 1 }}>
-                    <Text style={{ color: 'white' }}>{"Sexe"}</Text>
+                    <Text style={{ color: 'white' }}>{strings('filter.sex')}</Text>
                     <RadioForm
                             formHorizontal={true}
                             animation={false}
@@ -170,9 +170,9 @@ export default class filter extends React.Component {
                             labelStyle={{ color: 'white' }}
                             radioStyle={{ paddingRight: 20, opacity: 0.5 }}
                             radio_props={[
-                                { label: 'Any', value: "" },
-                                { label: 'Male', value: "Male" },
-                                { label: 'Female', value: "Female" }
+                                { label: strings('filter.any'), value: "" },
+                                { label: strings('filter.male'), value: "Male" },
+                                { label: strings('filter.female'), value: "Female" }
 
                             ]}
                             initial={0}
@@ -182,7 +182,7 @@ export default class filter extends React.Component {
                 </View>
 
                 <View style={{ flex: 1 }}>
-                    <Text style={{ color: 'white' }}>{"Type"}</Text>
+                    <Text style={{ color: 'white' }}>{strings('filter.type')}</Text>
                     <RadioForm
                             formHorizontal={true}
                             animation={false}
@@ -192,9 +192,9 @@ export default class filter extends React.Component {
                             labelStyle={{ color: 'white' }}
                             radioStyle={{ paddingRight: 20, opacity: 0.5 }}
                             radio_props={[
-                                { label: 'Any', value: "" },
-                                { label: 'Adoption', value: "adoption" },
-                                { label: 'Foster', value: "foster" }
+                                { label: strings('filter.any'), value: "" },
+                                { label: strings('filter.adoption'), value: "adoption" },
+                                { label: strings('filter.foster'), value: "foster" }
 
                             ]}
                             initial={0}
@@ -204,7 +204,7 @@ export default class filter extends React.Component {
                 </View>
                 <Button
                     style={{color:'white', flex:1}}
-                    title='Change filters'
+                    title= {strings('filter.change')}
                     color='#D84B37'
                     onPress={() => this.handleChangeFilters()}
                 ></Button>

@@ -21,6 +21,7 @@ import { ImagePicker, Permissions, Constants, Location } from 'expo';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Ionicons } from "@expo/vector-icons";
 import { StackActions, NavigationActions } from 'react-navigation';
+import strings from '../i18n/i18n';
 
 
 export default class formPerfilUsuari extends React.Component {
@@ -196,11 +197,11 @@ export default class formPerfilUsuari extends React.Component {
         )
 
         if (this.state.name === '') {
-            Alert.alert("Error", "Please enter the your name")
+            Alert.alert(strings('formNewOffer.error'), strings('formNewOffer.nameError'))
         }
 
         else if (this.state.description === null) {
-            Alert.alert("Error", "Please specify a description")
+            Alert.alert(strings('formNewOffer.error'), strings('formNewOffer.descriptionError'))
         }
 
         else {
@@ -273,7 +274,7 @@ export default class formPerfilUsuari extends React.Component {
 
             }
             else {
-                Alert.alert("Error", response.msg);
+                Alert.alert(strings('formNewOffer.error'), response.msg);
             }
         }
     }
@@ -449,7 +450,7 @@ export default class formPerfilUsuari extends React.Component {
                             <Icon name={"exchange"} size={20} color="#F15A24" />
 
                         </TouchableOpacity>
-                        <Text style={{ color: 'white', opacity: 0.5 }}>{"Change image"}</Text>
+                        <Text style={{ color: 'white', opacity: 0.5 }}>{strings('formNewOffer.changeImage')}</Text>
 
                     </View>
                 </View>);
@@ -499,7 +500,7 @@ export default class formPerfilUsuari extends React.Component {
                             <Icon name={"plus"} size={20} color="#F15A24" />
 
                         </TouchableOpacity>
-                        <Text style={{ color: 'white', opacity: 0.5 }}>{"Add an image"}</Text>
+                        <Text style={{ color: 'white', opacity: 0.5 }}>{strings('formNewOffer.addImage')}</Text>
 
                     </View>
                 </View>);
@@ -520,19 +521,19 @@ export default class formPerfilUsuari extends React.Component {
                     }}
                     showsVerticalScrollIndicator={false}
                     keyboardShouldPersistTaps='always'>
-                    <Text style={{ color: 'white', fontSize: 45, flex: 1 }}>Who are you?</Text>
+                    <Text style={{ color: 'white', fontSize: 45, flex: 1 }}>{strings('formNewOffer.userDetails')}</Text>
 
 
                     {imageForm}
 
                     <View style={{ flex: 1, paddingVertical: 10 }}>
-                        <Text style={{ color: 'white',fontWeight: 'bold' }}>{"What's your name"}</Text>
+                        <Text style={{ color: 'white',fontWeight: 'bold' }}>{strings('formNewOffer.name')}</Text>
                         <TextInput onChangeText={(name) => this.setState({ name })} value={this.state.name}
                             style={{ backgroundColor: 'white', opacity: 0.5, borderRadius: 5, paddingVertical: 0, height: 35 }}></TextInput>
                     </View>
 
                     <View style={{ flex: 1, paddingVertical: 10 }}>
-                        <Text style={{ color: 'white' ,fontWeight: 'bold'}}>{"Add a little description about yourself!"}</Text>
+                        <Text style={{ color: 'white' ,fontWeight: 'bold'}}>{strings('formNewOffer.description')}</Text>
                         <TextInput
                             multiline={true}
                             numberOfLines={4}
@@ -544,7 +545,7 @@ export default class formPerfilUsuari extends React.Component {
 
 
                     <View style={{ flex: 1, paddingVertical: 10 }}>
-                        <Text style={{ color: 'white',fontWeight: 'bold' }}>{"You are from..."}</Text>
+                        <Text style={{ color: 'white',fontWeight: 'bold' }}>{strings('formNewOffer.location')}</Text>
                         <Text style={{ color: 'white' }}>
                           { this.state.city } - {this.state.region}
                         </Text>
@@ -556,7 +557,7 @@ export default class formPerfilUsuari extends React.Component {
 
 
                                           <Button
-                                              title='Submit'
+                                              title= {strings('formNewOffer.name')}
                                               color='#ff3b28'
                                               onPress={async () => this.handlePress()}>
 
