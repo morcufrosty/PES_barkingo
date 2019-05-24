@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import { Button, FormGroup, FormControl, FormLabel } from "react-bootstrap";
 import "./Login.css";
 import Routing from './Routing.js';
+import { AsyncStorage } from 'AsyncStorage';
 
+const ACCESS_TOKEN = 'access_token';
 
 export default class Login extends Component {
   constructor(props) {
@@ -11,6 +13,47 @@ export default class Login extends Component {
     this.state = {
       password: ""
     };
+  }
+
+  storeToken = async (token) => {
+    try {
+        var expirationDate = new Date().getTime() + (24 * 60 * 60) * 1000;
+        var jsonObject = { token: token, expiration: expirationDate };
+        await AsyncStorage.setItem(ACCESS_TOKEN, JSON.stringify(jsonObject));
+    } catch (error) {
+        console.log("Ha fallat el storeToken: " + error)
+        // Error saving data
+    }
+  }
+
+  async removeToken() {
+      try {
+          await AsyncStorage.removeItem(ACCESS_TOKEN);
+      } catch (error) {
+          // Error showing data
+          console.log("Ha fallat el removeToken: " + error)
+      }
+  }
+
+  async loginDevUsingAPI() {
+
+    return fetch('http://10.4.41.164/api/users/login', {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            email: 'devUser@dev.dev',
+            password: 'devUser'
+        }),
+    }).then((response) => response.json())
+        .then((responseJson) => {
+            console.log(responseJson.msg);
+            return responseJson;
+        }).catch((error) => {
+            console.error(error);
+        });
   }
 
   validateForm() {
@@ -23,12 +66,22 @@ export default class Login extends Component {
     });
   }
 
-  handleSubmit = event => {
-    event.preventDefault();
+  async handleLogin (){
     if (this.state.password=="123456"){
-      this.props.login();
+      const response = await this.loginDevUsingAPI();
+      if (response.success) {
+        var token = response.token;
+        console.log(token);
+        this.storeToken(response.token);
+        this.props.login();
+      }
     }
     console.log(this.props.login);
+  }
+
+  handleSubmit = event => {
+    event.preventDefault();
+    this.handleLogin();
   }
 
   render() {

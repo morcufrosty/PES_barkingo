@@ -157,7 +157,7 @@ const deleteOffer = async (request, response) => {
                                 console.error('Unknown error', error);
                             } else {
                                 client.query('COMMIT');
-                                response.json({ success: true, msg: 'Offer deleted successfully', id: idOffer });
+                                console.log("Offer eliminated");
                             }
                         });
                     client.query(
@@ -168,7 +168,7 @@ const deleteOffer = async (request, response) => {
                                 response.json({ success: false, msg: 'Unknown error' });
                             } else {
                                 client.query('COMMIT');
-                                response.json({ success: true, msg: 'Offer deleted from favourites successfully', id: idOffer });
+                                response.json({ success: true, msg: 'Offer deleted successfully', id: idOffer });
                             }
                         });
                 }

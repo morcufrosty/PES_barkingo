@@ -69,6 +69,7 @@ export default class formNewOffer extends React.Component {
 
             this.setState({
                 imageFromServer: imageServer,
+                age: response.offer.age,
                 update: this.props.navigation.getParam('update', false),
                 id: this.props.navigation.getParam('id', '1'),
                 name: response.offer.name,
@@ -155,8 +156,8 @@ export default class formNewOffer extends React.Component {
             Alert.alert("Error", "Please enter the race of the pet" )
           }
         */
-        else if (this.state.age === '') {
-            Alert.alert(strings('formNewOffer.error'), strings('formNewOffer.ageError'))
+        else if (this.state.age === '' || this.state.age < 0) {
+            Alert.alert(strings('fromNewOffer.error'), strings('fromNewOffer.ageError'))
         }
 
 
