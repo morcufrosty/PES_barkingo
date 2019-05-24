@@ -143,7 +143,7 @@ export default class formNewOffer extends React.Component {
         )
 
         if (this.state.name === '') {
-            Alert.alert(strings('fromNewOffer.error'), strings('fromNewOffer.errorName'))
+            Alert.alert(strings('formNewOffer.error'), strings('formNewOffer.errorName'))
         }
         /*
           else if(this.state.species === ''){
@@ -156,19 +156,19 @@ export default class formNewOffer extends React.Component {
           }
         */
         else if (this.state.age === '') {
-            Alert.alert(strings('fromNewOffer.error'), strings('fromNewOffer.ageError'))
+            Alert.alert(strings('formNewOffer.error'), strings('formNewOffer.ageError'))
         }
 
 
         else if (this.state.sex === null) {
-            Alert.alert(strings('fromNewOffer.error'), strings('fromNewOffer.sexError'))
+            Alert.alert(strings('formNewOffer.error'), strings('formNewOffer.sexError'))
         }
 
         else if (this.state.description === '') {
-            Alert.alert(strings('fromNewOffer.error'), strings('fromNewOffer.descriptionError'))
+            Alert.alert(strings('formNewOffer.error'), strings('formNewOffer.descriptionError'))
         }
         else if (this.state.image === null && !this.state.update) {
-            Alert.alert(strings('fromNewOffer.error'), strings('fromNewOffer.imageError'))
+            Alert.alert(strings('formNewOffer.error'), strings('formNewOffer.imageError'))
         }
         else {
 
@@ -203,11 +203,9 @@ export default class formNewOffer extends React.Component {
                     this.props.navigation.state.params.onGoBack();
                     this.props.navigation.goBack();
                 }
-
-
             }
             else {
-                Alert.alert(strings('fromNewOffer.error'), response.msg);
+                Alert.alert(strings('formNewOffer.error'), response.msg);
             }
         }
     }
