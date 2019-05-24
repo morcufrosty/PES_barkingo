@@ -151,6 +151,7 @@ export default class formPerfilUsuari extends React.Component {
               'Nafarroako Foru Komunitatea':'NC',
               'País Vasco':'PV',
               'Euskal Herria':'PV',
+              'Euskadi': 'PV',
               'Valenciana, Comunidad':'VC',
               'Comunidad Valenciana':'VC',
               'Valenciana, Comunidat':'VC',
@@ -168,8 +169,11 @@ export default class formPerfilUsuari extends React.Component {
               let region = parsedLocation[0].region;
               let isoComunity = map[region];
               console.log(isoComunity);
-              this.setState({isoComunity})
+              if (isoComunity != null){
+                this.setState({isoComunity})
+              }
             }
+            else(this.setState({isoComunity: null}))
             this.setState({isoCountry: parsedLocation[0].isoCountryCode,
                           city: parsedLocation[0].city,
                           region: parsedLocation[0].region,
@@ -179,10 +183,12 @@ export default class formPerfilUsuari extends React.Component {
             })
 
 
-            if (this.state.isoComunity != ''){
+            if (this.state.isoComunity != null){
+              console.log("comunity")
               let flagURI = "http://flags.ox3.in/mini/"+this.state.isoCountry.toLowerCase()+"/"+this.state.isoComunity.toLowerCase()+".png";
               this.setState({flagURI});
             }else{
+              console.log("country"+this.state.isoCountry)
               let flagURI = "http://flags.ox3.in/mini/"+this.state.isoCountry.toLowerCase()+".png";
               this.setState({flagURI});
 
@@ -461,7 +467,7 @@ export default class formPerfilUsuari extends React.Component {
               <Text style={{ color: 'white', opacity:0.5 }}>
                 {this.state.postalCode} - {this.state.country}
               </Text>
-              <Image source={{ uri:`${this.state.flagURI}` , width: 20, height: 15 }} />
+              <Image source={{ uri:`${this.state.flagURI}` , width: 35, height: 20 }} />
           </View>)
 
         }
