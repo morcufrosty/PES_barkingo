@@ -14,6 +14,7 @@ import TextInputWTitle from './inputText.js';
 import InputPassword from './inputPassword.js';
 import { AsyncStorage } from 'react-native';
 import strings from '../i18n/i18n';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default class perfilAnimalFavorites extends React.Component {
 
@@ -195,15 +196,27 @@ export default class perfilAnimalFavorites extends React.Component {
                     <TouchableOpacity
                         style={{
                             position: 'absolute',
-                            bottom: 20,
-                            right: 20,
-                            zIndex: 100,
-                            height: 70,
-                            width: 70
+                        bottom: 20,
+                        right: 20,
+                        zIndex: 100,
+                        height: 70,
+                        width: 70,
+                        alignItems:'center',
+                        justifyContent:'center',
+                        backgroundColor:'rgb(255,255,255)',
+                        borderRadius:35,
+                        shadowColor: "#000",
+                        shadowOffset: {
+                        width: 0,
+                        height: 3,
+                        },
+                        shadowOpacity: 0.27,
+                        shadowRadius: 4.65,
+
+                        elevation: 6,
                         }}
                         onPress={() => this.props.navigation.navigate('chatScreen', {offerId: this.state.id})}>
-                        <Image
-                            source={{ uri: "http://cdn.onlinewebfonts.com/svg/img_54456.png", width: 70, height: 70 }} />
+                    <Icon name={"comments"} size={40} color="#f95234" />
                     </TouchableOpacity>
 
                     <TouchableOpacity
@@ -213,23 +226,35 @@ export default class perfilAnimalFavorites extends React.Component {
                         left: 20,
                         zIndex: 100,
                         height: 70,
-                        width: 70
+                        width: 70,
+                        alignItems:'center',
+                        justifyContent:'center',
+                        backgroundColor:'rgb(255,255,255)',
+                        borderRadius:35,
+                        shadowColor: "#000",
+                        shadowOffset: {
+                        width: 0,
+                        height: 3,
+                        },
+                        shadowOpacity: 0.27,
+                        shadowRadius: 4.65,
+
+                        elevation: 6,
                     }}
                     onPress={() => 
                 
                         Alert.alert(
-                            'Finalitzar oferta',
-                            'Està segur que desitja finalitzar la oferta?',
+                            strings('perfilAnimal.endOffer'),
+                            strings('perfilAnimal.askEnd'),
                             [
-                              {text: 'No', onPress: () => console.log("NO")},
-                              {text: 'Si', onPress: () => this.handleEndOffer()},
+                              {text: strings('perfilAnimal.no'), onPress: () => console.log("NO")},
+                              {text: strings('perfilAnimal.yes'), onPress: () => this.handleEndOffer()},
                             ],
                             {cancelable: false},
                           )
                     
                     }>
-                    <Image
-                        source={{ uri: "https://pbs.twimg.com/profile_images/2265449598/TheENDFund_Roundel-01.png", width: 70, height: 70 }} />
+                    <Icon name={"trash"} size={40} color="#f95234" />
                 </TouchableOpacity>
 
                 <View style={{ flex: 1 }}>
@@ -243,7 +268,7 @@ export default class perfilAnimalFavorites extends React.Component {
                         <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%' }}>{strings('perfilAnimal.age', {a: this.state.age})}</Text>
                         <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%' }}>{strings('perfilAnimal.race', {r: this.state.race})}</Text>
                         <Text style={{ color: 'white', fontSize: 20,  marginLeft: '10%' }}>{strings('perfilAnimal.sex', {s: this.state.sex})}</Text>
-                        <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%', marginBottom:'5%'}}>{strings('perfilAnimal.description', {d: this.state.description})}</Text>
+                        <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%', marginBottom:'5%'}}>{strings('perfilAnimal.description')} {this.state.description}</Text>
                         <View style={{marginBottom:'20%', marginLeft:'10%', marginRight:'10%', borderRadius: 5, backgroundColor: 'rgba(255, 255, 255, 0.2)'}}>
                             <View style={{flexDirection: 'row', padding:'5%'}} >
                             <Image style={{
@@ -253,9 +278,9 @@ export default class perfilAnimalFavorites extends React.Component {
                                     width: 64, height: 64
                                 }} source={{ uri: `${this.state.ownerImage}`}} />
                                 <Text style={{fontWeight: 'bold', color: 'white', fontSize: 25, marginLeft: '10%', marginRight: '10%', justifyContent: 'center', alignItems: 'center', textAlignVertical: 'center' 
-                            }}>{strings('perfilAnimal.ownerName', {on:this.state.ownerName})}</Text>
+                            }}>{this.state.ownerName}</Text>
                             </View>
-                            <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%', marginBottom:'5%', marginRight:'5%' }}>{strings('perfilAnimal.ownerDescription')} {this.state.ownerDesc}</Text>
+                            <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%', marginBottom:'5%', marginRight:'5%' }}>{this.state.ownerDesc}</Text>
                         </View>
                     </ScrollView>
                 </View>

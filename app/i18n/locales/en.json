@@ -10,8 +10,8 @@
 	},
 	"login": {
 		"loginText": "Login",
-		"email": "Correu Electronic",
-		"password": "Contrasenya",
+		"email": "Email",
+		"password": "Password",
 		"noAccount": "Don't have an account?",
 		"register" : "Register now!",
 		"loginFace" : "LOGIN WITH FACEBOOK",
@@ -22,16 +22,117 @@
 		"googleError" : "Google Login Error: {{message}}",
 		"error" : "Error",
 		"enterEmail": "Please enter your email",
-		"enterPassword": "Please enter your password"
+		"enterPassword": "Please enter your password",
+		"pwdError" : "The passwords do not match, please try again",
+		"pageLogin" : "Login page"
 	},
 	"perfilAnimal": {
 		"age" : "Age: {{a}}",
 		"sex" : "Sex: {{s}}",
-		"description" : "Description: {{d}}",
+		"description" : "Description: ",
 		"race": "Race: {{r}}",
-		"ownerName" : "Owner name: {{on}}",
-		"ownerDescription": "about owner: "
+		"endOffer" : "End Offer",
+		"askEnd" : "Are you sure you want to end this offer?",
+		"no" : "No",
+		"yes" : "Yes"
+
+	},
+	"autoComplete" : {
+		"raceName" : "Enter race name"
+	},
+	
+	"changeSettings" : {
+		"language" : "Select language",
+		"delete" : "Delete account",
+		"deleteQuestion" : "Are you sure you want to delete your account?",
+		"no" : "No",
+		"yes" : "Yes",
+		"selectedLanguage" : "selectedLanguage",
+		"settings" : "Settings",
+		"logOut" : "Log Out",
+		"languageSucces": "Language has changed succesfully",
+		"languageError" : "ERROR. Language has not been changed"
+	},
+
+	"filter" : {
+		"title" : "Filters",
+		"ageRange" : "Age range",
+		"specie" : "specie",
+		"all" : "All",
+		"dog" : "Dogs",
+		"cat" : "Cats",
+		"fish" : "Fishes",
+		"reptile" : "Reptiles",
+		"bird" : "Birds",
+		"other" : "Others",
+		"distance" : "Distance",
+		"sex" : "Sex",
+		"any" : "Any",
+		"male" : "Male",
+		"female" : "Female",
+		"type" : "Type",
+		"adoption" : "Adoption",
+		"foster" : "Foster",
+		"change" : "CHANGE FILTERS"
+	},
+	"formNewOffer" : {
+		"newOffer" : "New Offer",
+		"error" : "Error",
+		"nameError" : "Please enter the name of the pet",
+		"ageError": "Please enter the age of the pet",
+		"sexError": "Please enter the sex of the pet",
+		"descriptionError": "Please enter the description of the pet",
+		"imageError": "Please add an image",
+		"startDate" : "Start date",
+		"selectStartDate" : "Select start date",
+		"endDate" : "End date",
+		"selectEndDate": "Select end date",
+		"changeImage" : "Change image",
+		"addImage" : "Add an image",
+		"name" : "Name",
+		"race": "Race",
+		"age" : "Age",
+		"description" : "Description",
+		"sex" : "Sex",
+		"male": "Male",
+		"female" : "Female",
+		"type" : "Type of offer",
+		"adoption" : "Adoption",
+		"foster" : "Foster",
+		"image" : "Image",
+		"submit" : "Submit",
+		"userDetails" : "User Details",
+		"location" : "Location"
+	},
+
+	"register" : {
+		"title": "Register",
+		"email" : "Email",
+		"user" : "Username",
+		"pwd" : "Password",
+		"repPwd" : "Repeat password",
+		"error" : "Error",
+		"allFields": "Plese fill all the fields",
+		"invalidEmail": "The email you entered is invalid, please try again",
+		"invalidPwd" : "The passowrd must have at lest 5 characters",
+		"learnMore" : "Learn more about this purple button",
+		"succesCreate" : "User created succesfully",
+		"goBack" : "Go Back to"
+
+	},
+
+	"settings": {
+		"userDeleted" : "User has been deleted!",
+		"errorUserDeleted" : "User has not been deleted",
+		"offerDeleted" : "Offer deleted successfully",
+		"errorOfferDeleted" : "Offer has not been deleted",
+		"username" : "Username",
+		"publications" : "Your publications",
+		"newPublication" : "New publication",
+		"noPublications": "You have not any active publication"
 
 	}
+	
+
 
 }

@@ -20,6 +20,9 @@ import { AsyncStorage } from 'react-native';
 import { ImagePicker, Permissions, Constants, Location } from 'expo';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Ionicons } from "@expo/vector-icons";
+import { StackActions, NavigationActions } from 'react-navigation';
+import strings from '../i18n/i18n';
+
 
 export default class formPerfilUsuari extends React.Component {
 
@@ -42,9 +45,8 @@ export default class formPerfilUsuari extends React.Component {
             isoCountry:'',
             isoComunity:'',
             flagURI:'',
-            isLoading: true
-
-
+            isLoading: true,
+            imageFromServer: '',
         }
     }
 
@@ -54,20 +56,33 @@ export default class formPerfilUsuari extends React.Component {
           console.log("new")
         }else{
           this.setState({new: false})
+          console.log("old")
         }
+
         this.setState({isLoading:false});
 
         const token = await AsyncStorage.getItem("access_token");
         const jsonToken = JSON.parse(token);
-        let response = await this.getCurrentUserFromAPI(jsonToken);
-        console.log(response)
+        console.log("TOKEN FROM ASYNC : " + jsonToken);
+        let response = await this.getCurrentUserFromAPI(jsonToken.token);
+        let imageFromServer = await this.getProfileImageFromServer(jsonToken, response.user.id);
+        console.log("debug1: "+ imageFromServer)
+        let imageServer = '';
+
+        if(imageFromServer != '{"success":false,"msg":"Image couldn\'t be found"}'){
+          console.log("diferent")
+          imageServer = "data:image/jpeg;base64," + imageFromServer;
+
+        }
+        console.log("image server:"+ imageServer)
         this.setState({
+          imageFromServer: imageServer,
           name: response.user.username,
           description: response.user.bio,
           longitude: response.user.longitude,
           latitude: response.user.latitude,
         });
-
+        console.log(this.state.getImageFromServer)
     }
 
 
@@ -81,7 +96,7 @@ export default class formPerfilUsuari extends React.Component {
         console.log("polla grossa");
       } else {
         console.log("getting location");
-        this._getLocationAsync();
+      //  this._getLocationAsync();
       }
     }
 
@@ -102,6 +117,19 @@ export default class formPerfilUsuari extends React.Component {
                     console.error(error);
                 });
         }
+
+
+        async getProfileImageFromServer(tokenJson, id) {
+            return fetch(`http://10.4.41.164/api/users/${id}/image`, {
+                method: 'GET',
+                headers: {
+                    Accept: '*',
+                    'x-access-token': tokenJson.token
+                }
+            }).then((response => { return response.text() }))
+
+        }
+
 
     _getLocationAsync = async () => {
       let { status } = await Permissions.askAsync(Permissions.LOCATION);
@@ -194,19 +222,19 @@ export default class formPerfilUsuari extends React.Component {
         )
 
         if (this.state.name === '') {
-            Alert.alert("Error", "Please enter the your name")
+            Alert.alert(strings('formNewOffer.error'), strings('formNewOffer.nameError'))
         }
 
         else if (this.state.description === null) {
-            Alert.alert("Error", "Please specify a description")
+            Alert.alert(strings('formNewOffer.error'), strings('formNewOffer.descriptionError'))
         }
 
         else {
 
             const token = await AsyncStorage.getItem("access_token");
             const jsonToken = JSON.parse(token);
-            console.log(jsonToken.token)
-            const responseCurrentUser = await this.getCurrentUserFromAPI(jsonToken);
+            console.log(jsonToken)
+            const responseCurrentUser = await this.getCurrentUserFromAPI(jsonToken.token);
             const id = responseCurrentUser.user.id;
             console.log("ID: "+id)
             let response;
@@ -235,8 +263,9 @@ export default class formPerfilUsuari extends React.Component {
                     console.log(id);
                     const responsePostImg = await this.handleSubmitImage(jsonToken, id, data);
                     //Alert.alert(responsePostImg.msg);
-                    console.log("going back")
                     if(!this.state.new){
+                      console.log("going back")
+
                       this.props.navigation.state.params.onGoBack();
                       this.props.navigation.goBack();
                     }else{
@@ -244,18 +273,25 @@ export default class formPerfilUsuari extends React.Component {
                           index: 0,
                           actions: [NavigationActions.navigate({ routeName: 'BottomNavigation' })],
                       });
+                      this.props.navigation.dispatch(resetAction);
+
                     }
                 }
                 else{
-                  console.log("going back")
                   if(!this.state.new){
+                    console.log("going back")
+
                     this.props.navigation.state.params.onGoBack();
                     this.props.navigation.goBack();
                   }else{
+                    console.log("going to bottom nav")
+
                     const resetAction = StackActions.reset({
                         index: 0,
-                        actions: [NavigationActions.navigate({ routeName: 'BottomNavigation' })],
+                        actions: [NavigationActions.navigate({ routeName: 'AppAfterLogin' })],
                     });
+                    this.props.navigation.dispatch(resetAction);
+
                   }
 
                 }
@@ -263,7 +299,7 @@ export default class formPerfilUsuari extends React.Component {
 
             }
             else {
-                Alert.alert("Error", response.msg);
+                Alert.alert(strings('formNewOffer.error'), response.msg);
             }
         }
     }
@@ -289,7 +325,7 @@ export default class formPerfilUsuari extends React.Component {
 
 
     async getCurrentUserFromAPI(tokenJson) {
-
+        console.log("TOKEN :" + tokenJson);
         return fetch('http://10.4.41.164/api/users/currentUser', {
             method: 'GET',
             headers: {
@@ -310,7 +346,7 @@ export default class formPerfilUsuari extends React.Component {
     async newPerfilUsingAPI(tokenJson, id) {
 
         return fetch(`http://10.4.41.164/api/users/${id}`, {
-            method: 'POST',
+            method: 'PUT',
             headers: {
                 Accept: '*',
                 'Content-Type': 'application/json',
@@ -410,7 +446,7 @@ export default class formPerfilUsuari extends React.Component {
 
 
 
-        if (this.state.image != null) {
+        if (this.state.image != null ) {
             imageForm = (
                 <View style={{ flex: 1, marginTop: 10, marginBottom: 20, flexDirection: 'row' }}>
                     <Image
@@ -439,12 +475,47 @@ export default class formPerfilUsuari extends React.Component {
                             <Icon name={"exchange"} size={20} color="#F15A24" />
 
                         </TouchableOpacity>
-                        <Text style={{ color: 'white', opacity: 0.5 }}>{"Change image"}</Text>
+                        <Text style={{ color: 'white', opacity: 0.5 }}>{strings('formNewOffer.changeImage')}</Text>
 
                     </View>
                 </View>);
 
-        } else {
+        } else if (this.state.imageFromServer != '')  {
+          console.log("GOT IMAGE FROM SERVER IN RENDER!")
+          imageForm = (
+              <View style={{ flex: 1, marginTop: 10, marginBottom: 20, flexDirection: 'row' }}>
+                  <Image
+                      source={{ uri: this.state.imageFromServer }}
+                      style={{ width: 100, height: 100, borderRadius: 100 }}
+                  />
+                  <View
+                      style={{
+                          alignItems: "center",
+                          justifyContent: 'center',
+                          flex: 1
+                      }}>
+                      <TouchableOpacity onPress={this._pickImage}
+                          style={{
+                              //borderWidth:1,
+                              //borderColor:'rgba(0,0,0,0.2)',
+                              opacity: 0.5,
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              width: 60,
+                              height: 60,
+                              backgroundColor: '#fff',
+                              borderRadius: 50,
+                          }}
+                      >
+                          <Icon name={"exchange"} size={20} color="#F15A24" />
+
+                      </TouchableOpacity>
+                      <Text style={{ color: 'white', opacity: 0.5 }}>{"Change image"}</Text>
+
+                  </View>
+              </View>);
+        }else
+        {
             var random = Math.random();
             var source;
             var imagePlace;
@@ -489,7 +560,7 @@ export default class formPerfilUsuari extends React.Component {
                             <Icon name={"plus"} size={20} color="#F15A24" />
 
                         </TouchableOpacity>
-                        <Text style={{ color: 'white', opacity: 0.5 }}>{"Add an image"}</Text>
+                        <Text style={{ color: 'white', opacity: 0.5 }}>{strings('formNewOffer.addImage')}</Text>
 
                     </View>
                 </View>);
@@ -510,19 +581,19 @@ export default class formPerfilUsuari extends React.Component {
                     }}
                     showsVerticalScrollIndicator={false}
                     keyboardShouldPersistTaps='always'>
-                    <Text style={{ color: 'white', fontSize: 45, flex: 1 }}>Who are you?</Text>
+                    <Text style={{ color: 'white', fontSize: 45, flex: 1 }}>{strings('formNewOffer.userDetails')}</Text>
 
 
                     {imageForm}
 
                     <View style={{ flex: 1, paddingVertical: 10 }}>
-                        <Text style={{ color: 'white',fontWeight: 'bold' }}>{"What's your name"}</Text>
+                        <Text style={{ color: 'white',fontWeight: 'bold' }}>{strings('formNewOffer.name')}</Text>
                         <TextInput onChangeText={(name) => this.setState({ name })} value={this.state.name}
                             style={{ backgroundColor: 'white', opacity: 0.5, borderRadius: 5, paddingVertical: 0, height: 35 }}></TextInput>
                     </View>
 
                     <View style={{ flex: 1, paddingVertical: 10 }}>
-                        <Text style={{ color: 'white' ,fontWeight: 'bold'}}>{"Add a little description about yourself!"}</Text>
+                        <Text style={{ color: 'white' ,fontWeight: 'bold'}}>{strings('formNewOffer.description')}</Text>
                         <TextInput
                             multiline={true}
                             numberOfLines={4}
@@ -534,7 +605,7 @@ export default class formPerfilUsuari extends React.Component {
 
 
                     <View style={{ flex: 1, paddingVertical: 10 }}>
-                        <Text style={{ color: 'white',fontWeight: 'bold' }}>{"You are from..."}</Text>
+                        <Text style={{ color: 'white',fontWeight: 'bold' }}>{strings('formNewOffer.location')}</Text>
                         <Text style={{ color: 'white' }}>
                           { this.state.city } - {this.state.region}
                         </Text>
@@ -546,7 +617,7 @@ export default class formPerfilUsuari extends React.Component {
 
 
                                           <Button
-                                              title='Submit'
+                                              title= {strings('formNewOffer.name')}
                                               color='#ff3b28'
                                               onPress={async () => this.handlePress()}>
 

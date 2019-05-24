@@ -171,7 +171,7 @@ export default class perfilAnimalMyOffers extends React.Component {
                     <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%' }}>{strings('perfilAnimal.age', {a: this.state.age})}</Text>
                     <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%' }}>{strings('perfilAnimal.race', {r: this.state.race})}</Text>
                     <Text style={{ color: 'white', fontSize: 20,  marginLeft: '10%' }}>{strings('perfilAnimal.sex', {s: this.state.sex})}</Text>
-                    <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%', marginBottom:'5%'}}>{strings('perfilAnimal.description', {d: this.state.description})}</Text>
+                    <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%', marginBottom:'5%'}}>{strings('perfilAnimal.description')} {this.state.description}</Text>
                     <View style={{marginBottom:'20%', marginLeft:'10%', marginRight:'10%', borderRadius: 5, backgroundColor: 'rgba(255, 255, 255, 0.2)'}}>
                         <View style={{flexDirection: 'row', padding:'5%'}} >
                             <Image style={{
@@ -179,9 +179,9 @@ export default class perfilAnimalMyOffers extends React.Component {
                                 overflow: 'hidden'
                             }} source={{ uri: "https://facebook.github.io/react-native/img/favicon.png", width: 64, height: 64 }} />
                             <Text style={{fontWeight: 'bold', color: 'white', fontSize: 25, marginLeft: '10%', marginRight: '10%', justifyContent: 'center', alignItems: 'center', textAlignVertical: 'center' 
-                         }}>{strings('perfilAnimal.ownerName')}</Text>
+                         }}>{this.state.ownerName}</Text>
                         </View>
-                        <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%', marginBottom:'5%', marginRight:'5%' }}>{strings('perfilAnimal.ownerDescription', {od: this.state.description})}</Text>
+                        <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%', marginBottom:'5%', marginRight:'5%' }}>{this.state.ownerDesc}</Text>
                     </View>
                 </ScrollView>
             </View>

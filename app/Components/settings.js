@@ -19,6 +19,9 @@ import TextInputWTitle from './inputText.js';
 import InputPassword from './inputPassword.js';
 import { AsyncStorage } from 'react-native';
 import { NavigationActions, StackActions } from 'react-navigation';
+import strings from '../i18n/i18n';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 
 const initialState = {
     myOffers: [],
@@ -40,11 +43,11 @@ export default class Swipe extends React.Component {
         const response = await this.deleteFavourite(tokenJson, id);
         console.log("retorna delete user")
         if (response.success) {
-            Alert.alert("User has been deleted!", response.msg);
+            Alert.alert(strings('settings.userDeleted'), response.msg);
             //navigate cap al login, eliminar access token
         }
         else {
-            Alert.alert("User has not been deleted!", response.msg);
+            Alert.alert(strings('settings.errorUserDeleted'), response.msg);
         }
     }
 
@@ -76,7 +79,7 @@ export default class Swipe extends React.Component {
         console.log(response);
         if (response.success) {
             ToastAndroid.showWithGravityAndOffset(
-                'Offer deleted succesfully',
+                strings('settings.offerDeleted'),
                 ToastAndroid.SHORT,
                 ToastAndroid.BOTTOM,
                 25,
@@ -84,7 +87,7 @@ export default class Swipe extends React.Component {
             );
         }
         else {
-            Alert.alert("No ha borrat", response.msg);
+            Alert.alert(strings('settings.errorOfferDeleted'), response.msg);
         }
     }
 
@@ -351,8 +354,7 @@ export default class Swipe extends React.Component {
                     right: 15
                 }}
                 onPress={()  => this.props.navigation.navigate('changeSettings')}>
-                <Image
-                    source={{ uri: "https://flaticons.net/icons/Mobile%20Application/Settings-01.png", width: 15, height: 15 }} />
+                <Icon name={"cog"} size={20} color="#FFFFFF" />
             </TouchableOpacity>
             <ScrollView>
                 <View style={{
@@ -368,14 +370,14 @@ export default class Swipe extends React.Component {
                         backgroundColor: "#f29797"
                     }} source={{ uri: this.state.pImage }} />
                 </TouchableOpacity>
-                <Text style={{ color:"#f29797", fontSize: 20, marginLeft: 10, color: "#f29797", flex: 1, justifyContent: 'center', alignItems: 'center', height: 64, textAlignVertical: 'center' }}>username</Text>
+                <Text style={{ color:"#f29797", fontSize: 20, marginLeft: 10, color: "#f29797", flex: 1, justifyContent: 'center', alignItems: 'center', height: 64, textAlignVertical: 'center' }}>{strings('settings.username')}</Text>
 
                 </View>
                 <Text style={{
                     paddingTop: '5%',
                     paddingBottom: '5%',
                     color: 'white'
-                }}>Your publications</Text>
+                }}>{strings('settings.publications')}</Text>
                 <ScrollView
                     horizontal={true}
                     style={{
@@ -391,7 +393,7 @@ export default class Swipe extends React.Component {
                 <View style={{ flex: 1, marginTop: 10 }}>
                     <Button
                         onPress={() => this.props.navigation.navigate('formNewOffer', { onGoBack: () => this.refresh() })}
-                        title="New Publication"
+                        title={strings('settings.newPublication')}
                         color="#ff3b28"
 
                     />
@@ -406,7 +408,7 @@ export default class Swipe extends React.Component {
                 <View style={{
                     paddingBottom: 30
                 }}>
-                    <Text style={{ color: 'white', opacity: 0.5, fontStyle: "italic" }}>{"You haven't created any publications"}</Text>
+                    <Text style={{ color: 'white', opacity: 0.5, fontStyle: "italic" }}>{strings('settings.noPublications')}</Text>
                 </View>
             );
         } else {
@@ -434,8 +436,7 @@ export default class Swipe extends React.Component {
                         width:20
                     }}
                     onPress={()  => this.props.navigation.navigate('changeSettings')}>
-                    <Image
-                        source={{ uri: "https://flaticons.net/icons/Mobile%20Application/Settings-01.png", width: 20, height: 20 }} />
+                    <Icon name={"cog"} size={20} color="#FFFFFF" />
                 </TouchableOpacity>
                 <ScrollView>
                     <View style={{
@@ -459,7 +460,7 @@ export default class Swipe extends React.Component {
                         paddingTop: '5%',
                         paddingBottom: '5%',
                         color: 'white'
-                    }}>Your publications</Text>
+                    }}>{strings('settings.publications')}</Text>
                     <ScrollView
                         horizontal={true}
                         style={{
@@ -472,7 +473,7 @@ export default class Swipe extends React.Component {
                     <View style={{ flex: 1, marginTop: 10 }}>
                         <Button
                             onPress={() => this.props.navigation.navigate('formNewOffer', { onGoBack: () => this.refresh() })}
-                            title="New Publication"
+                            title={strings('settings.newPublication')}
                             color="#ff3b28"
 
                         />

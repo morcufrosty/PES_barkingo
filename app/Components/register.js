@@ -5,6 +5,7 @@ import { LinearGradient } from 'expo'
 import TextInputWTitle from './inputText.js';
 import InputPassword from './inputPassword.js';
 import Button from './Button';
+import strings from '../i18n/i18n';
 
 
 export default class Register extends React.Component {
@@ -52,46 +53,46 @@ export default class Register extends React.Component {
                     padding: '10%',
                     paddingTop: '30%'
                 }}>
-                <Text style={{ color: 'white', fontSize: 45, flex: 1 }}>Register</Text>
+                <Text style={{ color: 'white', fontSize: 45, flex: 1 }}>{strings('register.title')}</Text>
 
                 <View style={{ flex: 1 }}>
-                    <Text style={{ color: 'white' }}>{"Email"}</Text>
+                    <Text style={{ color: 'white' }}>{strings('register.email')}</Text>
                     <TextInput onChangeText={(email) => this.setState({ email })} value={this.state.email} textAlign={'center'} autoCapitalize={'none'}
                         style={{ backgroundColor: 'white', opacity: 0.5, borderRadius: 5, paddingVertical: 0, height: 35 }}></TextInput>
                 </View>
 
                 <View style={{ flex: 1 }}>
-                    <Text style={{ color: 'white' }}>{"Username"}</Text>
+                    <Text style={{ color: 'white' }}>{strings('register.user')}</Text>
                     <TextInput onChangeText={(username) => this.setState({ username })} value={this.state.username} textAlign={'center'} autoCapitalize={'none'}
                         style={{ backgroundColor: 'white', opacity: 0.5, borderRadius: 5, paddingVertical: 0, height: 35 }}></TextInput>
                 </View>
 
                 <View style={{ flex: 1 }}>
-                    <Text style={{ color: 'white' }}>{"Password"}</Text>
+                    <Text style={{ color: 'white' }}>{strings('register.pwd')}</Text>
                     <TextInput secureTextEntry={true} onChangeText={(password) => this.setState({ password })} value={this.state.password} textAlign={'center'} autoCapitalize={'none'}
                         style={{ backgroundColor: 'white', opacity: 0.5, borderRadius: 5, paddingVertical: 0, height: 35 }}></TextInput>
                 </View>
 
                 <View style={{ flex: 1 }}>
-                    <Text style={{ color: 'white' }}>{"Repeat password"}</Text>
+                    <Text style={{ color: 'white' }}>{strings('register.repPwd')}</Text>
                     <TextInput secureTextEntry={true} onChangeText={(repeatPassword) => this.setState({ repeatPassword })} value={this.state.repeatPassword} textAlign={'center'} autoCapitalize={'none'}
                         style={{ backgroundColor: 'white', opacity: 0.5, borderRadius: 5, paddingVertical: 0, height: 35 }}></TextInput>
                 </View>
 
                 <View style={{ flex: 1 }}>
                     <Button
-                        title='Register'
-                        accessibilityLabel="Learn more about this purple button"
+                        title={strings('register.title')}
+                        accessibilityLabel={strings('register.learnMore')}
                         color='#ff3b28'
                         onPress={async () => {
                             const expression = /\S+@\S+\.\S+/
                             if (this.state.email === '' || this.state.username === '' || this.state.password === '' || this.state.repeatPassword === '')
-                                Alert.alert("Error", "Please fill all the fields")
+                                Alert.alert(strings('register.error'), strings('register.allFields'))
                             else if (!expression.test(String(this.state.email).toLowerCase()))
-                                Alert.alert("Error", "The email you entered is invalid, please try again")
+                                Alert.alert(strings('register.error'), strings('register.invalidEmail'))
                             else if (this.state.password == this.state.repeatPassword) {
                                 if (this.state.password.length < 5) {
-                                    Alert.alert("Error", "The password must have at least 5 characters");
+                                    Alert.alert(strings('register.error'), strings('register.invalidPwd'));
                                     return;
                                 }
 
@@ -99,7 +100,7 @@ export default class Register extends React.Component {
                                 if (response.success) {
                                     //Alert.alert("Congratulations", response.msg);
                                     ToastAndroid.showWithGravityAndOffset(
-                                        'User created successfully',
+                                        strings('register.succesCreate'),
                                         ToastAndroid.SHORT,
                                         ToastAndroid.BOTTOM,
                                         25,
@@ -107,18 +108,18 @@ export default class Register extends React.Component {
                                     );
                                     this.props.navigation.navigate('Login');
                                 } else if (response.msg === undefined)
-                                    Alert.alert("Login error", "Server error");
+                                    Alert.alert(strings('login.loginError'), strings('login.serverError'));
                                 else
                                     alert(response.msg);
                             }
-                            else Alert.alert("Error", 'The passwords do not match, please try again');
+                            else Alert.alert(strings('login.error'), strings('login.pwdError'));
                         }
                         }
                     ></Button>
                 </View>
                 <View style={{ flex: 1 }}>
 
-                    <Text style={{ color: 'white' }}>Go Back to <Text> </Text>
+                    <Text style={{ color: 'white' }}>{strings('register.goBack')} <Text> </Text>
                         <Text style={{ textDecorationLine: "underline" }}
                             onPress={() => this.props.navigation.navigate('Login')}>
                             Login page

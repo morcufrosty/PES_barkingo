@@ -194,8 +194,9 @@ Animal species:
             -   `name`: name of the animal.
             -   `sex`: sex of the offered animal.
             -   `species`: species of the animal in the offer.
-            -   `offerType`: type of the offer
-            -   `age`: age of the offered animal
+            -   `offerType`: type of the offer.
+            -   `age`: age of the offered animal.
+            -   `reports`: number of reports of the offer.
 
 -   ### POST `/offers`: creates a new offer
 
@@ -231,6 +232,7 @@ Animal species:
         -   `iniDate`: if the offer is of type `foster` this will indicate the date in which the animal would be fostered.
         -   `endDate`: if the offer is of type `foster` this will indicate the date in which the animal will end its fostering.
         -   `idOwner`: id of the owner.
+        -   `reports`: number of reports of the offer.
 
 -   ### PUT `/offers/:id`: edit an offer
 
@@ -248,8 +250,24 @@ Animal species:
         -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
 
 -   ### DELETE `/offers/:id`: delete an offer. To do so you must be its creator.
+    
+    -   ### Path parameters
+
+        -   `id` [`required`]: identifier of the requested offer.
 
     -   #### Response
+        -   `id`: Identifier of the newly created offer.
+        -   `success`: Is either `true` or `false`.
+        -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
+        
+-   ### POST `/offers/:id`: report an offer.
+
+    -   ### Path parameters
+
+        -   `id` [`required`]: identifier of the requested offer.
+        
+    -   #### Response
+        -   `id`: Identifier of the newly created offer.
         -   `success`: Is either `true` or `false`.
         -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
 
@@ -262,6 +280,7 @@ Animal species:
             -   `description`: description of the offer.
             -   `sex`: sex of the offered animal.
             -   `species`: species of the animal in the offer.
+            -   `reports`: number of reports of the offer.
 
 -   ### GET `/offers/favourite`: returns all the user's favourite offers
 
