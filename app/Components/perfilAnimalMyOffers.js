@@ -181,7 +181,7 @@ export default class perfilAnimalMyOffers extends React.Component {
                             <Text style={{fontWeight: 'bold', color: 'white', fontSize: 25, marginLeft: '10%', marginRight: '10%', justifyContent: 'center', alignItems: 'center', textAlignVertical: 'center' 
                          }}>{this.state.ownerName}</Text>
                         </View>
-                        <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%', marginBottom:'5%', marginRight:'5%' }}>{this.state.description}</Text>
+                        <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%', marginBottom:'5%', marginRight:'5%' }}>{this.state.ownerDesc}</Text>
                     </View>
                 </ScrollView>
             </View>

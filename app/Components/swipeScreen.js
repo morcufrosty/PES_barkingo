@@ -5,7 +5,7 @@ import { AsyncStorage } from 'react-native';
 import strings from '../i18n/i18n';
 const SCREEN_HEIGHT = Dimensions.get('window').height
 const SCREEN_WIDTH = Dimensions.get('window').width
-import Icon from 'react-native-vector-icons/Ionicons'
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default class swipeScreen extends React.Component {
 
@@ -375,8 +375,7 @@ handleQuery(filterJson){
             height:20
           }}
           onPress={()  => this.props.navigation.navigate('Filter', {onGoBack: () => this.refresh()})}>
-          <Image
-              source={{ uri: "https://flaticons.net/icons/Data/Filter-Standard.png", width: 20, height: 20 }} />
+          <Icon name={"filter"} size={20} color="#FFFFFF" />
         </TouchableOpacity>
 
           </LinearGradient>;
@@ -397,8 +396,7 @@ handleQuery(filterJson){
             right: 15
           }}
           onPress={()  => this.props.navigation.navigate('Filter', {onGoBack: () => this.refresh()})}>
-            <Image
-              source={{ uri: "https://flaticons.net/icons/Data/Filter-Standard.png", width: 15, height: 15 }} />
+          <Icon name={"filter"} size={20} color="#FFFFFF" />
         </TouchableOpacity>
 
         <View style={{ height: 60 }}>

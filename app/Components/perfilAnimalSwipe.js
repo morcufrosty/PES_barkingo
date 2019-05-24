@@ -14,6 +14,7 @@ import TextInputWTitle from './inputText.js';
 import InputPassword from './inputPassword.js';
 import { AsyncStorage } from 'react-native';
 import strings from '../i18n/i18n';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default class perfilAnimalSwipe extends React.Component {
 
@@ -159,6 +160,45 @@ export default class perfilAnimalSwipe extends React.Component {
             style={{
                 flex: 1,
             }}>
+                <TouchableOpacity
+                    style={{
+                        position: 'absolute',
+                        bottom: 20,
+                        right: 20,
+                        zIndex: 100,
+                        height: 70,
+                        width: 70,
+                        alignItems:'center',
+                        justifyContent:'center',
+                        backgroundColor:'rgb(255,255,255)',
+                        borderRadius:35,
+                        shadowColor: "#000",
+                        shadowOffset: {
+                        width: 0,
+                        height: 3,
+                        },
+                        shadowOpacity: 0.27,
+                        shadowRadius: 4.65,
+
+                        elevation: 6,
+                        
+                    }}
+                    onPress={() => 
+                        Alert.alert(
+                          'Report User',
+                          'Creus que aqeuest anunci no compleix les nostres guies? Si es així dóni a acceptar, si no dóni a cancelar ',
+                          [
+                            {
+                              text: 'Cancel',
+                              onPress: () => console.log('Cancel Pressed'),
+                              style: 'cancel',
+                            },
+                            {text: 'OK', onPress: () => console.log('OK Pressed')},
+                          ],
+                          {cancelable: false},
+                        )}>
+                <Icon name={"flag"} size={40} color="#f95234" />
+                </TouchableOpacity>
                 <View style={{ flex: 1 }}>
                     <Image style={{
                         width: '100%',
@@ -182,7 +222,7 @@ export default class perfilAnimalSwipe extends React.Component {
                                 <Text style={{fontWeight: 'bold', color: 'white', fontSize: 25, marginLeft: '10%', marginRight: '10%', justifyContent: 'center', alignItems: 'center', textAlignVertical: 'center' 
                             }}>{this.state.ownerName}</Text>
                             </View>
-                            <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%', marginBottom:'5%', marginRight:'5%' }}>Sobre l'amo: {this.state.ownerDesc}</Text>
+                            <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%', marginBottom:'5%', marginRight:'5%' }}>{this.state.ownerDesc}</Text>
                         </View>
                     </ScrollView>
                 </View>

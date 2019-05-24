@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const homedir = require('os').homedir();
 const imagesDir = '.users';
+const chatHandlers = require('../chat/handlers');
 
 const currentUser = async (request, response) => {
     const { email, name } = request.decoded;
@@ -71,9 +72,9 @@ const createProfile = async (request, response) => {
                     console.log(err)
                     response.json({ success: false, msg: 'User ' + email + ' doesn\'t exist' });
                 } else {
-                    if(result.rows[0].id == idUser) {
+                    if (result.rows[0].id == idUser) {
                         client.query(
-                            'UPDATE users SET bio=$1, latitude=$2, longitude=$3 WHERE id=$4;)',
+                            'UPDATE users SET bio=$1, latitude=$2, longitude=$3 WHERE id=$4;',
                             [bio, latitude, longitude, idUser],
                             (error, res) => {
                                 if (error) {
@@ -81,12 +82,13 @@ const createProfile = async (request, response) => {
                                     response.json({ success: false, msg: 'Unknown error' });
                                 } else {
                                     client.query('COMMIT');
+                                    chatHandlers.createUser({ idUser, name });
                                     response.json({ success: true, msg: 'Profile created successfully', id: idUser });
                                 }
-                        });
+                            });
                     }
                     else {
-                        response.json({ success: false, msg: 'No authorized for operation' });
+                        response.json({ success: false, msg: 'Not authorized for operation' });
                     }
                 }
             });
@@ -113,7 +115,7 @@ const updateUser = async (request, response) => {
                     console.log(err)
                     response.json({ success: false, msg: 'User ' + email + ' doesn\'t exist' });
                 } else {
-                    if(result.rows[0].id == idUser) {
+                    if (result.rows[0].id == idUser) {
                         client.query(
                             'UPDATE users SET username=$1, bio=$2, latitude=$3, longitude=$4 WHERE id=$5;',
                             [username, bio, latitude, longitude, idUser],
@@ -125,7 +127,7 @@ const updateUser = async (request, response) => {
                                     client.query('COMMIT');
                                     response.json({ success: true, msg: 'Profile updated successfully', id: idUser });
                                 }
-                        });
+                            });
                     }
                     else {
                         response.json({ success: false, msg: 'No authorized for operation' });
@@ -154,18 +156,18 @@ const deleteUser = async (request, response) => {
                     console.log(err)
                     response.json({ success: false, msg: 'User ' + email + ' doesn\'t exist' });
                 } else {
-                    if(result.rows[0].id == idUser) {
+                    if (result.rows[0].id == idUser) {
                         client.query(
-                        'DELETE FROM users WHERE "id"=$1;', [idUser],
-                        (error, res) => {
-                            if (error) {
-                                console.error('Unknown error', error);
-                                response.json({ success: false, msg: 'Unknown error' });
-                            } else {
-                                client.query('COMMIT');
-                                response.json({ success: true, msg: 'User deleted successfully', id: idUser });
-                            }
-                        });
+                            'DELETE FROM users WHERE "id"=$1;', [idUser],
+                            (error, res) => {
+                                if (error) {
+                                    console.error('Unknown error', error);
+                                    response.json({ success: false, msg: 'Unknown error' });
+                                } else {
+                                    client.query('COMMIT');
+                                    response.json({ success: true, msg: 'User deleted successfully', id: idUser });
+                                }
+                            });
                     }
                     else {
                         response.json({ success: false, msg: 'No authorized for operation' });

@@ -74,7 +74,7 @@ router.get('/offers', db.getOffers);
 
 router.post('/offers', db.createOffer);
 
-//router.delete('/offers/:id/elim', db.eliminateOffer);
+router.delete('/offers/:id/elim', db.eliminateOffer);
 
 router.get('/offers/currentUser', db.myOffers);
 
@@ -95,6 +95,8 @@ router.put('/offers/:id', db.updateOffer);
 router.post('/offers/:id', db.swipe);
 
 router.delete('/offers/:id', db.deleteOffer);
+
+router.post('/offers/:id/report', db.reportOffer);
 
 router.get('/races', db.racesList);
 

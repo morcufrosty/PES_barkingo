@@ -20,6 +20,8 @@ import InputPassword from './inputPassword.js';
 import { AsyncStorage } from 'react-native';
 import { NavigationActions, StackActions } from 'react-navigation';
 import strings from '../i18n/i18n';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 
 const initialState = {
     myOffers: [],
@@ -291,8 +293,7 @@ export default class Swipe extends React.Component {
                     right: 15
                 }}
                 onPress={()  => this.props.navigation.navigate('changeSettings')}>
-                <Image
-                    source={{ uri: "https://flaticons.net/icons/Mobile%20Application/Settings-01.png", width: 15, height: 15 }} />
+                <Icon name={"cog"} size={20} color="#FFFFFF" />
             </TouchableOpacity>
             <ScrollView>
                 <View style={{
@@ -374,8 +375,7 @@ export default class Swipe extends React.Component {
                         width:20
                     }}
                     onPress={()  => this.props.navigation.navigate('changeSettings')}>
-                    <Image
-                        source={{ uri: "https://flaticons.net/icons/Mobile%20Application/Settings-01.png", width: 20, height: 20 }} />
+                    <Icon name={"cog"} size={20} color="#FFFFFF" />
                 </TouchableOpacity>
                 <ScrollView>
                     <View style={{
