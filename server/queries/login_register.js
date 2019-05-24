@@ -2,7 +2,8 @@ const bcrypt = require('bcrypt');
 const uuidv4 = require('uuid/v4');
 const jwt = require('jsonwebtoken');
 const pool = require('./db');
-const {secret} = require('../creds.json');
+const { secret } = require('../creds.json');
+const chatHandlers = require('../chat/handlers')
 
 const createUser = async (request, response) => {
     const { password, email, name } = request.body || request.query;
@@ -22,12 +23,22 @@ const createUser = async (request, response) => {
                 if (result.rows[0]) {
                     response.json({ success: false, msg: 'User already exists' });
                 } else {
-                    client.query('INSERT INTO users (id, name, email, password, username) VALUES ($1, $2, $3, $4, $5)', [uuidv4(), name, email, pwd, username], (err, result) => {
+                    const id = uuidv4();
+                    client.query('INSERT INTO users (id, name, email, password, username) VALUES ($1, $2, $3, $4, $5)', [id, name, email, pwd, username], (err, result) => {
                         if (err) {
                             console.error('Unknown error', err);
                         } else {
-                            client.query('COMMIT');
-                            response.json({ success: true, msg: 'User created successfully' });
+                            chatHandlers.createUser({ idUser: id, name })
+                                .then((res) => {
+                                    console.log(res.success)
+                                    if (res.success) {
+                                        client.query('COMMIT');
+                                        response.json({ success: true, msg: 'User created successfully' });
+                                    } else response.json(res);
+                                })
+                                .catch((error) => {
+                                    console.log(error);
+                                });
                         }
                     });
                 }
@@ -107,16 +118,25 @@ const renewGoogleToken = async (request, response) => {
                 }
                 if (result.rowCount == 0) {
                     let username = email.split("@")[0];
-                    client.query('INSERT INTO users (id, name, email, googletoken, username) VALUES ($1, $2, $3, $4, $5)', [uuidv4(), name, email, hashed, username], (err, resultI) => {
+                    const id = uuidv4();
+                    client.query('INSERT INTO users (id, name, email, googletoken, username) VALUES ($1, $2, $3, $4, $5)', [id, name, email, hashed, username], (err, resultI) => {
                         if (err) {
                             console.error('Query error', err);
                         } else {
-                            client.query('COMMIT');
-                            const payload = { email, name };
-                            var token = jwt.sign(payload, secret, {
-                                expiresIn: '1 day',
-                            });
-                            response.json({ success: true, msg: 'User created successfully', token: token });
+                            chatHandlers.createUser({ idUser: id, name })
+                                .then((res) => {
+                                    if (res.success) {
+                                        client.query('COMMIT');
+                                        const payload = { email, name };
+                                        var token = jwt.sign(payload, secret, {
+                                            expiresIn: '1 day',
+                                        });
+                                        response.json({ success: true, msg: 'User created successfully', token: token });
+                                    } else response.json(res);
+                                })
+                                .catch((error) => {
+                                    console.log(error);
+                                });
                         }
                     });
                 } else {
@@ -172,16 +192,26 @@ const renewFacebookToken = async (request, response) => {
                 }
                 if (result.rowCount == 0) {
                     let username = email.split("@")[0];
-                    client.query('INSERT INTO users (id, name, email, facebooktoken, username) VALUES ($1, $2, $3, $4, $5)', [uuidv4(), name, email, hashed, username], (err, resultI) => {
+                    const id = uuidv4();
+                    client.query('INSERT INTO users (id, name, email, facebooktoken, username) VALUES ($1, $2, $3, $4, $5)', [id, name, email, hashed, username], (err, resultI) => {
                         if (err) {
                             console.log(err);
                         } else {
-                            client.query('COMMIT');
-                            const payload = { email, name };
-                            var signedToken = jwt.sign(payload, secret, {
-                                expiresIn: '1 day',
-                            });
-                            response.json({ success: true, msg: 'User created successfully', token: signedToken });
+                            chatHandlers.createUser({ idUser: id, name })
+                                .then((res) => {
+                                    if (res.success) {
+                                        client.query('COMMIT');
+                                        const payload = { email, name };
+                                        var signedToken = jwt.sign(payload, secret, {
+                                            expiresIn: '1 day',
+                                        });
+                                        response.json({ success: true, msg: 'User created successfully', token: signedToken });
+                                    } else response.json(res);
+                                })
+                                .catch((error) => {
+                                    console.log(error);
+                                });
+
                         }
                     });
                 } else {

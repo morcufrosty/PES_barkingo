@@ -9,6 +9,7 @@ const handlers = require('../chat/handlers')
 const User = require('./models/user');
 
 socketio.on('connection', (socket) => {
+    console.log('connection started')
     socket.on('init', (userId) => {
         sockets[userId.senderId] = socket;
     });
