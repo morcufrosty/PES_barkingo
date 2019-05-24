@@ -7,7 +7,8 @@ import {
     Platform,
     Picker,
     Image,
-    TouchableOpacity
+    TouchableOpacity,
+    ActivityIndicator
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
@@ -47,10 +48,12 @@ export default class formPerfilUsuari extends React.Component {
             flagURI:'',
             isLoading: true,
             imageFromServer: '',
+            gettingLocation: false,
         }
     }
 
     async handleStart(){
+      //  this.setState({gettingLocation: true})
         if (this.props.navigation.getParam('new', false)) {
           this.setState({new: true})
           console.log("new")
@@ -66,15 +69,12 @@ export default class formPerfilUsuari extends React.Component {
         console.log("TOKEN FROM ASYNC : " + jsonToken);
         let response = await this.getCurrentUserFromAPI(jsonToken.token);
         let imageFromServer = await this.getProfileImageFromServer(jsonToken, response.user.id);
-        console.log("debug1: "+ imageFromServer)
         let imageServer = '';
 
         if(imageFromServer != '{"success":false,"msg":"Image couldn\'t be found"}'){
-          console.log("diferent")
           imageServer = "data:image/jpeg;base64," + imageFromServer;
 
         }
-        console.log("image server:"+ imageServer)
         this.setState({
           imageFromServer: imageServer,
           name: response.user.username,
@@ -82,23 +82,14 @@ export default class formPerfilUsuari extends React.Component {
           longitude: response.user.longitude,
           latitude: response.user.latitude,
         });
+        console.log("LONGITUDE" + this.state.longitude)
+        let flag = await this.reverseGeocode();
+        //this.setState({gettingLocation: false})
+
         console.log(this.state.getImageFromServer)
     }
 
 
-
-    componentWillMount() {
-      if (Platform.OS === 'android' && !Constants.isDevice) {
-        this.setState({
-          errorMessage: 'Oops, this will not work on Sketch in an Android emulator. Try it on your device!',
-
-        });
-        console.log("polla grossa");
-      } else {
-        console.log("getting location");
-      //  this._getLocationAsync();
-      }
-    }
 
 
         async getProfileInfoFromApi(tokenJson, id) {
@@ -130,8 +121,76 @@ export default class formPerfilUsuari extends React.Component {
 
         }
 
+    async reverseGeocode() {
+            let map = {
+              'Andalucía':'AN',
+              'Aragón':'AR',
+              'Principado de Asturias':'AS',
+              'Canarias':'CN',
+              'Cantabria':'CB',
+              'Castilla-La Mancha':'CM',
+              'Castilla La Mancha':'CM',
+              'Castilla la Mancha': 'CM',
+              'Castilla y León':'CL',
+              'Catalunya':'CT',
+              'Cataluña':'CT',
+              'Extremadura':'EX',
+              'Galicia':'GA',
+              'Illes Balears':'IB',
+              'Islas Baleares':'IB',
+              'La Rioja':'RI',
+              'Madrid, Comunidad de':'MD',
+              'Comunidad de Madrid':'MD',
+              'Murcia, Región de':'MC',
+              'Murica':'MC',
+              'Región de Murcia':'MC',
+              'Navarra, Comunidad Foral de':'NC',
+              'Navarra':'NC',
+              'Comunidad Foral de Navarra':'NC',
+              'Nafarroako Foru Komunitatea':'NC',
+              'País Vasco':'PV',
+              'Euskal Herria':'PV',
+              'Valenciana, Comunidad':'VC',
+              'Comunidad Valenciana':'VC',
+              'Valenciana, Comunidat':'VC',
+              'Comunidat Valenciana':'VC',
+
+            }
+            let locationJSON = {
+              'longitude':this.state.longitude,
+              'latitude': this.state.latitude
+            }
+            console.log(JSON.stringify(locationJSON))
+            let parsedLocation = await Location.reverseGeocodeAsync(locationJSON);
+            console.log(JSON.stringify(parsedLocation))
+            if (parsedLocation[0].country ==="Espanya"){
+              let region = parsedLocation[0].region;
+              let isoComunity = map[region];
+              console.log(isoComunity);
+              this.setState({isoComunity})
+            }
+            this.setState({isoCountry: parsedLocation[0].isoCountryCode,
+                          city: parsedLocation[0].city,
+                          region: parsedLocation[0].region,
+                          postalCode:parsedLocation[0].postalCode,
+                          country:parsedLocation[0].country,
+
+            })
+
+
+            if (this.state.isoComunity != ''){
+              let flagURI = "http://flags.ox3.in/mini/"+this.state.isoCountry.toLowerCase()+"/"+this.state.isoComunity.toLowerCase()+".png";
+              this.setState({flagURI});
+            }else{
+              let flagURI = "http://flags.ox3.in/mini/"+this.state.isoCountry.toLowerCase()+".png";
+              this.setState({flagURI});
+
+            }
+            console.log(this.state.flagURI);
+    };
 
     _getLocationAsync = async () => {
+      this.setState({gettingLocation: true});
       let { status } = await Permissions.askAsync(Permissions.LOCATION);
       if (status !== 'granted') {
         this.setState({
@@ -144,72 +203,9 @@ export default class formPerfilUsuari extends React.Component {
         console.log(JSON.stringify(this.state.location))
         this.setState({ longitude: location.coords.longitude});
         this.setState({ latitude: location.coords.latitude});
+        let flag = await this.reverseGeocode();
+        this.setState({gettingLocation: false});
 
-      let map = {
-        'Andalucía':'AN',
-        'Aragón':'AR',
-        'Principado de Asturias':'AS',
-        'Canarias':'CN',
-        'Cantabria':'CB',
-        'Castilla-La Mancha':'CM',
-        'Castilla La Mancha':'CM',
-        'Castilla la Mancha': 'CM',
-        'Castilla y León':'CL',
-        'Catalunya':'CT',
-        'Cataluña':'CT',
-        'Extremadura':'EX',
-        'Galicia':'GA',
-        'Illes Balears':'IB',
-        'Islas Baleares':'IB',
-        'La Rioja':'RI',
-        'Madrid, Comunidad de':'MD',
-        'Comunidad de Madrid':'MD',
-        'Murcia, Región de':'MC',
-        'Murica':'MC',
-        'Región de Murcia':'MC',
-        'Navarra, Comunidad Foral de':'NC',
-        'Navarra':'NC',
-        'Comunidad Foral de Navarra':'NC',
-        'Nafarroako Foru Komunitatea':'NC',
-        'País Vasco':'PV',
-        'Euskal Herria':'PV',
-        'Valenciana, Comunidad':'VC',
-        'Comunidad Valenciana':'VC',
-        'Valenciana, Comunidat':'VC',
-        'Comunidat Valenciana':'VC',
-
-      }
-      let locationJSON = {
-        'longitude':location.coords.longitude,
-        'latitude': location.coords.latitude
-      }
-      console.log(JSON.stringify(locationJSON))
-      let parsedLocation = await Location.reverseGeocodeAsync(locationJSON);
-      console.log(JSON.stringify(parsedLocation))
-      if (parsedLocation[0].country ==="Espanya"){
-        let region = parsedLocation[0].region;
-        let isoComunity = map[region];
-        console.log(isoComunity);
-        this.setState({isoComunity})
-      }
-      this.setState({isoCountry: parsedLocation[0].isoCountryCode,
-                    city: parsedLocation[0].city,
-                    region: parsedLocation[0].region,
-                    postalCode:parsedLocation[0].postalCode,
-                    country:parsedLocation[0].country,
-
-      })
-
-
-      if (this.state.isoComunity != ''){
-        let flagURI = "http://flags.ox3.in/mini/"+this.state.isoCountry.toLowerCase()+"/"+this.state.isoComunity.toLowerCase()+".png";
-        this.setState({flagURI});
-      }else{
-        let flagURI = "http://flags.ox3.in/mini/"+this.state.isoCountry.toLowerCase()+".png";
-        this.setState({flagURI});
-
-      }
-      console.log(this.state.flagURI);
     };
 
 
@@ -443,8 +439,31 @@ export default class formPerfilUsuari extends React.Component {
         var imageForm;
         var form;
         var submitButton;
+        var locationForm;
+        console.log("state latitude"+ this.state.latitude);
+        if(this.state.gettingLocation === true){
+          locationForm=(
+            <View style={{ flex: 1, paddingVertical: 10 }}>
+              <ActivityIndicator size="small" color="#ffffff"  />
+            </View>)
+        } else if (this.state.latitude === null){
+          locationForm=(
+          <View style={{ flex: 1, paddingVertical: 10 }}>
+            <Text style={{ color: 'white' }}>{strings('formNewOffer.noLoc')}</Text>
+          </View>)
+        } else {
+          locationForm=(
+          <View style={{ flex: 1, paddingVertical: 10 }}>
+              <Text style={{ color: 'white' }}>
+                { this.state.city } - {this.state.region}
+              </Text>
+              <Text style={{ color: 'white', opacity:0.5 }}>
+                {this.state.postalCode} - {this.state.country}
+              </Text>
+              <Image source={{ uri:`${this.state.flagURI}` , width: 20, height: 15 }} />
+          </View>)
 
-
+        }
 
         if (this.state.image != null ) {
             imageForm = (
@@ -581,7 +600,7 @@ export default class formPerfilUsuari extends React.Component {
                     }}
                     showsVerticalScrollIndicator={false}
                     keyboardShouldPersistTaps='always'>
-                    <Text style={{ color: 'white', fontSize: 45, flex: 1 }}>{strings('formNewOffer.userDetails')}</Text>
+                    <Text style={{ color: 'white', fontSize:35 , flex: 1 }}>{strings('formNewOffer.userDetails')}</Text>
 
 
                     {imageForm}
@@ -603,25 +622,46 @@ export default class formPerfilUsuari extends React.Component {
                         </TextInput>
                     </View>
 
+                    <Text style={{ color: 'white',fontWeight: 'bold' }}>{strings('formNewOffer.location')}</Text>
+                    <View style={{ flex: 1, marginTop: 10, marginBottom: 20, flexDirection: 'row' }}>
 
-                    <View style={{ flex: 1, paddingVertical: 10 }}>
-                        <Text style={{ color: 'white',fontWeight: 'bold' }}>{strings('formNewOffer.location')}</Text>
-                        <Text style={{ color: 'white' }}>
-                          { this.state.city } - {this.state.region}
-                        </Text>
-                        <Text style={{ color: 'white', opacity:0.5 }}>
-                          {this.state.postalCode} - {this.state.country}
-                        </Text>
-                        <Image source={{ uri:`${this.state.flagURI}` , width: 20, height: 15 }} />
-                      </View>
+                    {locationForm}
+
+                      <View style={{
+                          alignItems: "center",
+                          justifyContent: 'center',
+                          flex: 1
+                      }}>
+                            <TouchableOpacity onPress={this._getLocationAsync}
+                                style={{
+                                    //borderWidth:1,
+                                    //borderColor:'rgba(0,0,0,0.2)',
+                                    opacity: 0.5,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    width: 60,
+                                    height: 60,
+                                    backgroundColor: '#fff',
+                                    borderRadius: 50,
+                                }}>
+                              <Icon name={"refresh"} size={20} color="#F15A24" />
+                            </TouchableOpacity>
+
+                            <Text style={{ color: 'white', opacity: 0.5 }}>{strings('formNewOffer.refreshloc')}</Text>
 
 
-                                          <Button
-                                              title= {strings('formNewOffer.name')}
-                                              color='#ff3b28'
-                                              onPress={async () => this.handlePress()}>
+                        </View>
+                    </View>
 
+
+
+
+                    <Button
+                            title= {strings('formNewOffer.name')}
+                            color='#ff3b28'
+                            onPress={async () => this.handlePress()}>
                     </Button>
+
                 </ScrollView>
 
             </LinearGradient>

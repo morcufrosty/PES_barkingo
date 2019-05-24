@@ -40,7 +40,7 @@
 	"autoComplete" : {
 		"raceName" : "Introdueixi el nom de la raça"
 	},
-	
+
 	"changeSettings" : {
 		"language" : "Selecció de l'idioma",
 		"delete" : "Esborrar el compte",
@@ -102,7 +102,9 @@
 		"image" : "Imatge",
 		"submit" : "Enviar",
 		"userDetails" : "Detalls de l'usuari",
-		"location" : "Ubicació"
+		"location" : "Ubicació",
+		"refreshloc": "Actualitza Ubicació",
+		"noLoc": "No has introduit localització, refresca, si us plau"
 	},
 
 	"register" : {
@@ -130,7 +132,7 @@
 		"newPublication" : "Nova publicació",
 		"noPublications": "No tens cap publicació activa"
 	}
-	
+
 
 
 }
