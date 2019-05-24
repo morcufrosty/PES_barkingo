@@ -65,6 +65,7 @@ Animal species:
     -   #### Response
         -   `success`: Is either true or false.
         -   `msg`: In case the request was not a successs, this parameter is a short message explaining the causes of the result. If the request was successful, it also includes a token that the app must keep for a day (as it's only vlaid for such time) and send in every request that needs token based authentication.
+        -   `token`: Token given to the user.
 
 -   ### POST `/users/renewGoogleToken`
 

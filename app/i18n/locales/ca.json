@@ -9,13 +9,13 @@
 
 	},
 	"login": {
-		"loginText": "Accés",
+		"loginText": "Inici de Sessió",
 		"email": "Correu Electronic",
 		"password": "Contrasenya",
 		"noAccount": "Tens compte?",
 		"register" : "Registrar-se",
-		"loginFace" : "INGRÉS AMB FACEBOOK",
-		"loginGoogle": "INGRÉS AMB GOOGLE",
+		"loginFace" : "INICI AMB FACEBOOK",
+		"loginGoogle": "INICI AMB GOOGLE",
 		"loginError": "Error a l'hora d'accedir",
 		"serverError": "Error del servidor",
 		"faceError" : "Error a l'hora d'accedir amb Facebook: {{m}}",
@@ -24,15 +24,15 @@
 		"enterEmail": "Introdueixi el correu electrònic, si us plau",
 		"enterPassword": "Introdueixi la contrasenya, si us plau",
 		"pwdError" : "Les contrasenyes no coincideixen, torniu-ho a provar",
-		"pageLogin" : "Pagina de Accés"
+		"pageLogin" : "Inici de sessió"
 	},
 	"perfilAnimal": {
 		"age" : "Edat: {{a}}",
 		"sex" : "Sexe: {{s}}",
 		"description" : "Descripció: ",
 		"race": "Raça: {{r}}",
-		"endOffer" : "Final de la oferta",
-		"askEnd" : "Està segur d'acabar la oferta?",
+		"endOffer" : "Esborrat la oferta",
+		"askEnd" : "Està segur d'esborrar la oferta?",
 		"no" : "No",
 		"yes" : "Si"
 
@@ -79,7 +79,7 @@
 		"newOffer" : "Nova oferta",
 		"error" : "Error",
 		"nameError" : "Introdueixi el nom de l'animal si us plau",
-		"ageError": "Introdueixi l'edat de l'animal si us plau",
+		"ageError": "Introdueixi una edat vàlida si us plau",
 		"sexError": "Introdueixi el sexe de l'animal si us plau",
 		"descriptionError": "Introdueixi la descripció de l'animal si us plau",
 		"imageError": "Afegeixi una imatge si us plau",
@@ -128,9 +128,9 @@
 		"offerDeleted" : "S'ha eliminat la oferta",
 		"errorOfferDeleted" : "No s'ha pogut eliminar la oferta",
 		"username" : "Nom d'usuari",
-		"publications" : "Les teves publicacions",
-		"newPublication" : "Nova publicació",
-		"noPublications": "No tens cap publicació activa"
+		"publications" : "Les teves ofertes",
+		"newPublication" : "Nova oferta",
+		"noPublications": "No tens cap oferta activa"
 	}
 
 

@@ -9,7 +9,7 @@
 
 	},
 	"login": {
-		"loginText": "Ingreso",
+		"loginText": "Iniciar Sesión",
 		"email": "Correo Electrónico",
 		"password": "Contraseña",
 		"noAccount": "Tienes cuenta?",
@@ -55,7 +55,7 @@
 	},
 
 	"filter" : {
-		"title" : "Filtr0s",
+		"title" : "Filtros",
 		"ageRange" : "Rango de edad",
 		"specie" : "Especie",
 		"all" : "Todas",

@@ -23,6 +23,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { Ionicons } from "@expo/vector-icons";
 import { StackActions, NavigationActions } from 'react-navigation';
 import strings from '../i18n/i18n';
+import formNewOffer from './formNewOffer';
 
 
 export default class formPerfilUsuari extends React.Component {
@@ -529,7 +530,7 @@ export default class formPerfilUsuari extends React.Component {
                           <Icon name={"exchange"} size={20} color="#F15A24" />
 
                       </TouchableOpacity>
-                      <Text style={{ color: 'white', opacity: 0.5 }}>{"Change image"}</Text>
+                      <Text style={{ color: 'white', opacity: 0.5 }}>{strings('formNewOffer.changeImage')}</Text>
 
                   </View>
               </View>);
