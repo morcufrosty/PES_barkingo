@@ -17,6 +17,7 @@ import * as Expo from "expo"
 //import { getMaxListeners } from 'cluster';
 import { StackActions, NavigationActions } from 'react-navigation';
 import strings from '../i18n/i18n';
+import {setLocal} from '../i18n/i18n';
 
 
 const ACCESS_TOKEN = 'access_token';
@@ -418,6 +419,8 @@ export default class App extends React.Component {
 
         if (this.state.isLoading) {
             this.retrieveAndCheckToken();
+            //setLocal();
+            
             return <LinearGradient colors={['#F15A24', '#D4145A']}
                 start={[0, 1]}
                 end={[1, 0]}

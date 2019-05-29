@@ -17,6 +17,7 @@ import TextInputWTitle from './inputText.js';
 import InputPassword from './inputPassword.js';
 import { decompressFromUTF16 } from 'lz-string';
 import { AsyncStorage } from 'react-native';
+import FocusStateLabel from "../FocusStateLabel"
 
 
 export default class Chat extends React.Component {

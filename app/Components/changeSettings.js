@@ -46,7 +46,7 @@ export default class changeSettings extends React.Component {
                     <Text style={{ color: 'white', paddingBottom:'2%' }}>{strings('changeSettings.language')}</Text>
                     <View style={{flexDirection: 'row'}} >
                         <TouchableOpacity
-                        onPress={()=>ChangeLanguageHandler('en')}
+                        onPress={()=>this.ChangeLanguageHandler('en')}
                         style={{
                             height: 70,
                             width: '35%',
@@ -59,7 +59,7 @@ export default class changeSettings extends React.Component {
                                 source={{ uri: "https://upload.wikimedia.org/wikipedia/en/thumb/a/ae/Flag_of_the_United_Kingdom.svg/1280px-Flag_of_the_United_Kingdom.svg.png", width: 70, height: 70 }} />
                         </TouchableOpacity>  
                         <TouchableOpacity
-                        onPress={()=>ChangeLanguageHandler('ca-ES')}
+                        onPress={()=>this.ChangeLanguageHandler('ca-ES')}
                         style={{
                             height: 70,
                             width: '35%',
@@ -72,7 +72,7 @@ export default class changeSettings extends React.Component {
                                 source={{ uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Flag_of_Catalonia.svg/2000px-Flag_of_Catalonia.svg.png", width: 70, height: 70 }} />
                         </TouchableOpacity>  
                         <TouchableOpacity
-                        onPress={()=>ChangeLanguageHandler('es')}
+                        onPress={()=>this.ChangeLanguageHandler('es')}
                         style={{
                             height: 70,
                             width: '35%',
