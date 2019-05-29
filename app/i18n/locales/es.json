@@ -9,7 +9,7 @@
 
 	},
 	"login": {
-		"loginText": "Ingreso",
+		"loginText": "Iniciar Sesión",
 		"email": "Correo Electrónico",
 		"password": "Contraseña",
 		"noAccount": "Tienes cuenta?",
@@ -40,7 +40,7 @@
 	"autoComplete" : {
 		"raceName" : "Introduzca el nombre de la raza"
 	},
-	
+
 	"changeSettings" : {
 		"language" : "Selección del idioma",
 		"delete" : "Eliminar la cuenta",
@@ -55,7 +55,7 @@
 	},
 
 	"filter" : {
-		"title" : "Filtr0s",
+		"title" : "Filtros",
 		"ageRange" : "Rango de edad",
 		"specie" : "Especie",
 		"all" : "Todas",
@@ -102,7 +102,11 @@
 		"image" : "Imatge",
 		"submit" : "Enviar",
 		"userDetails" : "Detalls de l'usuari",
-		"location" : "Ubicació"
+		"location" : "Ubicació",
+		"refreshloc": "Acutaliza ubicación",
+		"noLoc": "No se ha detectado localización, actualiza, por favor"
+
+
 	},
 
 	"register" : {
@@ -130,7 +134,7 @@
 		"newPublication" : "Nova publicació",
 		"noPublications": "No tens cap publicació activa"
 	}
-	
+
 
 
 }
