@@ -8,7 +8,7 @@ const creds = require('../creds.json');
 const handlers = require('../chat/handlers')
 const User = require('./models/user');
 
-socketio.set('transports', ['websocket'])
+// socketio.set('transports', ['websocket'])
 
 socketio.on('connection', (socket) => {
     console.log('connection started')
