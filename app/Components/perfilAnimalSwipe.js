@@ -209,7 +209,7 @@ export default class perfilAnimalSwipe extends React.Component {
                         <Text style={{ marginTop: '5%', color: 'white', fontSize: 30, fontWeight: 'bold', marginLeft: '10%' }}>{this.state.name}</Text>
                         <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%' }}>{strings('perfilAnimal.age',{a: this.state.age})}</Text>
                         <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%' }}>{strings('perfilAnimal.race',{r: this.state.race})}</Text>
-                        <Text style={{ color: 'white', fontSize: 20,  marginLeft: '10%' }}>{strings('perfilAnimal.sex',{a: this.state.sex})}</Text>
+                        <Text style={{ color: 'white', fontSize: 20,  marginLeft: '10%' }}>{strings('perfilAnimal.sex',{s: this.state.sex})}</Text>
                         <Text style={{ color: 'white', fontSize: 20, marginLeft: '10%', marginBottom:'5%'}}>{strings('perfilAnimal.description')} {this.state.description}</Text>
                         <View style={{marginBottom:'20%', marginLeft:'10%', marginRight:'10%', borderRadius: 5, backgroundColor: 'rgba(255, 255, 255, 0.2)'}}>
                             <View style={{flexDirection: 'row', padding:'5%'}} >
