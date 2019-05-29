@@ -20,10 +20,10 @@ export default class changeSettings extends React.Component {
 
     ChangeLanguageHandler = (lang) => {
         if (ChangeLanguage(lang) != lang){
-            Alert.alert(strings('changeSettings.LanguageError'));
+            Alert.alert(strings('changeSettings.languageError'));
         }
         ToastAndroid.showWithGravityAndOffset(
-            strings('changeSettings.LanguageSuccess'),
+            strings('changeSettings.languageSuccess'),
             ToastAndroid.SHORT,
             ToastAndroid.BOTTOM,
             25,
