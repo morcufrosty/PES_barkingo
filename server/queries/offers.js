@@ -157,7 +157,7 @@ const deleteOffer = async (request, response) => {
                                 console.error('Unknown error', error);
                             } else {
                                 client.query('COMMIT');
-                                response.json({ success: true, msg: 'Offer deleted successfully', id: idOffer });
+                                console.log("Offer eliminated");
                             }
                         });
                     client.query(
@@ -168,7 +168,7 @@ const deleteOffer = async (request, response) => {
                                 response.json({ success: false, msg: 'Unknown error' });
                             } else {
                                 client.query('COMMIT');
-                                response.json({ success: true, msg: 'Offer deleted from favourites successfully', id: idOffer });
+                                response.json({ success: true, msg: 'Offer deleted successfully', id: idOffer });
                             }
                         });
                 }
@@ -201,7 +201,7 @@ const reportOffer = async (request, response) => {
                                 console.error('Unknown error', error);
                             } else {
                                 client.query('COMMIT');
-                                response.json({ success: true, msg: 'Offer deleted successfully', id: idOffer });
+                                response.json({ success: true, msg: 'Offer reported successfully', id: idOffer });
                             }
                         });
                 }
@@ -230,7 +230,7 @@ const eliminateOffer = async (request, response) => {
                 } else {
                     if (result.rows[0].id != 1){
                         console.log("Not authorised, not root user");
-                        response.json({ success: false, msg: 'User ' + email + ' doesn\'t exist' });
+                        response.json({ success: false, msg: 'You are not root user, not authorised' });
                     } else {
                         client.query(
                             'DELETE FROM animals WHERE id=$1;', [idOffer],

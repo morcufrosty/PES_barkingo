@@ -32,7 +32,7 @@ app.use((err, req, res, next) => {
     res.status(500).json({ success: false, msg: 'Server error' });
 });
 
-mongoose.connect(creds.chatDB);
+mongoose.connect(creds.chatDB, { useNewUrlParser: true });
 
 // START THE SERVER
 // =============================================================================

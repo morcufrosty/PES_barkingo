@@ -68,11 +68,17 @@ const createChat = async (request, response) => {
                                             console.log(err)
                                             response.json({ success: false, msg: 'Chat already exists or an error occured' });
                                         } else {
-                                            const mongo = chatHandlers.createConversation({ idChat: id, idUserOwner: result.rows[0].idOwner, idUserAsker: result1.rows[0].id });
-                                            if (mongo.success) {
-                                                client.query('COMMIT');
-                                                response.json({ success: true, msg: 'Chat created' });
-                                            } else response.json(mongo);
+                                            chatHandlers.createConversation({ idChat: id, idUserOwner: result.rows[0].idOwner, idUserAsker: result1.rows[0].id })
+                                            .then((res) => {
+                                                console.log(res);
+                                                if (res.success) {
+                                                    client.query('COMMIT');
+                                                    response.json({ success: true, msg: 'Chat created' });
+                                                } else response.json(res);
+                                            })
+                                            .catch((error) => {
+                                                console.log(error);
+                                            });
                                         }
                                     }
                                 )

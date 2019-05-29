@@ -65,6 +65,7 @@ Animal species:
     -   #### Response
         -   `success`: Is either true or false.
         -   `msg`: In case the request was not a successs, this parameter is a short message explaining the causes of the result. If the request was successful, it also includes a token that the app must keep for a day (as it's only vlaid for such time) and send in every request that needs token based authentication.
+        -   `token`: Token given to the user.
 
 -   ### POST `/users/renewGoogleToken`
 
@@ -96,11 +97,12 @@ Animal species:
         -   `id`: identifier of the user
         -   `email`: A valid email from the Facebook Account
         -   `name`: The name of the user, spaces must be expressed with an underscore (`_`).
+        -   `username`: Username of the user
         -   `bio`: Biography of the user
         -   `latitude`: latitude of the user
         -   `longitude`: longitude of the user
         -   `success`: Is either true or false.
-        -   `msg`: Short message explaining the causes of the result.
+        -   `msg`: Short message explaining the causes of the result, only if ended in error.
 
 -   ### GET `/users/:id/`: returns information about the requested user.
 
@@ -109,12 +111,13 @@ Animal species:
     -   #### Response
         -   `id`: identifier of the user
         -   `email`: A valid email from the Facebook Account
+        -   `username`: Username of the user
         -   `name`: The name of the user, spaces must be expressed with an underscore (`_`).
         -   `bio`: short description of the user
         -   `latitude`: latitude of the user
         -   `longitude`: longitude of the user
         -   `success`: Is either true or false.
-        -   `msg`: Short message explaining the causes of the result.
+        -   `msg`: Short message explaining the causes of the result, only if ended in error.
 
 -   ### POST `/users/:id`: creates a profile for the current user
 
@@ -189,12 +192,15 @@ Animal species:
         -   `maxAge` [`optional`]: maximum age of the offered animal
 
     -   ### Response
+        -   `success`: Is either `true` or `false`.
+        -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
         -   `offers`: list containing the offers that match the given search parameters, with the following attributes for each element.
             -   `id`: identifier of the animal, which will be used in further requests.
             -   `name`: name of the animal.
             -   `sex`: sex of the offered animal.
-            -   `species`: species of the animal in the offer.
-            -   `offerType`: type of the offer.
+            -   `race`: race of the animal in the offer, which in turn identifies its species.
+            -   `TypeName`: type of the offer.
+            -   `idSpecies`: id of the race of the animal.
             -   `age`: age of the offered animal.
             -   `reports`: number of reports of the offer.
 
@@ -221,28 +227,31 @@ Animal species:
         -   `id` [`required`]: identifier of the requested offer.
 
     -   ### Response
-        -   `id`: identifier of the offered animal, same as provided by the user.
-        -   `name`: name of the animal.
-        -   `type`: type of offer, which can be `adoption` o `foster`
-        -   `species`: species of the animal in the offer.
-        -   `idRace`: id of the race of the animal in the offer.
-        -   `race`: if the animal's species is that of a dog or a cat, this field will contain its race.
-        -   `sex`: sex of the animal.
-        -   `age`: age of the animal.
-        -   `iniDate`: if the offer is of type `foster` this will indicate the date in which the animal would be fostered.
-        -   `endDate`: if the offer is of type `foster` this will indicate the date in which the animal will end its fostering.
-        -   `idOwner`: id of the owner.
-        -   `reports`: number of reports of the offer.
+        -   `success`: Is either `true` or `false`.
+        -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
+        -   `offer`: Requested offer with the specified id.
+            -   `id`: identifier of the offered animal, same as provided by the user.
+            -   `name`: name of the animal.
+            -   `age`: age of the animal.
+            -   `description`: description of the animal.
+            -   `sex`: sex of the animal.
+            -   `reports`: number of reports of the offer.
+            -   `raceName`: if the animal's species is that of a dog or a cat, this field will contain its race.
+            -   `species`: species of the animal in the offer.
+            -   `idRace`: id of the race of the animal in the offer.            
+            -   `iniDate`: if the offer is of type `foster` this will indicate the date in which the animal would be fostered.
+            -   `endDate`: if the offer is of type `foster` this will indicate the date in which the animal will end its fostering.
+            -   `idOwner`: id of the owner.
 
 -   ### PUT `/offers/:id`: edit an offer
 
     -   #### Parameters
-        -   `name` [`optional`]: name of the animal.
-        -   `type` [`optional`]: type of offer, which can be `0` (`adoption`) or `1` (`foster`)
-        -   `race` [`optional`]: race of the animal in the offer, which in turn identifies its species.
-        -   `sex` [`optional`]: sex of the animal, can be `Male` or `Female`.
-        -   `age` [`optional`]: age of the animal.
-        -   `description` [`optional`]: description of the offer.
+        -   `name` [`required`]: name of the animal.
+        -   `type` [`required`]: type of offer, which can be `0` (`adoption`) or `1` (`foster`)
+        -   `race` [`required`]: race of the animal in the offer, which in turn identifies its species.
+        -   `sex` [`required`]: sex of the animal, can be `Male` or `Female`.
+        -   `age` [`required`]: age of the animal.
+        -   `description` [`required`]: description of the offer.
         -   `iniDate` [`optional`]: if the offer is of type `foster` this will indicate the date in which the animal would be fostered.
         -   `endDate` [`optional`]: if the offer is of type `foster` this will indicate the date in which the animal will end its fostering.
     -   #### Response
@@ -256,11 +265,11 @@ Animal species:
         -   `id` [`required`]: identifier of the requested offer.
 
     -   #### Response
-        -   `id`: Identifier of the newly created offer.
+        -   `id`: Identifier of the delated offer.
         -   `success`: Is either `true` or `false`.
         -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
         
--   ### POST `/offers/:id`: report an offer.
+-   ### POST `/offers/:id/report`: report an offer.
 
     -   ### Path parameters
 

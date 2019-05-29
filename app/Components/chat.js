@@ -23,13 +23,18 @@ import FocusStateLabel from "../FocusStateLabel"
 export default class Chat extends React.Component {
     constructor(props) {
         super(props)
+        this.navigationWillFocusListener = props.navigation.addListener('willFocus', () => {
+          this.refresh();
+        })
         this.state = {
             favouriteOffers: [],
             images: [],
             isLoading: true,
         }
     }
-
+    componentWillUnmount () {
+       this.navigationWillFocusListener.remove()
+     }
     refresh(){
         this.setState({favouriteOffers: [],
             images: [],
@@ -109,8 +114,8 @@ export default class Chat extends React.Component {
                 this.getImageFromServer(tokenJson, id, i).then( (value)=> {
                     let images = this.state.images;
                     images[i] = "data:image/jpeg;base64," + value;
-                    this.setState({images: images});} ) 
-                
+                    this.setState({images: images});} )
+
               }
 
         }
@@ -168,8 +173,8 @@ export default class Chat extends React.Component {
                         backgroundColor:"#f29797"
                     }} source={{ uri: `${this.state.images[index]}` }} />
                     </TouchableOpacity>
-                    <Text style={{ color: 'white', fontSize: 20, marginLeft: '2%', marginRight: '2%', justifyContent: 'center', alignItems: 'center', textAlignVertical: 'center' 
-                         }}>{this.state.favouriteOffers[index].name}</Text>                
+                    <Text style={{ color: 'white', fontSize: 20, marginLeft: '2%', marginRight: '2%', justifyContent: 'center', alignItems: 'center', textAlignVertical: 'center'
+                         }}>{this.state.favouriteOffers[index].name}</Text>
                 </View>
             )
         })
@@ -219,7 +224,7 @@ export default class Chat extends React.Component {
         if (this.state.isLoading) {
 
             this.handleGetFavouriteOffers();
-            
+
 
             return(
             <LinearGradient colors={['#F15A24', '#D4145A']}
@@ -247,7 +252,7 @@ export default class Chat extends React.Component {
 
                 </ScrollView>
                 {/* Aqui shan de fer ifs. Si no hi ha cap favorited que no surti i si ningu ha fet favorited dons que no surti */}
-                
+
             </LinearGradient>);
     }
 
@@ -278,7 +283,7 @@ export default class Chat extends React.Component {
                     {this.renderFavorites()}
                 </ScrollView>
                 {/* Aqui shan de fer ifs. Si no hi ha cap favorited que no surti i si ningu ha fet favorited dons que no surti */}
-                
+
             </LinearGradient>
         );
     }
