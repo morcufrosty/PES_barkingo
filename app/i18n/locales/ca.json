@@ -50,7 +50,7 @@
 		"selectedLanguage" : "Idioma seleccionat",
 		"settings" : "Opcions",
 		"logOut" : "Tancar Sessió",
-		"languageSucces": "S'ha canviat d'idioma satisfactòriament",
+		"languageSuccess": "S'ha canviat d'idioma satisfactòriament",
 		"languageError" : "ERROR. No s'ha pogut canviar d'idioma"
 	},
 

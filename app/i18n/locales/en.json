@@ -50,7 +50,7 @@
 		"selectedLanguage" : "selectedLanguage",
 		"settings" : "Settings",
 		"logOut" : "Log Out",
-		"languageSucces": "Language has changed succesfully",
+		"languageSuccess": "Language has changed succesfully",
 		"languageError" : "ERROR. Language has not been changed"
 	},
 
