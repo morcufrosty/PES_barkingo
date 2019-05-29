@@ -3,8 +3,8 @@ const Conversation = require('../models/conversation');
 const createUser = require('./createUser')
 
 module.exports = async function (chat) {
-    // console.log(chat);
-    let result = { success: false, msg: '' }
+    console.log(chat);
+    let result // = { success: false, msg: '' }
     await User.findOne({ UserId: chat.idUserAsker }).populate('conversations').then(
         (user) => {
             if (user) {

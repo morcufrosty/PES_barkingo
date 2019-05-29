@@ -14,6 +14,9 @@ I18n.fallbacks = true;
 console.log(Localization.locale);
 I18n.locale = Localization.locale; // AsyncStorage.getItem('lang') || 
 
+
+
+
 // Define the supported translations
 I18n.translations = {
   en,
@@ -21,7 +24,7 @@ I18n.translations = {
   ca
 };
 
-const currentLocale =  I18n.currentLocale();
+const currentLocale = I18n.currentLocale();
 
 // Is it a RTL language?
 export const isRTL = currentLocale.indexOf('es') === 0 || currentLocale.indexOf('ca') === 0;
@@ -31,18 +34,17 @@ export const isRTL = currentLocale.indexOf('es') === 0 || currentLocale.indexOf(
 ReactNative.I18nManager.allowRTL(isRTL);
 
 // The method we'll use instead of a regular string
- function strings(name, params = {}) {
+function strings(name, params = {}) {
   return I18n.t(name, params);
 };
 
-export const ChangeLanguage = (language) => 
-{
-  if (language === 'ca-ES' || language === 'en' || language === 'es-ES'){
+export const ChangeLanguage = (language) => {
+  if (language === 'ca-ES' || language === 'en' || language === 'es-ES') {
     I18n.locale = language;
     AsyncStorage.setItem('lang', language);
     return language;
   }
-  return "Error"; 
-  
+  return "Error";
+
 }
 export default strings;

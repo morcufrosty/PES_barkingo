@@ -70,6 +70,7 @@ const createChat = async (request, response) => {
                                         } else {
                                             chatHandlers.createConversation({ idChat: id, idUserOwner: result.rows[0].idOwner, idUserAsker: result1.rows[0].id })
                                             .then((res) => {
+                                                console.log(res);
                                                 if (res.success) {
                                                     client.query('COMMIT');
                                                     response.json({ success: true, msg: 'Chat created' });
