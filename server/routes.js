@@ -67,7 +67,6 @@ router.get('/users/:id/image', db.getUserImage);
 
 router.post('/users/:id/image', db.createUserImage);
 
-
 //OFFERS ROUTES
 
 router.get('/offers', db.getOffers);
@@ -105,6 +104,8 @@ router.get('/races', db.racesList);
 router.get('/chats', db.getChats);
 
 router.post('/offers/:id/chat', db.createChat);
+
+router.get('/chats/:id', db.getChatMessages);
 
 router.delete('/chats/:id', db.deleteChat);
 

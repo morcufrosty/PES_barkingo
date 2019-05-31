@@ -31,7 +31,8 @@ const { getOffers,
 
 const { getChats,
     createChat,
-    deleteChat } = require('./chat');
+    deleteChat,
+    getChatMessages } = require('./chat');
 
 module.exports = {
     //LOGIN_REGISTER
@@ -68,5 +69,6 @@ module.exports = {
     //CHAT
     getChats,
     createChat,
-    deleteChat
+    deleteChat,
+    getChatMessages
 };
