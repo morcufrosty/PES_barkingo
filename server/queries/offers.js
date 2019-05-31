@@ -369,7 +369,7 @@ const getImage = async (request, response) => {
     const { id: idOffer } = request.params;
     fs.readFile(path.join(homedir, imagesDir, idOffer + '.jpg'), (err, data) => {
         if (err) {
-            console.error(err);
+            // console.error(err);
             response.status(404);
             response.json({ success: false, msg: 'Image couldn\'t be found' });
         } else {
@@ -389,7 +389,7 @@ const uploadImage = async (request, response) => {
 
     require("fs").writeFile(path.join(homedir, imagesDir, idOffer + '.jpg'), image.data, (err) => {
         if (err) {
-            console.log(err);
+            // console.log(err);
             response.json({ success: false, msg: 'Image couldn\'t be uploaded' });
         } else response.json({ success: true, msg: 'Image added successfully' });
     });
