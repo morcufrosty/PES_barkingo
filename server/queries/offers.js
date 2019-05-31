@@ -69,16 +69,21 @@ const getAllOffers = async (request, response) => {
                     console.error(err)
                     response.json({ success: false, msg: 'User ' + email + ' doesn\'t exist' });
                 } else {
-                    client.query(
-                        'SELECT * FROM animals' ,
-                        (error, res) => {
-                            if (error) {
-                                console.error('Unknown error', error);
-                            } else {
-                                client.query('COMMIT');
-                                response.json({ success: true, msg: 'Offers found', offers: res.rows });
-                            }
-                        });
+                    if (result.rows[0].id != 1){
+                        console.log("Not authorised, not root user");
+                        response.json({ success: false, msg: 'You are not root user, not authorised' });
+                    } else {
+                        client.query(
+                            'SELECT * FROM animals' ,
+                            (error, res) => {
+                                if (error) {
+                                    console.error('Unknown error', error);
+                                } else {
+                                    client.query('COMMIT');
+                                    response.json({ success: true, msg: 'Offers found', offers: res.rows });
+                                }
+                            });
+                    }
                 }
             });
         done();
