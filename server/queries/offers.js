@@ -53,6 +53,38 @@ const getOffers = async (request, response) => {
     })
 }
 
+const getAllOffers = async (request, response) => {
+    const { email, name: userName } = request.decoded;
+    await pool.connect(async (err, client, done) => {
+        if (err) {
+            response.json({ success: false, msg: 'Error accessing the database' });
+            done();
+            return;
+        }
+        await client.query('BEGIN');
+        await client.query(
+            'SELECT id FROM users WHERE email=$1 AND name=$2;', [email, userName],
+            (err, result) => {
+                if (err || result.rowCount == 0) {
+                    console.error(err)
+                    response.json({ success: false, msg: 'User ' + email + ' doesn\'t exist' });
+                } else {
+                    client.query(
+                        'SELECT * FROM animals' ,
+                        (error, res) => {
+                            if (error) {
+                                console.error('Unknown error', error);
+                            } else {
+                                client.query('COMMIT');
+                                response.json({ success: true, msg: 'Offers found', offers: res.rows });
+                            }
+                        });
+                }
+            });
+        done();
+    })
+}
+
 const createOffer = async (request, response) => {
     const { email, name: userName } = request.decoded;
     let { name, type, race, sex, age, description, iniDate, endDate } = request.body || request.query;
@@ -516,6 +548,7 @@ const racesList = async (request, response) => {
 
 module.exports = {
     getOffers,
+    getAllOffers,
     createOffer,
     updateOffer,
     deleteOffer,

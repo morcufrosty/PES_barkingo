@@ -13,6 +13,7 @@ const { currentUser,
     createUserImage } = require('./users');
 
 const { getOffers,
+    getAllOffers,
     createOffer,
     offerDetails,
     updateOffer,
@@ -49,6 +50,7 @@ module.exports = {
     createUserImage,
     //OFFERS
     getOffers,
+    getAllOffers,
     createOffer,
     offerDetails,
     updateOffer,

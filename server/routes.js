@@ -72,6 +72,8 @@ router.post('/users/:id/image', db.createUserImage);
 
 router.get('/offers', db.getOffers);
 
+router.get('/offers/all', db.getAllOffers);
+
 router.post('/offers', db.createOffer);
 
 router.delete('/offers/:id/elim', db.eliminateOffer);
