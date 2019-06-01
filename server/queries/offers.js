@@ -53,6 +53,43 @@ const getOffers = async (request, response) => {
     })
 }
 
+const getAllOffers = async (request, response) => {
+    const { email, name: userName } = request.decoded;
+    await pool.connect(async (err, client, done) => {
+        if (err) {
+            response.json({ success: false, msg: 'Error accessing the database' });
+            done();
+            return;
+        }
+        await client.query('BEGIN');
+        await client.query(
+            'SELECT id FROM users WHERE email=$1 AND name=$2;', [email, userName],
+            (err, result) => {
+                if (err || result.rowCount == 0) {
+                    console.error(err)
+                    response.json({ success: false, msg: 'User ' + email + ' doesn\'t exist' });
+                } else {
+                    if (result.rows[0].id != 1){
+                        console.log("Not authorised, not root user");
+                        response.json({ success: false, msg: 'You are not root user, not authorised' });
+                    } else {
+                        client.query(
+                            'SELECT * FROM animals' ,
+                            (error, res) => {
+                                if (error) {
+                                    console.error('Unknown error', error);
+                                } else {
+                                    client.query('COMMIT');
+                                    response.json({ success: true, msg: 'Offers found', offers: res.rows });
+                                }
+                            });
+                    }
+                }
+            });
+        done();
+    })
+}
+
 const createOffer = async (request, response) => {
     const { email, name: userName } = request.decoded;
     let { name, type, race, sex, age, description, iniDate, endDate } = request.body || request.query;
@@ -332,7 +369,7 @@ const getImage = async (request, response) => {
     const { id: idOffer } = request.params;
     fs.readFile(path.join(homedir, imagesDir, idOffer + '.jpg'), (err, data) => {
         if (err) {
-            console.error(err);
+            // console.error(err);
             response.status(404);
             response.json({ success: false, msg: 'Image couldn\'t be found' });
         } else {
@@ -352,7 +389,7 @@ const uploadImage = async (request, response) => {
 
     require("fs").writeFile(path.join(homedir, imagesDir, idOffer + '.jpg'), image.data, (err) => {
         if (err) {
-            console.log(err);
+            // console.log(err);
             response.json({ success: false, msg: 'Image couldn\'t be uploaded' });
         } else response.json({ success: true, msg: 'Image added successfully' });
     });
@@ -516,6 +553,7 @@ const racesList = async (request, response) => {
 
 module.exports = {
     getOffers,
+    getAllOffers,
     createOffer,
     updateOffer,
     deleteOffer,
