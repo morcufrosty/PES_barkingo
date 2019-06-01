@@ -5,7 +5,7 @@ module.exports = async function(id, reply) {
         .populate('messages')
         .then(conversation => {
             if (conversation) {
-                reply.json({ id: conversation._id, messages: conversation.messages });
+                reply.json({ success: true, id: conversation._id, messages: conversation.messages });
             } else {
                 reply.json({ success: false, msg: 'Chat not found' });
             }

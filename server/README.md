@@ -1,14 +1,44 @@
 # Barkingo API server
 
 ## Table of Contents
+  * [Running](#running)
+  * [API usage](#api-usage)
+  * [Endpoints](#endpoints)
+  * [Login and Register](#login-and-register)
+    + [POST `/users/register`](#post---users-register-)
+    + [POST `/users/login`](#post---users-login-)
+    + [POST `/users/renewGoogleToken`](#post---users-renewgoogletoken-)
+    + [POST `/users/renewFacebookToken`](#post---users-renewfacebooktoken-)
+    + [GET `/users/currentUser`: returns short information about the logged-in user.](#get---users-currentuser---returns-short-information-about-the-logged-in-user)
+    + [GET `/users/:id/`: returns information about the requested user.](#get---users--id----returns-information-about-the-requested-user)
+    + [POST `/users/:id`: creates a profile for the current user](#post---users--id---creates-a-profile-for-the-current-user)
+    + [PUT `/users/:id`: edits the profile for the current user, provided its id](#put---users--id---edits-the-profile-for-the-current-user--provided-its-id)
+    + [DELETE `/users/:id`: deletes the profile for the current user, provided its id](#delete---users--id---deletes-the-profile-for-the-current-user--provided-its-id)
+    + [GET `/users/:id/image`: obtain profile picture of the requested user](#get---users--id-image---obtain-profile-picture-of-the-requested-user)
+    + [POST `/users/:id/image`](#post---users--id-image-)
+  * [View, edit and interact with offers](#view--edit-and-interact-with-offers)
+    + [GET `/offers`: returns all the offers given some search paramters](#get---offers---returns-all-the-offers-given-some-search-paramters)
+    + [POST `/offers`: creates a new offer](#post---offers---creates-a-new-offer)
+    + [GET `/offers/:id`: returns information about a single offer](#get---offers--id---returns-information-about-a-single-offer)
+    + [PUT `/offers/:id`: edit an offer](#put---offers--id---edit-an-offer)
+    + [DELETE `/offers/:id`: delete an offer. To do so you must be its creator.](#delete---offers--id---delete-an-offer-to-do-so-you-must-be-its-creator)
+    + [POST `/offers/:id/report`: report an offer.](#post---offers--id-report---report-an-offer)
+    + [GET `/offers/currentUser`: returns all the current user offers, provided the token on the parameters](#get---offers-currentuser---returns-all-the-current-user-offers--provided-the-token-on-the-parameters)
+    + [GET `/offers/favourite`: returns all the user's favourite offers](#get---offers-favourite---returns-all-the-user-s-favourite-offers)
+    + [DELETE `/offers/:id/favourite`: deletes offer from favourites](#delete---offers--id-favourite---deletes-offer-from-favourites)
+    + [POST `/offers/:id`: swipe on an offer](#post---offers--id---swipe-on-an-offer)
+    + [GET `/offers/:id/image`](#get---offers--id-image-)
+    + [POST `/offers/:id/image`](#post---offers--id-image-)
+    + [DELETE `/offers/seen`](#delete---offers-seen-)
+  * [Chat](#chat)
+    + [GET `/chats`: obtain the current user's chats.](#get---chats---obtain-the-current-user-s-chats)
+    + [POST `/offers/:id/chat`: creates chat with the owner of the offer.](#post---offers--id-chat---creates-chat-with-the-owner-of-the-offer)
+    + [DELETE `/chat/:id`: closes a chat.](#delete---chat--id---closes-a-chat)
+    + [GET `/chat/:id`: gets all the messages from a chat](#get---chat--id---gets-all-the-messages-from-a-chat)
+  * [Other](#other)
+    + [GET `/races`: list of races and its species](#get---races---list-of-races-and-its-species)
 
-1. [Running](#running)
-2. [API Usage](#API-Usage)
-3. [Endpoints](#endpoints)
-    - [Login and Register](#Login-and-Register)
-    - [View, edit and interact with offers](#View-edit-and-interact-with-offers)
-    - [Chat](#chat)
-    - [Other](#other)
+
 
 ## Running
 
@@ -41,7 +71,7 @@ Animal species:
 
 ## Endpoints
 
-### Login and Register
+## Login and Register
 
 -   ### POST `/users/register`
 
@@ -121,11 +151,11 @@ Animal species:
 
 -   ### POST `/users/:id`: creates a profile for the current user
 
-    -   ### Header
+    -   #### Header
         -   `token` [`required`]: Barkingo authenthetication token
-    -   ### Path parameters
+    -   #### Path parameters
         -   `id` [`required`]: identifier of the requested offer.
-    -   ### Parameters
+    -   #### Parameters
         -   `bio` [`required`]: short description of the user
         -   `latitude` [`required`]: latitude of the user
         -   `longitude` [`required`]: longitude of the user
@@ -138,9 +168,9 @@ Animal species:
 
     -   #### Header
         -   `token` [`required`]: Barkingo authenthetication token
-    -   ### Path parameters
+    -   #### Path parameters
         -   `id` [`required`]: identifier of the requested offer.
-    -   ### Parameters
+    -   #### Parameters
         -   `username` [`required`]: The username of the user. Any spaces must be expressed with an underscore (`_`).
         -   `bio` [`required`]: short description of the user
         -   `latitude` [`required`]: latitude of the user
@@ -155,7 +185,7 @@ Animal species:
 
     -   #### Header
         -   `token` [`required`]: Barkingo authenthetication token
-    -   ### Path parameters
+    -   #### Path parameters
         -   `id` [`required`]: identifier of the requested offer.
     -   #### Response
         -   `success`: Is either `true` or `false`.
@@ -178,7 +208,7 @@ Animal species:
         -   `success`: Is either `true` or `false`.
         -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
 
-### View, edit and interact with offers
+## View, edit and interact with offers
 
 -   ### GET `/offers`: returns all the offers given some search paramters
 
@@ -191,7 +221,7 @@ Animal species:
         -   `minAge` [`optional`]: minimum age of the offered animal
         -   `maxAge` [`optional`]: maximum age of the offered animal
 
-    -   ### Response
+    -   #### Response
         -   `success`: Is either `true` or `false`.
         -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
         -   `offers`: list containing the offers that match the given search parameters, with the following attributes for each element.
@@ -222,11 +252,11 @@ Animal species:
 
 -   ### GET `/offers/:id`: returns information about a single offer
 
-    -   ### Path parameters
+    -   #### Path parameters
 
         -   `id` [`required`]: identifier of the requested offer.
 
-    -   ### Response
+    -   #### Response
         -   `success`: Is either `true` or `false`.
         -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
         -   `offer`: Requested offer with the specified id.
@@ -238,7 +268,7 @@ Animal species:
             -   `reports`: number of reports of the offer.
             -   `raceName`: if the animal's species is that of a dog or a cat, this field will contain its race.
             -   `species`: species of the animal in the offer.
-            -   `idRace`: id of the race of the animal in the offer.            
+            -   `idRace`: id of the race of the animal in the offer.
             -   `iniDate`: if the offer is of type `foster` this will indicate the date in which the animal would be fostered.
             -   `endDate`: if the offer is of type `foster` this will indicate the date in which the animal will end its fostering.
             -   `idOwner`: id of the owner.
@@ -259,22 +289,23 @@ Animal species:
         -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
 
 -   ### DELETE `/offers/:id`: delete an offer. To do so you must be its creator.
-    
-    -   ### Path parameters
+
+    -   #### Path parameters
 
         -   `id` [`required`]: identifier of the requested offer.
 
     -   #### Response
+
         -   `id`: Identifier of the delated offer.
         -   `success`: Is either `true` or `false`.
         -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
-        
+
 -   ### POST `/offers/:id/report`: report an offer.
 
-    -   ### Path parameters
+    -   #### Path parameters
 
         -   `id` [`required`]: identifier of the requested offer.
-        
+
     -   #### Response
         -   `id`: Identifier of the newly created offer.
         -   `success`: Is either `true` or `false`.
@@ -293,7 +324,7 @@ Animal species:
 
 -   ### GET `/offers/favourite`: returns all the user's favourite offers
 
-    -   ### Response
+    -   #### Response
 
         -   `offers`: list containing the offers that match the given search parameters, with the following attributes for each element.
 
@@ -344,7 +375,7 @@ Animal species:
         -   `success`: Is either `true` or `false`.
         -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
 
-### Chat
+## Chat
 
 -   ### GET `/chats`: obtain the current user's chats.
 
@@ -363,14 +394,26 @@ Animal species:
         -   `success`: Is either `true` or `false`.
         -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
 
--   ### DELETE `/chat/:id`: closes a chat from the database and the chat server.
+-   ### DELETE `/chat/:id`: closes a chat.
+
     -   #### Path parameters
         -   `id` [`required`]: identifier of the chat.
     -   #### Response
         -   `success`: Is either `true` or `false`.
         -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
 
-### Other
+-   ### GET `/chat/:id`: gets all the messages from a chat
+    -   #### Path parameters
+        -   `id` [`required`]: identifier of the chat.
+    -   #### Response
+        -   `success`: Is either `true` or `false`.
+        -   `id`: id of the chat.
+        -   `messages`: array of messages.
+            -   `text`
+            -   `createdAt`: date sent
+            -   `userId`: sender id
+
+## Other
 
 -   ### GET `/races`: list of races and its species
     -   #### Response
