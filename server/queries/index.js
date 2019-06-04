@@ -6,6 +6,7 @@ const { createUser,
 
 const { currentUser,
     getUser,
+    getAllUsers,
     createProfile,
     updateUser,
     deleteUser,
@@ -44,6 +45,7 @@ module.exports = {
     //USERS
     currentUser,
     getUser,
+    getAllUsers,
     createProfile,
     updateUser,
     deleteUser,

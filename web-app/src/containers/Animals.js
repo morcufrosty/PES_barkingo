@@ -1,6 +1,10 @@
-import React, {Component} from 'react';
-import {Card, Button, ListGroup, ListGroupItem, Nav} from 'react-bootstrap';
+import React, { Component } from 'react';
+import { Card, Button, ListGroup, ListGroupItem, Nav } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
+import { get } from 'https';
+import ImageComponent from '../Components/ImageComponent';
+import { getDogOffers, getUserInfo, deleteOffer } from "../Helpers/APIcalls"
+
 
 
 
@@ -12,26 +16,13 @@ export default class Animals extends Component {
     super(props);
 
     this.state = {
-      animalOffers: new Array(),
+      ofertes: [],
+      isLoading: true,
+      owners: [],
     };
-    this.getOffersRendered = this.getOffersRendered.bind(this);
   }
 
-  async getDogOffers() {
-    return fetch('http://10.4.41.164/api/offers/all', {
-        method: 'GET',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            'x-access-token': localStorage.getItem("api_token")
-        }
-    }).then((response) => response.json())
-        .then((responseJson) => {
-            return responseJson.offers;
-        }).catch((error) => {
-            console.error(error);
-        });
-  }
+
 
   async getImageFromServer(id) {
     return fetch(`http://10.4.41.164/api/offers/${id}/image`, {
@@ -40,65 +31,105 @@ export default class Animals extends Component {
         Accept: '*',
         'x-access-token': localStorage.getItem("api_token")
       }
-      }).then((response =>  {
-        return response.text();
-      }))
+    }).then((response => {
+      return response.text();
+    }))
   }
 
-  async getOffers(){
+  async getOffers() {
     var dogOffers = await this.getDogOffers();
     console.log(dogOffers);
     return dogOffers;
   }
-  
-  componentWillMount(){
-    this.setState({animalOffers:this.getOffers()}) ;//({animalOffers: this.getOffers()});
+
+
+  async handleStart() {
+    let offers = []
+    offers = await getDogOffers();
+    let owners = []
+    
+    for(let i = 0; i < offers.length; i++){
+
+      owners[i] = await getUserInfo(offers[i].idOwner);
+      console.log(owners[i])
+
+    }
+    console.log(owners.length)
+
+
+
+    this.setState({ offers: offers, owners: owners, isLoading: false })
+
+
   }
 
-  getOffersRendered(){
-    var ofertes = []
-    console.log(this.state.animalOffers.length != undefined);
-    if (this.state.animalOffers.length != undefined) ofertes = this.state.animalOffers;
-    return ofertes.map((animal)=>{ 
+  async handleClick(id, e) {
+
+    console.log("click")
+    console.log(id)
+    let resp = await deleteOffer(id)
+    console.log(resp)
+    this.setState({ isLoading: true, offers: [] })
+
+  }
+
+
+  renderOffers() {
+
+    console.log(this.state.owners.length)
+
+    return this.state.offers.map((animal, index) => {
       return (
         <div class='m-3'>
           <Card style={{ width: '18rem' }}>
-            <Card.Img variant="top" src={this.getImageFromServer(1)} />
+            {<ImageComponent id={animal.id} type={"offer"} />}
             <Card.Body>
               <Card.Title>{animal.name}</Card.Title>
               <Card.Text>
-                De mom no està implementat
+                {animal.description}
               </Card.Text>
             </Card.Body>
             <ListGroup className="list-group-flush">
-              <ListGroup.Item variant="danger">Reports: Num reports</ListGroup.Item>
-              <ListGroupItem>{animal.sex}</ListGroupItem>
-              <ListGroupItem>{animal.age}</ListGroupItem>
-              <ListGroupItem>{animal.race}</ListGroupItem>
-              <ListGroupItem>Nom del puto usuari</ListGroupItem>
+              <ListGroup.Item variant="danger">Reports: {animal.reports}</ListGroup.Item>
+              <ListGroupItem>Sex: {animal.sex}</ListGroupItem>
+              <ListGroupItem>Age: {animal.age}</ListGroupItem>
+              <ListGroupItem>Race: {animal.race}</ListGroupItem>
+              <ListGroupItem>Username: {this.state.owners[index].user.name}</ListGroupItem>
             </ListGroup>
             <Card.Body>
-              <Button variant="danger">Eliminar anunci</Button>
+              <Button onClick={(e) => this.handleClick(animal.id, e)} variant="danger">Eliminar anunci</Button>
             </Card.Body>
           </Card>
         </div>
-      ); 
-    });
+      );
+    }
+    );
   }
-   
-  
 
-  render(){
+
+
+  render() {
+
+    if (this.state.isLoading) {
+      this.handleStart()
+      return (
+        <div />
+      )
+
+    }
+
+
+
     return (
       <div>
         <div class='m-3 row fixed'>
         </div>
         <div>
           <div class="m-3 row">
-            {this.getOffersRendered()}
+            {this.renderOffers(this.state.owners)}
           </div>
         </div>
-        
+
       </div>
     );
   }

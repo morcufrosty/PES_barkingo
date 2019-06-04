@@ -7,6 +7,7 @@ import TextInputWTitle from './inputText.js';
 import InputPassword from './inputPassword.js';
 import { decompressFromUTF16 } from 'lz-string';
 import { AsyncStorage } from 'react-native';
+import ImageComponent from './ImageComponent';
 
 export default class ChatDirectory extends React.Component {
     constructor(props) {
@@ -449,7 +450,7 @@ export default class ChatDirectory extends React.Component {
                         height: '90%',
                     }}
                 >
-                    {this.renderFavorites()}
+                    {this.renderChats()}
                 </ScrollView>
                 {/* Aqui shan de fer ifs. Si no hi ha cap favorited que no surti i si ningu ha fet favorited dons que no surti */}
             </LinearGradient>
