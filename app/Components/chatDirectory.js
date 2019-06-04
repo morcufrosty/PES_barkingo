@@ -17,26 +17,29 @@ import TextInputWTitle from './inputText.js';
 import InputPassword from './inputPassword.js';
 import { decompressFromUTF16 } from 'lz-string';
 import { AsyncStorage } from 'react-native';
+import ImageComponent from './ImageComponent';
 
 
 export default class ChatDirectory extends React.Component {
     constructor(props) {
         super(props)
         this.navigationWillFocusListener = props.navigation.addListener('willFocus', () => {
-          this.refresh();
+            this.refresh();
         })
         this.state = {
             favouriteOffers: [],
             images: [],
             isLoading: true,
-            chats:[]
+            chats: []
         }
     }
 
-    refresh(){
-        this.setState({favouriteOffers: [],
+    refresh() {
+        this.setState({
+            favouriteOffers: [],
             images: [],
-            isLoading: true})
+            isLoading: true
+        })
     }
 
     async getImageFromServer(tokenJson, id) {
@@ -69,7 +72,7 @@ export default class ChatDirectory extends React.Component {
             let auxImg = this.state.images;
             auxFav.splice(index, 1);
             auxImg.splice(index, 1);
-            this.setState({favouriteOffers : auxFav, images : auxImg});
+            this.setState({ favouriteOffers: auxFav, images: auxImg });
         }
         else {
             Alert.alert("Favorite offer has not been deleted!", response.msg);
@@ -153,7 +156,7 @@ export default class ChatDirectory extends React.Component {
             }
         }).then((response) => response.json())
             .then((responseJson) => {
-                console.log("THIS IS THE MESSAGE OF OFFERS:" +  responseJson.msg);
+                console.log("THIS IS THE MESSAGE OF OFFERS:" + responseJson.msg);
                 return responseJson;
             }).catch((error) => {
                 console.error(error);
@@ -184,15 +187,16 @@ export default class ChatDirectory extends React.Component {
 
 
         return fetch(`http://10.4.41.164/api/offers/${id}/image`, {
-          method: 'GET',
-          headers: {
-            Accept: '*',
-            'x-access-token': tokenJson.token
-          }
-          }).then((response =>  {return response.text();
-          }))
+            method: 'GET',
+            headers: {
+                Accept: '*',
+                'x-access-token': tokenJson.token
+            }
+        }).then((response => {
+            return response.text();
+        }))
 
-      }
+    }
 
     async handleGetChats() {
 
@@ -208,9 +212,9 @@ export default class ChatDirectory extends React.Component {
 
         const myOffersResponse = await this.getMyOffersFromAPI(tokenJson);
 
-        if(myOffersResponse.success){
+        if (myOffersResponse.success) {
             myOffers = myOffersResponse.offers;
-            for ( let i = 0; i < myOffers.length; i++){
+            for (let i = 0; i < myOffers.length; i++) {
 
                 myOffersIds[i] = myOffers[i].id
 
@@ -234,69 +238,54 @@ export default class ChatDirectory extends React.Component {
 
 
 
-                    if(myOffersIds.includes(chatOfferId)){
-                        user = true;
+                if (myOffersIds.includes(chatOfferId)) {
+                    user = true;
+                }
+
+                else offer = true;
+
+                if (user) {
+
+                    responseUser = await this.getUserInfoFromAPI(tokenJson, chatUserId)
+                    responseOffer = await this.getOfferInfoFromAPI(tokenJson, chatOfferId)
+
+
+                    if (responseUser.success && responseOffer.success) {
+
+                        chatAux[i] = { name: responseUser.user.username, desc: " (interested in " + responseOffer.offer.name + ")", type: "user", id: responseUser.user.id };
+
+
+
+
+
                     }
 
-                    else offer = true;
-
-                    if(user){
-
-                        responseUser = await this.getUserInfoFromAPI(tokenJson, chatUserId)
-                        responseOffer = await this.getOfferInfoFromAPI(tokenJson, chatOfferId)
-
-
-                        if(responseUser.success && responseOffer.success){
-
-                        chatAux[i] = {name: responseUser.user.username, desc: " (interested in " + responseOffer.offer.name + ")", type: "user", id: "id"};
-
-                        this.getProfileImageFromServer(tokenJson,  responseUser.user.id, i).then( (value)=> {
-                            profileImage = "data:image/jpeg;base64," + value;
-                            let imagesA = this.state.images
-                            imagesA[i] = profileImage
-                            //let name = this.state.chats[i].name
-                            //this.setState({images: imagesA})
-                            ;})
-
-
-
                 }
-
-                }
-                    else if (offer){
+                else if (offer) {
 
                     responseOffer = await this.getOfferInfoFromAPI(tokenJson, chatOfferId)
                     responseUser = await this.getUserInfoFromAPI(tokenJson, chatUserId)
 
 
 
-                    if(responseOffer.success && responseUser.success){
+                    if (responseOffer.success && responseUser.success) {
 
-                    chatAux[i] = {name:responseOffer.offer.name, desc: " (" + responseUser.user.username + "'s pet)"}
-
-                    this.getImageFromServer(tokenJson, responseOffer.offer.id, i).then( (value)=> {
-                        profileImage = "data:image/jpeg;base64," + value;
-                        let imagesA = this.state.images
-                        imagesA[i] = profileImage
-                        //let name = this.state.chats[i].name
-                        //this.setState({images: imagesA})
-                        ;})
+                        chatAux[i] = { name: responseOffer.offer.name, desc: " (" + responseUser.user.username + "'s pet)", id: chatOfferId, type: "offer" }
 
 
-
-                    console.log(responseOffer.offer.name)
+                        console.log(responseOffer.offer.name)
 
                     }
                 }
 
 
-                    /*
-                this.getImageFromServer(tokenJson, id, i).then( (value)=> {
-                    let images = this.state.images;
-                    images[i] = "data:image/jpeg;base64," + value;
-                    this.setState({images: images});} ) */
+                /*
+            this.getImageFromServer(tokenJson, id, i).then( (value)=> {
+                let images = this.state.images;
+                images[i] = "data:image/jpeg;base64," + value;
+                this.setState({images: images});} ) */
 
-              }
+            }
 
         }
 
@@ -325,83 +314,39 @@ export default class ChatDirectory extends React.Component {
     }
 
 
-    renderFavorites = () => {
+    renderChats = () => {
         return this.state.chats.map((data, index) => {
             return (
-                <View style={{flexDirection: 'row', padding:'2%'}}>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('chatScreen', {offerId: this.state.id} )}
-                    onLongPress={()=>
-                        Alert.alert(
-                            'UnFavourite',
-                            'Remove from favourited list',
-                            [
-                              {
-                                text: 'Cancel',
-                                onPress: () => console.log('Cancel Pressed'),
-                                style: 'cancel',
-                              },
-                              {text: 'OK', onPress:  () => this.handleDeleteFavourite(this.state.chats[index].id, index)},
-                            ],
-                            {cancelable: false},
-                          )}>
-                    <Image style={{
-                        borderRadius: 40,
-                        overflow: 'hidden',
-                        marginLeft: 5,
-                        marginRight: 5,
-                        width: 80,
-                        height: 80,
-                        backgroundColor:"#f29797"
-                    }} source={{ uri: `${this.state.images[index]}` }} />
+                <View style={{ flexDirection: 'row', padding: '2%' }}>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('chatScreen', { offerId: this.state.id })}
+                        onLongPress={() =>
+                            Alert.alert(
+                                'UnFavourite',
+                                'Remove from favourited list',
+                                [
+                                    {
+                                        text: 'Cancel',
+                                        onPress: () => console.log('Cancel Pressed'),
+                                        style: 'cancel',
+                                    },
+                                    { text: 'OK', onPress: () => this.handleDeleteFavourite(this.state.chats[index].id, index) },
+                                ],
+                                { cancelable: false },
+                            )}>
+                        <ImageComponent id={data} />
                     </TouchableOpacity>
-                    <Text style={{ color: 'white', fontSize: 20, bottom:20, marginLeft: '2%', marginRight: '2%', justifyContent: 'center', alignItems: 'center', textAlignVertical: 'center'
-                         }}>{this.state.chats[index].name}</Text>
-                    <Text style={{ fontStyle: "italic", color: 'white',bottom:20,  fontSize: 15, marginLeft: '1%', marginRight: '2%', justifyContent: 'center', alignItems: 'center', textAlignVertical: 'center'
-                    }}>{this.state.chats[index].desc }</Text>
+                    <Text style={{
+                        color: 'white', fontSize: 20, bottom: 20, marginLeft: '2%', marginRight: '2%', justifyContent: 'center', alignItems: 'center', textAlignVertical: 'center'
+                    }}>{this.state.chats[index].name}</Text>
+                    <Text style={{
+                        fontStyle: "italic", color: 'white', bottom: 20, fontSize: 15, marginLeft: '1%', marginRight: '2%', justifyContent: 'center', alignItems: 'center', textAlignVertical: 'center'
+                    }}>{this.state.chats[index].desc}</Text>
 
                 </View>
             )
         })
     }
 
-    renderChats = () => {
-        return this.state.favouriteOffers.map((data, index) => {
-            return (
-                <View>
-                    <Image style={{
-                        borderRadius: 50,
-                        overflow: 'hidden',
-                        marginBottom: 5,
-                        marginTop: 5,
-                        width: 100,
-                        height: 100,
-                        marginLeft: '5%',
-                        backgroundColor:"#f29797"
-                    }} source={{ uri: `${this.state.images[index]}` }} />
-                    <Text
-                        style={{
-                            position: 'absolute',
-                            top: 30,
-                            left: 125,
-                            color: 'white',
-                            fontWeight: "bold"
-                        }}
-                        onPress={() => Alert.alert("Editar puto gos!")}>{data.name}
-                    </Text>
-                    <Text
-                        style={{
-                            position: 'absolute',
-                            top: 50,
-                            left: 125,
-                            color: 'white'
-                        }}
-                        onPress={() => Alert.alert("Editar puto gos!")}>Ultim missatge del xat :)
-        </Text>
-
-                </View>
-            )
-        })
-    }
 
     render() {
 
@@ -410,35 +355,35 @@ export default class ChatDirectory extends React.Component {
             this.handleGetChats();
 
 
-            return(
-            <LinearGradient colors={['#F15A24', '#D4145A']}
-                start={[0, 1]}
-                end={[1, 0]}
-                style={{
-                    flex: 1,
-                    paddingTop: 30
-                }}
-            >
-                <Text style={{
-                    paddingLeft: '5%',
-                    paddingBottom: 5,
-                    color: 'white',
-                    fontSize: 30,
-                    fontWeight: 'bold'
-                }}>Chats</Text>
-                <ScrollView
-                    horizontal={false}
+            return (
+                <LinearGradient colors={['#F15A24', '#D4145A']}
+                    start={[0, 1]}
+                    end={[1, 0]}
                     style={{
-                        height: '90%',
+                        flex: 1,
+                        paddingTop: 30
                     }}
                 >
-                <ActivityIndicator size="small" color="#ffffff"  />
+                    <Text style={{
+                        paddingLeft: '5%',
+                        paddingBottom: 5,
+                        color: 'white',
+                        fontSize: 30,
+                        fontWeight: 'bold'
+                    }}>Chats</Text>
+                    <ScrollView
+                        horizontal={false}
+                        style={{
+                            height: '90%',
+                        }}
+                    >
+                        <ActivityIndicator size="small" color="#ffffff" />
 
-                </ScrollView>
-                {/* Aqui shan de fer ifs. Si no hi ha cap favorited que no surti i si ningu ha fet favorited dons que no surti */}
+                    </ScrollView>
+                    {/* Aqui shan de fer ifs. Si no hi ha cap favorited que no surti i si ningu ha fet favorited dons que no surti */}
 
-            </LinearGradient>);
-    }
+                </LinearGradient>);
+        }
 
 
 
@@ -464,7 +409,7 @@ export default class ChatDirectory extends React.Component {
                         height: '90%',
                     }}
                 >
-                    {this.renderFavorites()}
+                    {this.renderChats()}
                 </ScrollView>
                 {/* Aqui shan de fer ifs. Si no hi ha cap favorited que no surti i si ningu ha fet favorited dons que no surti */}
 
