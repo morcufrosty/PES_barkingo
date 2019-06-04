@@ -74,7 +74,10 @@ const SwipeNavigator = createStackNavigator({
 
     const ChatNavigator = createStackNavigator({
         Chat: { screen: Chat },
-        perfilAnimalFavorites: { screen: perfilAnimalFavoritesNav }
+        perfilAnimalFavorites: { screen: perfilAnimalFavoritesNav },
+
+
+
     },
         {
             initialRouteName: 'Chat',
@@ -86,6 +89,28 @@ const SwipeNavigator = createStackNavigator({
         });
 
     const ChatNav = createAppContainer(ChatNavigator);
+
+
+    const chatDir = createStackNavigator({
+        chatDirectory: { screen: chatDirectory },
+        chatScreen: { screen: chatScreen },
+
+
+
+    },
+        {
+            initialRouteName: 'chatDirectory',
+            headerMode: 'none',
+            navigationOptions: {
+                headerVisible: false,
+            }
+
+        });
+
+    const ChatDir = createAppContainer(chatDir);
+
+
+
 
 const SwipeNav = createAppContainer(SwipeNavigator);
 
@@ -134,7 +159,7 @@ const TabNavigator = createBottomTabNavigator(
             },
         },
         chatDirectory: {
-            screen: chatDirectory,
+            screen: ChatDir,
             navigationOptions: {
                 tabBarLabel: "",
                 tabBarIcon: ({ focused, tintColor }) => (
