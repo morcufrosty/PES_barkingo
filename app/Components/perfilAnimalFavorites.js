@@ -42,6 +42,37 @@ export default class perfilAnimalFavorites extends React.Component {
         }
 
     }
+
+    async openChatToAPI(tokenJson, id) {
+
+        return fetch(`http://10.4.41.164/api/offers/${id}/chat`, {
+            method: 'POST',
+            headers: {
+                Accept: '*',
+                'Content-Type': 'application/json',
+                'x-access-token': tokenJson.token
+            }
+        }).then((response) => response.json())
+            .then((responseJson) => {
+                console.log(responseJson.msg);
+                return responseJson;
+            }).catch((error) => {
+                console.error(error);
+            });
+    }
+
+      async handleStartChat(){
+        const token = await AsyncStorage.getItem("access_token");
+        tokenJson = JSON.parse(token);
+        console.log(this.state.id);
+        const response = await this.openChatToAPI(tokenJson, this.state.id)
+        console.log(response);
+        if (response.success)this.props.navigation.navigate('chatScreen', {offerId: this.state.id})
+        else Alert.alert(response.msg)
+       
+
+      }
+    
     async getOfferInfoFromAPI(tokenJson, id) {
 
         return fetch(`http://10.4.41.164/api/offers/${id}`, {
@@ -215,7 +246,7 @@ export default class perfilAnimalFavorites extends React.Component {
 
                         elevation: 6,
                         }}
-                        onPress={() => this.props.navigation.navigate('chatScreen', {offerId: this.state.id})}>
+                        onPress={async() => this.handleStartChat()}>
                     <Icon name={"comments"} size={40} color="#f95234" />
                     </TouchableOpacity>
 

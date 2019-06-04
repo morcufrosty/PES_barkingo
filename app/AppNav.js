@@ -16,7 +16,7 @@ import TabIcon from './TabIcon';
 import AutocompleteExample from "./Components/autocomplete"
 import Filter from "./Components/filter"
 import formPerfilUsuari from "./Components/formPerfilUsuari"
-import chatScreen from "./Components/chatScreen"
+import chatScreen from "./Components/conversationChat"
 import changeSettings from "./Components/changeSettings"
 import chatDirectory from "./Components/chatDirectory"
 
