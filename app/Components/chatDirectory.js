@@ -252,7 +252,7 @@ export default class ChatDirectory extends React.Component {
 
                     if (responseUser.success && responseOffer.success) {
 
-                        chatAux[i] = { name: responseUser.user.username, desc: " (interested in " + responseOffer.offer.name + ")", type: "user", id: responseUser.user.id };
+                        chatAux[i] = { name: responseUser.user.username, desc: " (interested in your pet " + responseOffer.offer.name + ")", type: "user", id: responseUser.user.id };
 
 
 
@@ -318,7 +318,7 @@ export default class ChatDirectory extends React.Component {
         return this.state.chats.map((data, index) => {
             return (
                 <View style={{ flexDirection: 'row', padding: '2%' }}>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('chatScreen', { offerId: this.state.id })}
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('chatScreen', { offerId: data.id })}
                         onLongPress={() =>
                             Alert.alert(
                                 'UnFavourite',
