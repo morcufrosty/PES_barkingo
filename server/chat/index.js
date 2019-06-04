@@ -8,6 +8,8 @@ const creds = require('../creds.json');
 const handlers = require('../chat/handlers')
 const User = require('./models/user');
 
+const sockets = {};
+
 socketio.on('connection', (socket) => {
     console.log('connection started')
     socket.on('init', (userId) => {
@@ -24,7 +26,7 @@ socketio.on('connection', (socket) => {
     });
 });
 
-mongoose.connect(creds.chatDB);
+mongoose.connect(creds.chatDB, { useNewUrlParser: true });
 // https://github.com/lukewalczak/friendChat
 // https://blog.callstack.io/simple-chat-app-with-react-native-part-i-34d6ea4c2535
 // https://blog.callstack.io/simple-chat-app-with-react-native-part-ii-e3d8fd9c6cd4

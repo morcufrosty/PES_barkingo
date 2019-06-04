@@ -11,8 +11,12 @@ export default class Login extends Component {
     super(props);
 
     this.state = {
-      password: ""
+      password: "",
     };
+  }
+
+  componentDidMount(){
+
   }
 
   storeToken = async (token) => {
@@ -50,6 +54,7 @@ export default class Login extends Component {
     }).then((response) => response.json())
         .then((responseJson) => {
             console.log(responseJson.msg);
+            localStorage.setItem("api_token", responseJson.token);
             return responseJson;
         }).catch((error) => {
             console.error(error);
@@ -76,7 +81,6 @@ export default class Login extends Component {
         this.props.login();
       }
     }
-    console.log(this.props.login);
   }
 
   handleSubmit = event => {
@@ -88,7 +92,7 @@ export default class Login extends Component {
     return (
       <div className="Login">
         <form onSubmit={this.handleSubmit}>
-          <FormGroup controlId="password" bsSize="large">
+          <FormGroup controlId="password" bssize="large">
             <FormLabel>Password</FormLabel>
             <FormControl
               value={this.state.password}
