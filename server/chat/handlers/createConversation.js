@@ -20,7 +20,7 @@ module.exports = async function(chat, response) {
                             console.log(friend);
                             console.log(user);
                             const newConversation = new Conversation({
-                                chatId: chat.idChat,
+                                idOffer: chat.idOffer,
                                 userOneId: user.UserId,
                                 userTwoId: friend.UserId,
                             });

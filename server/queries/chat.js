@@ -45,8 +45,8 @@ const createChat = async (request, response) => {
                         response.status(404);
                         response.json({ success: false, msg: "Offer doesn't exist" });
                     } else {
-                        const id = uuidv4();
-                        const pr = chatHandlers.createConversation({ idChat: id, idUserOwner: result.rows[0].idOwner, idUserAsker: result1.rows[0].id }, response);
+                        // const id = uuidv4();
+                        const pr = chatHandlers.createConversation({ idOffer: result.rows[0].id, idUserOwner: result.rows[0].idOwner, idUserAsker: result1.rows[0].id }, response);
                         // .then(res => {
                         //     console.log(res);
                         //     if (res.success) {
