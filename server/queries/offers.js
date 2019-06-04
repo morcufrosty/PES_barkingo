@@ -74,7 +74,7 @@ const getAllOffers = async (request, response) => {
                         response.json({ success: false, msg: 'You are not root user, not authorised' });
                     } else {
                         client.query(
-                            'SELECT * FROM animals' ,
+                            'SELECT * FROM animals WHERE status=0' ,
                             (error, res) => {
                                 if (error) {
                                     console.error('Unknown error', error);
