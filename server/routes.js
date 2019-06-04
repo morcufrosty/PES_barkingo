@@ -55,6 +55,8 @@ router.use((req, res, next) => {
 
 router.get('/users/currentUser', db.currentUser);
 
+router.get('/users/all', db.getAllUsers);
+
 router.get('/users/:id', db.getUser);
 
 router.post('/users/:id', db.createProfile);
