@@ -402,7 +402,7 @@ Animal species:
         -   `success`: Is either `true` or `false`.
         -   `msg`: If success is false, short message explaining the causes of the error. If not, contains success message.
 
--   ### GET `/chat/:id`: gets all the messages from a chat
+-   ### GET `/chats/:id`: gets all the messages from a chat
     -   #### Path parameters
         -   `id` [`required`]: identifier of the chat.
     -   #### Response
