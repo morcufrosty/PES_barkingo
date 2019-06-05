@@ -517,7 +517,7 @@ const offerDetails = async (request, response) => {
         }
         await client.query('BEGIN');
         await client.query(
-            'SELECT "openedOffers".id, "openedOffers"."name", "openedOffers"."age", "openedOffers".description, "openedOffers".sex, "openedOffers".reports, race."raceName", species."speciesName" AS "species", race."idRace", users.id AS "idOwner" FROM "openedOffers", race, species, users WHERE "openedOffers".id = $1 and "openedOffers"."idOwner"=users.id and "openedOffers".race=race."idRace" and race."idSpecies"=species.id;', [idOffer],
+            'SELECT animals.id, animals."name", animals."age", animals.description, animals.sex, animals.reports, race."raceName", species."speciesName" AS "species", race."idRace", users.id AS "idOwner" FROM animals, race, species, users WHERE animals.id = $1 and animals."idOwner"=users.id and animals.race=race."idRace" and race."idSpecies"=species.id;', [idOffer],
             (err, result) => {
                 if (err || result.rowCount == 0) {
                     console.log(err);
