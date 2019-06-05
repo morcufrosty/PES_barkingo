@@ -17,15 +17,15 @@ module.exports = async function(chat, response) {
                 } else {
                     User.findOne({ UserId: chat.idUserOwner }).then(friend => {
                         if (friend) {
-                            console.log(friend);
-                            console.log(user);
+                            // console.log(friend);
+                            // console.log(user);
                             const newConversation = new Conversation({
                                 idOffer: chat.idOffer,
                                 userOneId: user.UserId,
                                 userTwoId: friend.UserId,
                             });
                             newConversation.save().then(conversation => {
-                                console.log(conversation);
+                                // console.log(conversation);
                                 user.conversations.push(conversation);
                                 friend.conversations.push(conversation);
                                 user.save();
