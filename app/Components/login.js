@@ -18,6 +18,8 @@ import * as Expo from "expo"
 import { StackActions, NavigationActions } from 'react-navigation';
 import strings from '../i18n/i18n';
 import {setLocal} from '../i18n/i18n';
+import {ChangeLanguage} from '../i18n/i18n';
+
 
 
 const ACCESS_TOKEN = 'access_token';
@@ -415,9 +417,19 @@ export default class App extends React.Component {
         }
     }
 
+
+    async handleLanguage(){
+
+        lang = await AsyncStorage.getItem("lang");
+            if(lang != null){
+                ChangeLanguage(lang);
+            }
+    }
+
     render() {
 
         if (this.state.isLoading) {
+            this.handleLanguage();
             this.retrieveAndCheckToken();
             //setLocal();
             

@@ -19,6 +19,7 @@ import strings, {ChangeLanguage} from '../i18n/i18n';
 export default class changeSettings extends React.Component {
 
     ChangeLanguageHandler = (lang) => {
+        AsyncStorage.setItem("lang", lang);
         if (ChangeLanguage(lang) != lang){
             Alert.alert(strings('changeSettings.languageError'));
         }
@@ -29,6 +30,8 @@ export default class changeSettings extends React.Component {
             25,
             50,
         );
+
+        this.props.navigation.navigate("Login")
     }
 
     render() {

@@ -39,9 +39,9 @@ function strings(name, params = {}) {
 };
 
 export const ChangeLanguage = (language) => {
-  if (language === 'ca-ES' || language === 'en' || language === 'es-ES') {
+  if (language === 'ca-ES' || language === 'en' || language === 'es') {
     I18n.locale = language;
-    AsyncStorage.setItem('lang', language);
+    //AsyncStorage.setItem('lang', language);
     return language;
   }
   return "Error";
