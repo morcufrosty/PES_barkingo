@@ -229,30 +229,15 @@ export default class ChatDirectory extends React.Component {
                     responseOffer = await this.getOfferInfoFromAPI(tokenJson, chatOfferId);
 
                     if (responseUser.success && responseOffer.success) {
-                        chatAux[i] = { name: responseUser.user.username, desc: ' (interested in ' + responseOffer.offer.name + ')', type: 'user', chatInfo: chatResponse[i], currentUser: currentUser.user.id };
-
-                        this.getProfileImageFromServer(tokenJson, responseUser.user.id, i).then(value => {
-                            profileImage = 'data:image/jpeg;base64,' + value;
-                            let imagesA = this.state.images;
-                            imagesA[i] = profileImage;
-                            //let name = this.state.chats[i].name
-                            //this.setState({images: imagesA})
-                        });
+                        chatAux[i] = { name: responseUser.user.username, desc: ' (interested in ' + responseOffer.offer.name + ')', type: 'user', chatInfo: chatResponse[i], currentUser: currentUser.user.id, id:chatUserId };
                     }
                 } else if (offer) {
                     responseOffer = await this.getOfferInfoFromAPI(tokenJson, chatOfferId);
                     responseUser = await this.getUserInfoFromAPI(tokenJson, chatUserId);
 
                     if (responseOffer.success && responseUser.success) {
-                        chatAux[i] = { name: responseOffer.offer.name, desc: ' (' + responseUser.user.username + "'s pet)", chatInfo: chatResponse[i], currentUser: currentUser.user.id };
-
-                        this.getImageFromServer(tokenJson, responseOffer.offer.id, i).then(value => {
-                            profileImage = 'data:image/jpeg;base64,' + value;
-                            let imagesA = this.state.images;
-                            imagesA[i] = profileImage;
-                            //let name = this.state.chats[i].name
-                            //this.setState({images: imagesA})
-                        });
+                        chatAux[i] = { name: responseOffer.offer.name, desc: ' (' + responseUser.user.username + "'s pet)", chatInfo: chatResponse[i], currentUser: currentUser.user.id, id:chatOfferId };
+                       
 
                         // console.log(responseOffer.offer.name);
                     }
