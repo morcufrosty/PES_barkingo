@@ -46,7 +46,6 @@ export default class ImageComponent extends Component {
         this.getOfferImageFromServer(tokenJson, this.props.id.id).then( (value)=> {
             profileImage = "data:image/jpeg;base64," + value;
             this.setState({image: profileImage})
-            console.log(profileImage)
 
             ;})
         
@@ -56,7 +55,6 @@ export default class ImageComponent extends Component {
             this.getProfileImageFromServer(tokenJson, this.props.id.id).then( (value)=> {
                 profileImage = "data:image/jpeg;base64," + value;
                 this.setState({image: profileImage})
-                console.log(profileImage)
     
                 ;})
             

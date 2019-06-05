@@ -276,6 +276,29 @@ export default class ChatDirectory extends React.Component {
             });
     }
 
+   async handleDelete(id){
+    const t = await AsyncStorage.getItem('access_token');
+    tokenJson = JSON.parse(t);
+
+    return fetch(`http://10.4.41.164/api/chats/${id}`, {
+        method: 'DELETE',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            'x-access-token': tokenJson.token
+        }
+
+    }).then((response) => response.json())
+        .then((responseJson) => {
+            console.log(responseJson);
+            return responseJson;
+        }).catch((error) => {
+            console.error(error);
+        });
+}
+
+    
+
 
     renderChats = () => {
         return this.state.chats.map((data, index) => {
@@ -284,15 +307,15 @@ export default class ChatDirectory extends React.Component {
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('chatScreen', { chat: data })}
                         onLongPress={() =>
                             Alert.alert(
-                                'UnFavourite',
-                                'Remove from favourited list',
+                                'Block',
+                                'Do you want to block this user?',
                                 [
                                     {
                                         text: 'Cancel',
                                         onPress: () => console.log('Cancel Pressed'),
                                         style: 'cancel',
                                     },
-                                    { text: 'OK', onPress: () => this.handleDeleteFavourite(this.state.chats[index].id, index) },
+                                    { text: 'OK', onPress: () => this.handleDelete(data.chatInfo.idChat) },
                                 ],
                                 { cancelable: false },
                             )}>

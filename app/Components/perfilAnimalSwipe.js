@@ -90,6 +90,26 @@ export default class perfilAnimalSwipe extends React.Component {
     }
 
 
+    async reportOffer() {
+        const t = await AsyncStorage.getItem('access_token');
+        tokenJson = JSON.parse(t);
+
+        return fetch(`http://10.4.41.164/api/offers/${this.state.id}/report`, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': tokenJson.token
+            }
+
+        }).then((response) => response.json())
+            .then((responseJson) => {
+                console.log(responseJson.msg);
+                return responseJson;
+            }).catch((error) => {
+                console.error(error);
+            });
+    }
 
 
     async handleStart() {
@@ -193,7 +213,7 @@ export default class perfilAnimalSwipe extends React.Component {
                               onPress: () => console.log('Cancel Pressed'),
                               style: 'cancel',
                             },
-                            {text: 'OK', onPress: () => console.log('OK Pressed')},
+                            {text: 'OK', onPress: () =>this.reportOffer()},
                           ],
                           {cancelable: false},
                         )}>
