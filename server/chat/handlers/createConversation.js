@@ -10,7 +10,7 @@ module.exports = async function(chat, response) {
         .then(user => {
             console.log('entrem logging');
             if (user) {
-                const isConversationExist = user.conversations.filter(conversation => conversation.userOneId === chat.idUserOwner || conversation.userTwoId === chat.idUserOwner || conversation.idOffer === chat.idOffer).length > 0;
+                const isConversationExist = user.conversations.filter(conversation => conversation.userOneId === chat.idUserOwner && conversation.userTwoId === chat.idUserOwner && conversation.idOffer === chat.idOffer).length > 0;
                 if (isConversationExist) {
                     console.log('already exists');
                     response.json({ success: false, msg: 'Chat already exists' });
