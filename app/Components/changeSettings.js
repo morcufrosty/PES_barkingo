@@ -34,6 +34,37 @@ export default class changeSettings extends React.Component {
         this.props.navigation.navigate("Login")
     }
 
+
+    async handleReset(){
+            const t = await AsyncStorage.getItem('access_token');
+            tokenJson = JSON.parse(t);
+            return fetch(`http://10.4.41.164/api/offers/seen`, {
+                method: 'DELETE',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'x-access-token': tokenJson.token
+                }
+        
+            }).then((response) => response.json())
+                .then((responseJson) => {
+                    console.log(responseJson);
+                    if(responseJson.success){
+                        ToastAndroid.showWithGravityAndOffset(
+                            "Swipes reseted successfully",
+                            ToastAndroid.SHORT,
+                            ToastAndroid.BOTTOM,
+                            25,
+                            50,
+                        );
+                    }
+                        
+                }).catch((error) => {
+                    console.error(error);
+                });
+    }
+
+
     render() {
         return (
             <LinearGradient colors={['#F15A24', '#D4145A']}
@@ -91,6 +122,16 @@ export default class changeSettings extends React.Component {
                 </View>
                 <Button
                     style={{color:'white', flex:1}}
+                    title= {"Reset swipes"}
+                    color='#D84B37'
+                    onPress={async () => {
+                        this.handleReset()
+
+                    }}
+                ></Button>
+                <View style={{paddingTop: 10}}> 
+                <Button
+                    style={{color:'white', flex:1}}
                     title= {strings('changeSettings.logOut')}
                     color='#D84B37'
                     onPress={async () => {
@@ -103,6 +144,8 @@ export default class changeSettings extends React.Component {
                         this.props.navigation.dispatch(resetAction);
                     }}
                 ></Button>
+
+                </View>
                 <Text style={{color: 'white', textDecorationLine: "underline", flex:1 }}
                             onPress={() => 
                                 Alert.alert(
