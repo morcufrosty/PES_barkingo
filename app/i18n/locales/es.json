@@ -14,17 +14,17 @@
 		"password": "Contraseña",
 		"noAccount": "Tienes cuenta?",
 		"register" : "Registrar-se",
-		"loginFace" : "INGRESO CON FACEBOOK",
-		"loginGoogle": "INGRESO CON GOOGLE",
-		"loginError": "Error de ingreso",
+		"loginFace" : "INICIAR SESSIÓN CON FACEBOOK",
+		"loginGoogle": "INICIAR SESSIÓN CON GOOGLE",
+		"loginError": "Error de inicio de sessión",
 		"serverError": "Error del servidor",
-		"faceError" : "Error de ingreso con Facebook: {{m}}",
-		"googleError" : "Error de ingreso con Google: {{message}}",
+		"faceError" : "Error de inicio de sessión con Facebook: {{m}}",
+		"googleError" : "Error de inicio de sessión con Google: {{message}}",
 		"error" : "Error",
 		"enterEmail": "Introduzca el correo electrónico, por favor",
 		"enterPassword": "Introduzca la contrasenya, por favor",
 		"pwdError" : "Las contraseñas no coinciden vuelvelo a provar",
-		"pageLogin" : "Pagina de ingreso"
+		"pageLogin" : "Pagina de inicio de sessión"
 	},
 	"perfilAnimal": {
 		"age" : "Edad: {{a}}",

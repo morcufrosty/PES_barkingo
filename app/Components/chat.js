@@ -18,6 +18,7 @@ import InputPassword from './inputPassword.js';
 import { decompressFromUTF16 } from 'lz-string';
 import { AsyncStorage } from 'react-native';
 import FocusStateLabel from "../FocusStateLabel"
+import strings from '../i18n/i18n';
 
 
 export default class Chat extends React.Component {
@@ -74,7 +75,7 @@ export default class Chat extends React.Component {
             this.setState({favouriteOffers : auxFav, images : auxImg});
         }
         else {
-            Alert.alert("Favorite offer has not been deleted!", response.msg);
+            Alert.alert(strings('chat.errorDeleted'), response.msg);
         }
     }
 
@@ -151,15 +152,15 @@ export default class Chat extends React.Component {
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('perfilAnimalFavorites', {id: this.state.favouriteOffers[index].id, image: this.state.images[index], onGoBack: () => this.refresh() } )}
                     onLongPress={()=>
                         Alert.alert(
-                            'UnFavourite',
-                            'Remove from favourited list',
+                            strings('chat.unfavorite'),
+                            strings('chat.removeFavourite'),
                             [
                               {
-                                text: 'Cancel',
+                                text: strings('chat.cancel'),
                                 onPress: () => console.log('Cancel Pressed'),
                                 style: 'cancel',
                               },
-                              {text: 'OK', onPress:  () => this.handleDeleteFavourite(this.state.favouriteOffers[index].id, index)},
+                              {text: strings('chat.ok'), onPress:  () => this.handleDeleteFavourite(this.state.favouriteOffers[index].id, index)},
                             ],
                             {cancelable: false},
                           )}>
@@ -202,7 +203,7 @@ export default class Chat extends React.Component {
                             color: 'white',
                             fontWeight: "bold"
                         }}
-                        onPress={() => Alert.alert("Editar puto gos!")}>{data.name}
+                        onPress={() => Alert.alert(strings('chat.editDog'))}>{data.name}
                     </Text>
                     <Text
                         style={{
@@ -211,7 +212,7 @@ export default class Chat extends React.Component {
                             left: 125,
                             color: 'white'
                         }}
-                        onPress={() => Alert.alert("Editar puto gos!")}>Ultim missatge del xat :)
+                        onPress={() => Alert.alert(strings('chat.editDog'))}>Ultim missatge del xat :)
         </Text>
 
                 </View>
@@ -273,7 +274,7 @@ export default class Chat extends React.Component {
                     color: 'white',
                     fontSize: 30,
                     fontWeight: 'bold'
-                }}>Favorited</Text>
+                }}>{strings('chat.favourite')}</Text>
                 <ScrollView
                     horizontal={false}
                     style={{

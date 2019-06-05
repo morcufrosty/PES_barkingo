@@ -5,8 +5,22 @@
 		"Dislike" : "No m'agrada"
 	},
 	"chat": {
-		"ErrorDeleted": "No s'ha eliminat la oferta de preferits"
-
+		"errorDeleted": "No s'ha eliminat la oferta de preferits",
+		"unfavourite" : "UnFavourite",
+		"removeFavourite" : "Remove from favourited list",
+		"cancel" : "Cancel",
+		"ok": "Acceptar",
+		"editDog": "Editar gos",
+		"favourite": "Favorited",
+		"interested": "(interested in {{n}})",
+		"userInfo": "({{n}}'s pet)",
+		"block" : "Block",
+		"askBlock" : "Do you want to block this user?",
+		"chatTitle": "Chats",
+		"chatExists" : "Chat already exists",
+		"userNotExists": "The user owner doesn't exist",
+		"created" : "Chat created",
+		"noUser" : "User doesn't exist"
 	},
 	"login": {
 		"loginText": "Inici de Sessió",
@@ -132,7 +146,4 @@
 		"newPublication" : "Nova oferta",
 		"noPublications": "No tens cap oferta activa"
 	}
-
-
-
 }

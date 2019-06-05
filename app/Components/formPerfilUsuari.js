@@ -664,7 +664,7 @@ export default class formPerfilUsuari extends React.Component {
 
 
                     <Button
-                            title= {strings('formNewOffer.name')}
+                            title= {strings('formNewOffer.submit')}
                             color='#ff3b28'
                             onPress={async () => this.handlePress()}>
                     </Button>
