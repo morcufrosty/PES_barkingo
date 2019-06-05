@@ -13,7 +13,7 @@ const sockets = {};
 socketio.on('connection', (socket) => {
     console.log('connection started')
     socket.on('init', (userId) => {
-        console.log(userId)
+        console.log(sockets)
         sockets[userId.senderId] = socket;
     });
     socket.on('message', (message) => {
