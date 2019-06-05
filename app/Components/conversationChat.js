@@ -1,8 +1,9 @@
 /* @flow */
 import React from 'react';
-import { AsyncStorage, ScrollView, ActivityIndicator } from 'react-native';
+import { AsyncStorage, ScrollView, ActivityIndicator, View, Platform } from 'react-native';
 import SocketIOClient from 'socket.io-client';
 import { GiftedChat } from 'react-native-gifted-chat';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 // import { loadMessages, sendMessage } from '../actions/loadMessages';
 
@@ -188,7 +189,17 @@ export default class ConversationChat extends React.Component {
                 </ScrollView>
             );
         } else {
-            return <GiftedChat messages={this.state.messages} onSend={this._onSend} user={{ _id: this.state.user.id, name: this.state.user.username }} />;
+            return (
+                <View style={{flex: 1}}>
+                    <GiftedChat
+                    messages={this.state.messages} 
+                    onSend={this._onSend} 
+                    user={{ _id: this.state.user.id, name: this.state.user.username }}
+                    />
+                    {Platform.OS === 'android' ? <KeyboardSpacer /> : null }
+                </View>
+            );
+
         }
     }
 }
