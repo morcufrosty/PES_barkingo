@@ -13,11 +13,9 @@ const sockets = {};
 socketio.on('connection', (socket) => {
     console.log('connection started')
     socket.on('init', (userId) => {
-        console.log(userId)
         sockets[userId.senderId] = socket;
     });
     socket.on('message', (message) => {
-        console.log(message.receiverId)
         if (sockets[message.receiverId]) {
             sockets[message.receiverId].emit('message', message);
         }
