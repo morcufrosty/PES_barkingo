@@ -4,7 +4,7 @@ import {
     ScrollView,
     TextInput,
     Alert,
-    Platform, Image, TouchableOpacity
+    Platform, Image, TouchableOpacity, ToastAndroid
 
 } from 'react-native';
 import Button from './Button';
@@ -105,7 +105,15 @@ export default class perfilAnimalSwipe extends React.Component {
         }).then((response) => response.json())
             .then((responseJson) => {
                 console.log(responseJson.msg);
-                return responseJson;
+                if(responseJson.success){
+                    ToastAndroid.showWithGravityAndOffset(
+                        "Gràcies per la vostra col·laboració",
+                        ToastAndroid.SHORT,
+                        ToastAndroid.BOTTOM,
+                        25,
+                        50,
+                    );
+                }
             }).catch((error) => {
                 console.error(error);
             });
