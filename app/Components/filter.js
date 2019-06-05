@@ -68,7 +68,7 @@ export default class filter extends React.Component {
 
         const token = await AsyncStorage.getItem("access_token");
         const jsonToken = JSON.parse(token);
-        jsonObject = { sex: this.state.sex, type: this.state.type, species: this.state.species, radius: this.state.distance[0], minAge: this.state.ageRange[0], maxAge: this.state.ageRange[1] };
+        jsonObject = { sex: this.state.sex, type: this.state.type, species: this.state.species, radius: this.state.distance[0], minAge: this.state.ageRange[0], maxAge: this.state.ageRange[1], ageFilter: this.state.ageFilter, distanceFilter: this.state.distanceFilter };
         console.log(jsonObject);
 
         const userResponse = await this.getCurrentUserFromAPI(jsonToken)
@@ -181,12 +181,12 @@ renderDistance(){
                     </Picker>
                 </View>
                 <View style={{ flex: 1 }}>
-                    <View style={{ flexDirection: 'row' }} >
+                    <View style={{ flexDirection: 'row', alignItems:"center" }} >
                         <Text style={{ color: 'white' }}>{strings('filter.distance')}: </Text>
                         <Text style={{ color: 'white' }}>{this.state.distance} Km</Text>
                         <CheckBox
-                            checked={this.state.ageRange}
-                            onPress={() => this.setState({ageRange: !this.state.ageRange})}
+                            checked={this.state.distanceFilter}
+                            onPress={() => this.setState({distanceFilter: !this.state.distanceFilter})}
 
                         />
                     </View>
