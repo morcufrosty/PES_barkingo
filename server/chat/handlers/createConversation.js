@@ -1,9 +1,8 @@
 const User = require('../models/user');
 const Conversation = require('../models/conversation');
 const createUser = require('./createUser');
-import strings from '../i18n/i18n';
 
-module.exports = async function(chat, response) {
+module.exports = async function (chat, response) {
     console.log(chat);
     let result; // = { success: false, msg: '' }
     await User.findOne({ UserId: chat.idUserAsker })
@@ -14,7 +13,7 @@ module.exports = async function(chat, response) {
                 const isConversationExist = user.conversations.filter(conversation => (conversation.userOneId === chat.idUserOwner || conversation.userTwoId === chat.idUserOwner) && conversation.idOffer === chat.idOffer).length > 0;
                 if (isConversationExist) {
                     console.log('already exists');
-                    response.json({ success: false, msg: strings('chat.chatExists') });
+                    response.json({ success: false, msg:  'Chat already exists' });
                 } else {
                     User.findOne({ UserId: chat.idUserOwner }).then(friend => {
                         if (friend) {
@@ -32,15 +31,15 @@ module.exports = async function(chat, response) {
                                 user.save();
                                 friend.save();
 
-                                response.json({ success: true, msg: strings('chat.created') });
+                                response.json({ success: true, msg: 'Chat created' });
                             });
                         } else {
-                            response.json({ success: false, msg: strings('chat.userNotExists') });
+                            response.json({ success: false, msg: "The user owner doesn't exist" });
                         }
                     });
                 }
             } else {
-                response.json({ success: false, msg: strings('chat.noUser') });
+                response.json({ success: false, msg: "User doesn't exist" });
             }
         });
     console.log(result);
