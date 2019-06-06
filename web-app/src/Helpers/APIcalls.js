@@ -54,7 +54,10 @@ export async function getUserInfo( id) {
         }
     }).then((response) => response.json())
         .then((responseJson) => {
+
+            console.log(responseJson)
             return responseJson.offers;
+        
         }).catch((error) => {
             console.error(error);
         });
@@ -72,7 +75,7 @@ export async function getUserInfo( id) {
         }
     }).then((response) => response.json())
         .then((responseJson) => {
-            return responseJson.offers;
+            return responseJson;
         }).catch((error) => {
             console.error(error);
         });
@@ -97,3 +100,19 @@ export async function deleteOffer(id) {
 
 }
 
+
+export async function deleteUser(id) {
+    return fetch(link + `/users/${id}`, {
+        method: 'DELETE',
+        headers: {
+            Accept: '*',
+            'x-access-token': localStorage.getItem("api_token")
+        }
+    }).then((response) => response.json())
+    .then((responseJson) => {
+        return responseJson;
+    }).catch((error) => {
+        console.error(error);
+    });
+
+}
