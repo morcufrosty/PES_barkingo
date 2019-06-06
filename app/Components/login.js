@@ -342,33 +342,6 @@ export default class App extends React.Component {
                 );
             }
 
-            if (this.state.count === 2) {
-                this.resetState();
-                const response = await this.loginDevUsingAPI();
-                console.log(response.msg);
-                if (response.success) {
-                    var token = response.token;
-                    console.log(token);
-                    this.storeToken(response.token);
-                    var profile = await this.checkIfUserHasProfile(token);
-                    if(profile){
-                      console.log("USUARI AMB PERFIL");
-                      const resetAction = StackActions.reset({
-                          index: 0,
-                          actions: [NavigationActions.navigate({ routeName: 'AppAfterLogin' })],
-                      });
-                      this.props.navigation.dispatch(resetAction);
-                    }else{
-                      console.log("USUARI SENSE PERFIL");
-                      const resetAction = StackActions.reset({
-                          index: 0,
-                          actions: [NavigationActions.navigate( {routeName: 'newProfileFormScreen',params: {new: true} } )],
-                      });
-                      this.props.navigation.dispatch(resetAction);
-                    }
-                }
-            }
-            return;
 
         }
         else if (this.state.email == '') {

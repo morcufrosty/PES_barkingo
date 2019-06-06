@@ -237,7 +237,7 @@ export default class ChatDirectory extends React.Component {
                     responseUser = await this.getUserInfoFromAPI(tokenJson, chatUserId);
 
                     if (responseOffer.success && responseUser.success) {
-                        chatAux[i] = { name: responseOffer.offer.name, type:"offer", desc: strings('chat.interested', {n: responseUser.user.username  }), chatInfo: chatResponse[i], currentUser: currentUser.user.id, idd:chatOfferId };
+                        chatAux[i] = { name: responseOffer.offer.name, type:"offer", desc: strings('chat.userInfo', {n: responseUser.user.username  }), chatInfo: chatResponse[i], currentUser: currentUser.user.id, idd:chatOfferId };
                        
 
                         // console.log(responseOffer.offer.name);

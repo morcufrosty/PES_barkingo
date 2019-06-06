@@ -25,6 +25,8 @@ import { StackActions, NavigationActions } from 'react-navigation';
 import strings from '../i18n/i18n';
 import formNewOffer from './formNewOffer';
 
+var random = Math.random();
+
 
 export default class formPerfilUsuari extends React.Component {
 
@@ -52,6 +54,8 @@ export default class formPerfilUsuari extends React.Component {
             gettingLocation: false,
         }
     }
+
+    
 
     async handleStart(){
       //  this.setState({gettingLocation: true})
@@ -542,7 +546,6 @@ export default class formPerfilUsuari extends React.Component {
               </View>);
         }else
         {
-            var random = Math.random();
             var source;
             var imagePlace;
             if (random < 0.5){
