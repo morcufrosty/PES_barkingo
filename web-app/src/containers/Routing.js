@@ -50,14 +50,11 @@ export default class Routing extends React.Component{
             return(
             <div>
                <Nav  onSelect={selectedKey => this.changeActivePage(selectedKey)}  justify variant="tabs" defaultActiveKey="/animals">
-                    <Nav.Item>
-                    <Nav.Link eventKey="Animals">Animals</Nav.Link>
+                    <Nav.Item   >
+                        <Nav.Link class = "active" eventKey="Animals">Animals</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                    <Nav.Link eventKey="Users">Users</Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                    <Nav.Link eventKey="Other">Other</Nav.Link>
+                        <Nav.Link eventKey="Users">Users</Nav.Link>
                     </Nav.Item>
                 </Nav>
                 {this.getActivePage()}
