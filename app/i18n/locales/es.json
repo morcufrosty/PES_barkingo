@@ -5,8 +5,22 @@
 		"Dislike" : "No me gusta"
 	},
 	"chat": {
-		"ErrorDeleted": "No se ha eliminado la oferta de preferidos"
-
+		"errorDeleted": "No se ha eliminado la oferta de favoritos",
+		"unfavourite" : "Quitar de favoritos",
+		"removeFavourite" : "Eliminar de la lista de favoritos",
+		"cancel" : "Cancelar",
+		"ok": "Aceptar",
+		"editDog": "Editar mascota",
+		"favourite": "Favorito",
+		"interested": "(interesado en {{n}})",
+		"userInfo": "(La mascota de {{n}})",
+		"block" : "Bloquear",
+		"askBlock" : "Quieres bloquear a este usuario?",
+		"chatTitle": "Chats",
+		"chatExists" : "El chat ya existe",
+		"userNotExists": "El propietario no existe",
+		"created" : "Chat creado",
+		"noUser" : "El usuario no existe"
 	},
 	"login": {
 		"loginText": "Iniciar Sesión",
@@ -14,17 +28,17 @@
 		"password": "Contraseña",
 		"noAccount": "Tienes cuenta?",
 		"register" : "Registrar-se",
-		"loginFace" : "INGRESO CON FACEBOOK",
-		"loginGoogle": "INGRESO CON GOOGLE",
-		"loginError": "Error de ingreso",
+		"loginFace" : "INICIAR SESSIÓN CON FACEBOOK",
+		"loginGoogle": "INICIAR SESSIÓN CON GOOGLE",
+		"loginError": "Error de inicio de sessión",
 		"serverError": "Error del servidor",
-		"faceError" : "Error de ingreso con Facebook: {{m}}",
-		"googleError" : "Error de ingreso con Google: {{message}}",
+		"faceError" : "Error de inicio de sessión con Facebook: {{m}}",
+		"googleError" : "Error de inicio de sessión con Google: {{message}}",
 		"error" : "Error",
 		"enterEmail": "Introduzca el correo electrónico, por favor",
 		"enterPassword": "Introduzca la contrasenya, por favor",
 		"pwdError" : "Las contraseñas no coinciden vuelvelo a provar",
-		"pageLogin" : "Pagina de ingreso"
+		"pageLogin" : "Pagina de inicio de sessión"
 	},
 	"perfilAnimal": {
 		"age" : "Edad: {{a}}",

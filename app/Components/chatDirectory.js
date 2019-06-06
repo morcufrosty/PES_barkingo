@@ -8,6 +8,7 @@ import InputPassword from './inputPassword.js';
 import { decompressFromUTF16 } from 'lz-string';
 import { AsyncStorage } from 'react-native';
 import ImageComponent from './ImageComponent';
+import strings from '../i18n/i18n';
 
 export default class ChatDirectory extends React.Component {
     constructor(props) {
@@ -63,7 +64,7 @@ export default class ChatDirectory extends React.Component {
             this.setState({ favouriteOffers: auxFav, images: auxImg });
         }
         else {
-            Alert.alert("Favorite offer has not been deleted!", response.msg);
+            Alert.alert(strings('chat.errorDelete'), response.msg);
         }
     }
 
@@ -229,14 +230,14 @@ export default class ChatDirectory extends React.Component {
                     responseOffer = await this.getOfferInfoFromAPI(tokenJson, chatOfferId);
 
                     if (responseUser.success && responseOffer.success) {
-                        chatAux[i] = { name: responseUser.user.username, desc: ' (interested in ' + responseOffer.offer.name + ')', type: 'user', chatInfo: chatResponse[i], currentUser: currentUser.user.id, idd:chatUserId };
+                        chatAux[i] = { name: responseUser.user.username, desc: strings('chat.interested', {n: responseOffer.offer.name }), type: 'user', chatInfo: chatResponse[i], currentUser: currentUser.user.id, idd:chatUserId };
                     }
                 } else if (offer) {
                     responseOffer = await this.getOfferInfoFromAPI(tokenJson, chatOfferId);
                     responseUser = await this.getUserInfoFromAPI(tokenJson, chatUserId);
 
                     if (responseOffer.success && responseUser.success) {
-                        chatAux[i] = { name: responseOffer.offer.name, desc: ' (' + responseUser.user.username + "'s pet)", type:'offer', chatInfo: chatResponse[i], currentUser: currentUser.user.id, idd:chatOfferId };
+                        chatAux[i] = { name: responseOffer.offer.name, desc: strings('chat.interested', {n: responseUser.user.username  }), chatInfo: chatResponse[i], currentUser: currentUser.user.id, idd:chatOfferId };
                        
 
                         // console.log(responseOffer.offer.name);
@@ -307,15 +308,15 @@ export default class ChatDirectory extends React.Component {
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('chatScreen', { chat: data })}
                         onLongPress={() =>
                             Alert.alert(
-                                'Block',
-                                'Do you want to block this user?',
+                                strings('chat.block'),
+                                strings('chat.askBlock'),
                                 [
                                     {
-                                        text: 'Cancel',
+                                        text: strings('chat.cancel'),
                                         onPress: () => console.log('Cancel Pressed'),
                                         style: 'cancel',
                                     },
-                                    { text: 'OK', onPress: () => this.handleDelete(data.chatInfo.idChat) },
+                                    { text: strings('chat.ok'), onPress: () => this.handleDelete(data.chatInfo.idChat) },
                                 ],
                                 { cancelable: false },
                             )}>
@@ -357,7 +358,7 @@ export default class ChatDirectory extends React.Component {
                             fontWeight: 'bold',
                         }}
                     >
-                        Chats
+                        {strings('chat.chatTitle')}
                     </Text>
                     <ScrollView
                         horizontal={false}
@@ -394,7 +395,7 @@ export default class ChatDirectory extends React.Component {
                         fontWeight: 'bold',
                     }}
                 >
-                    Chats
+                    {strings('chat.chatTitle')}
                 </Text>
                 <ScrollView
                     horizontal={false}

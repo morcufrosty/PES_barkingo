@@ -5,8 +5,22 @@
 		"Dislike" : "No m'agrada"
 	},
 	"chat": {
-		"ErrorDeleted": "No s'ha eliminat la oferta de preferits"
-
+		"errorDeleted": "No s'ha eliminat la oferta de preferits",
+		"unfavourite" : "Desmarcar de preferits",
+		"removeFavourite" : "Esborrar de la llista de preferits",
+		"cancel" : "Cancel·lar",
+		"ok": "Acceptar",
+		"editDog": "Editar mascota",
+		"favourite": "Preferit",
+		"interested": "(interessat en {{n}})",
+		"userInfo": "(La mascota de {{n}})",
+		"block" : "Bloquejar",
+		"askBlock" : "Vol bloquejar l'usuari?",
+		"chatTitle": "Xats",
+		"chatExists" : "El xat ja existeix",
+		"userNotExists": "El propeitari no existeix",
+		"created" : "Xat creat",
+		"noUser" : "L'usuari no existeix"
 	},
 	"login": {
 		"loginText": "Inici de Sessió",
@@ -132,7 +146,4 @@
 		"newPublication" : "Nova oferta",
 		"noPublications": "No tens cap oferta activa"
 	}
-
-
-
 }

@@ -67,7 +67,7 @@ export default class perfilAnimalFavorites extends React.Component {
         console.log(this.state.id);
         const response = await this.openChatToAPI(tokenJson, this.state.id)
         console.log(response);
-        if (response.success)this.props.navigation.navigate('chatScreen', {offerId: this.state.id})
+        if (response.success)this.props.navigation.navigate('chatDirectory')
         else Alert.alert(response.msg)
        
 
