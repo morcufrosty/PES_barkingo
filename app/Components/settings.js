@@ -69,26 +69,35 @@ export default class Swipe extends React.Component {
             });
     }
 
-    async handleDeleteOffer(id) {
-        this.setState({ isLoading: true, myOffers: [] })
+    async handleDeleteOffer(id, del) {
         const t = await AsyncStorage.getItem('access_token');
         tokenJson = JSON.parse(t);
         console.log(tokenJson);
         const response = await this.deleteOffer(tokenJson, id);
 
         console.log(response);
-        if (response.success) {
+        if (response.success && del) {
             ToastAndroid.showWithGravityAndOffset(
                 strings('settings.offerDeleted'),
                 ToastAndroid.SHORT,
                 ToastAndroid.BOTTOM,
                 25,
                 50,
+                
             );
+
         }
-        else {
+        else if(del) {
             Alert.alert(strings('settings.errorOfferDeleted'), response.msg);
         }
+        this.setState({  myOffers: [],
+            images: [],
+            isLoading: true,
+            username: '',
+            noOffers: false,
+            pImage:'' })
+        return response;
+        
     }
 
     async getProfileImageFromServer(tokenJson, id) {
@@ -300,7 +309,7 @@ export default class Swipe extends React.Component {
                             top: 10,
                             left: 20
                         }}
-                        onPress={() => this.handleDeleteOffer(item.id)}>
+                        onPress={() => this.handleDeleteOffer(item.id, true)}>
                         <Image
                             source={{ uri: "https://png.pngtree.com/svg/20170121/delete_286553.png", width: 40, height: 40 }} />
                     </TouchableOpacity>
@@ -313,14 +322,25 @@ export default class Swipe extends React.Component {
                         height: 35,
                         width: 35
                     }}
-                    onPress={() => 
+                    onPress={async () => 
                 
                         Alert.alert(
                             'Finalitzar oferta',
                             'Està segur que desitja finalitzar la oferta?',
                             [
                               {text: 'No', onPress: () => console.log("NO")},
-                              {text: 'Si', onPress: () => this.handleFinishOffer(this.state.myOffers[index].id, index)},
+                              {text: 'Si', onPress: async () =>{
+                                  let res =await this.handleDeleteOffer(item.id, false)
+
+                                  if(res.success){
+                                  ToastAndroid.showWithGravityAndOffset(
+                                    "Oferta finalitzada!",
+                                    ToastAndroid.SHORT,
+                                    ToastAndroid.BOTTOM,
+                                    25,
+                                    50,
+                                );}
+                                }},
                             ],
                             {cancelable: false},
                           )

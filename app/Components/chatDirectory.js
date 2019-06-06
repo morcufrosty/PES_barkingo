@@ -229,14 +229,14 @@ export default class ChatDirectory extends React.Component {
                     responseOffer = await this.getOfferInfoFromAPI(tokenJson, chatOfferId);
 
                     if (responseUser.success && responseOffer.success) {
-                        chatAux[i] = { name: responseUser.user.username, desc: ' (interested in ' + responseOffer.offer.name + ')', type: 'user', chatInfo: chatResponse[i], currentUser: currentUser.user.id, id:chatUserId };
+                        chatAux[i] = { name: responseUser.user.username, desc: ' (interested in ' + responseOffer.offer.name + ')', type: 'user', chatInfo: chatResponse[i], currentUser: currentUser.user.id, idd:chatUserId };
                     }
                 } else if (offer) {
                     responseOffer = await this.getOfferInfoFromAPI(tokenJson, chatOfferId);
                     responseUser = await this.getUserInfoFromAPI(tokenJson, chatUserId);
 
                     if (responseOffer.success && responseUser.success) {
-                        chatAux[i] = { name: responseOffer.offer.name, desc: ' (' + responseUser.user.username + "'s pet)", chatInfo: chatResponse[i], currentUser: currentUser.user.id, id:chatOfferId };
+                        chatAux[i] = { name: responseOffer.offer.name, desc: ' (' + responseUser.user.username + "'s pet)", type:'offer', chatInfo: chatResponse[i], currentUser: currentUser.user.id, idd:chatOfferId };
                        
 
                         // console.log(responseOffer.offer.name);

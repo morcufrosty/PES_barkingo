@@ -38,12 +38,12 @@ export default class ImageComponent extends Component {
         const t = await AsyncStorage.getItem('access_token');
         tokenJson = JSON.parse(t);
         console.log("ID")
-        console.log(this.props.id)
+        console.log(this.props)
 
         if(this.props.id.type == "offer"){
 
-        
-        this.getOfferImageFromServer(tokenJson, this.props.id.id).then( (value)=> {
+        console.log("offer")
+        this.getOfferImageFromServer(tokenJson, this.props.id.idd).then( (value)=> {
             profileImage = "data:image/jpeg;base64," + value;
             this.setState({image: profileImage})
 
@@ -51,8 +51,8 @@ export default class ImageComponent extends Component {
         
         } else{
 
-        
-            this.getProfileImageFromServer(tokenJson, this.props.id.id).then( (value)=> {
+            console.log("user")
+            this.getProfileImageFromServer(tokenJson, this.props.id.idd).then( (value)=> {
                 profileImage = "data:image/jpeg;base64," + value;
                 this.setState({image: profileImage})
     
