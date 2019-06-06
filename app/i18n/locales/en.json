@@ -5,8 +5,22 @@
 		"Dislike" : "Dislike"
 	},
 	"chat": {
-		"ErrorDeleted": "Favorite offer has not been deleted!"
-
+		"errorDeleted": "Favourite offer has not been deleted",
+		"unfavourite" : "UnFavourite",
+		"removeFavourite" : "Remove from favourited list",
+		"cancel" : "Cancel",
+		"ok": "Acceptar",
+		"editDog": "Edit Pet",
+		"favourite": "Favorited",
+		"interested": "(interested in {{n}})",
+		"userInfo": "({{n}}'s pet)",
+		"block" : "Block",
+		"askBlock" : "Do you want to block this user?",
+		"chatTitle": "Chats",
+		"chatExists" : "Chat already exists",
+		"userNotExists": "The user owner doesn't exist",
+		"created" : "Chat created",
+		"noUser" : "User doesn't exist"
 	},
 	"login": {
 		"loginText": "Login",

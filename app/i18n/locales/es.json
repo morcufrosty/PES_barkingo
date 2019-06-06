@@ -5,8 +5,22 @@
 		"Dislike" : "No me gusta"
 	},
 	"chat": {
-		"ErrorDeleted": "No se ha eliminado la oferta de preferidos"
-
+		"errorDeleted": "No se ha eliminado la oferta de favoritos",
+		"unfavourite" : "Quitar de favoritos",
+		"removeFavourite" : "Eliminar de la lista de favoritos",
+		"cancel" : "Cancelar",
+		"ok": "Aceptar",
+		"editDog": "Editar mascota",
+		"favourite": "Favorito",
+		"interested": "(interesado en {{n}})",
+		"userInfo": "(La mascota de {{n}})",
+		"block" : "Bloquear",
+		"askBlock" : "Quieres bloquear a este usuario?",
+		"chatTitle": "Chats",
+		"chatExists" : "El chat ya existe",
+		"userNotExists": "El propietario no existe",
+		"created" : "Chat creado",
+		"noUser" : "El usuario no existe"
 	},
 	"login": {
 		"loginText": "Iniciar Sesión",
