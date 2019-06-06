@@ -14,16 +14,6 @@ export default class ConversationChat extends React.Component {
         const port = '3000';
         this.socket = SocketIOClient(`http://${host}:${port}`);
 
-        this.socket.on('message', message => {
-            const newMessage = {
-                createdAt: message.createdAt,
-                text: message.text,
-                userId: message.senderId,
-                _id: message.msgId,
-            };
-            this.props.onSendMessage(message.conversationId, newMessage);
-        });
-
         this.state = {
             // message: '',
             // messages: [],
@@ -38,6 +28,9 @@ export default class ConversationChat extends React.Component {
         this.getMappedMessages = this.getMappedMessages.bind(this);
         this.getConversationFriend = this.getConversationFriend.bind(this);
         this.getUserInfoAPI = this.getUserInfoAPI.bind(this);
+        this.handleNewMessage = this.handleNewMessage.bind(this);
+
+        this.socket.on('message', message => this.handleNewMessage(message));
     }
 
     async handleStart() {
@@ -48,10 +41,27 @@ export default class ConversationChat extends React.Component {
         this.socket.emit('init', {
             senderId: id,
         });
+        console.log('hem enviat???');
 
         const messages = await this.getMappedMessages();
 
         this.setState({ messages, tokenJson, user: response.user });
+    }
+
+    handleNewMessage(message) {
+        console.log('ha arribat missatge', message);
+        const newMessage = {
+            createdAt: message.createdAt,
+            text: message.text,
+            user: {
+                _id: message.senderId,
+                name: message.userName
+            },
+            _id: message.msgId,
+        };
+        this.setState(previousState => ({
+            messages: GiftedChat.append(previousState.messages, newMessage),
+        }));
     }
 
     componentDidMount() {
@@ -153,13 +163,15 @@ export default class ConversationChat extends React.Component {
     _onSend = message => {
         const { chat } = this.state;
         const { chatInfo } = chat;
+        console.log(chatInfo);
         this.socket.emit('message', {
             conversationId: chatInfo.idChat,
             text: message[0].text,
             senderId: chat.currentUser,
-            receiverId: chatInfo.userId,
+            receiverId: chatInfo.idUser,
             createdAt: new Date(),
             msgId: message[0]._id,
+            userName: this.state.user.username,
         });
         const newMessage = {
             createdAt: message[0].createdAt,
@@ -190,16 +202,11 @@ export default class ConversationChat extends React.Component {
             );
         } else {
             return (
-                <View style={{flex: 1}}>
-                    <GiftedChat
-                    messages={this.state.messages} 
-                    onSend={this._onSend} 
-                    user={{ _id: this.state.user.id, name: this.state.user.username }}
-                    />
-                    {Platform.OS === 'android' ? <KeyboardSpacer /> : null }
+                <View style={{ flex: 1 }}>
+                    <GiftedChat messages={this.state.messages} onSend={this._onSend} user={{ _id: this.state.user.id, name: this.state.user.username }} />
+                    {Platform.OS === 'android' ? <KeyboardSpacer /> : null}
                 </View>
             );
-
         }
     }
 }

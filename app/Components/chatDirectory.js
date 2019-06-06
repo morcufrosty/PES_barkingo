@@ -55,7 +55,7 @@ export default class ChatDirectory extends React.Component {
         const t = await AsyncStorage.getItem('access_token');
         tokenJson = JSON.parse(t);
         const response = await this.deleteFavourite(tokenJson, id);
-        console.log('retorna delete');
+        // console.log('retorna delete');
         if (response.success) {
             let auxFav = this.state.favouriteOffers;
             let auxImg = this.state.images;
@@ -69,7 +69,7 @@ export default class ChatDirectory extends React.Component {
     }
 
     async deleteFavourite(tokenJson, id) {
-        console.log(id);
+        // console.log(id);
         return fetch(`http://10.4.41.164/api/offers/${id}/favourite`, {
             method: 'DELETE',
             headers: {
@@ -80,7 +80,7 @@ export default class ChatDirectory extends React.Component {
         })
             .then(response => response.json())
             .then(responseJson => {
-                console.log(responseJson.msg);
+                // console.log(responseJson.msg);
                 return responseJson;
             })
             .catch(error => {
@@ -117,7 +117,7 @@ export default class ChatDirectory extends React.Component {
         })
             .then(response => response.json())
             .then(responseJson => {
-                console.log(responseJson);
+                // console.log(responseJson);
                 return responseJson;
             })
             .catch(error => {
@@ -147,7 +147,7 @@ export default class ChatDirectory extends React.Component {
             }
         }).then((response) => response.json())
             .then((responseJson) => {
-                console.log("THIS IS THE MESSAGE OF OFFERS:" + responseJson.msg);
+                // console.log("THIS IS THE MESSAGE OF OFFERS:" + responseJson.msg);
                 return responseJson;
             })
             .catch(error => {
@@ -166,7 +166,7 @@ export default class ChatDirectory extends React.Component {
         })
             .then(response => response.json())
             .then(responseJson => {
-                console.log(responseJson);
+                // console.log(responseJson);
                 return responseJson;
             })
             .catch(error => {
@@ -213,7 +213,7 @@ export default class ChatDirectory extends React.Component {
 
         if (response.success) {
             chatResponse = response.offers;
-            console.log('current user', currentUser.user.id);
+            // console.log('current user', currentUser.user.id);
 
             for (let i = 0; i < chatResponse.length; i++) {
                 offer = false;
@@ -224,7 +224,7 @@ export default class ChatDirectory extends React.Component {
                 if (myOffersIds.includes(chatOfferId)) {
                     user = true;
                 } else offer = true;
-
+                console.log('chat ', i, chatResponse[i])
                 if (user) {
                     responseUser = await this.getUserInfoFromAPI(tokenJson, chatUserId);
                     responseOffer = await this.getOfferInfoFromAPI(tokenJson, chatOfferId);
@@ -269,7 +269,7 @@ export default class ChatDirectory extends React.Component {
         })
             .then(response => response.json())
             .then(responseJson => {
-                console.log(responseJson.msg);
+                // console.log(responseJson.msg);
                 return responseJson;
             })
             .catch(error => {
@@ -291,7 +291,7 @@ export default class ChatDirectory extends React.Component {
 
     }).then((response) => response.json())
         .then((responseJson) => {
-            console.log(responseJson);
+            // console.log(responseJson);
             return responseJson;
         }).catch((error) => {
             console.error(error);

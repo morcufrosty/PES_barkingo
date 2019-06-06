@@ -33,6 +33,8 @@ export default class filter extends React.Component {
     }
 
     multiSliderValuesChange = values => {
+        if (values[1] > 45 ) values[1] = 999;
+        console.log(values);
         this.setState({
             ageRange: values,
         });
@@ -41,6 +43,8 @@ export default class filter extends React.Component {
     sliderOneValuesChange = values => {
         let newValues = [0];
         newValues[0] = values[0];
+        console.log(values);
+        if (values[0] > 45 ) values[0] = 999;
         this.setState({
             distance: values,
         });
@@ -85,64 +89,6 @@ export default class filter extends React.Component {
 
 
     }
-
-
-    renderMultiSlider(){
-        if(this.state.ageFilter){
-
-        return( <View style={{ flexDirection: 'row', flex: 1 }} >
-        <Text style={{ color: 'white', margin: 1 }}>{this.state.ageRange[0]}</Text>
-        <MultiSlider
-            values={[
-                this.state.ageRange[0],
-                this.state.ageRange[1],
-            ]}
-            sliderLength={300}
-            onValuesChange={this.multiSliderValuesChange}
-            min={0}
-            max={50}
-            step={1}
-            selectedStyle={{
-                backgroundColor: '#D84B37',
-            }}
-            markerStyle={{
-                backgroundColor: '#D84B37'
-            }}
-            style={{
-                margin: 40
-            }}
-
-            allowOverlap
-            snapped
-        />
-        <Text style={{ color: 'white', margin: 1 }}>{this.state.ageRange[1]}</Text>
-    </View>)
-    }
-}
-
-renderDistance(){
-    if(this.state.distanceFilter){
-    return(
-        <MultiSlider
-        values={this.state.distance}
-        sliderLength={280}
-        sliderLength={300}
-        min={0}
-        max={50}
-        step={1}
-        selectedStyle={{
-            backgroundColor: '#D84B37',
-        }}
-        markerStyle={{
-            backgroundColor: '#D84B37'
-        }}
-        onValuesChange={this.sliderOneValuesChange}
-    />
-    )
-    }
-}
-
-
     render() {
         return (
             <LinearGradient colors={['#F15A24', '#D4145A']}
@@ -158,15 +104,31 @@ renderDistance(){
 
                     <View style={{ flexDirection: "row", alignItems: "center" }}>
                         <Text style={{ color: 'white', paddingBottom: '2%' }}>{strings('filter.ageRange')}</Text>
-                        <CheckBox
-                            checked={this.state.ageFilter}
-                            onPress={() => this.setState({ageFilter: !this.state.ageFilter})}
-
-                        />
-
                     </View>
 
-                   {this.renderMultiSlider()}
+                    <View style={{ flexDirection: 'row', flex: 1 }} >
+                        <Text style={{ color: 'white', margin: 1 }}>{this.state.ageRange[0]}</Text>
+                        <MultiSlider
+                            values={[
+                                this.state.ageRange[0],
+                                this.state.ageRange[1],
+                            ]}
+                            sliderLength={300}
+                            onValuesChange={this.multiSliderValuesChange}
+                            min={0}
+                            max={50}
+                            step={1}
+                            selectedStyle={{
+                                backgroundColor: '#D84B37',
+                            }}
+                            markerStyle={{
+                                backgroundColor: '#D84B37'
+                            }}
+                            allowOverlap
+                            snapped
+                        />
+                        <Text style={{ color: 'white', margin: 1 }}>{this.state.ageRange[1]}</Text>
+                    </View>
                 </View>
                 <View style={{ flex: 1 }}>
                     <Text style={{ color: 'white' }}>{strings('filter.specie')}</Text>
@@ -184,13 +146,22 @@ renderDistance(){
                     <View style={{ flexDirection: 'row', alignItems:"center" }} >
                         <Text style={{ color: 'white' }}>{strings('filter.distance')}: </Text>
                         <Text style={{ color: 'white' }}>{this.state.distance} Km</Text>
-                        <CheckBox
-                            checked={this.state.distanceFilter}
-                            onPress={() => this.setState({distanceFilter: !this.state.distanceFilter})}
-
-                        />
                     </View>
-                   {this.renderDistance()}
+                    <MultiSlider
+                        values={this.state.distance}
+                        sliderLength={280}
+                        sliderLength={300}
+                        min={0}
+                        max={50}
+                        step={1}
+                        selectedStyle={{
+                            backgroundColor: '#D84B37',
+                        }}
+                        markerStyle={{
+                            backgroundColor: '#D84B37'
+                        }}
+                        onValuesChange={this.sliderOneValuesChange}
+                    />
                 </View>
                 <View style={{ flex: 1 }}>
                     <Text style={{ color: 'white' }}>{strings('filter.sex')}</Text>

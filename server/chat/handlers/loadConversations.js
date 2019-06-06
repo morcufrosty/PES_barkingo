@@ -6,7 +6,7 @@ module.exports = async function(id, reply) {
         .then(user => {
             if (user) {
                 const conversations = user.conversations.map(conversation => {
-                    const friendId = `${user._id}` === conversation.userOneId ? conversation.userTwoId : conversation.userOneId;
+                    const friendId = id === conversation.userOneId ? conversation.userTwoId : conversation.userOneId; //`${user._id}`
                     return {
                         idChat: conversation._id,
                         idUser: friendId,

@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 
 import { Card, Button, ListGroup, ListGroupItem, Nav } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
-import { getAllUsers } from "../Helpers/APIcalls"
+import { getAllUsers,deleteUser } from "../Helpers/APIcalls"
+import ImageComponent from"../Components/ImageComponent"
 
 
 
@@ -12,7 +13,7 @@ export default class Users extends Component {
     super(props);
 
     this.state = {
-      users: [1,2,3,4],
+      users: [],
       isLoading: true,
     };
   }
@@ -21,12 +22,14 @@ export default class Users extends Component {
   async handleStart(){
 
     let users = []
-    users = await getAllUsers();
+    let response = await getAllUsers();
+    users = response.users;
+
 
     console.log(users)
 
-    //this.setState({users:users, isLoading:false})
-    this.setState({isLoading:false})
+    this.setState({users:users, isLoading:false})
+   // this.setState({isLoading:false})
 
 
   }
@@ -60,6 +63,45 @@ export default class Users extends Component {
     });
   }
 
+
+  async handleClick(id, e) {
+
+    console.log("click")
+    console.log(id)
+    let resp = await deleteUser(id)
+    console.log(resp)
+    this.setState({ isLoading: true, offers: [] })
+
+  }
+
+  
+  renderOffers() {
+
+    return this.state.users.map((element, index) => {
+      return (
+        <div class='m-3'>
+          <Card style={{ width: '18rem' }}>
+            {<ImageComponent id={element.id} type={"user"} />}
+            <Card.Body>
+              <Card.Title>{element.name}</Card.Title>
+              <Card.Text>
+                {element.bio}
+              </Card.Text>
+            </Card.Body>
+            <ListGroup className="list-group-flush">
+              <ListGroupItem>Email: {element.email}</ListGroupItem>
+              <ListGroupItem>Username: {element.username}</ListGroupItem>
+            </ListGroup>
+            <Card.Body>
+              <Button onClick={(e) => this.handleClick(element.id, e)} variant="danger">Eliminar usuari</Button>
+            </Card.Body>
+          </Card>
+        </div>
+      );
+    }
+    );
+  }
+
   render() {
     
     if (this.state.isLoading) {
@@ -69,14 +111,14 @@ export default class Users extends Component {
       )
 
     }
-
+console.log(this.state.users)
     return (
       <div>
         <div class='m-3 row fixed'>
+          {this.renderOffers()}
         </div>
         <div>
           <div class="m-3 row">
-            {this.renderUsers()}
           </div>
         </div>
 
