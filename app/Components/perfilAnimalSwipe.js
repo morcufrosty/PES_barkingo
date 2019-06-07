@@ -134,6 +134,7 @@ export default class perfilAnimalSwipe extends React.Component {
             race = responseOffer.offer.raceName,
             age = responseOffer.offer.age,
             uIdd = responseOffer.offer.idOwner
+            
 
                 const responseUser = await this.getUserInfoFromAPI(tokenJson, uIdd);
                 ownerN = responseUser.user.username;
@@ -155,6 +156,7 @@ export default class perfilAnimalSwipe extends React.Component {
             isLoading: false,
             image: image,
             uId: uIdd,
+            id: id,
             ownerDesc: ownerD,
             ownerName: ownerN
         })
