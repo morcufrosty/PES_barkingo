@@ -15,3 +15,8 @@
 ## Estructura
 
 A la carpeta app s'hi troba l'aplicació multiplataforma, a la carpeta server s'hi troba el servidor que interactua amb l'aplicació i la base de dades.
+
+
+## Build de la app:
+
+https://expo.io/artifacts/4484dc8b-8a0e-4360-a709-ea7b245ed025
