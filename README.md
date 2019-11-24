@@ -1,5 +1,23 @@
 # Barkingo
 
+## Resum
+Aplicació que permet facilitar la gestió de mascotes que ja no avui en dia n’hi ha moltes que no tenen llar però en podrien tenir. Quan una persona o organització vol buscar una nova casa a una mascota, publica una oferta dins de l’aplicació. D’altra banda, quan una persona vol adoptar una mascota, entra dins de l’aplicació i pot triar quines mascotes li agraden mitjançant un mecanisme de swipe. Un cop s’ha fet swipe, les ofertes es mostren a la pestanya de preferits des d’on es pot obrir un xat per a poder parlar amb el propietari. Quan es posen d’acord, el propietari accepta la oferta i l’animal ja no apareix per la resta d’usuaris. 
+## Funcionalitats
+- Creació, esborrat i edició d’ofertes
+- Mecànica swipe amb like/dislike
+- Xat
+- Creació, edició i esborrat d’usuaris i perfils
+- Aplicació multiplataforma (Android i IOS)
+- Multiidioma
+- Filtres de les ofertes:
+- Filtre per localització (Integració de geolocalització)
+- Filtre per raça (amb autocomplete), edat, sexe i tipus d’oferta
+- Login amb plataformes externes (google, facebook)
+- Possibilitat de reportar ofertes fraudulentes
+- WebApp que permet esborrar usuaris conflictius del sistema i ofertes inadequades
+- Caché d’imatges al client-side per augmentar la rapidesa
+- Creació d’una API REST documentada
+- Formularis a stakeholders per obtenir feedback sobre la aplicació
 ## Membres
 
 | Nom                | Adreça de correu electrònic        |
